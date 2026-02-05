@@ -7,23 +7,25 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --mantiq-blue: #38bdf8;
+            --mantiq-sky: #38bdf8;
             --mantiq-navy: #0f172a;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             scroll-behavior: smooth;
             overflow-x: hidden;
+            background-color: #f8fafc;
         }
 
+        /* Smooth Reveal Animation */
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
         .reveal.active {
@@ -31,242 +33,340 @@
             transform: translateY(0);
         }
 
+        /* Enhanced Mesh Background */
+        .bg-mesh-dark {
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(129, 140, 248, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(56, 189, 248, 0.05) 0px, transparent 50%);
+        }
+
         .gradient-text {
-            background: linear-gradient(to right, #38bdf8, #818cf8);
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .bg-mesh {
-            background-color: #0f172a;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.08) 0px, transparent 50%);
+        /* Service Row Hover Effects */
+        .service-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .service-row {
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border-left: 4px solid transparent;
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
 
-        .service-row:hover {
-            border-left-color: #38bdf8;
-            background-color: #f8fafc;
-            transform: translateX(10px);
+        /* Details Sidebar Animation */
+        #details-panel {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(100%);
         }
 
-        #details-view {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: white;
-            overflow-y: auto;
+        #details-panel.open {
+            transform: translateX(0);
         }
 
-        .fade-in { animation: fadeIn 0.3s ease-in forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
 
-        .logo-text {
+        .logo-font {
             font-weight: 800;
-            letter-spacing: -0.05em;
-            font-size: 1.75rem;
+            letter-spacing: -0.02em;
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="text-slate-900">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center gap-2 cursor-pointer" onclick="closeDetails()">
-                    <div class="flex items-center gap-1">
-                        <span class="logo-text text-slate-900">MANTI</span>
-                        <div class="relative w-8 h-8 -mt-1">
-                            <svg viewBox="0 0 100 100" class="text-sky-500 fill-none stroke-current stroke-[10px]">
-                                <circle cx="50" cy="50" r="40" />
-                                <path d="M50 70V30M50 30L35 45M50 30L65 45" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M75 80C80 75 85 65 85 50" stroke-linecap="round"/>
-                            </svg>
-                        </div>
+                <div class="flex items-center gap-2 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <span class="logo-font text-2xl text-slate-900 uppercase">Manti<span class="text-sky-500">q</span></span>
+                    <div class="w-8 h-8 group-hover:rotate-12 transition-transform duration-300">
+                        <svg viewBox="0 0 100 100" class="text-sky-500 fill-none stroke-current stroke-[8px]">
+                            <circle cx="50" cy="50" r="40" opacity="0.2"/>
+                            <path d="M50 75V25M50 25L30 45M50 25L70 45" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                 </div>
-                <div class="hidden md:flex space-x-8 font-medium items-center">
-                    <a href="#about" class="hover:text-sky-500 transition">About</a>
-                    <a href="#services" class="hover:text-sky-500 transition">Services</a>
-                    <a href="#events" class="hover:text-sky-500 transition">Events</a>
-                    <a href="#contact" class="bg-sky-500 text-white px-6 py-2.5 rounded-full hover:bg-sky-600 transition shadow-lg shadow-sky-200">Get Started</a>
+                <div class="hidden md:flex space-x-10 font-semibold items-center text-sm uppercase tracking-wider text-slate-600">
+                    <a href="#about" class="hover:text-sky-500 transition-colors">About</a>
+                    <a href="#services" class="hover:text-sky-500 transition-colors">Services</a>
+                    <a href="#events" class="hover:text-sky-500 transition-colors">Events</a>
+                    <a href="#contact" class="bg-slate-900 text-white px-7 py-3 rounded-full hover:bg-sky-600 transition-all shadow-xl shadow-slate-900/10">Get Started</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main View -->
-    <main id="main-view">
-        <header class="pt-40 pb-24 bg-mesh min-h-[80vh] flex items-center">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid lg:grid-cols-2 gap-16 items-center">
-                    <div class="reveal">
-                        <h1 class="text-6xl lg:text-7xl font-black text-white leading-[1.1] mb-8">
-                            The Path <br><span class="gradient-text">You Should Take</span>
-                        </h1>
-                        <p class="text-xl text-slate-400 mb-10 max-w-lg">
-                            Helping you start or develop your business with solutions that take you to the next level.
-                        </p>
-                        <div class="flex flex-wrap gap-4">
-                            <a href="#services" class="px-8 py-4 bg-sky-500 text-white rounded-xl font-bold hover:bg-sky-400 transition shadow-xl shadow-sky-500/20">Explore Services</a>
-                            <a href="#contact" class="px-8 py-4 border border-slate-700 text-white rounded-xl font-bold hover:bg-slate-800 transition">Get Started</a>
-                        </div>
+    <!-- Hero Section -->
+    <header class="pt-48 pb-32 bg-mesh-dark relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <span class="inline-block px-4 py-1.5 rounded-full bg-sky-500/10 text-sky-400 text-xs font-bold uppercase tracking-widest mb-6 border border-sky-500/20">
+                        Business Acceleration
+                    </span>
+                    <h1 class="text-6xl lg:text-8xl font-black text-white leading-[1.05] mb-8">
+                        The Path <br><span class="gradient-text">You Should Take</span>
+                    </h1>
+                    <p class="text-lg text-slate-400 mb-10 max-w-lg leading-relaxed">
+                        Mantiq empowers visionaries with strategic solutions to launch, scale, and automate your business operations for the digital age.
+                    </p>
+                    <div class="flex flex-wrap gap-5">
+                        <a href="#services" class="px-8 py-4 bg-sky-500 text-white rounded-2xl font-bold hover:bg-sky-400 transition-all shadow-2xl shadow-sky-500/30 flex items-center gap-2">
+                            Explore Solutions <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                        <a href="#contact" class="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-bold hover:bg-white/10 transition-all backdrop-blur-sm">
+                            Book Consultation
+                        </a>
                     </div>
-                    <div class="hidden lg:block reveal">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800" class="rounded-[3rem] shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500" alt="Business Growth">
+                </div>
+                <div class="hidden lg:block reveal relative">
+                    <div class="absolute -inset-4 bg-sky-500/20 blur-3xl rounded-full"></div>
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1000" 
+                         class="rounded-[3rem] shadow-2xl relative z-10 transform hover:scale-[1.02] transition-transform duration-500 border border-white/10" 
+                         alt="Collaboration">
+                    <!-- Floating Stat Card -->
+                    <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-3xl shadow-2xl z-20 flex items-center gap-4 reveal delay-500">
+                        <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-slate-900">210+</div>
+                            <div class="text-xs font-bold text-slate-500 uppercase tracking-tighter">Success Stories</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <section id="about" class="py-20 bg-white">
-            <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-4 gap-8 text-center">
-                <div class="reveal"><div class="text-4xl font-black text-sky-500">210+</div><div class="text-slate-500 text-sm font-bold uppercase">Services Completed</div></div>
-                <div class="reveal delay-100"><div class="text-4xl font-black text-sky-500">18</div><div class="text-slate-500 text-sm font-bold uppercase">Managed Projects</div></div>
-                <div class="reveal delay-200"><div class="text-4xl font-black text-sky-500">14</div><div class="text-slate-500 text-sm font-bold uppercase">New Businesses</div></div>
-                <div class="reveal delay-300"><div class="text-4xl font-black text-sky-500">+25</div><div class="text-slate-500 text-sm font-bold uppercase">Interns Trained</div></div>
+    <!-- Stats Bar -->
+    <section id="about" class="py-16 bg-white border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+            <div class="reveal">
+                <div class="text-3xl font-black text-slate-900 mb-1">210+</div>
+                <div class="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Projects Completed</div>
             </div>
-        </section>
+            <div class="reveal delay-100">
+                <div class="text-3xl font-black text-slate-900 mb-1">18</div>
+                <div class="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Active Managements</div>
+            </div>
+            <div class="reveal delay-200">
+                <div class="text-3xl font-black text-slate-900 mb-1">14</div>
+                <div class="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Startup Launches</div>
+            </div>
+            <div class="reveal delay-300">
+                <div class="text-3xl font-black text-slate-900 mb-1">25+</div>
+                <div class="text-slate-500 text-[10px] font-extrabold uppercase tracking-widest">Experts Trained</div>
+            </div>
+        </div>
+    </section>
 
-        <section id="services" class="py-32 bg-slate-50">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16 reveal">
-                    <h2 class="text-4xl font-extrabold mb-4">Our Services</h2>
-                    <p class="text-slate-500">Select a service to view examples and details</p>
+    <!-- Services Grid -->
+    <section id="services" class="py-32 bg-slate-50/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+                <div class="max-w-2xl reveal">
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Tailored Ecosystems for <span class="text-sky-500">Your Growth</span></h2>
+                    <p class="text-slate-500 leading-relaxed font-medium">We don't just provide services; we build the infrastructure that allows your business to breathe and expand autonomously.</p>
                 </div>
-
-                <div class="space-y-4 reveal">
-                    <div onclick="openDetails('business')" class="service-row bg-white p-8 rounded-3xl shadow-sm flex items-center justify-between group">
-                        <div class="flex items-center gap-6">
-                            <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-xl flex items-center justify-center text-xl">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-slate-800">Business Development</h3>
-                        </div>
-                        <i class="fas fa-arrow-right text-slate-300 group-hover:text-sky-500 transition"></i>
-                    </div>
-
-                    <div onclick="openDetails('tracking')" class="service-row bg-white p-8 rounded-3xl shadow-sm flex items-center justify-between group">
-                        <div class="flex items-center gap-6">
-                            <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-xl">
-                                <i class="fas fa-layer-group"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-slate-800">Tracking Systems & Tools</h3>
-                        </div>
-                        <i class="fas fa-arrow-right text-slate-300 group-hover:text-indigo-500 transition"></i>
-                    </div>
-
-                    <div onclick="openDetails('web')" class="service-row bg-white p-8 rounded-3xl shadow-sm flex items-center justify-between group">
-                        <div class="flex items-center gap-6">
-                            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-xl">
-                                <i class="fas fa-laptop-code"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-slate-800">Websites Development</h3>
-                        </div>
-                        <i class="fas fa-arrow-right text-slate-300 group-hover:text-emerald-500 transition"></i>
-                    </div>
-
-                    <div onclick="openDetails('mobile')" class="service-row bg-white p-8 rounded-3xl shadow-sm flex items-center justify-between group">
-                        <div class="flex items-center gap-6">
-                            <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center text-xl">
-                                <i class="fas fa-mobile-screen-button"></i>
-                            </div>
-                            <h3 class="text-2xl font-bold text-slate-800">Mobile Applications</h3>
-                        </div>
-                        <i class="fas fa-arrow-right text-slate-300 group-hover:text-orange-500 transition"></i>
-                    </div>
+                <div class="reveal">
+                    <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Scroll to explore <i class="fas fa-chevron-down ml-2"></i></span>
                 </div>
             </div>
-        </section>
 
-        <!-- Events -->
-        <section id="events" class="py-32 bg-white overflow-hidden">
-            <div class="max-w-7xl mx-auto px-4">
-                <h2 class="text-4xl font-extrabold text-center mb-16 reveal">Events We've Been Part Of</h2>
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="reveal group">
-                        <div class="relative h-80 rounded-[2rem] overflow-hidden mb-6">
-                            <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Internship">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-8">
-                                <h4 class="text-white font-bold text-xl">Mantiq Internships</h4>
-                            </div>
-                        </div>
-                        <p class="text-slate-500 px-2">Aimed to help the youth start their own professional path.</p>
+            <div class="grid md:grid-cols-2 gap-8 reveal">
+                <!-- Business Dev -->
+                <div onclick="openDetails('business')" class="service-card group bg-white p-10 rounded-[2.5rem] border border-slate-100 cursor-pointer">
+                    <div class="w-16 h-16 bg-sky-50 text-sky-500 rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="reveal delay-100 group">
-                        <div class="relative h-80 rounded-[2rem] overflow-hidden mb-6">
-                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="App Launch">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-8">
-                                <h4 class="text-white font-bold text-xl">Pyramids Quality App Launch</h4>
-                            </div>
-                        </div>
-                        <p class="text-slate-500 px-2">Official launching event for our high-performance quality tracking application.</p>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mb-4">Business Development</h3>
+                    <p class="text-slate-500 mb-8 leading-relaxed">Strategic roadmaps and sales optimization designed to capture market share and ensure sustainable revenue.</p>
+                    <div class="flex items-center text-sky-500 font-bold gap-2 text-sm uppercase tracking-wider">
+                        View Case Studies <i class="fas fa-arrow-right text-xs group-hover:translate-x-2 transition-transform"></i>
                     </div>
-                    <div class="reveal delay-200 group">
-                        <div class="relative h-80 rounded-[2rem] overflow-hidden mb-6">
-                            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Team">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-8">
-                                <h4 class="text-white font-bold text-xl">The Path You Should Take</h4>
-                            </div>
-                        </div>
-                        <p class="text-slate-500 px-2">Strategic planning session for our 18+ managed projects.</p>
+                </div>
+
+                <!-- Tracking Systems -->
+                <div onclick="openDetails('tracking')" class="service-card group bg-white p-10 rounded-[2.5rem] border border-slate-100 cursor-pointer">
+                    <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mb-4">Operational Infrastructure</h3>
+                    <p class="text-slate-500 mb-8 leading-relaxed">Custom CRM, ERP, and tracking systems that turn messy operations into streamlined data-driven workflows.</p>
+                    <div class="flex items-center text-indigo-500 font-bold gap-2 text-sm uppercase tracking-wider">
+                        Explore Systems <i class="fas fa-arrow-right text-xs group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Web Development -->
+                <div onclick="openDetails('web')" class="service-card group bg-white p-10 rounded-[2.5rem] border border-slate-100 cursor-pointer">
+                    <div class="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mb-4">Web Engineering</h3>
+                    <p class="text-slate-500 mb-8 leading-relaxed">High-performance digital storefronts and corporate platforms optimized for conversion and speed.</p>
+                    <div class="flex items-center text-emerald-500 font-bold gap-2 text-sm uppercase tracking-wider">
+                        See Portfolio <i class="fas fa-arrow-right text-xs group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Mobile Apps -->
+                <div onclick="openDetails('mobile')" class="service-card group bg-white p-10 rounded-[2.5rem] border border-slate-100 cursor-pointer">
+                    <div class="w-16 h-16 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center text-2xl mb-8 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                        <i class="fas fa-mobile-screen-button"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-slate-900 mb-4">Mobile Experiences</h3>
+                    <p class="text-slate-500 mb-8 leading-relaxed">Native and cross-platform mobile applications that bring your business services directly into your users' pockets.</p>
+                    <div class="flex items-center text-orange-500 font-bold gap-2 text-sm uppercase tracking-wider">
+                        Launch Mobile <i class="fas fa-arrow-right text-xs group-hover:translate-x-2 transition-transform"></i>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Form Section -->
-        <section id="contact" class="py-32 bg-slate-900 text-white">
-            <div class="max-w-3xl mx-auto px-4 reveal">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl font-black mb-4">Get Started</h2>
-                    <p class="text-slate-400">Transform your business vision into reality today.</p>
+    <!-- Events Showreel -->
+    <section id="events" class="py-32 bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-4xl font-black text-center mb-20 reveal">Presence & <span class="text-sky-500">Partnerships</span></h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="reveal group relative">
+                    <div class="h-[450px] rounded-[2.5rem] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Networking">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent p-10 flex flex-col justify-end">
+                            <span class="text-sky-400 font-bold text-xs uppercase tracking-widest mb-2">Social Impact</span>
+                            <h4 class="text-white font-black text-2xl">AIESEC Global</h4>
+                            <p class="text-slate-300 text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Mentoring the next generation of digital entrepreneurs through global leadership workshops.</p>
+                        </div>
+                    </div>
                 </div>
-                <form id="mantiq-form" onsubmit="handleForm(event)" class="bg-white/5 p-8 md:p-12 rounded-[3rem] backdrop-blur-sm border border-white/10">
-                    <div class="grid md:grid-cols-2 gap-6 mb-6">
-                        <input type="text" name="name" placeholder="Full Name" required class="bg-white/10 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white">
-                        <input type="text" name="business" placeholder="Business Name" class="bg-white/10 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white">
+                <div class="reveal delay-100 group relative">
+                    <div class="h-[450px] rounded-[2.5rem] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="App Launch">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent p-10 flex flex-col justify-end">
+                            <span class="text-sky-400 font-bold text-xs uppercase tracking-widest mb-2">Innovation</span>
+                            <h4 class="text-white font-black text-2xl">Quality Hub Launch</h4>
+                            <p class="text-slate-300 text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Official release of the Pyramids Quality tracking ecosystem for high-scale manufacturing.</p>
+                        </div>
                     </div>
-                    <div class="grid md:grid-cols-2 gap-6 mb-6">
-                        <input type="email" name="email" placeholder="Email Address" required class="bg-white/10 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white">
-                        <input type="tel" name="phone" placeholder="Mobile Number" required class="bg-white/10 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white">
+                </div>
+                <div class="reveal delay-200 group relative">
+                    <div class="h-[450px] rounded-[2.5rem] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition duration-700" alt="Planning">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent p-10 flex flex-col justify-end">
+                            <span class="text-sky-400 font-bold text-xs uppercase tracking-widest mb-2">Strategy</span>
+                            <h4 class="text-white font-black text-2xl">The Path Roadmap</h4>
+                            <p class="text-slate-300 text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Annual strategy summit for our managed portfolio of 18+ cross-industry projects.</p>
+                        </div>
                     </div>
-                    <div class="relative mb-6">
-                        <select name="service" id="contact-service" class="w-full bg-white/10 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 appearance-none text-white">
-                            <option class="text-slate-900" value="Business Development">Business Development</option>
-                            <option class="text-slate-900" value="Tracking Systems">Tracking Systems</option>
-                            <option class="text-slate-900" value="Websites">Websites</option>
-                            <option class="text-slate-900" value="Mobile Applications">Mobile Applications</option>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA & Form -->
+    <section id="contact" class="py-32 bg-slate-900 relative">
+        <!-- Abstract Decoration -->
+        <div class="absolute top-0 right-0 w-96 h-96 bg-sky-500/10 blur-[120px] rounded-full"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full"></div>
+
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl md:text-5xl font-black text-white mb-6">Start Your Journey</h2>
+                <p class="text-slate-400 font-medium">Brief us on your vision, and we'll draft the path together.</p>
+            </div>
+
+            <form id="mantiq-form" onsubmit="handleForm(event)" class="bg-white/5 border border-white/10 p-10 md:p-16 rounded-[3rem] backdrop-blur-md reveal">
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-4">Full Name</label>
+                        <input type="text" name="name" placeholder="John Doe" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-4">Company</label>
+                        <input type="text" name="business" placeholder="Acme Corp" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white transition-all">
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-4">Email</label>
+                        <input type="email" name="email" placeholder="john@example.com" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-4">Phone</label>
+                        <input type="tel" name="phone" placeholder="+1 (234) 567-890" required class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 text-white transition-all">
+                    </div>
+                </div>
+                <div class="space-y-2 mb-8">
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-4">Inquiry Type</label>
+                    <div class="relative">
+                        <select name="service" required class="w-full bg-slate-800 border border-white/10 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 appearance-none text-white transition-all">
+                            <option value="Business Development">Business Development</option>
+                            <option value="Operational Tracking">Operational Infrastructure</option>
+                            <option value="Web Engineering">Web Engineering</option>
+                            <option value="Mobile Development">Mobile Development</option>
                         </select>
-                        <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                        <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
                     </div>
-                    <div class="mb-8 group">
-                        <label class="text-slate-400 text-sm ml-2 block mb-2">Project Brief</label>
-                        <textarea name="brief" id="project-brief" rows="4" placeholder="Tell us about your project..." class="w-full bg-white/10 border-0 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 resize-none text-white"></textarea>
-                    </div>
-                    <button type="submit" id="submit-btn" class="w-full py-5 bg-sky-500 rounded-2xl font-bold text-lg hover:bg-sky-400 transition shadow-lg shadow-sky-500/20">Submit Inquiry</button>
-                </form>
-            </div>
-        </section>
-    </main>
+                </div>
+                <div class="space-y-2 mb-10">
+                    <label class="text-xs font-bold text-slate-400 uppercase tracking-widest ml-4">Project Brief</label>
+                    <textarea name="brief" rows="4" placeholder="Describe your goals and challenges..." class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:ring-2 focus:ring-sky-500 resize-none text-white transition-all"></textarea>
+                </div>
+                <button type="submit" id="submit-btn" class="w-full py-6 bg-sky-500 rounded-2xl font-black text-white text-lg hover:bg-sky-400 transition-all shadow-2xl shadow-sky-500/20 active:scale-[0.98]">
+                    Submit Inquiry
+                </button>
+            </form>
+        </div>
+    </section>
 
-    <!-- Details Modal -->
-    <div id="details-view" class="fade-in">
-        <div class="max-w-5xl mx-auto px-4 py-24">
-            <button onclick="closeDetails()" class="fixed top-8 right-8 w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200 transition z-[110]">
-                <i class="fas fa-times text-slate-800"></i>
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-2">
+                <span class="logo-font text-xl text-white uppercase tracking-tighter">Manti<span class="text-sky-500">q</span></span>
+            </div>
+            <p class="text-slate-500 text-sm font-medium">© 2024 Mantiq Strategic Solutions. All rights reserved.</p>
+            <div class="flex gap-6">
+                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-slate-500 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Side Panel Detail View -->
+    <div id="details-panel" class="fixed inset-y-0 right-0 w-full md:w-[600px] z-[100] bg-white shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between p-8 border-b border-slate-100">
+            <div id="panel-header-icon" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-900"></div>
+            <button onclick="closeDetails()" class="w-12 h-12 rounded-full hover:bg-slate-100 transition-colors flex items-center justify-center">
+                <i class="fas fa-times text-slate-400"></i>
             </button>
-            <div id="details-content"></div>
+        </div>
+        <div class="flex-1 overflow-y-auto p-10" id="details-body">
+            <!-- Dynamic Content Injection -->
         </div>
     </div>
+    <!-- Panel Overlay -->
+    <div id="panel-overlay" onclick="closeDetails()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[90] hidden"></div>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVasCdHBbZ4fNh1wfnKK76TLDJQxhjmH4tiyShQFwkFZorMj0GQyrTAovkOJHkw55rxA/exec";
@@ -275,65 +375,101 @@
             business: {
                 title: "Business Development",
                 icon: "fa-chart-line",
+                color: "text-sky-500",
                 img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=800",
-                features: ["Strategic Planning", "Professional Consultations", "Leads Generation", "Data Analytics"],
-                examples: ["Launch Strategy for 14 Startups", "Leads Pipeline Optimization"]
+                description: "We optimize the engine of your business. From defining high-converting sales pipelines to identifying strategic market opportunities.",
+                features: ["Market Analysis & Positioning", "B2B Lead Generation Engines", "Sales Process Automation", "Strategic Consultation"],
+                examples: ["Startup Launch Strategy (14 Successful Launches)", "Performance Optimization for Mid-sized Agencies"]
             },
             tracking: {
-                title: "Tracking Systems",
+                title: "Operational Tracking",
                 icon: "fa-layer-group",
+                color: "text-indigo-500",
                 img: "https://images.unsplash.com/photo-1551288049-bbbda5366991?auto=format&fit=crop&q=80&w=800",
-                features: ["CRMing", "Finance Trackers", "Sales Trackers", "Operations Management"],
-                examples: ["Custom Budget Tracking for SMEs", "Real-time Sales Dashboards"]
+                description: "Turn chaos into clarity. We build custom dashboards and tracking ecosystems that provide real-time visibility into every facet of your business.",
+                features: ["Custom CRM Implementations", "Financial Flow Management", "Supply Chain Visibility", "Personnel Performance Trackers"],
+                examples: ["Pyramids Quality App (Manufacturing)", "Real-time Sales Dashboards for Real Estate"]
             },
             web: {
-                title: "Websites Development",
+                title: "Web Engineering",
                 icon: "fa-laptop-code",
+                color: "text-emerald-500",
                 img: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&q=80&w=800",
-                features: ["E-commerce (Shopify/Custom)", "Portfolio Websites", "SEO Optimization", "Payment Gateways"],
-                examples: ["Respresso Corporate Site", "Naqla Logistics Platform"]
+                description: "A website is more than a brochure; it's a conversion machine. We build high-performance platforms that load instantly and drive results.",
+                features: ["Full-stack Custom Development", "E-commerce Architectures", "SEO Mastery & Technical Optimization", "Scalable Cloud Hosting Solutions"],
+                examples: ["Respresso Corporate Identity", "Logistics Fleet Management Web App"]
             },
             mobile: {
-                title: "Mobile Applications",
+                title: "Mobile Experiences",
                 icon: "fa-mobile-screen-button",
+                color: "text-orange-500",
                 img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=800",
-                features: ["UI/UX Design", "iOS & Android Development", "Secure Gateways"],
-                examples: ["Pyramids Quality App", "Internal Comms Systems"]
+                description: "Reach your audience anywhere. We design and develop mobile applications that prioritize user experience and lightning-fast responsiveness.",
+                features: ["iOS & Android Development", "UI/UX Experience Design", "Secure Payment Integration", "Push Notification Logic"],
+                examples: ["Internal Logistics Trackers", "Consumer Retention Apps"]
             }
         };
 
         function openDetails(key) {
             const data = serviceData[key];
-            const content = `
-                <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
-                    <div>
-                        <div class="inline-flex items-center gap-3 text-sky-500 font-bold mb-4">
-                            <i class="fas ${data.icon}"></i>
-                            <span class="uppercase tracking-widest text-sm">Service Detail</span>
-                        </div>
-                        <h1 class="text-5xl font-black mb-6">${data.title}</h1>
-                        <ul class="space-y-4 mb-8">
-                            ${data.features.map(f => `<li class="flex items-center gap-3 text-slate-600 font-medium"><i class="fas fa-check text-sky-500"></i> ${f}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="rounded-[3rem] overflow-hidden shadow-2xl h-96">
+            const panel = document.getElementById('details-panel');
+            const overlay = document.getElementById('panel-overlay');
+            const body = document.getElementById('details-body');
+            const iconContainer = document.getElementById('panel-header-icon');
+
+            iconContainer.innerHTML = `<i class="fas ${data.icon} ${data.color}"></i>`;
+            
+            body.innerHTML = `
+                <div class="mb-10">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 block">Solution Overview</span>
+                    <h2 class="text-4xl font-black text-slate-900 mb-6">${data.title}</h2>
+                    <p class="text-slate-600 leading-relaxed mb-8">${data.description}</p>
+                    <div class="aspect-video rounded-3xl overflow-hidden shadow-lg mb-10">
                         <img src="${data.img}" class="w-full h-full object-cover" alt="${data.title}">
                     </div>
                 </div>
-                <div class="bg-slate-50 p-12 rounded-[3rem] mt-12">
-                    <h3 class="text-2xl font-bold mb-8">Project Examples</h3>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        ${data.examples.map(e => `<div class="p-6 bg-white rounded-2xl border border-slate-200 shadow-sm font-bold text-slate-700">${e}</div>`).join('')}
+
+                <div class="space-y-10">
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6">Key Capabilities</h4>
+                        <ul class="grid gap-4">
+                            ${data.features.map(f => `
+                                <li class="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-sky-500/30 transition-colors">
+                                    <div class="w-2 h-2 rounded-full bg-sky-500"></div>
+                                    <span class="font-semibold text-slate-700">${f}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="p-8 bg-slate-900 rounded-[2rem] text-white">
+                        <h4 class="text-xs font-bold text-sky-400 uppercase tracking-widest mb-6">Proven Examples</h4>
+                        <div class="space-y-4">
+                            ${data.examples.map(e => `
+                                <div class="flex items-center gap-4">
+                                    <i class="fas fa-check-double text-sky-500 text-xs"></i>
+                                    <span class="text-sm font-medium text-slate-300">${e}</span>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 </div>
+
+                <div class="mt-12">
+                    <button onclick="closeDetails(); document.getElementById('contact').scrollIntoView();" class="w-full py-5 bg-slate-100 text-slate-900 rounded-2xl font-bold hover:bg-slate-200 transition-colors">
+                        Request a Consultation for ${data.title}
+                    </button>
+                </div>
             `;
-            document.getElementById('details-content').innerHTML = content;
-            document.getElementById('details-view').style.display = 'block';
+
+            panel.classList.add('open');
+            overlay.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
 
         function closeDetails() {
-            document.getElementById('details-view').style.display = 'none';
+            document.getElementById('details-panel').classList.remove('open');
+            document.getElementById('panel-overlay').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
 
@@ -342,26 +478,20 @@
             const btn = document.getElementById('submit-btn');
             const originalText = btn.innerText;
             
-            btn.innerText = "Submitting...";
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> Processing...`;
             btn.disabled = true;
 
             const formData = new FormData(e.target);
             const params = new URLSearchParams();
-            
-            // Collect all fields explicitly for the GET request
-            formData.forEach((value, key) => {
-                params.append(key, value);
-            });
+            formData.forEach((value, key) => params.append(key, value));
 
             try {
-                // Using GET with no-cors to bypass complex pre-flight checks
-                // Ensure your Apps Script has a 'doGet(e)' function
                 await fetch(`${SCRIPT_URL}?${params.toString()}`, {
                     method: 'GET',
                     mode: 'no-cors' 
                 });
 
-                btn.innerText = "Inquiry Sent!";
+                btn.innerText = "Submission Received!";
                 btn.classList.replace('bg-sky-500', 'bg-emerald-500');
                 e.target.reset();
 
@@ -373,19 +503,29 @@
 
             } catch (error) {
                 console.error('Submission error:', error);
-                btn.innerText = "Error. Try again.";
+                btn.innerText = "Connection Error. Try Again.";
                 btn.classList.replace('bg-sky-500', 'bg-red-500');
                 btn.disabled = false;
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.classList.replace('bg-red-500', 'bg-sky-500');
+                }, 4000);
             }
         }
 
+        // Scroll Observer Logic
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
     </script>
 </body>
 </html>
