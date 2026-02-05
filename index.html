@@ -24,6 +24,15 @@
             color: #0f172a;
         }
 
+        /* Nav Transition */
+        nav {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease;
+        }
+
+        .nav-hidden {
+            transform: translateY(-100%);
+        }
+
         /* Digital Architecture Background */
         .digital-grid {
             position: absolute;
@@ -183,12 +192,45 @@
             pointer-events: none;
             z-index: 0;
         }
+
+        /* Page Navigator Styling */
+        .page-nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background: #cbd5e1;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .page-nav-dot.active {
+            height: 24px;
+            background: #38bdf8;
+        }
+        .page-nav-link:hover .page-nav-dot {
+            background: #38bdf8;
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
 
+    <!-- Page Navigator (Hidden on top, appears on scroll) -->
+    <div id="side-navigator" class="fixed right-6 md:right-10 top-1/2 -translate-y-1/2 z-[110] flex flex-col gap-4 items-center opacity-0 pointer-events-none transition-all duration-700 translate-x-10">
+        <a href="#about" class="page-nav-link group py-2">
+            <div class="page-nav-dot active" data-section="about"></div>
+        </a>
+        <a href="#services" class="page-nav-link group py-2">
+            <div class="page-nav-dot" data-section="services"></div>
+        </a>
+        <a href="#customers" class="page-nav-link group py-2">
+            <div class="page-nav-dot" data-section="customers"></div>
+        </a>
+        <a href="#contact" class="page-nav-link group py-2">
+            <div class="page-nav-dot" data-section="contact"></div>
+        </a>
+    </div>
+
     <!-- Navigation -->
-    <nav class="fixed w-full z-[100] border-b border-white/5 bg-slate-950/80 backdrop-blur-xl">
+    <nav id="main-nav" class="fixed w-full z-[100] border-b border-white/5 bg-slate-950/80 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between h-20 items-center">
                 <!-- Direct Logo Implementation from Google Drive -->
@@ -230,7 +272,7 @@
         <div class="hero-glow"></div>
         
         <div class="max-w-7xl mx-auto px-6 relative z-10 w-full text-center">
-            <div class="max-w-4xl mx-auto reveal">
+            <div id="hero-content" class="max-w-4xl mx-auto reveal">
                 <div class="flex items-center justify-center gap-3 mb-8">
                     <span class="w-10 h-[2px] bg-sky-500"></span>
                     <span class="text-sky-400 text-[10px] font-black uppercase tracking-[0.4em]">Business Services Company</span>
@@ -429,7 +471,7 @@
                 </div>
                 <textarea name="brief" rows="5" placeholder="Tell us how we take the path together?" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-sky-500 resize-none text-white transition-all placeholder:text-slate-600 mb-10"></textarea>
                 <button type="submit" id="submit-btn" class="w-full py-6 md:py-8 bg-sky-500 rounded-3xl font-black text-slate-950 text-base md:text-lg hover:bg-sky-400 transition-all shadow-3xl shadow-sky-500/40 active:scale-95">
-                    Lets Started
+                    INITIATE MISSION
                 </button>
             </form>
         </div>
@@ -483,7 +525,7 @@
                 features: ["Intelligent CRM Systems", "Financial Flow Trackers", "Sales Pipeline Monitoring", "Operational Intelligence"],
             },
             web: {
-                title: "Websites Development",
+                title: "Web Engineering",
                 icon: "fa-laptop-code",
                 img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200",
                 description: "Specialized architectures designed to convert attention into brand equity and store performance.",
@@ -499,13 +541,64 @@
                 ]
             },
             mobile: {
-                title: "Mobile Applications",
+                title: "Mobile Experiences",
                 icon: "fa-mobile-screen-button",
                 img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200",
                 description: "Native and cross-platform apps built for performance, security, and AI-driven retention.",
                 features: ["User UI/UX Design", "In-App Messaging", "AI Chatbot Integrations", "iOS/Android Scalability", "Secure Payment Gateways"]
             }
         };
+
+        // Scroll Performance Logic
+        let lastScrollY = window.scrollY;
+        const mainNav = document.getElementById('main-nav');
+        const sideNavigator = document.getElementById('side-navigator');
+        const heroContent = document.getElementById('hero-content');
+        const sections = ['about', 'services', 'customers', 'contact'];
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+
+            // 1. Header Retreat/Appear Logic
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                mainNav.classList.add('nav-hidden');
+            } else {
+                mainNav.classList.remove('nav-hidden');
+            }
+
+            // 2. Page Navigator Visibility (Side dots)
+            if (currentScrollY > 400) {
+                sideNavigator.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-10');
+                sideNavigator.classList.add('opacity-100', 'pointer-events-auto', 'translate-x-0');
+            } else {
+                sideNavigator.classList.add('opacity-0', 'pointer-events-none', 'translate-x-10');
+                sideNavigator.classList.remove('opacity-100', 'pointer-events-auto', 'translate-x-0');
+            }
+
+            // 3. Hero Content Fade & Parallax
+            if (heroContent) {
+                const fadeFactor = Math.max(0, 1 - (currentScrollY / 600));
+                heroContent.style.opacity = fadeFactor;
+                heroContent.style.transform = `translateY(${currentScrollY * 0.25}px)`;
+            }
+
+            // 4. Dot Navigator Active State
+            sections.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    const top = element.offsetTop - 300;
+                    const height = element.offsetHeight;
+                    if (currentScrollY >= top && currentScrollY < top + height) {
+                        document.querySelectorAll('.page-nav-dot').forEach(dot => {
+                            dot.classList.remove('active');
+                            if (dot.dataset.section === id) dot.classList.add('active');
+                        });
+                    }
+                }
+            });
+
+            lastScrollY = currentScrollY;
+        });
 
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
@@ -604,7 +697,7 @@
             formData.forEach((v, k) => params.append(k, v));
             try {
                 await fetch(`${SCRIPT_URL}?${params.toString()}`, { method: 'GET', mode: 'no-cors' });
-                btn.innerText = "Message Recieved";
+                btn.innerText = "MISSION RECEIVED";
                 btn.style.backgroundColor = "#10b981";
                 event.target.reset();
                 setTimeout(() => {
@@ -613,7 +706,7 @@
                     btn.disabled = false;
                 }, 4000);
             } catch (error) {
-                btn.innerText = "RETRY Message";
+                btn.innerText = "RETRY MISSION";
                 btn.style.backgroundColor = "#ef4444";
                 btn.disabled = false;
             }
