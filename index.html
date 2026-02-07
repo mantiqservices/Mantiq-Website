@@ -163,12 +163,41 @@
         .service-image-container img {
             width: 100%;
             height: 100%;
-            object-cover: cover;
+            /* Fixed: object-fit ensures images aren't squashed or stretched */
+            object-fit: cover; 
             transition: transform 0.7s ease;
         }
         
         .service-card:hover .service-image-container img {
             transform: scale(1.1);
+        }
+
+        /* Redesigned Label Component */
+        .mantiq-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 9999px;
+            backdrop-filter: blur(4px);
+            margin-bottom: 2rem;
+        }
+
+        .mantiq-label-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #38bdf8;
+            box-shadow: 0 0 10px #38bdf8;
+            animation: mantiq-pulse 2s infinite;
+        }
+
+        @keyframes mantiq-pulse {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
         }
     </style>
 </head>
@@ -229,11 +258,12 @@
         <div class="digital-grid opacity-20 dark:opacity-40"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full text-center">
             <div id="hero-content" class="max-w-4xl mx-auto reveal">
-                <div class="flex items-center justify-center gap-3 mb-6 sm:mb-8">
-                    <span class="w-8 sm:w-10 h-[2px] bg-sky-500"></span>
-                    <span data-i18n="hero_tag" class="text-sky-600 dark:text-sky-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em]">Business Services Company</span>
-                    <span class="w-8 sm:w-10 h-[2px] bg-sky-500"></span>
+                <!-- Redesigned Element -->
+                <div class="mantiq-label">
+                    <span class="mantiq-label-dot"></span>
+                    <span data-i18n="hero_tag" class="text-sky-600 dark:text-sky-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em]">Business Services Company</span>
                 </div>
+                
                 <h1 class="text-5xl sm:text-7xl lg:text-[100px] font-black leading-[1.1] sm:leading-[0.9] mb-6 tracking-tighter">
                     <span data-i18n="hero_title_1">The Path</span> <br><span class="gradient-text" data-i18n="hero_title_2">You Should Take</span>
                 </h1>
