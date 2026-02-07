@@ -64,13 +64,6 @@
             transform: translateY(0);
         }
 
-        .bg-mesh-dark {
-            background-color: #020617;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.1) 0px, transparent 50%);
-        }
-
         .gradient-text {
             background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
             -webkit-background-clip: text;
@@ -122,15 +115,35 @@
             background: #1e293b;
         }
 
-        @keyframes marquee {
+        /* Marquee Specific Logic */
+        @keyframes marquee-ltr {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
+        }
+
+        @keyframes marquee-rtl {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(50%); }
+        }
+
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
         }
 
         .marquee-track {
             display: flex;
             width: max-content;
-            animation: marquee 40s linear infinite;
+            padding: 2rem 0;
+        }
+
+        [dir="ltr"] .marquee-track {
+            animation: marquee-ltr 50s linear infinite;
+        }
+
+        [dir="rtl"] .marquee-track {
+            animation: marquee-rtl 50s linear infinite;
         }
 
         .partner-pill {
@@ -145,6 +158,7 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             transition: all 0.3s ease;
+            white-space: nowrap;
         }
 
         .dark .partner-pill {
@@ -425,10 +439,14 @@
     <!-- Customers Section -->
     <section id="customers" class="py-24 bg-white dark:bg-slate-950 transition-all duration-500 overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 mb-16 text-center reveal">
-            <h2 data-i18n="cust_tag" class="text-[10px] font-black tracking-[0.4em] text-slate-400 uppercase mb-4">The Trusted Ecosystem</h2>
+            <h2 data-i18n="cust_tag" class="text-[10px] font-black tracking-[0.4em] text-slate-400 uppercase mb-4">Some of our Customers</h2>
             <div class="h-[2px] w-12 bg-sky-500 mx-auto rounded-full"></div>
         </div>
-        <div class="marquee-track reveal" id="partner-track"></div>
+        
+        <!-- Marquee Logic Fix -->
+        <div class="reveal delay-200 marquee-container">
+            <div class="marquee-track" id="partner-track"></div>
+        </div>
     </section>
 
     <!-- Contact Section -->
@@ -438,7 +456,7 @@
             <div class="text-center mb-16 md:mb-20 reveal">
                 <h2 data-i18n="contact_title" class="text-5xl md:text-7xl font-black tracking-tighter mb-6 uppercase text-slate-900 dark:text-white">Get Started.</h2>
                 
-                <!-- Decorative Pattern applied to Contact Section -->
+                <!-- Decorative Pattern -->
                 <div class="flex items-center justify-center gap-2 mb-8 reveal">
                     <div class="feature-block bg-sky-200 dark:bg-sky-400/20"></div>
                     <div class="feature-block bg-sky-500"></div>
@@ -448,7 +466,6 @@
                 <p class="text-slate-500 dark:text-slate-400 font-medium mb-12"><span data-i18n="contact_subtitle">Connect at</span> <span class="text-sky-600 dark:text-sky-500 font-bold">Mantiq2023@gmail.com</span></p>
             </div>
 
-            <!-- Enhanced High-Contrast Form -->
             <form id="mantiq-form" onsubmit="handleForm(event)" class="glass-card-light dark:bg-slate-900/40 p-8 md:p-20 rounded-[4rem] reveal transition-all duration-500">
                 <div class="grid md:grid-cols-2 gap-8 mb-8">
                     <div class="space-y-2">
@@ -505,8 +522,8 @@
         const customers = ["EL ASEEL Development", "Omar Gharib", "ETMAM", "ALSAIF ANALYSIS", "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO", "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA", "START MART", "CREATIVO", "ALPHA ACADEMY", "VARM", "ART FURNITURE"];
 
         const translations = {
-            en: { nav_about: "About Us", nav_services: "Our Services", nav_customers: "Customers", nav_cta: "Get Started", hero_tag: "Business Services Company", hero_title_1: "The Path", hero_title_2: "You Should Take", hero_desc: "Empowering your success through market knowledge, customized business models, digital solutions, and accurate consultation.", hero_cta_1: "Our Solutions", hero_cta_2: "The Identity", about_tag: "Est. July 2023", about_title_1: "About", about_desc: "Mantiq is a business service engineering firm. We help you start or develop your business by offering a suite of precise digital and strategic services designed to take your venture to the next level.", stat_1: "Completed Services", stat_2: "Managed Projects", stat_3: "Launched Ventures", stat_4: "Intern Experts", side_pill_1_tag: "Active Ventures", side_pill_1_title: "Inspiring Innovation", side_pill_1_desc: "Helping the youth launch their path through tactical engineering and incubation.", side_pill_2_tag: "Total Services", side_pill_2_title: "Empowering Growth", side_pill_2_desc: "Market intelligence and customized digital models built for sustainable expansion.", serv_tag: "Our Solutions", serv_title: "The Path you should take", serv_desc: "Tailored business engineering designed for modern ventures looking to scale efficiently.", serv_card_1_title: "Business Development", serv_card_1_desc: "Strategic scaling and consultation to capture market share.", serv_card_2_title: "Tracking Systems", serv_card_2_desc: "Custom CRM & Finance tools built for your specific needs.", serv_card_3_title: "Web Engineering", serv_card_3_desc: "E-commerce and Portfolios designed for maximum conversion.", serv_card_4_title: "Mobile Experience", serv_card_4_desc: "iOS & Android solutions with AI-integrated automation.", explore: "Explore", cust_tag: "The Trusted Ecosystem", contact_title: "Get Started.", contact_subtitle: "Connect at", form_name: "Full Name", form_comp: "Company Name", form_email: "Email Address", form_phone: "Phone Number", form_message: "Message", form_btn: "INITIATE MISSION", sol_profile: "Solution Profile", init_sol: "Initiate Solution.", init_inq: "INITIATE INQUIRY" },
-            ar: { nav_about: "من نحن", nav_services: "خدماتنا", nav_customers: "عملاؤنا", nav_cta: "ابدأ الآن", hero_tag: "شركة خدمات أعمال", hero_title_1: "المسار الذي", hero_title_2: "يجب أن تسلكه", hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق ونماذج الأعمال المخصصة والحلول الرقمية والاستشارات الدقيقة.", hero_cta_1: "حلولنا", hero_cta_2: "الهوية", about_tag: "تأسست في يوليو 2023", about_title_1: "حول", about_desc: "منطق هي شركة هندسة خدمات أعمال. نساعدك على بدء أو تطوير عملك من خلال تقديم مجموعة من الخدمات الرقمية والاستراتيجية المصممة للارتقاء بمشروعك.", stat_1: "خدمات منجزة", stat_2: "مشاريع مدارة", stat_3: "مشاريع انطلقت", stat_4: "خبراء دوليون", side_pill_1_tag: "مشاريع نشطة", side_pill_1_title: "إلهام الابتكار", side_pill_1_desc: "مساعدة الشباب على إطلاق مسارهم المهني من خلال هندسة الأعمال واحتضان المشاريع.", side_pill_2_tag: "إجمالي الخدمات", side_pill_2_title: "تمكين النمو", side_pill_2_desc: "ذكاء السوق والنماذج الرقمية المخصصة لضمان الاستشارات الدقيقة والتوسع المستدام.", serv_tag: "حلولنا", serv_title: "المسار الذي يجب أن تسلكه", serv_desc: "هندسة أعمال مصممة خصيصاً للمشاريع الحديثة التي تتطلع إلى التوسع بكفاءة.", serv_card_1_title: "تطوير الأعمال", serv_card_1_desc: "توسع استراتيجي واستشارات للاستحواذ على حصة في السوق.", serv_card_2_title: "أنظمة التتبع", serv_card_2_desc: "أدوات CRM ومالية مخصصة مبنية لاحتياجات بياناتك المحددة.", serv_card_3_title: "هندسة الويب", serv_card_3_desc: "مواقع تجارة إلكترونية وبورتفوليو مصممة لتحقيق أقصى قدر من التحويل.", serv_card_4_title: "تجربة الموبايل", serv_card_4_desc: "حلول iOS و أندرويد مع أتمتة مدمجة بالذكاء الاصطناعي.", explore: "استكشف", cust_tag: "النظام البيئي الموثوق", contact_title: "ابدأ الآن.", contact_subtitle: "تواصل معنا عبر", form_name: "الاسم الكامل", form_comp: "اسم الشركة", form_email: "البريد الإلكتروني", form_phone: "رقم الهاتف", form_message: "الرسالة", form_btn: "بدء المهمة", sol_profile: "ملف الحل", init_sol: "بدء الحل.", init_inq: "بدء الاستفسار" }
+            en: { nav_about: "About Us", nav_services: "Our Services", nav_customers: "Customers", nav_cta: "Get Started", hero_tag: "Business Services Company", hero_title_1: "The Path", hero_title_2: "You Should Take", hero_desc: "Empowering your success through market knowledge, customized business models, digital solutions, and accurate consultation.", hero_cta_1: "Our Solutions", hero_cta_2: "The Identity", about_tag: "Est. July 2023", about_title_1: "About", about_desc: "Mantiq is a business service engineering firm. We help you start or develop your business by offering a suite of precise digital and strategic services designed to take your venture to the next level.", stat_1: "Completed Services", stat_2: "Managed Projects", stat_3: "Launched Ventures", stat_4: "Intern Experts", side_pill_1_tag: "Active Ventures", side_pill_1_title: "Inspiring Innovation", side_pill_1_desc: "Helping the youth launch their path through tactical engineering and incubation.", side_pill_2_tag: "Total Services", side_pill_2_title: "Empowering Growth", side_pill_2_desc: "Market intelligence and customized digital models built for sustainable expansion.", serv_tag: "Our Solutions", serv_title: "The Path you should take", serv_desc: "Tailored business engineering designed for modern ventures looking to scale efficiently.", serv_card_1_title: "Business Development", serv_card_1_desc: "Strategic scaling and consultation to capture market share.", serv_card_2_title: "Tracking Systems", serv_card_2_desc: "Custom CRM & Finance tools built for your specific needs.", serv_card_3_title: "Web Engineering", serv_card_3_desc: "E-commerce and Portfolios designed for maximum conversion.", serv_card_4_title: "Mobile Experience", serv_card_4_desc: "iOS & Android solutions with AI-integrated automation.", explore: "Explore", cust_tag: "Some of our Customers", contact_title: "Get Started.", contact_subtitle: "Connect at", form_name: "Full Name", form_comp: "Company Name", form_email: "Email Address", form_phone: "Phone Number", form_message: "Message", form_btn: "INITIATE MISSION", sol_profile: "Solution Profile", init_sol: "Initiate Solution.", init_inq: "INITIATE INQUIRY" },
+            ar: { nav_about: "من نحن", nav_services: "خدماتنا", nav_customers: "عملاؤنا", nav_cta: "ابدأ الآن", hero_tag: "شركة خدمات أعمال", hero_title_1: "المسار الذي", hero_title_2: "يجب أن تسلكه", hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق ونماذج الأعمال المخصصة والحلول الرقمية والاستشارات الدقيقة.", hero_cta_1: "حلولنا", hero_cta_2: "الهوية", about_tag: "تأسست في يوليو 2023", about_title_1: "حول", about_desc: "منطق هي شركة هندسة خدمات أعمال. نساعدك على بدء أو تطوير عملك من خلال تقديم مجموعة من الخدمات الرقمية والاستراتيجية المصممة للارتقاء بمشروعك.", stat_1: "خدمات منجزة", stat_2: "مشاريع مدارة", stat_3: "مشاريع انطلقت", stat_4: "خبراء دوليون", side_pill_1_tag: "مشاريع نشطة", side_pill_1_title: "إلهام الابتكار", side_pill_1_desc: "مساعدة الشباب على إطلاق مسارهم المهني من خلال هندسة الأعمال واحتضان المشاريع.", side_pill_2_tag: "إجمالي الخدمات", side_pill_2_title: "تمكين النمو", side_pill_2_desc: "ذكاء السوق والنماذج الرقمية المخصصة لضمان الاستشارات الدقيقة والتوسع المستدام.", serv_tag: "حلولنا", serv_title: "المسار الذي يجب أن تسلكه", serv_desc: "هندسة أعمال مصممة خصيصاً للمشاريع الحديثة التي تتطلع إلى التوسع بكفاءة.", serv_card_1_title: "تطوير الأعمال", serv_card_1_desc: "توسع استراتيجي واستشارات للاستحواذ على حصة في السوق.", serv_card_2_title: "أنظمة التتبع", serv_card_2_desc: "أدوات CRM ومالية مخصصة مبنية لاحتياجات بياناتك المحددة.", serv_card_3_title: "هندسة الويب", serv_card_3_desc: "مواقع تجارة إلكترونية وبورتفوليو مصممة لتحقيق أقصى قدر من التحويل.", serv_card_4_title: "تجربة الموبايل", serv_card_4_desc: "حلول iOS و أندرويد مع أتمتة مدمجة بالذكاء الاصطناعي.", explore: "استكشف", cust_tag: "بعض من عملائنا", contact_title: "ابدأ الآن.", contact_subtitle: "تواصل معنا عبر", form_name: "الاسم الكامل", form_comp: "اسم الشركة", form_email: "البريد الإلكتروني", form_phone: "رقم الهاتف", form_message: "الرسالة", form_btn: "بدء المهمة", sol_profile: "ملف الحل", init_sol: "بدء الحل.", init_inq: "بدء الاستفسار" }
         };
 
         const serviceData = {
@@ -590,11 +607,18 @@
         async function handleForm(e) {
             e.preventDefault();
             const b = document.getElementById('submit-btn');
+            const originalText = b.innerText;
             b.innerText = "...";
             const f = new FormData(e.target);
             const p = new URLSearchParams();
             f.forEach((v, k) => p.append(k, v));
-            try { await fetch(`${SCRIPT_URL}?${p.toString()}`, { method: 'GET', mode: 'no-cors' }); b.innerText = "MISSION RECEIVED"; b.style.backgroundColor = "#10b981"; e.target.reset(); setTimeout(() => { b.innerText = translations[currentLang].form_btn; b.style.backgroundColor = ""; }, 4000); } catch (err) { b.innerText = "RETRY"; b.style.backgroundColor = "#ef4444"; }
+            try { 
+                await fetch(`${SCRIPT_URL}?${p.toString()}`, { method: 'GET', mode: 'no-cors' }); 
+                b.innerText = translations[currentLang].form_btn === 'بدء المهمة' ? "تم الاستلام" : "MISSION RECEIVED";
+                b.style.backgroundColor = "#10b981"; 
+                e.target.reset(); 
+                setTimeout(() => { b.innerText = translations[currentLang].form_btn; b.style.backgroundColor = ""; }, 4000); 
+            } catch (err) { b.innerText = "RETRY"; b.style.backgroundColor = "#ef4444"; }
         }
 
         const obs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); e.target.querySelectorAll('.stat-counter').forEach(c => { const t = +c.dataset.target; let v = 0; const u = () => { v += t/40; if(v < t) { c.innerText = Math.ceil(v); setTimeout(u, 20); } else c.innerText = t; }; u(); }); } }), { threshold: 0.1 });
@@ -602,9 +626,11 @@
         window.addEventListener('load', () => {
             if (localStorage.getItem('theme') === 'dark') toggleTheme();
             if (localStorage.getItem('lang') === 'ar') toggleLang();
+            
             const tr = document.getElementById('partner-track');
-            const dL = [...customers, ...customers, ...customers];
+            const dL = [...customers, ...customers, ...customers, ...customers];
             tr.innerHTML = dL.map(n => `<div class="partner-pill">${n}</div>`).join('');
+            
             document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
         });
     </script>
