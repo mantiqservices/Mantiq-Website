@@ -29,34 +29,124 @@
 
         body {
             font-family: 'Outfit', 'Noto Sans Arabic', sans-serif;
-            scroll-behavior: smooth;
-            overflow-x: hidden;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow: hidden; 
+            transition: background-color 0.5s ease;
         }
 
         [dir="rtl"] { font-family: 'Noto Sans Arabic', sans-serif; }
 
-        nav { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease; }
-        .nav-hidden { transform: translateY(-100%); }
+        .view-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
 
-        .digital-grid {
+        .view-section {
             position: absolute;
             inset: 0;
-            background-image: 
-                linear-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px), 
-                linear-gradient(90deg, rgba(56, 189, 248, 0.1) 1px, transparent 1px);
-            background-size: 40px 40px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; 
+            opacity: 0;
             pointer-events: none;
+            transform: translateY(20px) scale(0.98);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            padding: 100px 0 0 0; /* Header spacing */
         }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .reveal.active {
+        .view-section.active {
             opacity: 1;
-            transform: translateY(0);
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+            z-index: 20;
+        }
+
+        .content-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 20px 20px 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1 0 auto;
+        }
+
+        /* Nav Footer Styles */
+        .page-footer {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            padding-bottom: 40px;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .next-page-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: #38bdf8;
+            color: #0f172a;
+            font-weight: 900;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 999px;
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.2);
+            transition: all 0.3s ease;
+        }
+        .next-page-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.3);
+            background: #7dd3fc;
+        }
+
+        /* Smaller Marquee */
+        .small-marquee-container {
+            width: 100%;
+            overflow: hidden;
+            opacity: 0.9;
+            padding: 12px 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.02);
+        }
+        .dark .small-marquee-container {
+            border-top-color: rgba(255,255,255,0.05);
+            background: rgba(0,0,0,0.1);
+        }
+
+        .page-nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: #cbd5e1;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+        .dark .page-nav-dot { background: #334155; }
+        .page-nav-dot.active {
+            background: #38bdf8;
+            height: 24px;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
+        .digital-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .gradient-text {
@@ -65,114 +155,18 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Boutique Card Styling */
         .boutique-card {
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.03);
+            transition: all 0.4s ease;
         }
         .dark .boutique-card {
             background: rgba(15, 23, 42, 0.4);
             border-color: rgba(255, 255, 255, 0.05);
         }
-        .boutique-card:hover {
-            transform: translateY(-8px);
-            border-color: #38bdf8;
-            box-shadow: 0 30px 60px -20px rgba(56, 189, 248, 0.15);
-        }
 
-        .service-card {
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            border: 1px solid #e2e8f0;
-            background: #ffffff;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .dark .service-card {
-            background: #0f172a;
-            border-color: rgba(255, 255, 255, 0.05);
-        }
-        .service-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            border-color: #38bdf8;
-            box-shadow: 0 25px 50px -12px rgba(56, 189, 248, 0.2);
-        }
-
-        @keyframes iconFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .floating-icon { animation: iconFloat 4s ease-in-out infinite; }
-
-        .stat-chip {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 1rem;
-            border-radius: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        .dark .stat-chip { background: rgba(30, 41, 59, 0.4); border-color: rgba(255, 255, 255, 0.05); }
-
-        @keyframes marquee-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @keyframes marquee-rtl { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
-        .marquee-track { display: flex; width: max-content; padding: 2rem 0; }
-        [dir="ltr"] .marquee-track { animation: marquee-ltr 50s linear infinite; }
-        [dir="rtl"] .marquee-track { animation: marquee-rtl 50s linear infinite; }
-
-        .partner-pill {
-            padding: 1rem 2.5rem; margin: 0 1rem;
-            background: #ffffff; border: 1px solid #e2e8f0;
-            border-radius: 9999px; color: #64748b; font-weight: 700; font-size: 0.8rem;
-            letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
-        }
-        .dark .partner-pill { background: #1e293b; border-color: rgba(255, 255, 255, 0.05); color: #94a3b8; }
-
-        #details-panel { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); background: #0f172a; }
-        [dir="ltr"] #details-panel { transform: translateX(100%); right: 0; }
-        [dir="rtl"] #details-panel { transform: translateX(-100%); left: 0; }
-        #details-panel.open { transform: translateX(0); }
-
-        /* Brand-logo styling for SVG */
-        .brand-logo { 
-            height: 100%; 
-            width: auto; 
-            transition: all 0.5s ease; 
-        }
-
-        .feature-block { width: 12px; height: 12px; border-radius: 2px; transition: all 0.4s ease; }
-
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
-        
-        .service-image-container {
-            width: 100%;
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .service-image-container img {
-            width: 100%;
-            height: 100%;
-            /* Fixed: object-fit ensures images aren't squashed or stretched */
-            object-fit: cover; 
-            transition: transform 0.7s ease;
-        }
-        
-        .service-card:hover .service-image-container img {
-            transform: scale(1.1);
-        }
-
-        /* Redesigned Label Component */
         .mantiq-label {
             display: inline-flex;
             align-items: center;
@@ -186,38 +180,94 @@
         }
 
         .mantiq-label-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #38bdf8;
-            box-shadow: 0 0 10px #38bdf8;
-            animation: mantiq-pulse 2s infinite;
+            width: 6px; height: 6px; border-radius: 50%; background: #38bdf8;
+            box-shadow: 0 0 10px #38bdf8; animation: mantiq-pulse 2s infinite;
         }
 
         @keyframes mantiq-pulse {
-            0% { transform: scale(0.95); opacity: 0.7; }
+            0%, 100% { transform: scale(0.95); opacity: 0.7; }
             50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+
+        .service-image-container {
+            width: 100%; height: 180px; overflow: hidden; border-radius: 1.5rem 1.5rem 0 0;
+        }
+        .service-image-container img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .stat-chip {
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+        }
+        .dark .stat-chip { background: rgba(30, 41, 59, 0.4); border-color: rgba(255, 255, 255, 0.05); }
+
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-track { display: flex; animation: marquee 40s linear infinite; width: max-content; }
+
+        #details-panel { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); z-index: 200; }
+        [dir="ltr"] #details-panel { transform: translateX(100%); right: 0; }
+        [dir="rtl"] #details-panel { transform: translateX(-100%); left: 0; }
+        #details-panel.open { transform: translateX(0); }
+
+        .view-section::-webkit-scrollbar { width: 4px; }
+        .view-section::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
+
+        .feature-point {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .feature-point-dot {
+            width: 5px; height: 5px; border-radius: 50%; background: #38bdf8;
+        }
+
+        /* High Contrast Partner Pills */
+        .partner-pill {
+            padding: 0.5rem 1.25rem;
+            background: rgba(15, 23, 42, 0.05);
+            border: 1px solid rgba(15, 23, 42, 0.1);
+            border-radius: 999px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #0f172a; /* Solid dark text in light mode */
+            white-space: nowrap;
+            margin: 0 10px;
+        }
+        .dark .partner-pill {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff; /* Pure white text in dark mode */
         }
     </style>
 </head>
 <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-500">
 
-    <!-- Navigator -->
-    <div id="side-navigator" class="fixed ltr:right-4 rtl:left-4 md:ltr:right-10 md:rtl:left-10 top-1/2 -translate-y-1/2 z-[110] flex flex-col gap-4 items-center opacity-0 pointer-events-none transition-all duration-700 ltr:translate-x-10 rtl:-translate-x-10">
-        <a href="#about" class="page-nav-link group py-2"><div class="page-nav-dot active" data-section="about"></div></a>
-        <a href="#services" class="page-nav-link group py-2"><div class="page-nav-dot" data-section="services"></div></a>
-        <a href="#customers" class="page-nav-link group py-2"><div class="page-nav-dot" data-section="customers"></div></a>
-        <a href="#contact" class="page-nav-link group py-2"><div class="page-nav-dot" data-section="contact"></div></a>
+    <div class="digital-grid opacity-20 dark:opacity-40"></div>
+
+    <!-- Side Navigator -->
+    <div id="side-navigator" class="fixed ltr:right-6 rtl:left-6 top-1/2 -translate-y-1/2 z-[110] flex flex-col gap-5 items-center">
+        <div class="page-nav-dot active" data-view="home" onclick="showView('home')"></div>
+        <div class="page-nav-dot" data-view="about" onclick="showView('about')"></div>
+        <div class="page-nav-dot" data-view="services" onclick="showView('services')"></div>
+        <div class="page-nav-dot" data-view="customers" onclick="showView('customers')"></div>
+        <div class="page-nav-dot" data-view="contact" onclick="showView('contact')"></div>
     </div>
 
     <!-- Nav Bar -->
-    <nav id="main-nav" class="fixed w-full z-[100] border-b border-slate-100 dark:border-white/5 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="flex justify-between h-16 sm:h-20 items-center">
-                <div class="flex items-center gap-1 cursor-pointer group" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                    <div class="h-10 sm:h-12 flex items-center">
-                        <svg class="brand-logo" width="400" height="400" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+    <nav id="main-nav" class="fixed w-full z-[100] border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-1 cursor-pointer group" onclick="showView('home')">
+                    <div class="h-10 flex items-center">
+                        <svg class="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
                             <g fill="none" stroke="#3ABEFF" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="200" cy="200" r="150" />
                                 <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
@@ -226,329 +276,377 @@
                         <span class="ml-2 text-xl font-black uppercase tracking-widest hidden sm:inline-block">Mantiq</span>
                     </div>
                 </div>
-                <!-- Desktop Nav -->
                 <div class="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.25em] text-slate-500">
-                    <a href="#about" data-i18n="nav_about" class="hover:text-sky-400">About Us</a>
-                    <a href="#services" data-i18n="nav_services" class="hover:text-sky-400">Our Services</a>
-                    <a href="#customers" data-i18n="nav_customers" class="hover:text-sky-400">Customers</a>
+                    <button onclick="showView('about')" data-i18n="nav_about" class="nav-link hover:text-sky-400">About Us</button>
+                    <button onclick="showView('services')" data-i18n="nav_services" class="nav-link hover:text-sky-400">Our Services</button>
+                    <button onclick="showView('customers')" data-i18n="nav_customers" class="nav-link hover:text-sky-400">Customers</button>
                     <div class="flex items-center gap-4 pl-8 border-l border-slate-100 dark:border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r">
                         <button onclick="toggleLang()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 text-[10px] font-black"><span id="lang-btn-text">AR</span></button>
                         <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5"><i id="theme-icon" class="fas fa-moon"></i></button>
-                        <a href="#contact" data-i18n="nav_cta" class="bg-sky-500 text-slate-950 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-sky-400 shadow-xl shadow-sky-500/20">Get Started</a>
+                        <button onclick="showView('contact')" data-i18n="nav_cta" class="bg-sky-500 text-slate-950 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-sky-400 shadow-xl shadow-sky-500/20">Get Started</button>
                     </div>
                 </div>
-                <!-- Mobile Nav Controls -->
-                <div class="md:hidden flex items-center gap-2">
-                    <button onclick="toggleLang()" class="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 dark:bg-white/5 text-[10px] font-black uppercase tracking-tighter"><span id="lang-btn-text-mobile">AR</span></button>
-                    <button onclick="toggleTheme()" class="w-9 h-9 flex items-center justify-center text-slate-500 dark:text-slate-400"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
-                    <button onclick="toggleMobileMenu()" class="w-9 h-9 flex items-center justify-center text-2xl"><i id="menu-icon" class="fas fa-bars"></i></button>
+                <div class="md:hidden flex items-center gap-3">
+                    <button onclick="toggleTheme()" class="w-9 h-9 flex items-center justify-center text-slate-500"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
+                    <button onclick="toggleMobileMenu()" class="w-9 h-9 flex items-center justify-center text-xl"><i id="menu-icon" class="fas fa-bars"></i></button>
                 </div>
             </div>
         </div>
-        <div id="mobile-menu" class="md:hidden absolute top-16 left-0 w-full bg-white dark:bg-slate-950 border-b border-slate-100 dark:border-white/5 p-6 sm:p-8 space-y-6 shadow-2xl opacity-0 pointer-events-none transition-all">
-            <a href="#about" onclick="toggleMobileMenu()" data-i18n="nav_about" class="block font-bold uppercase tracking-widest text-xs">About Us</a>
-            <a href="#services" onclick="toggleMobileMenu()" data-i18n="nav_services" class="block font-bold uppercase tracking-widest text-xs">Our Services</a>
-            <a href="#customers" onclick="toggleMobileMenu()" data-i18n="nav_customers" class="block font-bold uppercase tracking-widest text-xs">Customers</a>
-            <a href="#contact" onclick="toggleMobileMenu()" data-i18n="nav_cta" class="block bg-sky-500 text-slate-950 text-center py-4 rounded-xl font-black uppercase text-[10px]">Get Started</a>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 z-[120] bg-white dark:bg-slate-950 flex flex-col p-10 opacity-0 pointer-events-none transition-all duration-500">
+            <div class="flex justify-end mb-10">
+                <button onclick="toggleMobileMenu()" class="text-3xl"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="flex flex-col gap-8 text-2xl font-black uppercase tracking-widest">
+                <button onclick="showView('home'); toggleMobileMenu()">Home</button>
+                <button onclick="showView('about'); toggleMobileMenu()">About Us</button>
+                <button onclick="showView('services'); toggleMobileMenu()">Our Services</button>
+                <button onclick="showView('customers'); toggleMobileMenu()">Customers</button>
+                <button onclick="showView('contact'); toggleMobileMenu()" class="bg-sky-500 text-slate-950 py-5 rounded-2xl text-center text-sm">Get Started</button>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <header class="relative min-h-[90vh] flex items-center bg-white dark:bg-slate-950 overflow-hidden pt-16 transition-all duration-500">
-        <div class="digital-grid opacity-20 dark:opacity-40"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full text-center">
-            <div id="hero-content" class="max-w-4xl mx-auto reveal">
-                <!-- Redesigned Element -->
-                <div class="mantiq-label">
-                    <span class="mantiq-label-dot"></span>
-                    <span data-i18n="hero_tag" class="text-sky-600 dark:text-sky-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em]">Business Services Company</span>
-                </div>
-                
-                <h1 class="text-5xl sm:text-7xl lg:text-[100px] font-black leading-[1.1] sm:leading-[0.9] mb-6 tracking-tighter">
-                    <span data-i18n="hero_title_1">The Path</span> <br><span class="gradient-text" data-i18n="hero_title_2">You Should Take</span>
-                </h1>
-                <div class="flex items-center justify-center gap-2 mb-8 sm:mb-10 reveal">
-                    <div class="feature-block bg-sky-200 dark:bg-sky-400/20"></div>
-                    <div class="feature-block bg-sky-500"></div>
-                    <div class="feature-block bg-indigo-200 dark:bg-indigo-400/20"></div>
-                </div>
-                <p data-i18n="hero_desc" class="text-base sm:text-xl text-slate-500 dark:text-slate-400 mb-10 sm:mb-12 max-w-2xl mx-auto leading-relaxed font-medium">Empowering success through market knowledge and digital solutions.</p>
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center">
-                    <a href="#services" data-i18n="hero_cta_1" class="px-8 py-4 sm:px-10 sm:py-5 bg-sky-500 text-slate-950 rounded-xl sm:rounded-2xl font-black shadow-2xl shadow-sky-500/30">Our Solutions</a>
-                    <a href="#about" data-i18n="hero_cta_2" class="px-8 py-4 sm:px-10 sm:py-5 border border-slate-200 dark:border-white/10 rounded-xl sm:rounded-2xl font-black">About us</a>
+    <!-- Page Content -->
+    <main class="view-container">
+        
+        <!-- Home Page -->
+        <section id="home-view" class="view-section active">
+            <div class="content-wrapper">
+                <div class="max-w-5xl text-center my-auto">
+                    <div class="mantiq-label">
+                        <span class="mantiq-label-dot"></span>
+                        <span data-i18n="hero_tag" class="text-sky-600 dark:text-sky-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em]">Business Services Company</span>
+                    </div>
+                    <h1 class="text-6xl sm:text-8xl lg:text-[110px] font-black leading-[0.9] mb-8 tracking-tighter">
+                        <span data-i18n="hero_title_1">The Path</span> <br><span class="gradient-text italic" data-i18n="hero_title_2">You Should Take</span>
+                    </h1>
+                    <p data-i18n="hero_desc" class="text-xl sm:text-2xl text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">Empowering success through market knowledge and digital solutions.</p>
                 </div>
             </div>
-        </div>
-    </header>
-
-    <!-- About -->
-    <section id="about" class="py-20 sm:py-32 md:py-40 bg-white dark:bg-slate-950 transition-all duration-500">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-            <div class="grid lg:grid-cols-12 gap-8 items-start">
-                <div class="lg:col-span-7">
-                    <div class="p-8 sm:p-16 rounded-[2.5rem] sm:rounded-[4rem] boutique-card border-none bg-slate-50/50 dark:bg-white/5 reveal">
-                        <span data-i18n="about_tag" class="px-3 py-1 rounded-full bg-sky-500/10 text-sky-500 text-[10px] font-black uppercase mb-6 sm:mb-8 inline-block">Est. July 2023</span>
-                        <h2 class="text-4xl sm:text-7xl font-black mb-6 sm:mb-8 tracking-tighter leading-[1.05]"><span data-i18n="about_title_1">About</span> <br><span class="text-sky-500">MANTIQ</span></h2>
-                        <p data-i18n="about_desc" class="text-lg sm:text-xl text-slate-500 dark:text-slate-400 leading-relaxed font-medium mb-8 sm:mb-12 max-w-2xl">Mantiq is a business service engineering firm focused on precision digital services.</p>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-                            <div class="stat-chip p-4 sm:p-6"><div class="text-2xl sm:text-3xl font-black stat-counter" data-target="210">0</div><div data-i18n="stat_1" class="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase mt-1">Completed Services</div></div>
-                            <div class="stat-chip p-4 sm:p-6"><div class="text-2xl sm:text-3xl font-black stat-counter" data-target="18">0</div><div data-i18n="stat_2" class="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase mt-1">Managed Projects</div></div>
-                            <div class="stat-chip p-4 sm:p-6"><div class="text-2xl sm:text-3xl font-black stat-counter" data-target="14">0</div><div data-i18n="stat_3" class="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase mt-1">Launched Ventures</div></div>
-                            <div class="stat-chip p-4 sm:p-6"><div class="text-2xl sm:text-3xl font-black stat-counter" data-target="25">0</div><div data-i18n="stat_4" class="text-[8px] sm:text-[9px] font-bold text-slate-400 uppercase mt-1">Intern Experts</div></div>
-                        </div>
-                    </div>
+            <footer class="page-footer">
+                <button onclick="showView('about')" class="next-page-btn group">
+                    <span data-i18n="next_about">About Us</span>
+                    <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                <div class="small-marquee-container">
+                    <div class="marquee-track partner-marquee-track"></div>
                 </div>
-                <div class="lg:col-span-5 flex flex-col gap-6">
-                    <div class="boutique-card p-8 rounded-[2.5rem] reveal delay-100 overflow-hidden relative">
-                        <div class="absolute top-0 ltr:right-0 rtl:left-0 w-16 h-16 bg-sky-500/5 rotate-45 translate-x-8 -translate-y-8"></div>
-                        <div class="flex items-start justify-between mb-8">
-                            <div class="w-14 h-14 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-500 relative">
-                                <i class="fas fa-microchip text-2xl floating-icon"></i>
-                                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-sky-500 rounded-full border-2 border-white dark:border-slate-900"></div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-3xl font-black text-slate-900 dark:text-white">14</div>
-                                <div class="text-[8px] font-black text-sky-500 uppercase tracking-widest">Active Ventures</div>
-                            </div>
-                        </div>
-                        <h3 class="text-2xl font-black mb-3 text-slate-900 dark:text-white" data-i18n="side_pill_1_title">Inspiring Innovation</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed" data-i18n="side_pill_1_desc">Helping youth launch their professional path through tactical engineering and incubation.</p>
-                    </div>
+            </footer>
+        </section>
 
-                    <div class="boutique-card p-8 rounded-[2.5rem] reveal delay-200 overflow-hidden relative">
-                        <div class="absolute top-0 ltr:right-0 rtl:left-0 w-16 h-16 bg-sky-500/5 rotate-45 translate-x-8 -translate-y-8"></div>
-                        <div class="flex items-start justify-between mb-8">
-                            <div class="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 relative">
-                                <i class="fas fa-chart-line text-2xl floating-icon"></i>
-                                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-indigo-500 rounded-full border-2 border-white dark:border-slate-900"></div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-3xl font-black text-slate-900 dark:text-white">210+</div>
-                                <div class="text-[8px] font-black text-indigo-500 uppercase tracking-widest">Total Services</div>
+        <!-- About Page -->
+        <section id="about-view" class="view-section">
+            <div class="content-wrapper">
+                <div class="max-w-6xl w-full flex flex-col gap-10">
+                    <div class="grid lg:grid-cols-12 gap-10">
+                        <div class="lg:col-span-7">
+                            <div class="p-10 sm:p-14 rounded-[3rem] boutique-card">
+                                <span data-i18n="about_tag" class="px-3 py-1 rounded-full bg-sky-500/10 text-sky-500 text-[10px] font-black uppercase mb-8 inline-block">Est. July 2023</span>
+                                
+                                <div class="mb-10 pb-10 border-b border-slate-100 dark:border-white/5">
+                                    <h2 class="text-4xl sm:text-6xl font-black mb-8 tracking-tighter leading-none"><span data-i18n="about_title_pre">About</span> <br><span class="text-sky-500">MANTIQ</span></h2>
+                                    <p data-i18n="about_desc_intro" class="text-lg sm:text-xl text-slate-500 dark:text-slate-400 leading-relaxed font-medium">We are a business service company established in July 2023 Aimed to help you to start or develop your business by offering several services that take your business to another level.</p>
+                                </div>
+
+                                <div class="mb-10">
+                                    <h2 class="text-2xl font-black mb-4 flex items-center gap-3"><i class="fas fa-bullseye text-sky-500 text-xl"></i> <span data-i18n="msg_title">Our Message</span></h2>
+                                    <p data-i18n="msg_desc" class="text-base text-slate-500 dark:text-slate-400 leading-relaxed font-medium">We help businesses grow smarter, operate faster, and compete stronger in a digital-first world. By combining strategic business development with intelligent tracking systems, high-performance websites, and scalable mobile applications, we turn ideas into measurable results.</p>
+                                </div>
+
+                                <div class="mb-10">
+                                    <h2 class="text-2xl font-black mb-4 flex items-center gap-3"><i class="fas fa-eye text-sky-500 text-xl"></i> <span data-i18n="vision_title">Our Vision</span></h2>
+                                    <p data-i18n="vision_desc" class="text-base text-slate-500 dark:text-slate-400 leading-relaxed font-medium">To become a trusted digital partner for businesses seeking sustainable growth, operational clarity, and technological excellence—empowering organizations to make data-driven decisions and build future-ready digital ecosystems.</p>
+                                </div>
+
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                                    <div class="stat-chip text-center"><div class="text-3xl font-black stat-counter" data-target="210">0</div><div data-i18n="stat_1" class="text-[8px] font-bold text-slate-400 uppercase mt-2">Completed Services</div></div>
+                                    <div class="stat-chip text-center"><div class="text-3xl font-black stat-counter" data-target="18">0</div><div data-i18n="stat_2" class="text-[8px] font-bold text-slate-400 uppercase mt-2">Managed Projects</div></div>
+                                    <div class="stat-chip text-center"><div class="text-3xl font-black stat-counter" data-target="14">0</div><div data-i18n="stat_3" class="text-[8px] font-bold text-slate-400 uppercase mt-2">Launched Ventures</div></div>
+                                    <div class="stat-chip text-center"><div class="text-3xl font-black stat-counter" data-target="25">0</div><div data-i18n="stat_4" class="text-[8px] font-bold text-slate-400 uppercase mt-2">Intern Experts</div></div>
+                                </div>
                             </div>
                         </div>
-                        <h3 class="text-2xl font-black mb-3 text-slate-900 dark:text-white" data-i18n="side_pill_2_title">Empowering Growth</h3>
-                        <p class="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed" data-i18n="side_pill_2_desc">Market intelligence and customized digital models built for sustainable expansion and success.</p>
+                        <div class="lg:col-span-5 flex flex-col gap-6">
+                            <div class="boutique-card p-10 rounded-[2.5rem]">
+                                <div class="flex items-start justify-between mb-8">
+                                    <div class="w-14 h-14 bg-sky-500/10 rounded-2xl flex items-center justify-center text-sky-500"><i class="fas fa-microchip text-2xl"></i></div>
+                                    <div class="text-right"><div class="text-2xl font-black">14</div><div class="text-[8px] font-black text-sky-500 uppercase">Ventures</div></div>
+                                </div>
+                                <h3 class="text-xl font-black mb-3" data-i18n="side_pill_1_title">Inspiring Innovation</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="side_pill_1_desc">It’s Aimed to help the youth to starting their own business.</p>
+                            </div>
+                            <div class="boutique-card p-10 rounded-[2.5rem]">
+                                <div class="flex items-start justify-between mb-8">
+                                    <div class="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500"><i class="fas fa-chart-line text-2xl"></i></div>
+                                    <div class="text-right"><div class="text-2xl font-black">210+</div><div class="text-[8px] font-black text-indigo-500 uppercase">Growth Paths</div></div>
+                                </div>
+                                <h3 class="text-xl font-black mb-3" data-i18n="side_pill_2_title">Empowering Growth</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="side_pill_2_desc">Empowering your success by market knowledge, customised business models, digital solutions and accurate consultation.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Services Section -->
-    <section id="services" class="py-20 sm:py-32 bg-white dark:bg-slate-950 transition-all duration-500">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 reveal">
-                <div class="mb-6 md:mb-0">
-                    <span data-i18n="serv_tag" class="text-sky-600 dark:text-sky-500 font-black text-base sm:text-lg uppercase tracking-[0.3em] sm:tracking-[0.4em] mb-3 sm:mb-4 block">Our Solutions</span>
-                    <h2 data-i18n="serv_title" class="text-4xl sm:text-6xl font-black tracking-tighter">The path you should take</h2>
-                </div>
-                <p data-i18n="serv_desc" class="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-sm font-medium leading-relaxed">Sophisticated business engineering frameworks designed to scale your venture with precision and impact.</p>
-            </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-8 sm:gap-12">
-                <!-- Business Development Card -->
-                <div onclick="openDetails('business')" class="service-card p-0 rounded-[2.5rem] cursor-pointer group reveal">
-                    <div class="service-image-container">
-                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200" alt="Business Development" class="opacity-90">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-6 left-8 floating-icon w-14 h-14 bg-sky-500 text-slate-950 rounded-2xl flex items-center justify-center text-xl shadow-lg">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                    </div>
-                    <div class="p-8 sm:p-10 flex-1">
-                        <h3 data-i18n="serv_card_1_title" class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-sky-500 transition-colors">Business Development</h3>
-                        <p data-i18n="serv_card_1_long_desc" class="text-slate-500 dark:text-slate-400 text-sm sm:text-base leading-relaxed mb-8">
-                            We architect strategic growth paths by identifying untapped market opportunities and optimizing your internal operations. Our boutique approach ensures that every expansion tactic is data-driven and aligned with your long-term vision.
-                        </p>
-                        <div class="flex items-center gap-2">
-                            <span data-i18n="explore" class="text-sky-600 dark:text-sky-400 text-[10px] font-black uppercase tracking-widest">Explore Profile</span>
-                            <i class="fas fa-arrow-right text-[10px] text-sky-500 group-hover:translate-x-2 transition-transform rtl:rotate-180 rtl:group-hover:-translate-x-2"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Tracking Systems Card -->
-                <div onclick="openDetails('tracking')" class="service-card p-0 rounded-[2.5rem] cursor-pointer group reveal delay-150">
-                    <div class="service-image-container">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" alt="Tracking Systems" class="opacity-90">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-6 left-8 floating-icon w-14 h-14 bg-indigo-500 text-white rounded-2xl flex items-center justify-center text-xl shadow-lg" style="animation-delay: 0.5s">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-                    </div>
-                    <div class="p-8 sm:p-10 flex-1">
-                        <h3 data-i18n="serv_card_2_title" class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-indigo-500 transition-colors">Tracking Systems</h3>
-                        <p data-i18n="serv_card_2_long_desc" class="text-slate-500 dark:text-slate-400 text-sm sm:text-base leading-relaxed mb-8">
-                            Transform your raw data into actionable intelligence. We build custom CRM and financial tracking ecosystems that provide real-time visibility into your business health, enabling faster decision-making and higher operational transparency.
-                        </p>
-                        <div class="flex items-center gap-2">
-                            <span data-i18n="explore" class="text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest">Explore Profile</span>
-                            <i class="fas fa-arrow-right text-[10px] text-indigo-500 group-hover:translate-x-2 transition-transform rtl:rotate-180 rtl:group-hover:-translate-x-2"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Websites Card -->
-                <div onclick="openDetails('web')" class="service-card p-0 rounded-[2.5rem] cursor-pointer group reveal delay-300">
-                    <div class="service-image-container">
-                        <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200" alt="Websites" class="opacity-90">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-6 left-8 floating-icon w-14 h-14 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-xl shadow-lg" style="animation-delay: 1s">
-                            <i class="fas fa-laptop-code"></i>
-                        </div>
-                    </div>
-                    <div class="p-8 sm:p-10 flex-1">
-                        <h3 data-i18n="serv_card_3_title" class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-emerald-500 transition-colors">Websites</h3>
-                        <p data-i18n="serv_card_3_long_desc" class="text-slate-500 dark:text-slate-400 text-sm sm:text-base leading-relaxed mb-8">
-                            We build digital storefronts that act as your most efficient salesman. From high-conversion E-commerce architectures to ultra-sleek corporate portfolios, our websites are engineered for performance, SEO authority, and aesthetic depth.
-                        </p>
-                        <div class="flex items-center gap-2">
-                            <span data-i18n="explore" class="text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest">Explore Profile</span>
-                            <i class="fas fa-arrow-right text-[10px] text-emerald-500 group-hover:translate-x-2 transition-transform rtl:rotate-180 rtl:group-hover:-translate-x-2"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mobile Development Card -->
-                <div onclick="openDetails('mobile')" class="service-card p-0 rounded-[2.5rem] cursor-pointer group reveal delay-450">
-                    <div class="service-image-container">
-                        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200" alt="Mobile Apps" class="opacity-90">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                        <div class="absolute bottom-6 left-8 floating-icon w-14 h-14 bg-orange-500 text-white rounded-2xl flex items-center justify-center text-xl shadow-lg" style="animation-delay: 1.5s">
-                            <i class="fas fa-mobile-screen-button"></i>
-                        </div>
-                    </div>
-                    <div class="p-8 sm:p-10 flex-1">
-                        <h3 data-i18n="serv_card_4_title" class="text-2xl sm:text-3xl font-black mb-4 group-hover:text-orange-500 transition-colors">Mobile Development</h3>
-                        <p data-i18n="serv_card_4_long_desc" class="text-slate-500 dark:text-slate-400 text-sm sm:text-base leading-relaxed mb-8">
-                            Native experiences for the modern mobile-first user. We specialize in iOS and Android development that integrates advanced AI logic and frictionless UX to ensure high user retention and professional brand presence on every device.
-                        </p>
-                        <div class="flex items-center gap-2">
-                            <span data-i18n="explore" class="text-orange-600 dark:text-orange-400 text-[10px] font-black uppercase tracking-widest">Explore Profile</span>
-                            <i class="fas fa-arrow-right text-[10px] text-orange-500 group-hover:translate-x-2 transition-transform rtl:rotate-180 rtl:group-hover:-translate-x-2"></i>
+                    <div class="boutique-card p-10 sm:p-14 rounded-[3rem] w-full">
+                        <h2 class="text-4xl font-black mb-12 text-center" data-i18n="why_us_title">Why Choose Us</h2>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="flex flex-col gap-3">
+                                <h4 class="text-xl font-black text-sky-500" data-i18n="why_1_title">Strategy-Driven Development</h4>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed" data-i18n="why_1_desc">We don’t just build systems—we align technology with your business goals to ensure every solution delivers real value.</p>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <h4 class="text-xl font-black text-sky-500" data-i18n="why_2_title">End-to-End Solutions</h4>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed" data-i18n="why_2_desc">From business development and process tracking to websites and mobile applications, we provide integrated services under one roof.</p>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <h4 class="text-xl font-black text-sky-500" data-i18n="why_3_title">Smart Tracking & Automation</h4>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed" data-i18n="why_3_desc">Our tracking systems give you full visibility over operations, performance, and growth metrics—so decisions are based on data, not guesswork.</p>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <h4 class="text-xl font-black text-sky-500" data-i18n="why_4_title">Performance & Scalability Focus</h4>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed" data-i18n="why_4_desc">Every website and mobile app we build is optimized for speed, security, scalability, and long-term growth.</p>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <h4 class="text-xl font-black text-sky-500" data-i18n="why_5_title">User-Centered Design</h4>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed" data-i18n="why_5_desc">We design intuitive, frictionless experiences that increase engagement, retention, and brand credibility.</p>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <h4 class="text-xl font-black text-sky-500" data-i18n="why_6_title">Reliable Partnership</h4>
+                                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed" data-i18n="why_6_desc">We work as an extension of your team—transparent, responsive, and committed to your success.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Customers -->
-    <section id="customers" class="py-16 sm:py-24 bg-white dark:bg-slate-950 transition-all duration-500 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16 text-center reveal">
-            <h2 data-i18n="cust_tag" class="text-[9px] sm:text-[10px] font-black tracking-[0.3em] sm:tracking-[0.4em] text-slate-400 uppercase mb-4">Some of our Customers</h2>
-            <div class="h-[2px] w-12 bg-sky-500 mx-auto rounded-full"></div>
-        </div>
-        <div class="reveal delay-200 marquee-container"><div class="marquee-track" id="partner-track"></div></div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="py-20 sm:py-32 md:py-40 bg-white dark:bg-slate-950 relative transition-all duration-500">
-        <div class="digital-grid opacity-20 dark:opacity-40"></div>
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-            <div class="text-center mb-12 sm:mb-20 reveal">
-                <h2 data-i18n="contact_title" class="text-4xl sm:text-7xl font-black tracking-tighter mb-4 sm:mb-6 uppercase">Get Started.</h2>
-                <div class="flex items-center justify-center gap-2 mb-6 sm:mb-8 reveal">
-                    <div class="feature-block bg-sky-200 dark:bg-sky-400/20"></div>
-                    <div class="feature-block bg-sky-500"></div>
-                    <div class="feature-block bg-indigo-200 dark:bg-indigo-400/20"></div>
+            <footer class="page-footer">
+                <button onclick="showView('services')" class="next-page-btn group">
+                    <span data-i18n="nav_services">Our Services</span>
+                    <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                <div class="small-marquee-container">
+                    <div class="marquee-track partner-marquee-track"></div>
                 </div>
-                <p class="text-sm sm:text-base text-slate-500 dark:text-slate-400 font-medium mb-8 sm:mb-12"><span data-i18n="contact_subtitle">Connect at</span> <span class="text-sky-600 dark:text-sky-500 font-bold">Mantiq2023@gmail.com</span></p>
+            </footer>
+        </section>
+
+        <!-- Services Page -->
+        <section id="services-view" class="view-section">
+            <div class="content-wrapper">
+                <div class="max-w-7xl w-full">
+                    <div class="text-center mb-16">
+                        <span class="text-sky-500 font-black text-sm uppercase tracking-[0.4em] mb-4 block" data-i18n="serv_tag">Our Solutions</span>
+                        <h2 class="text-5xl sm:text-7xl font-black tracking-tighter" data-i18n="serv_title">The Path You Should Take</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+                        <!-- Business Development -->
+                        <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
+                            <div class="service-image-container"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200" alt="Business Dev"></div>
+                            <div class="p-8 sm:p-10 flex-1 flex flex-col">
+                                <h3 class="text-2xl font-black mb-4" data-i18n="serv_card_1_title">Business Development</h3>
+                                <p class="text-base text-slate-500 dark:text-slate-400 leading-relaxed mb-6" data-i18n="serv_card_1_long_desc">We Create strategic growth paths by identifying untapped market opportunities and optimizing your internal operations. Our boutique approach ensures that every expansion is data-driven and aligned with your long-term vision.</p>
+                                <div class="mb-8" id="points-business"></div>
+                                <div onclick="openDetails('business')" class="mt-auto w-full py-4 bg-sky-500/10 hover:bg-sky-500 text-sky-500 hover:text-slate-950 rounded-2xl flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer group/btn">
+                                    <span data-i18n="explore">Explore More</span><i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tracking System -->
+                        <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
+                            <div class="service-image-container"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" alt="Tracking Systems"></div>
+                            <div class="p-8 sm:p-10 flex-1 flex flex-col">
+                                <h3 class="text-2xl font-black mb-4" data-i18n="serv_card_2_title">Tracking System</h3>
+                                <p class="text-base text-slate-500 dark:text-slate-400 leading-relaxed mb-6" data-i18n="serv_card_2_long_desc">Transform your raw data into Efficient Digital System. We build custom CRM and financial tracking ecosystems that provide real-time visibility into your business health, enabling faster decision-making and higher operational transparency.</p>
+                                <div class="mb-8" id="points-tracking"></div>
+                                <div onclick="openDetails('tracking')" class="mt-auto w-full py-4 bg-indigo-500/10 hover:bg-indigo-500 text-indigo-500 hover:text-slate-950 rounded-2xl flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer group/btn">
+                                    <span data-i18n="explore">Explore More</span><i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Websites -->
+                        <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
+                            <div class="service-image-container"><img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200" alt="Websites"></div>
+                            <div class="p-8 sm:p-10 flex-1 flex flex-col">
+                                <h3 class="text-2xl font-black mb-4" data-i18n="serv_card_3_title">Websites</h3>
+                                <p class="text-base text-slate-500 dark:text-slate-400 leading-relaxed mb-6" data-i18n="serv_card_3_long_desc">We design and develop performance-driven websites, from conversion-focused e-commerce solutions to portfolio and company profile websites that elevate your brand. Every build is optimized for SEO, usability, and long-term scalability.</p>
+                                <div class="mb-8" id="points-web"></div>
+                                <div onclick="openDetails('web')" class="mt-auto w-full py-4 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-500 hover:text-slate-950 rounded-2xl flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer group/btn">
+                                    <span data-i18n="explore">Explore More</span><i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Development -->
+                        <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
+                            <div class="service-image-container"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200" alt="Mobile Dev"></div>
+                            <div class="p-8 sm:p-10 flex-1 flex flex-col">
+                                <h3 class="text-2xl font-black mb-4" data-i18n="serv_card_4_title">Mobile Development</h3>
+                                <p class="text-base text-slate-500 dark:text-slate-400 leading-relaxed mb-6" data-i18n="serv_card_4_long_desc">Native mobile experiences built for today’s mobile-first users. We specialize in iOS and Android development, integrating advanced AI logic with frictionless UX to drive high user retention and a strong, professional brand presence across all devices.</p>
+                                <div class="mb-8" id="points-mobile"></div>
+                                <div onclick="openDetails('mobile')" class="mt-auto w-full py-4 bg-orange-500/10 hover:bg-orange-500 text-orange-500 hover:text-slate-950 rounded-2xl flex items-center justify-center gap-3 text-[11px] font-black uppercase tracking-widest transition-all cursor-pointer group/btn">
+                                    <span data-i18n="explore">Explore More</span><i class="fas fa-arrow-right group-hover/btn:translate-x-1 transition-transform"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <form id="mantiq-form" onsubmit="handleForm(event)" class="glass-card-light dark:bg-slate-900/40 p-6 sm:p-20 rounded-[2.5rem] sm:rounded-[4rem] reveal">
-                <div class="grid md:grid-cols-2 gap-4 sm:gap-8 mb-4 sm:mb-8">
-                    <div class="space-y-2"><label class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 px-2" data-i18n="form_name">Full Name</label><input type="text" name="name" required class="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-xl sm:rounded-2xl outline-none focus:border-sky-500 dark:text-white transition-all"></div>
-                    <div class="space-y-2"><label class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 px-2" data-i18n="form_comp">Company Name</label><input type="text" name="business_name" class="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-xl sm:rounded-2xl outline-none focus:border-sky-500 dark:text-white transition-all"></div>
+            <footer class="page-footer">
+                <button onclick="showView('customers')" class="next-page-btn group">
+                    <span data-i18n="nav_customers">Our Customers</span>
+                    <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                <div class="small-marquee-container">
+                    <div class="marquee-track partner-marquee-track"></div>
                 </div>
-                <div class="grid md:grid-cols-2 gap-4 sm:gap-8 mb-4 sm:mb-8">
-                    <div class="space-y-2"><label class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 px-2" data-i18n="form_email">Email Address</label><input type="email" name="email" required class="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-xl sm:rounded-2xl outline-none focus:border-sky-500 dark:text-white transition-all"></div>
-                    <div class="space-y-2"><label class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 px-2" data-i18n="form_phone">Phone Number</label><input type="tel" name="phone" required class="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-xl sm:rounded-2xl outline-none focus:border-sky-500 dark:text-white transition-all"></div>
-                </div>
-                <div class="space-y-2 mb-6 sm:mb-8"><label class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 px-2" data-i18n="form_service_label">Interested Service</label><select id="service-select" name="service" class="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-xl sm:rounded-2xl outline-none focus:border-sky-500 dark:text-white transition-all cursor-pointer"><option value="" data-i18n="form_service_none">Select a service</option><option value="business" data-i18n="service_business">Business Development</option><option value="tracking" data-i18n="service_tracking">Tracking Systems</option><option value="web" data-i18n="service_web">Websites</option><option value="mobile" data-i18n="service_mobile">Mobile Development</option></select></div>
-                <div class="space-y-2 mb-10 sm:mb-12"><label class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 px-2" data-i18n="form_message">Message</label><textarea name="brief" rows="4" class="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-white/10 p-4 sm:p-5 rounded-xl sm:rounded-2xl outline-none focus:border-sky-500 resize-none dark:text-white transition-all"></textarea></div>
-                <button type="submit" id="submit-btn" class="w-full py-5 sm:py-8 bg-sky-500 rounded-xl sm:rounded-3xl font-black text-slate-950 text-base sm:text-lg hover:bg-sky-400 shadow-3xl shadow-sky-500/40 transition-all active:scale-95"><span data-i18n="form_btn">INITIATE MISSION</span></button>
-            </form>
-        </div>
-    </section>
+            </footer>
+        </section>
 
-    <!-- Sidebar Panel (Full width on mobile) -->
-    <div id="details-panel" class="fixed inset-y-0 z-[150] w-full md:w-[680px] shadow-2xl flex flex-col transition-all">
-        <div class="flex items-center justify-between p-6 sm:p-8 border-b border-white/5"><div id="panel-header-icon" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl sm:rounded-2xl bg-white/5 text-sky-400"></div><button onclick="closeDetails()" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full hover:bg-white/10 flex items-center justify-center transition-all"><i class="fas fa-times text-slate-500"></i></button></div>
-        <div class="flex-1 overflow-y-auto p-6 sm:p-16 text-white custom-scrollbar" id="details-body"></div>
+        <!-- Customers Page -->
+        <section id="customers-view" class="view-section">
+            <div class="content-wrapper">
+                <div class="max-w-4xl text-center my-auto">
+                    <!-- Clean simple heading for the dedicated page -->
+                    <div class="mantiq-label mx-auto">
+                        <span class="mantiq-label-dot"></span>
+                        <span data-i18n="cust_tag" class="text-sky-600 dark:text-sky-400 text-[10px] font-black uppercase tracking-[0.4em]">Our Trusted Partners</span>
+                    </div>
+                    <h2 class="text-4xl sm:text-6xl font-black tracking-tighter mb-6 uppercase" data-i18n="nav_customers">Customers</h2>
+                    <p class="text-slate-500 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">We take pride in our diverse ecosystem of successful partnerships across multiple industries.</p>
+                </div>
+            </div>
+            <footer class="page-footer">
+                <button onclick="showView('contact')" class="next-page-btn group">
+                    <span data-i18n="nav_cta">Contact Us</span>
+                    <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+                <div class="small-marquee-container">
+                    <div class="marquee-track partner-marquee-track"></div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact-view" class="view-section">
+            <div class="content-wrapper">
+                <div class="max-w-4xl w-full">
+                    <div class="text-center mb-12">
+                        <h2 class="text-6xl sm:text-8xl font-black tracking-tighter mb-6 uppercase" data-i18n="contact_title">Let's Build.</h2>
+                        <p class="text-lg text-slate-500 dark:text-slate-400"><span data-i18n="contact_subtitle">Reach out at</span> <span class="text-sky-500 font-bold">Mantiq2023@gmail.com</span></p>
+                    </div>
+                    <form onsubmit="handleForm(event)" class="boutique-card p-10 sm:p-20 rounded-[3rem]">
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <input type="text" name="name" required placeholder="Full Name" class="w-full bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-white/10 p-5 outline-none focus:border-sky-500 transition-all dark:text-white">
+                            <input type="text" name="business_name" placeholder="Company Name" class="w-full bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-white/10 p-5 outline-none focus:border-sky-500 transition-all dark:text-white">
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <input type="email" name="email" required placeholder="Email Address" class="w-full bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-white/10 p-5 outline-none focus:border-sky-500 transition-all dark:text-white">
+                            <input type="tel" name="phone" required placeholder="Phone Number" class="w-full bg-slate-50 dark:bg-mantiq-navy/50 border-b border-slate-200 dark:border-white/10 p-5 outline-none focus:border-sky-500 transition-all dark:text-white">
+                        </div>
+                        <select name="service" class="w-full bg-slate-50 dark:bg-mantiq-navy/50 border-b border-slate-200 dark:border-white/10 p-5 mb-10 outline-none focus:border-sky-500 transition-all dark:text-white cursor-pointer">
+                            <option value="">Select a service</option>
+                            <option value="business">Business Development</option>
+                            <option value="tracking">Tracking Systems</option>
+                            <option value="web">Websites</option>
+                            <option value="mobile">Mobile Development</option>
+                        </select>
+                        <button type="submit" id="submit-btn" class="w-full py-6 bg-sky-500 rounded-2xl font-black text-slate-950 text-xl hover:bg-sky-400 shadow-2xl shadow-sky-500/30 transition-all active:scale-95"><span data-i18n="form_btn">INITIATE MISSION</span></button>
+                    </form>
+                </div>
+            </div>
+            <footer class="page-footer">
+                <div class="small-marquee-container">
+                    <div class="marquee-track partner-marquee-track"></div>
+                </div>
+            </footer>
+        </section>
+    </main>
+
+    <!-- Sidebar Panel -->
+    <div id="details-panel" class="fixed inset-y-0 w-full md:w-[700px] shadow-2xl flex flex-col bg-slate-950 text-white">
+        <div class="flex items-center justify-between p-8 border-b border-white/5">
+            <div id="panel-header-icon" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 text-sky-400"></div>
+            <button onclick="closeDetails()" class="w-12 h-12 rounded-full hover:bg-white/10 flex items-center justify-center transition-all"><i class="fas fa-times text-slate-500"></i></button>
+        </div>
+        <div class="flex-1 overflow-y-auto p-10 sm:p-20 custom-scrollbar" id="details-body"></div>
     </div>
     <div id="panel-overlay" onclick="closeDetails()" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[140] hidden"></div>
 
-    <footer class="py-12 sm:py-16 text-center border-t border-slate-100 dark:border-white/5 bg-white dark:bg-slate-950 transition-all duration-500">
-        <div class="flex items-center justify-center gap-1 mb-6 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-            <div class="h-10 sm:h-14 flex items-center">
-                <svg class="brand-logo" width="400" height="400" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-                    <g fill="none" stroke="#3ABEFF" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="200" cy="200" r="150" />
-                        <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
-                    </g>
-                </svg>
-            </div>
-        </div>
-        <p class="text-slate-400 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.3em] sm:tracking-[0.4em]">© 2024 Mantiq Solutions. Est July 2023.</p>
-    </footer>
-
     <script>
+        let currentLang = 'en';
+
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVasCdHBbZ4fNh1wfnKK76TLDJQxhjmH4tiyShQFwkFZorMj0GQyrTAovkOJHkw55rxA/exec";
         const customers = ["EL ASEEL Development", "Omar Gharib", "ETMAM", "ALSAIF ANALYSIS", "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO", "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA", "START MART", "CREATIVO", "ALPHA ACADEMY", "VARM", "ART FURNITURE"];
 
         const translations = {
             en: { 
-                nav_about: "About Us", nav_services: "Our Services", nav_customers: "Customers", nav_cta: "Get Started", 
+                nav_about: "About Us", nav_services: "Services", nav_customers: "Customers", nav_cta: "Get Started", 
                 hero_tag: "Business Services Company", hero_title_1: "The Path", hero_title_2: "You Should Take", 
-                hero_desc: "Empowering your success through market knowledge, customized business models, digital solutions, and accurate consultation.", 
-                hero_cta_1: "Our Solutions", hero_cta_2: "About us", about_tag: "Est. July 2023", about_title_1: "About", 
-                about_desc: "Mantiq is a business service engineering firm. We help you start or develop your business by offering a suite of precise digital and strategic services designed to take your venture to the next level.", 
-                stat_1: "Completed Services", stat_2: "Managed Projects", stat_3: "Launched Ventures", stat_4: "Intern Experts", 
-                side_pill_1_title: "Inspiring Innovation", side_pill_1_desc: "Helping youth launch their path through tactical engineering and incubation.",
-                side_pill_2_title: "Empowering Growth", side_pill_2_desc: "Market intelligence and customized digital models built for sustainable expansion.",
-                serv_tag: "Our Solutions", serv_title: "The path you should take", 
-                serv_desc: "Sophisticated business engineering frameworks designed to scale your venture with precision and impact.", 
-                serv_card_1_title: "Business Development", 
-                serv_card_1_long_desc: "We architect strategic growth paths by identifying untapped market opportunities and optimizing your internal operations. Our boutique approach ensures that every expansion tactic is data-driven and aligned with your long-term vision.",
-                serv_card_2_title: "Tracking Systems", 
-                serv_card_2_long_desc: "Transform your raw data into actionable intelligence. We build custom CRM and financial tracking ecosystems that provide real-time visibility into your business health, enabling faster decision-making and higher operational transparency.",
-                serv_card_3_title: "Websites", 
-                serv_card_3_long_desc: "We build digital storefronts that act as your most efficient salesman. From high-conversion E-commerce architectures to ultra-sleek corporate portfolios, our websites are engineered for performance, SEO authority, and aesthetic depth.",
-                serv_card_4_title: "Mobile Development", 
-                serv_card_4_long_desc: "Native experiences for the modern mobile-first user. We specialize in iOS and Android development that integrates advanced AI logic and frictionless UX to ensure high user retention and professional brand presence on every device.",
-                explore: "Explore Profile", cust_tag: "Some of our Customers", contact_title: "Get Started.", contact_subtitle: "Connect at", 
-                form_name: "Full Name", form_comp: "Company Name", form_email: "Email Address", form_phone: "Phone Number", 
-                form_message: "Message", form_btn: "INITIATE MISSION", form_service_label: "Interested Service", 
-                form_service_none: "Select a service", service_business: "Business Development", service_tracking: "Tracking Systems", 
-                service_web: "Websites", service_mobile: "Mobile Development", sol_profile: "Solution Profile", 
-                init_sol: "Initiate Solution.", init_inq: "INITIATE INQUIRY" 
+                hero_desc: "Empowering your success through market knowledge and digital solutions.",
+                form_btn: "INITIATE MISSION", explore: "Explore More", sol_profile: "Solution Profile", init_inq: "Initiate Inquiry", cust_tag: "Our Trusted Partners",
+                about_title_pre: "About",
+                about_desc_intro: "We are a business service company established in July 2023 Aimed to help you to start or develop your business by offering several services that take your business to another level.",
+                msg_title: "Our Message",
+                msg_desc: "We help businesses grow smarter, operate faster, and compete stronger in a digital-first world. By combining strategic business development with intelligent tracking systems, high-performance websites, and scalable mobile applications, we turn ideas into measurable results.",
+                vision_title: "Our Vision",
+                vision_desc: "To become a trusted digital partner for businesses seeking sustainable growth, operational clarity, and technological excellence—empowering organizations to make data-driven decisions and build future-ready digital ecosystems.",
+                side_pill_1_title: "Inspiring Innovation",
+                side_pill_1_desc: "It’s Aimed to help the youth to starting their own business.",
+                side_pill_2_title: "Empowering Growth",
+                side_pill_2_desc: "Empowering your success by market knowledge, customised business models, digital solutions and accurate consultation.",
+                why_us_title: "Why Choose Us",
+                why_1_title: "Strategy-Driven Development",
+                why_1_desc: "We don’t just build systems—we align technology with your business goals to ensure every solution delivers real value.",
+                why_2_title: "End-to-End Solutions",
+                why_2_desc: "From business development and process tracking to websites and mobile applications, we provide integrated services under one roof.",
+                why_3_title: "Smart Tracking & Automation",
+                why_3_desc: "Our tracking systems give you full visibility over operations, performance, and growth metrics—so decisions are based on data, not guesswork.",
+                why_4_title: "Performance & Scalability Focus",
+                why_4_desc: "Every website and mobile app we build is optimized for speed, security, scalability, and long-term growth.",
+                why_5_title: "User-Centered Design",
+                why_5_desc: "We design intuitive, frictionless experiences that increase engagement, retention, and brand credibility.",
+                why_6_title: "Reliable Partnership",
+                why_6_desc: "We work as an extension of your team—transparent, responsive, and committed to your success.",
+                serv_card_1_long_desc: "We Create strategic growth paths by identifying untapped market opportunities and optimizing your internal operations. Our boutique approach ensures that every expansion is data-driven and aligned with your long-term vision.",
+                serv_card_2_long_desc: "Transform your raw data into Efficient Digital System. We build custom CRM and financial tracking ecosystems that provide real-time visibility into your business health, enabling faster decision-making and higher operational transparency.",
+                serv_card_3_long_desc: "We design and develop performance-driven websites, from conversion-focused e-commerce solutions to portfolio and company profile websites that elevate your brand. Every build is optimized for SEO, usability, and long-term scalability.",
+                serv_card_4_long_desc: "Native mobile experiences built for today’s mobile-first users. We specialize in iOS and Android development, integrating advanced AI logic with frictionless UX to drive high user retention and a strong, professional brand presence across all devices.",
+                next_about: "Discover More",
             },
             ar: { 
                 nav_about: "من نحن", nav_services: "خدماتنا", nav_customers: "عملاؤنا", nav_cta: "ابدأ الآن", 
                 hero_tag: "شركة خدمات أعمال", hero_title_1: "المسار الذي", hero_title_2: "يجب أن تسلكه", 
-                hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق ونماذج الأعمال المخصصة والحلول الرقمية والاستشارات الدقيقة.", 
-                hero_cta_1: "حلولنا", hero_cta_2: "من نحن", about_tag: "تأسست في يوليو 2023", about_title_1: "حول", 
-                about_desc: "منطق هي شركة هندسة خدمات أعمال. نساعدك على بدء أو تطوير عملك من خلال تقديم مجموعة من الخدمات الرقمية والاستراتيجية المصممة للارتقاء بمشروعك.", 
-                stat_1: "خدمات مكتملة", stat_2: "مشاريع مدارة", stat_3: "مشاريع انطلقت", stat_4: "خبراء دوليون", 
-                side_pill_1_title: "إلهام الابتكار", side_pill_1_desc: "مساعدة الشباب على إطلاق مسارهم المهني من خلال هندسة الأعمال واحتضان المشاريع.",
-                side_pill_2_title: "تمكين النمو", side_pill_2_desc: "ذكاء السوق والنماذج الرقمية المخصصة لضمان الاستشارات الدقيقة والتوسع المستدام.",
-                serv_tag: "حلولنا", serv_title: "المسار الذي يجب أن تسلكه", 
-                serv_desc: "هندسة أعمال مصممة خصيصاً للمشاريع الحديثة التي تتطلع إلى التوسع بكفاءة.", 
-                serv_card_1_title: "تطوير الأعمال", 
+                hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق والحلول الرقمية.",
+                form_btn: "بدء المهمة", explore: "استكشف المزيد", sol_profile: "ملف الحل", init_inq: "ابدأ الاستفسار", cust_tag: "شركاؤنا الموثوقون",
+                about_title_pre: "عن",
+                about_desc_intro: "نحن شركة خدمات أعمال تأسست في يوليو 2023 نهدف إلى مساعدتك في بدء أو تطوير عملك من خلال تقديم عدة خدمات ترتقي بعملك إلى مستوى آخر.",
+                msg_title: "رسالتنا",
+                msg_desc: "نحن نساعد الشركات على النمو بشكل أذكى، والعمل بشكل أسرع، والمنافسة بقوة أكبر في عالم رقمي. من خلال دمج تطوير الأعمال الاستراتيجي مع أنظمة التتبع الذكية، والمواقع عالية الأداء، وتطبيقات الهاتف المحمول القابلة للتوسع، نحول الأفكار إلى نتائج ملموسة.",
+                vision_title: "رؤيتنا",
+                vision_desc: "أن نصبح شريكًا رقميًا موثوقًا به للشركات التي تسعى لتحقيق نمو مستدام ووضوح تشغيلي وتميز تكنولوجي - تمكين المؤسسات من اتخاذ قرارات قائمة على البيانات وبناء أنظمة رقمية جاهزة للمستقبل.",
+                side_pill_1_title: "إلهام الابتكار",
+                side_pill_1_desc: "يهدف إلى مساعدة الشباب على بدء أعمالهم التجارية الخاصة.",
+                side_pill_2_title: "تمكين النمو",
+                side_pill_2_desc: "تمكين نجاحك من خلال معرفة السوق، ونماذج الأعمال المخصصة، والحلول الرقمية والاستشارات الدقيقة.",
+                why_us_title: "لماذا تختارنا؟",
+                why_1_title: "تطوير مدفوع بالاستراتيجية",
+                why_1_desc: "نحن لا نبني أنظمة فحسب - بل نوائم التكنولوجيا مع أهداف عملك لضمان تقديم قيمة حقيقية من خلال كل حل.",
+                why_2_title: "حلول متكاملة وشاملة",
+                why_2_desc: "من تطوير الأعمال وتتبع العمليات إلى المواقع الإلكترونية وتطبيقات الهاتف المحمول، نقدم خدمات متكاملة تحت سقف واحد.",
+                why_3_title: "تتبع ذكي وأتمتة",
+                why_3_desc: "تمنحك أنظمة التتبع لدينا رؤية كاملة للعمليات والأداء ومقاييس النمو - بحيث تُبنى القرارات على البيانات وليس التخمين.",
+                why_4_title: "التركيز على الأداء والقابلية للتوسع",
+                why_4_desc: "كل موقع وتطبيق نبنيه يتم تحسينه من حيث السرعة والأمان وقابلية التوسع والنمو طويل الأمد.",
+                why_5_title: "تصميم متمحور حول المستخدم",
+                why_5_desc: "نصمم تجارب بديهية وسلسة تزيد من التفاعل والاحتفاظ بالعملاء ومصداقية العلامة التجارية.",
+                why_6_title: "شراكة موثوقة",
+                why_6_desc: "نعمل كامتداد لفريقك - بوضوح واستجابة والتزام تام بنجاحك.",
                 serv_card_1_long_desc: "نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية. يضمن نهجنا المخصص أن تكون كل تكتيكات التوسع مدفوعة بالبيانات ومتوافقة مع رؤيتك طويلة المدى.",
-                serv_card_2_title: "أنظمة التتبع", 
                 serv_card_2_long_desc: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ. نحن نبني أنظمة CRM وتتبع مالي مخصصة توفر رؤية فورية لصحة عملك، مما يتيح اتخاذ قرارات أسرع وشفافية تشغيلية أعلى.",
-                serv_card_3_title: "المواقع الإلكترونية", 
                 serv_card_3_long_desc: "نحن نبني واجهات رقمية تعمل كأكثر بائع كفاءة لديك. من هندسة التجارة الإلكترونية عالية التحويل إلى ملفات الشركات الأنيقة، تم تصميم مواقعنا للأداء وقوة محركات البحث والعمق الجمالي.",
-                serv_card_4_title: "تطوير الموبايل", 
                 serv_card_4_long_desc: "تجارب أصلية لمستخدمي الهاتف المحمول العصريين. نحن متخصصون في تطوير تطبيقات iOS وأندرويد التي تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة لضمان احتفاظ عالٍ بالمستخدمين.",
-                explore: "استكشف الملف", cust_tag: "بعض من عملائنا", contact_title: "ابدأ الآن.", contact_subtitle: "تواصل معنا عبر", 
-                form_name: "الاسم الكامل", form_comp: "اسم الشركة", form_email: "البريد الإلكتروني", form_phone: "رقم الهاتف", 
-                form_message: "الرسالة", form_btn: "بدء المهمة", form_service_label: "الخدمة المطلوبة", 
-                form_service_none: "اختر خدمة", service_business: "تطوير الأعمال", service_tracking: "أنظمة التتبع", 
-                service_web: "المواقع الإلكترونية", service_mobile: "تطوير الموبايل", sol_profile: "ملف الحل", 
-                init_sol: "بدء الحل.", init_inq: "بدء الاستفسار" 
+                next_about: "اكتشف المزيد",
             }
         };
 
@@ -557,83 +655,67 @@
                 title: { en: "Business Development", ar: "تطوير الأعمال" }, 
                 icon: "fa-chart-line", 
                 img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200", 
-                description: { 
-                    en: "Strategy and consultation focused on scaling your venture.", 
-                    ar: "استراتيجيات واستشارات تركز على توسيع نطاق مشروعك." 
-                }, 
-                features: { 
-                    en: ["Strategic Planning", "B2B Leads", "Performance Analytics", "Consultancy"], 
-                    ar: ["التخطيط الاستراتيجي", "توليد العملاء", "تحليلات الأداء", "الاستشارات"] 
-                } 
+                features: { en: ["Strategic Planning", "B2B Leads", "Analytics", "Consultancy"], ar: ["التخطيط الاستراتيجي", "توليد العملاء", "التحليلات", "الاستشارات"] },
+                description: { en: translations.en.serv_card_1_long_desc, ar: translations.ar.serv_card_1_long_desc } 
             },
             tracking: { 
                 title: { en: "Tracking Systems", ar: "أنظمة التتبع" }, 
                 icon: "fa-layer-group", 
                 img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200", 
-                description: { 
-                    en: "Customized systems based on B-O-U-D.", 
-                    ar: "أنظمة مخصصة بناءً على ميزانيتك وعملياتك." 
-                }, 
-                features: { 
-                    en: ["Intelligent CRM", "Finance Trackers", "Pipeline Monitoring"], 
-                    ar: ["أنظمة CRM", "تتبع المالية", "مراقبة المسار"] 
-                } 
+                features: { en: ["Intelligent CRM", "Finance Trackers", "Pipeline Monitoring"], ar: ["أنظمة CRM", "تتبع المالية", "مراقبة المسار"] },
+                description: { en: translations.en.serv_card_2_long_desc, ar: translations.ar.serv_card_2_long_desc } 
             },
             web: { 
                 title: { en: "Websites", ar: "المواقع الإلكترونية" }, 
                 icon: "fa-laptop-code", 
                 img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200", 
-                description: { 
-                    en: "Architectures designed for brand equity.", 
-                    ar: "هندسة مصممة لتحويل الانتباه إلى قيمة للعلامة التجارية." 
-                }, 
-                features: { 
-                    en: ["E-commerce Mastery", "Technical SEO", "Inventory Dashboards"], 
-                    ar: ["التجارة الإلكترونية", "تحسين محركات البحث", "لوحات التحكم"] 
-                } 
+                features: { en: ["E-commerce Mastery", "Technical SEO", "Usability Design"], ar: ["التجارة الإلكترونية", "تحسين محركات البحث", "تصميم الاستخدام"] },
+                description: { en: translations.en.serv_card_3_long_desc, ar: translations.ar.serv_card_3_long_desc } 
             },
             mobile: { 
                 title: { en: "Mobile Development", ar: "تطوير الموبايل" }, 
                 icon: "fa-mobile-screen-button", 
                 img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200", 
-                description: { 
-                    en: "Built for performance and AI retention.", 
-                    ar: "تطبيقات مبنية للأداء والاحتفاظ بالمستخدمين." 
-                }, 
-                features: { 
-                    en: ["UI/UX Design", "In-App Messaging", "AI Integrations"], 
-                    ar: ["تصميم الواجهة", "الرسائل المدمجة", "تكاملات الذكاء الاصطناعي"] 
-                } 
+                features: { en: ["UI/UX Design", "AI Integrations", "Retention Strategy"], ar: ["تصميم واجهة المستخدم", "تكاملات الذكاء الاصطناعي", "استراتيجية الاحتفاظ"] },
+                description: { en: translations.en.serv_card_4_long_desc, ar: translations.ar.serv_card_4_long_desc } 
             }
         };
 
-        let currentLang = 'en';
-        let lastScrollY = window.scrollY;
+        function showView(viewId) {
+            const sections = document.querySelectorAll('.view-section');
+            const dots = document.querySelectorAll('.page-nav-dot');
+            sections.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            const target = document.getElementById(viewId + '-view');
+            const targetDot = document.querySelector(`.page-nav-dot[data-view="${viewId}"]`);
+            if (target) {
+                target.classList.add('active');
+                target.scrollTop = 0;
+            }
+            if (targetDot) targetDot.classList.add('active');
+            if (viewId === 'about') runStats();
+            if (viewId === 'services') renderServicePoints();
+        }
 
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-            const mainNav = document.getElementById('main-nav');
-            const sideNav = document.getElementById('side-navigator');
-            const hero = document.getElementById('hero-content');
-            if (currentScrollY > lastScrollY && currentScrollY > 100) mainNav.classList.add('nav-hidden');
-            else mainNav.classList.remove('nav-hidden');
-            if (currentScrollY > 400) { sideNav.classList.remove('opacity-0', 'pointer-events-none'); sideNav.classList.add('opacity-100', 'translate-x-0'); }
-            else { sideNav.classList.add('opacity-0', 'pointer-events-none'); }
-            if (hero && window.innerWidth > 768) { hero.style.opacity = Math.max(0, 1 - (currentScrollY / 600)); hero.style.transform = `translateY(${currentScrollY * 0.2}px)`; }
-            ['about', 'services', 'customers', 'contact'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el && currentScrollY >= el.offsetTop - 300 && currentScrollY < el.offsetTop + el.offsetHeight - 300) {
-                    document.querySelectorAll('.page-nav-dot').forEach(d => { d.classList.remove('active'); if (d.dataset.section === id) d.classList.add('active'); });
+        function renderServicePoints() {
+            Object.keys(serviceData).forEach(key => {
+                const container = document.getElementById(`points-${key}`);
+                if (container) {
+                    const points = serviceData[key].features[currentLang];
+                    container.innerHTML = points.map(p => `
+                        <div class="feature-point">
+                            <div class="feature-point-dot"></div>
+                            <span>${p}</span>
+                        </div>
+                    `).join('');
                 }
             });
-            lastScrollY = currentScrollY;
-        });
+        }
 
         function toggleTheme() {
             const isDark = document.documentElement.classList.toggle('dark');
             const icons = [document.getElementById('theme-icon'), document.getElementById('theme-icon-mobile')];
             icons.forEach(i => { if(i) i.className = isDark ? 'fas fa-sun text-yellow-400' : 'fas fa-moon text-slate-600'; });
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
         }
 
         function toggleLang() {
@@ -641,73 +723,79 @@
             document.documentElement.setAttribute('lang', currentLang);
             document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
             document.getElementById('lang-btn-text').innerText = currentLang === 'ar' ? 'EN' : 'AR';
-            document.getElementById('lang-btn-text-mobile').innerText = currentLang === 'ar' ? 'EN' : 'AR';
-            document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = translations[currentLang][el.getAttribute('data-i18n')] || el.innerText; });
-            localStorage.setItem('lang', currentLang);
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
+            });
+            const servicesView = document.getElementById('services-view');
+            if (servicesView && servicesView.classList.contains('active')) renderServicePoints();
         }
 
         function toggleMobileMenu() {
             const m = document.getElementById('mobile-menu');
-            const i = document.getElementById('menu-icon');
-            const active = m.classList.toggle('opacity-100');
+            m.classList.toggle('opacity-100');
             m.classList.toggle('pointer-events-auto');
-            i.className = active ? 'fas fa-times' : 'fas fa-bars';
         }
 
         function openDetails(key) {
             const d = serviceData[key];
             const p = document.getElementById('details-panel');
             const t = translations[currentLang];
-            document.getElementById('panel-header-icon').innerHTML = `<i class="fas ${d.icon} text-lg"></i>`;
+            document.getElementById('panel-header-icon').innerHTML = `<i class="fas ${d.icon} text-2xl"></i>`;
             document.getElementById('details-body').innerHTML = `
-                <div class="reveal active">
-                    <span class="text-sky-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 sm:mb-6 block">${t.sol_profile}</span>
-                    <h2 class="text-3xl sm:text-5xl font-black mb-6 sm:mb-8 leading-tight">${d.title[currentLang]}</h2>
-                    <div class="w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden mb-8 sm:mb-12 border border-white/5 bg-slate-800"><img src="${d.img}" class="w-full h-full object-cover"></div>
-                    <p class="text-base sm:text-xl text-slate-400 leading-relaxed mb-8 sm:mb-12">${d.description[currentLang]}</p>
-                    <div class="grid gap-3 sm:gap-4 mb-10 sm:mb-16">${d.features[currentLang].map(f => `<div class="flex items-center gap-4 sm:gap-6 p-4 sm:p-6 bg-white/5 rounded-xl sm:rounded-2xl"><div class="w-2 h-2 rounded-full bg-sky-500"></div><span class="font-bold text-slate-300 text-sm">${f}</span></div>`).join('')}</div>
-                    <button onclick="selectServiceAndScroll('${key}')" class="w-full py-5 sm:py-6 bg-sky-500 text-slate-950 rounded-xl sm:rounded-2xl font-black transition-all hover:bg-sky-400 shadow-lg shadow-sky-500/20 active:scale-95">${t.init_inq}</button>
+                <div class="animate-in fade-in slide-in-from-bottom duration-700">
+                    <span class="text-sky-400 text-[10px] font-black uppercase tracking-[0.4em] mb-6 block">${t.sol_profile}</span>
+                    <h2 class="text-4xl sm:text-6xl font-black mb-10 leading-tight">${d.title[currentLang]}</h2>
+                    <div class="w-full aspect-video rounded-3xl overflow-hidden mb-12 bg-slate-800"><img src="${d.img}" class="w-full h-full object-cover opacity-80"></div>
+                    <p class="text-xl text-slate-400 leading-relaxed mb-12">${d.description[currentLang]}</p>
+                    <div class="grid gap-4 mb-10">
+                         ${d.features[currentLang].map(f => `<div class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/5"><div class="w-2 h-2 rounded-full bg-sky-500"></div><span class="font-bold text-slate-300">${f}</span></div>`).join('')}
+                    </div>
+                    <button onclick="closeDetails(); showView('contact')" class="w-full py-6 bg-sky-500 text-slate-950 rounded-2xl font-black transition-all hover:bg-sky-400 shadow-xl shadow-sky-500/20 active:scale-95">${t.init_inq}</button>
                 </div>`;
             p.classList.add('open');
             document.getElementById('panel-overlay').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
         }
 
-        function selectServiceAndScroll(key) {
-            const selectEl = document.getElementById('service-select');
-            if (selectEl) selectEl.value = key;
-            closeDetails();
-            document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        function closeDetails() {
+            document.getElementById('details-panel').classList.remove('open');
+            document.getElementById('panel-overlay').classList.add('hidden');
         }
 
-        function closeDetails() { document.getElementById('details-panel').classList.remove('open'); document.getElementById('panel-overlay').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+        function runStats() {
+            document.querySelectorAll('.stat-counter').forEach(c => {
+                const t = +c.dataset.target; let v = 0;
+                const u = () => { v += t/40; if(v < t) { c.innerText = Math.ceil(v); setTimeout(u, 25); } else c.innerText = t; }; u();
+            });
+        }
 
-        async function handleForm(e) {
-            e.preventDefault();
+        async function handleForm(event) {
+            event.preventDefault();
             const b = document.getElementById('submit-btn');
             b.innerText = "...";
-            const f = new FormData(e.target);
+            const f = new FormData(event.target);
             const p = new URLSearchParams();
             f.forEach((v, k) => p.append(k, v));
             try { 
                 await fetch(`${SCRIPT_URL}?${p.toString()}`, { method: 'GET', mode: 'no-cors' }); 
-                b.innerText = currentLang === 'ar' ? "تم الاستلام" : "MISSION RECEIVED";
+                b.innerText = "MISSION RECEIVED";
                 b.style.backgroundColor = "#10b981"; 
-                e.target.reset(); 
-                setTimeout(() => { b.innerText = translations[currentLang].form_btn; b.style.backgroundColor = ""; }, 4000); 
-            } catch (err) { b.innerText = "RETRY"; b.style.backgroundColor = "#ef4444"; }
+                event.target.reset(); 
+            } catch (err) { b.innerText = "RETRY"; }
         }
 
-        const obs = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('active'); e.target.querySelectorAll('.stat-counter').forEach(c => { const t = +c.dataset.target; let v = 0; const u = () => { v += t/40; if(v < t) { c.innerText = Math.ceil(v); setTimeout(u, 20); } else c.innerText = t; }; u(); }); } }), { threshold: 0.1 });
-
-        window.addEventListener('load', () => {
-            if (localStorage.getItem('theme') === 'dark') toggleTheme();
-            if (localStorage.getItem('lang') === 'ar') toggleLang();
-            const tr = document.getElementById('partner-track');
-            const dL = [...customers, ...customers, ...customers, ...customers];
-            tr.innerHTML = dL.map(n => `<div class="partner-pill">${n}</div>`).join('');
-            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-        });
+        window.onload = () => {
+            const marqueeTracks = document.querySelectorAll('.partner-marquee-track');
+            
+            const list = [...customers, ...customers];
+            const content = list.map(n => `<div class="partner-pill">${n}</div>`).join('');
+            
+            marqueeTracks.forEach(track => {
+                track.innerHTML = content;
+            });
+            
+            renderServicePoints(); 
+        };
     </script>
 </body>
 </html>
