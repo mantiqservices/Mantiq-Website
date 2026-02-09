@@ -55,7 +55,12 @@
             transform: translateY(20px) scale(0.98);
             transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
             overflow-y: auto;
-            padding: 100px 0 0 0; /* Header spacing */
+            /* Increased top padding to accommodate the new mobile scroll nav */
+            padding: 140px 0 0 0; 
+        }
+
+        @media (min-width: 768px) {
+            .view-section { padding: 100px 0 0 0; }
         }
 
         .view-section.active {
@@ -333,14 +338,49 @@
         .event-card:hover .event-overlay {
             opacity: 1;
         }
+
+        /* Mobile Scrollable Header Tabs */
+        .mobile-nav-scroll {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 0 1rem;
+            gap: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        .mobile-nav-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .mobile-nav-pill {
+            padding: 0.6rem 1.25rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.03);
+            color: #64748b;
+        }
+        .dark .mobile-nav-pill {
+            background: rgba(255,255,255,0.03);
+            color: #94a3b8;
+        }
+        .mobile-nav-pill.active {
+            background: #38bdf8;
+            color: #0f172a;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+        }
     </style>
 </head>
 <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-500">
 
     <div class="digital-grid opacity-20 dark:opacity-40"></div>
 
-    <!-- Side Navigator -->
-    <div id="side-navigator" class="fixed ltr:right-6 rtl:left-6 top-1/2 -translate-y-1/2 z-[110] flex flex-col gap-5 items-center">
+    <!-- Side Navigator (Desktop) -->
+    <div id="side-navigator" class="fixed ltr:right-6 rtl:left-6 top-1/2 -translate-y-1/2 z-[110] hidden lg:flex flex-col gap-5 items-center">
         <div class="page-nav-dot active" data-view="home" onclick="showView('home')"></div>
         <div class="page-nav-dot" data-view="about" onclick="showView('about')"></div>
         <div class="page-nav-dot" data-view="services" onclick="showView('services')"></div>
@@ -349,7 +389,7 @@
     </div>
 
     <!-- Nav Bar -->
-    <nav id="main-nav" class="fixed w-full z-[100] border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl">
+    <nav id="main-nav" class="fixed w-full z-[100] border-b border-slate-100 dark:border-white/5 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center gap-1 cursor-pointer group" onclick="showView('home')">
@@ -363,25 +403,53 @@
                         <span class="ml-2 text-xl font-black uppercase tracking-widest hidden sm:inline-block">Mantiq</span>
                     </div>
                 </div>
+                
+                <!-- Desktop Links -->
                 <div class="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.25em] text-slate-500">
-                    <button onclick="showView('about')" data-i18n="nav_about" class="nav-link hover:text-sky-400">About Us</button>
-                    <button onclick="showView('services')" data-i18n="nav_services" class="nav-link hover:text-sky-400">Our Services</button>
-                    <button onclick="showView('events')" data-i18n="nav_events" class="nav-link hover:text-sky-400">Events</button>
+                    <button onclick="showView('about')" data-view-link="about" class="nav-link hover:text-sky-400">About Us</button>
+                    <button onclick="showView('services')" data-view-link="services" class="nav-link hover:text-sky-400">Our Services</button>
+                    <button onclick="showView('events')" data-view-link="events" class="nav-link hover:text-sky-400">Events</button>
                     <div class="flex items-center gap-4 pl-8 border-l border-slate-100 dark:border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r">
                         <button onclick="toggleLang()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 text-[10px] font-black"><span id="lang-btn-text">AR</span></button>
                         <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5"><i id="theme-icon" class="fas fa-moon"></i></button>
                         <button onclick="showView('contact')" data-i18n="nav_cta" class="bg-sky-500 text-slate-950 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-sky-400 shadow-xl shadow-sky-500/20">Get Started</button>
                     </div>
                 </div>
+
+                <!-- Mobile Header Right Actions -->
                 <div class="md:hidden flex items-center gap-3">
                     <button onclick="toggleTheme()" class="w-9 h-9 flex items-center justify-center text-slate-500"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
                     <button onclick="toggleMobileMenu()" class="w-9 h-9 flex items-center justify-center text-xl"><i id="menu-icon" class="fas fa-bars"></i></button>
                 </div>
             </div>
         </div>
-        <!-- Mobile Menu -->
+
+        <!-- Mobile View Quick-Scroll Bar (ONLY MOBILE) -->
+        <div class="md:hidden border-t border-slate-100 dark:border-white/5 py-3">
+            <div class="mobile-nav-scroll">
+                <button onclick="showView('home')" data-mobile-link="home" class="mobile-nav-pill active">Home</button>
+                <button onclick="showView('about')" data-mobile-link="about" class="mobile-nav-pill" data-i18n="nav_about">About Us</button>
+                <button onclick="showView('services')" data-mobile-link="services" class="mobile-nav-pill" data-i18n="nav_services">Services</button>
+                <button onclick="showView('events')" data-mobile-link="events" class="mobile-nav-pill" data-i18n="nav_events">Events</button>
+                <button onclick="showView('career')" data-mobile-link="career" class="mobile-nav-pill">Careers</button>
+                <button onclick="showView('contact')" data-mobile-link="contact" class="mobile-nav-pill" data-i18n="nav_cta">Contact</button>
+            </div>
+        </div>
+        
+        <!-- Mobile Full Menu -->
         <div id="mobile-menu" class="fixed inset-0 z-[120] bg-white dark:bg-slate-950 flex flex-col p-10 opacity-0 pointer-events-none transition-all duration-500">
-            <div class="flex justify-end mb-10">
+            <div class="flex justify-between items-center mb-10">
+                <div class="flex items-center gap-1">
+                    <div class="h-8">
+                        <svg class="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                            <g fill="none" stroke="#3ABEFF" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="200" cy="200" r="150" />
+                                <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="text-xl font-black tracking-widest uppercase">Mantiq</span>
+                </div>
                 <button onclick="toggleMobileMenu()" class="text-3xl"><i class="fas fa-times"></i></button>
             </div>
             <div class="flex flex-col gap-8 text-2xl font-black uppercase tracking-widest">
@@ -389,6 +457,8 @@
                 <button onclick="showView('about'); toggleMobileMenu()">About Us</button>
                 <button onclick="showView('services'); toggleMobileMenu()">Our Services</button>
                 <button onclick="showView('events'); toggleMobileMenu()">Events</button>
+                <button onclick="showView('career'); toggleMobileMenu()">Careers</button>
+                <button onclick="toggleLang()" class="flex items-center gap-4 text-sky-500">Language: <span id="mobile-lang-text">EN</span></button>
                 <button onclick="showView('contact'); toggleMobileMenu()" class="bg-sky-500 text-slate-950 py-5 rounded-2xl text-center text-sm">Get Started</button>
             </div>
         </div>
@@ -680,6 +750,7 @@
                         <a href="mailto:Mantiq2023@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
                     </div>
                     <div class="flex flex-col items-center gap-2">
+                        <button onclick="showView('career')" class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-500 hover:text-sky-400 transition-colors" data-i18n="careers_link">Join Our Team / Careers</button>
                         <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">© 2026 MANTIq. All rights reserved.</span>
                     </div>
                 </div>
@@ -865,7 +936,7 @@
                 why_6_title: "شراكة موثوقة",
                 why_6_desc: "نعمل كامتداد لفريقك - بوضوح واستجابة والتزام تام بنجاحك.",
                 serv_card_1_long_desc: "نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية. يضمن نهجنا المخصص أن تكون كل تكتيكات التوسع مدفوعة بالبيانات ومتوافقة مع رؤيتك طويلة المدى.",
-                serv_card_2_long_desc: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ. نحن نبني أنظمة CRM وتتبع مالي مخصصة توفر رؤية فورية لصحة عملك، مما يتيح اتخاذ قرارات أسرع وشفافية تشغيلية أعلى.",
+                serv_card_2_long_desc: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ. نحن نبني أنظمة CRM وتتبع مالي مخصصة توفر رؤية فورية لصحة عملك، مما يتيح اتخاذ قرارات أسرع وشفافية تشغيلي أعلى.",
                 serv_card_3_long_desc: "نحن نبني واجهات رقمية تعمل كأكثر بائع كفاءة لديك. من هندسة التجارة الإلكترونية عالية التحويل إلى ملفات الشركات الأنيقة، تم تصميم مواقعنا للأداء وقوة محركات البحث والعمق الجمالي.",
                 serv_card_4_long_desc: "تجارب أصلية لمستخدمي الهاتف المحمول العصريين. نحن متخصصون في تطوير تطبيقات iOS وأندرويد التي تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة لضمان احتفاظ عالٍ بالمستخدمين.",
                 next_about: "اكتشف المزيد",
@@ -915,18 +986,44 @@
         function showView(viewId) {
             const sections = document.querySelectorAll('.view-section');
             const dots = document.querySelectorAll('.page-nav-dot');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobilePills = document.querySelectorAll('.mobile-nav-pill');
+            
             sections.forEach(s => s.classList.remove('active'));
             dots.forEach(d => d.classList.remove('active'));
+            
+            // Handle active state for desktop links
+            navLinks.forEach(l => {
+                l.classList.remove('text-sky-500');
+                if (l.getAttribute('data-view-link') === viewId) l.classList.add('text-sky-500');
+            });
+
+            // Handle active state for mobile quick pills
+            mobilePills.forEach(p => {
+                p.classList.remove('active');
+                if (p.getAttribute('data-mobile-link') === viewId) p.classList.add('active');
+            });
+
             const target = document.getElementById(viewId + '-view');
             const targetDot = document.querySelector(`.page-nav-dot[data-view="${viewId}"]`);
+            
             if (target) {
                 target.classList.add('active');
                 target.scrollTop = 0;
             }
             if (targetDot) targetDot.classList.add('active');
+            
             if (viewId === 'about') runStats();
             if (viewId === 'services') renderServicePoints();
             if (viewId === 'events') renderEvents();
+
+            // Automatically scroll the mobile pill bar to show the active item
+            if (window.innerWidth < 768) {
+                const activePill = document.querySelector(`.mobile-nav-pill[data-mobile-link="${viewId}"]`);
+                if (activePill) {
+                    activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
+            }
         }
 
         function renderEvents() {
@@ -970,6 +1067,8 @@
             document.documentElement.setAttribute('lang', currentLang);
             document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
             document.getElementById('lang-btn-text').innerText = currentLang === 'ar' ? 'EN' : 'AR';
+            document.getElementById('mobile-lang-text').innerText = currentLang === 'ar' ? 'EN' : 'AR';
+            
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
