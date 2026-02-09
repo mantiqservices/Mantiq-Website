@@ -227,7 +227,6 @@
             width: 5px; height: 5px; border-radius: 50%; background: #38bdf8;
         }
 
-        /* High Contrast Partner Pills */
         .partner-pill {
             padding: 0.5rem 1.25rem;
             background: rgba(15, 23, 42, 0.05);
@@ -237,14 +236,102 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: #0f172a; /* Solid dark text in light mode */
+            color: #0f172a; 
             white-space: nowrap;
             margin: 0 10px;
         }
         .dark .partner-pill {
             background: rgba(255, 255, 255, 0.08);
             border-color: rgba(255, 255, 255, 0.15);
-            color: #ffffff; /* Pure white text in dark mode */
+            color: #ffffff;
+        }
+
+        .site-links-footer {
+            width: 100%;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .dark .site-links-footer { border-top-color: rgba(255,255,255,0.05); }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.03);
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+        .dark .social-link { background: rgba(255,255,255,0.03); color: #94a3b8; }
+        .social-link:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            transform: translateY(-2px);
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+        }
+        .file-upload-input {
+            opacity: 0;
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .file-upload-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            padding: 1.25rem;
+            background: rgba(56, 189, 248, 0.05);
+            border: 2px dashed rgba(56, 189, 248, 0.3);
+            border-radius: 1.5rem;
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .file-upload-input:hover + .file-upload-btn {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        /* Event Card Hover Effects */
+        .event-card {
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .event-card img {
+            transition: transform 0.8s ease;
+        }
+        .event-card:hover img {
+            transform: scale(1.1);
+        }
+        .event-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+        }
+        .event-card:hover .event-overlay {
+            opacity: 1;
         }
     </style>
 </head>
@@ -257,7 +344,7 @@
         <div class="page-nav-dot active" data-view="home" onclick="showView('home')"></div>
         <div class="page-nav-dot" data-view="about" onclick="showView('about')"></div>
         <div class="page-nav-dot" data-view="services" onclick="showView('services')"></div>
-        <div class="page-nav-dot" data-view="customers" onclick="showView('customers')"></div>
+        <div class="page-nav-dot" data-view="events" onclick="showView('events')"></div>
         <div class="page-nav-dot" data-view="contact" onclick="showView('contact')"></div>
     </div>
 
@@ -279,7 +366,7 @@
                 <div class="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.25em] text-slate-500">
                     <button onclick="showView('about')" data-i18n="nav_about" class="nav-link hover:text-sky-400">About Us</button>
                     <button onclick="showView('services')" data-i18n="nav_services" class="nav-link hover:text-sky-400">Our Services</button>
-                    <button onclick="showView('customers')" data-i18n="nav_customers" class="nav-link hover:text-sky-400">Customers</button>
+                    <button onclick="showView('events')" data-i18n="nav_events" class="nav-link hover:text-sky-400">Events</button>
                     <div class="flex items-center gap-4 pl-8 border-l border-slate-100 dark:border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r">
                         <button onclick="toggleLang()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 text-[10px] font-black"><span id="lang-btn-text">AR</span></button>
                         <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5"><i id="theme-icon" class="fas fa-moon"></i></button>
@@ -301,7 +388,7 @@
                 <button onclick="showView('home'); toggleMobileMenu()">Home</button>
                 <button onclick="showView('about'); toggleMobileMenu()">About Us</button>
                 <button onclick="showView('services'); toggleMobileMenu()">Our Services</button>
-                <button onclick="showView('customers'); toggleMobileMenu()">Customers</button>
+                <button onclick="showView('events'); toggleMobileMenu()">Events</button>
                 <button onclick="showView('contact'); toggleMobileMenu()" class="bg-sky-500 text-slate-950 py-5 rounded-2xl text-center text-sm">Get Started</button>
             </div>
         </div>
@@ -318,7 +405,7 @@
                         <span class="mantiq-label-dot"></span>
                         <span data-i18n="hero_tag" class="text-sky-600 dark:text-sky-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em]">Business Services Company</span>
                     </div>
-                    <h1 class="text-6xl sm:text-8xl lg:text-[110px] font-black leading-[0.9] mb-8 tracking-tighter">
+                    <h1 class="text-5xl sm:text-7xl lg:text-[90px] font-black leading-[0.95] mb-8 tracking-tighter">
                         <span data-i18n="hero_title_1">The Path</span> <br><span class="gradient-text italic" data-i18n="hero_title_2">You Should Take</span>
                     </h1>
                     <p data-i18n="hero_desc" class="text-xl sm:text-2xl text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">Empowering success through market knowledge and digital solutions.</p>
@@ -331,6 +418,17 @@
                 </button>
                 <div class="small-marquee-container">
                     <div class="marquee-track partner-marquee-track"></div>
+                </div>
+                <div class="site-links-footer">
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.facebook.com/mantiiq" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/mantiq.services/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="mailto:Mantiq2023@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <button onclick="showView('career')" class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-500 hover:text-sky-400 transition-colors" data-i18n="careers_link">Join Our Team / Careers</button>
+                        <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">© 2026 MANTIq. All rights reserved.</span>
+                    </div>
                 </div>
             </footer>
         </section>
@@ -423,8 +521,16 @@
                     <span data-i18n="nav_services">Our Services</span>
                     <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <div class="small-marquee-container">
-                    <div class="marquee-track partner-marquee-track"></div>
+                <div class="site-links-footer">
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.facebook.com/mantiiq" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/mantiq.services/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="mailto:Mantiq2023@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <button onclick="showView('career')" class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-500 hover:text-sky-400 transition-colors" data-i18n="careers_link">Join Our Team / Careers</button>
+                        <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">© 2026 MANTIQ. All rights reserved.</span>
+                    </div>
                 </div>
             </footer>
         </section>
@@ -438,7 +544,6 @@
                         <h2 class="text-5xl sm:text-7xl font-black tracking-tighter" data-i18n="serv_title">The Path You Should Take</h2>
                     </div>
                     <div class="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-                        <!-- Business Development -->
                         <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
                             <div class="service-image-container"><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200" alt="Business Dev"></div>
                             <div class="p-8 sm:p-10 flex-1 flex flex-col">
@@ -450,8 +555,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Tracking System -->
                         <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
                             <div class="service-image-container"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" alt="Tracking Systems"></div>
                             <div class="p-8 sm:p-10 flex-1 flex flex-col">
@@ -463,8 +566,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Websites -->
                         <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
                             <div class="service-image-container"><img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200" alt="Websites"></div>
                             <div class="p-8 sm:p-10 flex-1 flex flex-col">
@@ -476,8 +577,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Mobile Development -->
                         <div class="boutique-card p-0 rounded-[2.5rem] flex flex-col group h-full overflow-hidden">
                             <div class="service-image-container"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200" alt="Mobile Dev"></div>
                             <div class="p-8 sm:p-10 flex-1 flex flex-col">
@@ -493,36 +592,96 @@
                 </div>
             </div>
             <footer class="page-footer">
-                <button onclick="showView('customers')" class="next-page-btn group">
-                    <span data-i18n="nav_customers">Our Customers</span>
+                <button onclick="showView('events')" class="next-page-btn group">
+                    <span data-i18n="nav_events">Our Events</span>
                     <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <div class="small-marquee-container">
-                    <div class="marquee-track partner-marquee-track"></div>
+                <div class="site-links-footer">
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.facebook.com/mantiiq" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/mantiq.services/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="mailto:Mantiq2023@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <button onclick="showView('career')" class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-500 hover:text-sky-400 transition-colors" data-i18n="careers_link">Join Our Team / Careers</button>
+                        <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">© 2026 MANTIq. All rights reserved.</span>
+                    </div>
                 </div>
             </footer>
         </section>
 
-        <!-- Customers Page -->
-        <section id="customers-view" class="view-section">
+        <!-- Events Page -->
+        <section id="events-view" class="view-section">
             <div class="content-wrapper">
-                <div class="max-w-4xl text-center my-auto">
-                    <!-- Clean simple heading for the dedicated page -->
-                    <div class="mantiq-label mx-auto">
-                        <span class="mantiq-label-dot"></span>
-                        <span data-i18n="cust_tag" class="text-sky-600 dark:text-sky-400 text-[10px] font-black uppercase tracking-[0.4em]">Our Trusted Partners</span>
+                <div class="max-w-7xl w-full">
+                    <div class="text-center mb-16">
+                        <span class="text-sky-500 font-black text-sm uppercase tracking-[0.4em] mb-4 block" data-i18n="event_tag">Participated Events</span>
+                        <h2 class="text-5xl sm:text-7xl font-black tracking-tighter" data-i18n="event_title">MANTIq in Motion</h2>
                     </div>
-                    <h2 class="text-4xl sm:text-6xl font-black tracking-tighter mb-6 uppercase" data-i18n="nav_customers">Customers</h2>
-                    <p class="text-slate-500 dark:text-slate-400 max-w-lg mx-auto leading-relaxed">We take pride in our diverse ecosystem of successful partnerships across multiple industries.</p>
+                    
+                    <div id="events-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Events injected via JS -->
+                    </div>
                 </div>
             </div>
             <footer class="page-footer">
                 <button onclick="showView('contact')" class="next-page-btn group">
-                    <span data-i18n="nav_cta">Contact Us</span>
+                    <span data-i18n="nav_cta">Get in Touch</span>
                     <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <div class="small-marquee-container">
-                    <div class="marquee-track partner-marquee-track"></div>
+                <div class="site-links-footer">
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.facebook.com/mantiiq" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/mantiq.services/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="mailto:Mantiq2023@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <button onclick="showView('career')" class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-500 hover:text-sky-400 transition-colors" data-i18n="careers_link">Join Our Team / Careers</button>
+                        <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">© 2026 MANTIq. All rights reserved.</span>
+                    </div>
+                </div>
+            </footer>
+        </section>
+
+        <!-- Career Page -->
+        <section id="career-view" class="view-section">
+            <div class="content-wrapper">
+                <div class="max-w-4xl w-full">
+                    <div class="text-center mb-12">
+                        <h2 class="text-6xl sm:text-8xl font-black tracking-tighter mb-6 uppercase" data-i18n="career_title">Work with Us.</h2>
+                        <p class="text-lg text-slate-500 dark:text-slate-400" data-i18n="career_subtitle">Submit your details to join our pool of experts.</p>
+                    </div>
+                    <form onsubmit="handleCareerForm(event)" class="boutique-card p-10 sm:p-20 rounded-[3rem]">
+                        <div class="grid md:grid-cols-1 gap-8 mb-8">
+                            <input type="text" name="name" required placeholder="Full Name" class="w-full bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-white/10 p-5 outline-none focus:border-sky-500 transition-all dark:text-white">
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <input type="email" name="email" required placeholder="Email Address" class="w-full bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-white/10 p-5 outline-none focus:border-sky-500 transition-all dark:text-white">
+                            <input type="tel" name="phone" required placeholder="Phone Number" class="w-full bg-slate-50 dark:bg-mantiq-navy/50 border-b border-slate-200 dark:border-white/10 p-5 outline-none focus:border-sky-500 transition-all dark:text-white">
+                        </div>
+                        <div class="mb-10">
+                            <div class="file-upload-wrapper">
+                                <input type="file" name="cv" accept=".pdf,.doc,.docx" required class="file-upload-input" onchange="handleFileSelect(this)">
+                                <div class="file-upload-btn" id="file-btn-text">
+                                    <i class="fas fa-cloud-upload-alt text-sky-500 text-xl"></i>
+                                    <span data-i18n="upload_cv">Upload your CV (PDF/DOC)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" id="career-submit-btn" class="w-full py-6 bg-sky-500 rounded-2xl font-black text-slate-950 text-xl hover:bg-sky-400 shadow-2xl shadow-sky-500/30 transition-all active:scale-95"><span data-i18n="apply_btn">SUBMIT APPLICATION</span></button>
+                    </form>
+                </div>
+            </div>
+            <footer class="page-footer">
+                <div class="site-links-footer">
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.facebook.com/mantiiq" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/mantiq.services/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="mailto:Mantiq2023@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">© 2026 MANTIq. All rights reserved.</span>
+                    </div>
                 </div>
             </footer>
         </section>
@@ -533,7 +692,14 @@
                 <div class="max-w-4xl w-full">
                     <div class="text-center mb-12">
                         <h2 class="text-6xl sm:text-8xl font-black tracking-tighter mb-6 uppercase" data-i18n="contact_title">Let's Build.</h2>
-                        <p class="text-lg text-slate-500 dark:text-slate-400"><span data-i18n="contact_subtitle">Reach out at</span> <span class="text-sky-500 font-bold">Mantiq2023@gmail.com</span></p>
+                        <p class="text-lg text-slate-500 dark:text-slate-400 mb-12"><span data-i18n="contact_subtitle">Reach out at</span> <span class="text-sky-500 font-bold">Mantiq2023@gmail.com</span></p>
+                        
+                        <div class="mb-16">
+                            <span class="text-sky-500 font-black text-[10px] uppercase tracking-[0.4em] mb-8 block" data-i18n="cust_tag">Our Trusted Partners</span>
+                            <div class="small-marquee-container rounded-3xl overflow-hidden border border-slate-100 dark:border-white/5">
+                                <div class="marquee-track partner-marquee-track"></div>
+                            </div>
+                        </div>
                     </div>
                     <form onsubmit="handleForm(event)" class="boutique-card p-10 sm:p-20 rounded-[3rem]">
                         <div class="grid md:grid-cols-2 gap-8 mb-8">
@@ -556,8 +722,16 @@
                 </div>
             </div>
             <footer class="page-footer">
-                <div class="small-marquee-container">
-                    <div class="marquee-track partner-marquee-track"></div>
+                <div class="site-links-footer">
+                    <div class="flex items-center gap-4">
+                        <a href="https://www.facebook.com/mantiiq" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.linkedin.com/company/mantiq.services/" target="_blank" class="social-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="mailto:Mantiq2023@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <button onclick="showView('career')" class="text-[10px] font-black uppercase tracking-[0.2em] text-sky-500 hover:text-sky-400 transition-colors" data-i18n="careers_link">Join Our Team / Careers</button>
+                        <span class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">© 2026 MANTIq. All rights reserved.</span>
+                    </div>
                 </div>
             </footer>
         </section>
@@ -577,11 +751,33 @@
         let currentLang = 'en';
 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVasCdHBbZ4fNh1wfnKK76TLDJQxhjmH4tiyShQFwkFZorMj0GQyrTAovkOJHkw55rxA/exec";
+        
         const customers = ["EL ASEEL Development", "Omar Gharib", "ETMAM", "ALSAIF ANALYSIS", "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO", "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA", "START MART", "CREATIVO", "ALPHA ACADEMY", "VARM", "ART FURNITURE"];
+
+        /** * EDIT EVENTS HERE:
+         * Add your photos and event details to this list
+         */
+        const events = [
+            { 
+                title: { en: "Startup Expo 2024", ar: "معرض الشركات الناشئة ٢٠٢٤" }, 
+                date: "Jan 2024", 
+                img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=1200" 
+            },
+            { 
+                title: { en: "Innovation Summit", ar: "قمة الابتكار" }, 
+                date: "Nov 2023", 
+                img: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=1200" 
+            },
+            { 
+                title: { en: "MANTIq Launch Event", ar: "حفل انطلاق منطق" }, 
+                date: "Jul 2023", 
+                img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=1200" 
+            }
+        ];
 
         const translations = {
             en: { 
-                nav_about: "About Us", nav_services: "Services", nav_customers: "Customers", nav_cta: "Get Started", 
+                nav_about: "About Us", nav_services: "Services", nav_events: "Events", nav_cta: "Get Started", 
                 hero_tag: "Business Services Company", hero_title_1: "The Path", hero_title_2: "You Should Take", 
                 hero_desc: "Empowering your success through market knowledge and digital solutions.",
                 form_btn: "INITIATE MISSION", explore: "Explore More", sol_profile: "Solution Profile", init_inq: "Initiate Inquiry", cust_tag: "Our Trusted Partners",
@@ -613,9 +809,18 @@
                 serv_card_3_long_desc: "We design and develop performance-driven websites, from conversion-focused e-commerce solutions to portfolio and company profile websites that elevate your brand. Every build is optimized for SEO, usability, and long-term scalability.",
                 serv_card_4_long_desc: "Native mobile experiences built for today’s mobile-first users. We specialize in iOS and Android development, integrating advanced AI logic with frictionless UX to drive high user retention and a strong, professional brand presence across all devices.",
                 next_about: "Discover More",
+                careers_link: "Join Our Team / Careers",
+                career_title: "Work with Us.",
+                career_subtitle: "Submit your details to join our pool of experts.",
+                upload_cv: "Upload your CV (PDF/DOC)",
+                apply_btn: "SUBMIT APPLICATION",
+                contact_title: "Let's Build.",
+                contact_subtitle: "Reach out at",
+                event_tag: "Participated Events",
+                event_title: "MANTIq in Motion",
             },
             ar: { 
-                nav_about: "من نحن", nav_services: "خدماتنا", nav_customers: "عملاؤنا", nav_cta: "ابدأ الآن", 
+                nav_about: "من نحن", nav_services: "خدماتنا", nav_events: "الفعاليات", nav_cta: "ابدأ الآن", 
                 hero_tag: "شركة خدمات أعمال", hero_title_1: "المسار الذي", hero_title_2: "يجب أن تسلكه", 
                 hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق والحلول الرقمية.",
                 form_btn: "بدء المهمة", explore: "استكشف المزيد", sol_profile: "ملف الحل", init_inq: "ابدأ الاستفسار", cust_tag: "شركاؤنا الموثوقون",
@@ -647,6 +852,15 @@
                 serv_card_3_long_desc: "نحن نبني واجهات رقمية تعمل كأكثر بائع كفاءة لديك. من هندسة التجارة الإلكترونية عالية التحويل إلى ملفات الشركات الأنيقة، تم تصميم مواقعنا للأداء وقوة محركات البحث والعمق الجمالي.",
                 serv_card_4_long_desc: "تجارب أصلية لمستخدمي الهاتف المحمول العصريين. نحن متخصصون في تطوير تطبيقات iOS وأندرويد التي تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة لضمان احتفاظ عالٍ بالمستخدمين.",
                 next_about: "اكتشف المزيد",
+                careers_link: "انضم إلينا / فرص العمل",
+                career_title: "اعمل معنا.",
+                career_subtitle: "قدم بياناتك للانضمام إلى فريق خبرائنا.",
+                upload_cv: "ارفع سيرتك الذاتية (PDF/DOC)",
+                apply_btn: "إرسال الطلب",
+                contact_title: "فلنبنِ معاً.",
+                contact_subtitle: "تواصل معنا عبر",
+                event_tag: "الفعاليات التي شاركنا بها",
+                event_title: "منطق في الميدان",
             }
         };
 
@@ -695,6 +909,22 @@
             if (targetDot) targetDot.classList.add('active');
             if (viewId === 'about') runStats();
             if (viewId === 'services') renderServicePoints();
+            if (viewId === 'events') renderEvents();
+        }
+
+        function renderEvents() {
+            const gallery = document.getElementById('events-gallery');
+            if (gallery) {
+                gallery.innerHTML = events.map(ev => `
+                    <div class="boutique-card event-card rounded-[2.5rem] group h-[300px]">
+                        <img src="${ev.img}" class="w-full h-full object-cover">
+                        <div class="event-overlay">
+                            <span class="text-[10px] font-black uppercase text-sky-400 mb-2">${ev.date}</span>
+                            <h3 class="text-xl font-black text-white leading-tight">${ev.title[currentLang]}</h3>
+                        </div>
+                    </div>
+                `).join('');
+            }
         }
 
         function renderServicePoints() {
@@ -729,6 +959,8 @@
             });
             const servicesView = document.getElementById('services-view');
             if (servicesView && servicesView.classList.contains('active')) renderServicePoints();
+            const eventsView = document.getElementById('events-view');
+            if (eventsView && eventsView.classList.contains('active')) renderEvents();
         }
 
         function toggleMobileMenu() {
@@ -784,16 +1016,30 @@
             } catch (err) { b.innerText = "RETRY"; }
         }
 
+        function handleFileSelect(input) {
+            const btnText = document.getElementById('file-btn-text');
+            if (input.files && input.files[0]) {
+                btnText.innerHTML = `<i class="fas fa-check-circle text-emerald-500 text-xl"></i><span>${input.files[0].name}</span>`;
+            }
+        }
+
+        async function handleCareerForm(event) {
+            event.preventDefault();
+            const b = document.getElementById('career-submit-btn');
+            b.innerText = "...";
+            setTimeout(() => {
+                b.innerText = "APPLICATION SENT";
+                b.style.backgroundColor = "#10b981";
+                event.target.reset();
+                document.getElementById('file-btn-text').innerHTML = `<i class="fas fa-cloud-upload-alt text-sky-500 text-xl"></i><span data-i18n="upload_cv">Upload your CV (PDF/DOC)</span>`;
+            }, 1500);
+        }
+
         window.onload = () => {
             const marqueeTracks = document.querySelectorAll('.partner-marquee-track');
-            
             const list = [...customers, ...customers];
             const content = list.map(n => `<div class="partner-pill">${n}</div>`).join('');
-            
-            marqueeTracks.forEach(track => {
-                track.innerHTML = content;
-            });
-            
+            marqueeTracks.forEach(track => track.innerHTML = content);
             renderServicePoints(); 
         };
     </script>
