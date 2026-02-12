@@ -86,7 +86,6 @@
             transform: translateY(20px) scale(0.98);
             transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
             overflow-y: auto;
-            /* Standard padding for mobile now that scroll nav is removed */
             padding: 100px 0 0 0; 
         }
 
@@ -187,9 +186,9 @@
             background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            /* Fix for italic letter clipping */
-            padding-right: 0.15em;
-            margin-right: -0.15em;
+            /* Enhanced fix for italic letter clipping with extra safety padding */
+            padding: 0 0.2em;
+            margin: 0 -0.2em;
             display: inline-block;
         }
 
@@ -400,6 +399,17 @@
         .hamburger-icon.open span:nth-child(3) {
             transform: translateY(-6px) rotate(-45deg);
         }
+
+        /* Mobile Menu Link Animation */
+        .mobile-menu-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        #mobile-menu.active .mobile-menu-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-500">
@@ -447,7 +457,7 @@
                 <div class="md:hidden flex items-center gap-3">
                     <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-sky-500 transition-colors"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
                     <!-- Enhanced Hamburger Button -->
-                    <button onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white transition-all active:scale-90 overflow-hidden">
+                    <button onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white transition-all active:scale-90 overflow-hidden relative z-[210]">
                         <div id="mobile-hamburger" class="hamburger-icon">
                             <span></span>
                             <span></span>
@@ -457,34 +467,35 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Mobile Full Menu -->
-        <div id="mobile-menu" class="fixed inset-0 z-[120] bg-white dark:bg-slate-950 flex flex-col p-10 opacity-0 pointer-events-none transition-all duration-500">
-            <div class="flex justify-between items-center mb-10">
-                <div class="flex items-center gap-1">
-                    <div class="h-8">
-                        <svg class="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-                            <g fill="none" stroke="#3ABEFF" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="200" cy="200" r="150" />
-                                <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
-                            </g>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-black tracking-widest uppercase">Mantiq</span>
+    </nav>
+    
+    <!-- Mobile Full Menu - Moved outside nav for z-index absolute priority -->
+    <div id="mobile-menu" class="fixed inset-0 z-[200] bg-white dark:bg-slate-950 flex flex-col p-10 opacity-0 pointer-events-none transition-all duration-500">
+        <div class="flex justify-between items-center mb-16">
+            <div class="flex items-center gap-1">
+                <div class="h-8">
+                    <svg class="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                        <g fill="none" stroke="#3ABEFF" stroke-width="45" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="200" cy="200" r="150" />
+                            <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
+                        </g>
+                    </svg>
                 </div>
-                <button onclick="toggleMobileMenu()" class="text-3xl"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="flex flex-col gap-8 text-2xl font-black uppercase tracking-widest">
-                <button onclick="showView('home'); toggleMobileMenu()">Home</button>
-                <button onclick="showView('about'); toggleMobileMenu()">About Us</button>
-                <button onclick="showView('services'); toggleMobileMenu()">Our Services</button>
-                <button onclick="showView('events'); toggleMobileMenu()">Events</button>
-                <button onclick="showView('career'); toggleMobileMenu()">Careers</button>
-                <button onclick="toggleLang()" class="flex items-center gap-4 text-sky-500">Language: <span id="mobile-lang-text">EN</span></button>
-                <button onclick="showView('contact'); toggleMobileMenu()" class="bg-sky-500 text-slate-950 py-5 rounded-2xl text-center text-sm">Get Started</button>
+                <span class="text-xl font-black tracking-widest uppercase">Mantiq</span>
             </div>
         </div>
-    </nav>
+        <div class="flex flex-col gap-10 text-3xl font-black uppercase tracking-widest flex-1">
+            <button class="mobile-menu-link text-left" style="transition-delay: 100ms" onclick="showView('home'); toggleMobileMenu()">Home</button>
+            <button class="mobile-menu-link text-left" style="transition-delay: 200ms" onclick="showView('about'); toggleMobileMenu()">About Us</button>
+            <button class="mobile-menu-link text-left" style="transition-delay: 300ms" onclick="showView('services'); toggleMobileMenu()">Our Services</button>
+            <button class="mobile-menu-link text-left" style="transition-delay: 400ms" onclick="showView('events'); toggleMobileMenu()">Events</button>
+            <button class="mobile-menu-link text-left" style="transition-delay: 500ms" onclick="showView('career'); toggleMobileMenu()">Careers</button>
+            <button class="mobile-menu-link text-left flex items-center gap-4 text-sky-500" style="transition-delay: 600ms" onclick="toggleLang()">Language: <span id="mobile-lang-text">EN</span></button>
+        </div>
+        <div class="mt-auto">
+            <button class="mobile-menu-link w-full bg-sky-500 text-slate-950 py-6 rounded-2xl text-center text-sm font-black uppercase tracking-widest shadow-2xl shadow-sky-500/30" style="transition-delay: 700ms" onclick="showView('contact'); toggleMobileMenu()">Get Started</button>
+        </div>
+    </div>
 
     <!-- Page Content -->
     <main class="view-container">
@@ -497,7 +508,7 @@
                         <span class="mantiq-label-dot"></span>
                         <span data-i18n="hero_tag" class="text-sky-600 dark:text-sky-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em]">Business Services Company</span>
                     </div>
-                    <h1 class="text-5xl sm:text-7xl lg:text-[90px] font-black leading-[1.1] mb-8 tracking-tight">
+                    <h1 class="text-5xl sm:text-7xl lg:text-[90px] font-black leading-[1.2] mb-8 tracking-tight">
                         <span data-i18n="hero_title_1" class="block mb-2">The Path</span> 
                         <span class="gradient-text italic" data-i18n="hero_title_2">You Should Take</span>
                     </h1>
@@ -1099,9 +1110,13 @@
         function toggleMobileMenu() {
             const m = document.getElementById('mobile-menu');
             const h = document.getElementById('mobile-hamburger');
-            m.classList.toggle('opacity-100');
+            const isOpen = m.classList.toggle('opacity-100');
             m.classList.toggle('pointer-events-auto');
+            m.classList.toggle('active'); // Triggers child animations
             if (h) h.classList.toggle('open');
+            
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = isOpen ? 'hidden' : '';
         }
 
         function openDetails(key) {
