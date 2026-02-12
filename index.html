@@ -6,6 +6,32 @@
     <title>MANTIQ | The Path You Should Take</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Security & Anti-Inspect Script -->
+    <script>
+        // Disable Right Click
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Disable Common Inspection Shortcuts
+        document.onkeydown = function(e) {
+            // F12
+            if(e.keyCode == 123) return false;
+            // Ctrl+Shift+I (Inspect)
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false;
+            // Ctrl+Shift+C (Element Selector)
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) return false;
+            // Ctrl+Shift+J (Console)
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false;
+            // Ctrl+U (View Source)
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
+        };
+
+        // Constant debugger loop to pause execution if DevTools is opened
+        setInterval(function() {
+            debugger;
+        }, 100);
+    </script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -31,6 +57,11 @@
             font-family: 'Outfit', 'Noto Sans Arabic', sans-serif;
             overflow: hidden; 
             transition: background-color 0.5s ease;
+            /* Disable text selection */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         [dir="rtl"] { font-family: 'Noto Sans Arabic', sans-serif; }
@@ -55,7 +86,6 @@
             transform: translateY(20px) scale(0.98);
             transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
             overflow-y: auto;
-            /* Increased top padding to accommodate the new mobile scroll nav */
             padding: 140px 0 0 0; 
         }
 
@@ -81,7 +111,6 @@
             flex: 1 0 auto;
         }
 
-        /* Nav Footer Styles */
         .page-footer {
             width: 100%;
             display: flex;
@@ -114,7 +143,6 @@
             background: #7dd3fc;
         }
 
-        /* Smaller Marquee */
         .small-marquee-container {
             width: 100%;
             overflow: hidden;
@@ -158,6 +186,10 @@
             background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            /* Fix for italic letter clipping */
+            padding-right: 0.15em;
+            margin-right: -0.15em;
+            display: inline-block;
         }
 
         .boutique-card {
@@ -373,6 +405,35 @@
             color: #0f172a;
             box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
         }
+
+        /* Animated Hamburger Menu Icon */
+        .hamburger-icon {
+            width: 20px;
+            height: 14px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+        .hamburger-icon span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background-color: currentColor;
+            border-radius: 2px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .hamburger-icon.open span:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+        .hamburger-icon.open span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(10px);
+        }
+        .hamburger-icon.open span:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
     </style>
 </head>
 <body class="bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-500">
@@ -418,8 +479,15 @@
 
                 <!-- Mobile Header Right Actions -->
                 <div class="md:hidden flex items-center gap-3">
-                    <button onclick="toggleTheme()" class="w-9 h-9 flex items-center justify-center text-slate-500"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
-                    <button onclick="toggleMobileMenu()" class="w-9 h-9 flex items-center justify-center text-xl"><i id="menu-icon" class="fas fa-bars"></i></button>
+                    <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-sky-500 transition-colors"><i id="theme-icon-mobile" class="fas fa-moon"></i></button>
+                    <!-- Enhanced Hamburger Button -->
+                    <button onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white transition-all active:scale-90 overflow-hidden">
+                        <div id="mobile-hamburger" class="hamburger-icon">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </button>
                 </div>
             </div>
         </div>
@@ -475,8 +543,9 @@
                         <span class="mantiq-label-dot"></span>
                         <span data-i18n="hero_tag" class="text-sky-600 dark:text-sky-400 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.4em]">Business Services Company</span>
                     </div>
-                    <h1 class="text-5xl sm:text-7xl lg:text-[90px] font-black leading-[0.95] mb-8 tracking-tighter">
-                        <span data-i18n="hero_title_1">The Path</span> <br><span class="gradient-text italic" data-i18n="hero_title_2">You Should Take</span>
+                    <h1 class="text-5xl sm:text-7xl lg:text-[90px] font-black leading-[1.1] mb-8 tracking-tight">
+                        <span data-i18n="hero_title_1" class="block mb-2">The Path</span> 
+                        <span class="gradient-text italic" data-i18n="hero_title_2">You Should Take</span>
                     </h1>
                     <p data-i18n="hero_desc" class="text-xl sm:text-2xl text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">Empowering success through market knowledge and digital solutions.</p>
                 </div>
@@ -1090,8 +1159,10 @@
 
         function toggleMobileMenu() {
             const m = document.getElementById('mobile-menu');
+            const h = document.getElementById('mobile-hamburger');
             m.classList.toggle('opacity-100');
             m.classList.toggle('pointer-events-auto');
+            if (h) h.classList.toggle('open');
         }
 
         function openDetails(key) {
