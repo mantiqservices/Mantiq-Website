@@ -662,10 +662,17 @@
                 </div>
             </div>
             <footer class="page-footer">
-                <button onclick="showView('events')" class="next-page-btn group">
-                    <span data-i18n="nav_events">Our Events</span>
-                    <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
-                </button>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <button onclick="showView('events')" class="next-page-btn group">
+                        <span data-i18n="nav_events">Our Events</span>
+                        <i class="fas fa-arrow-right rtl:rotate-180 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <!-- Pricing Calculator External Link -->
+                    <a href="https://mantiq-pricing.vercel.app/" target="_blank" class="next-page-btn group bg-slate-900 text-white dark:bg-white dark:text-slate-950">
+                        <span data-i18n="nav_calc">Pricing Calculator</span>
+                        <i class="fas fa-calculator ml-2"></i>
+                    </a>
+                </div>
                 <div class="site-links-footer">
                     <div class="flex items-center gap-4">
                         <a href="https://www.facebook.com/mantiiq" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -866,6 +873,7 @@
         const translations = {
             en: { 
                 nav_about: "About Us", nav_services: "Services", nav_events: "Events", nav_cta: "Get Started", 
+                nav_calc: "Pricing Calculator",
                 hero_tag: "Business Services Company", hero_title_1: "The Path", hero_title_2: "You Should Take", 
                 hero_desc: "Empowering your success through market knowledge and digital solutions.",
                 form_btn: "INITIATE MISSION", explore: "Explore More", sol_profile: "Solution Profile", init_inq: "Initiate Inquiry", cust_tag: "Our Trusted Partners",
@@ -909,6 +917,7 @@
             },
             ar: { 
                 nav_about: "من نحن", nav_services: "خدماتنا", nav_events: "الفعاليات", nav_cta: "ابدأ الآن", 
+                nav_calc: "حاسبة التسعير",
                 hero_tag: "شركة خدمات أعمال", hero_title_1: "المسار الذي", hero_title_2: "يجب أن تسلكه", 
                 hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق والحلول الرقمية.",
                 form_btn: "بدء المهمة", explore: "استكشف المزيد", sol_profile: "ملف الحل", init_inq: "ابدأ الاستفسار", cust_tag: "شركاؤنا الموثوقون",
