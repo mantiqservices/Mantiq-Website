@@ -86,7 +86,8 @@
             transform: translateY(20px) scale(0.98);
             transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
             overflow-y: auto;
-            padding: 140px 0 0 0; 
+            /* Standard padding for mobile now that scroll nav is removed */
+            padding: 100px 0 0 0; 
         }
 
         @media (min-width: 768px) {
@@ -371,41 +372,6 @@
             opacity: 1;
         }
 
-        /* Mobile Scrollable Header Tabs */
-        .mobile-nav-scroll {
-            display: flex;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding: 0 1rem;
-            gap: 0.5rem;
-            -webkit-overflow-scrolling: touch;
-        }
-        .mobile-nav-scroll::-webkit-scrollbar {
-            display: none;
-        }
-        .mobile-nav-pill {
-            padding: 0.6rem 1.25rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.3s ease;
-            background: rgba(0,0,0,0.03);
-            color: #64748b;
-        }
-        .dark .mobile-nav-pill {
-            background: rgba(255,255,255,0.03);
-            color: #94a3b8;
-        }
-        .mobile-nav-pill.active {
-            background: #38bdf8;
-            color: #0f172a;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
-        }
-
         /* Animated Hamburger Menu Icon */
         .hamburger-icon {
             width: 20px;
@@ -489,18 +455,6 @@
                         </div>
                     </button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Mobile View Quick-Scroll Bar (ONLY MOBILE) -->
-        <div class="md:hidden border-t border-slate-100 dark:border-white/5 py-3">
-            <div class="mobile-nav-scroll">
-                <button onclick="showView('home')" data-mobile-link="home" class="mobile-nav-pill active">Home</button>
-                <button onclick="showView('about')" data-mobile-link="about" class="mobile-nav-pill" data-i18n="nav_about">About Us</button>
-                <button onclick="showView('services')" data-mobile-link="services" class="mobile-nav-pill" data-i18n="nav_services">Services</button>
-                <button onclick="showView('events')" data-mobile-link="events" class="mobile-nav-pill" data-i18n="nav_events">Events</button>
-                <button onclick="showView('career')" data-mobile-link="career" class="mobile-nav-pill">Careers</button>
-                <button onclick="showView('contact')" data-mobile-link="contact" class="mobile-nav-pill" data-i18n="nav_cta">Contact</button>
             </div>
         </div>
         
@@ -1065,7 +1019,6 @@
             const sections = document.querySelectorAll('.view-section');
             const dots = document.querySelectorAll('.page-nav-dot');
             const navLinks = document.querySelectorAll('.nav-link');
-            const mobilePills = document.querySelectorAll('.mobile-nav-pill');
             
             sections.forEach(s => s.classList.remove('active'));
             dots.forEach(d => d.classList.remove('active'));
@@ -1074,12 +1027,6 @@
             navLinks.forEach(l => {
                 l.classList.remove('text-sky-500');
                 if (l.getAttribute('data-view-link') === viewId) l.classList.add('text-sky-500');
-            });
-
-            // Handle active state for mobile quick pills
-            mobilePills.forEach(p => {
-                p.classList.remove('active');
-                if (p.getAttribute('data-mobile-link') === viewId) p.classList.add('active');
             });
 
             const target = document.getElementById(viewId + '-view');
@@ -1094,14 +1041,6 @@
             if (viewId === 'about') runStats();
             if (viewId === 'services') renderServicePoints();
             if (viewId === 'events') renderEvents();
-
-            // Automatically scroll the mobile pill bar to show the active item
-            if (window.innerWidth < 768) {
-                const activePill = document.querySelector(`.mobile-nav-pill[data-mobile-link="${viewId}"]`);
-                if (activePill) {
-                    activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-                }
-            }
         }
 
         function renderEvents() {
