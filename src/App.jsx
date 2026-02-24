@@ -379,10 +379,20 @@ export default function App() {
     <div className={`${theme} ${lang === 'ar' ? 'font-arabic' : 'font-sans'} selection:bg-sky-500 selection:text-white`}>
       <div className={`bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-700 min-h-screen overflow-x-hidden ${(selectedService || showCareers) ? 'blur-md grayscale-[0.2]' : ''}`}>
         
-        {/* Background Effects */}
-        <div className="fixed inset-0 pointer-events-none opacity-20 dark:opacity-40">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.15),transparent_70%)] transition-opacity duration-1000"></div>
-          <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(rgba(56,189,248,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.05)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+        {/* ENHANCED VISUAL BACKGROUND */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+          {/* Animated Mesh Blobs */}
+          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sky-500/10 dark:bg-sky-400/5 blur-[120px] rounded-full animate-mesh-blob"></div>
+          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-500/10 dark:bg-indigo-400/5 blur-[120px] rounded-full animate-mesh-blob-reverse"></div>
+          
+          {/* Subtle Square Architectural Grid (Faded) */}
+          <div className="absolute inset-0 opacity-[0.15] dark:opacity-[0.05] bg-square-grid text-slate-400 dark:text-sky-400"></div>
+          
+          {/* Main Hero Glow */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.15),transparent_70%)] transition-opacity duration-1000"></div>
+          
+          {/* Subtle Film Grain / Noise Overlay */}
+          <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none mix-blend-overlay bg-noise"></div>
         </div>
 
         <Nav 
@@ -680,6 +690,32 @@ export default function App() {
           50% { transform: translateY(-10px); }
         }
         .animate-float { animation: float 5s ease-in-out infinite; }
+
+        /* MESH BACKGROUND ANIMATIONS */
+        @keyframes mesh-blob {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(10%, 10%) scale(1.1); }
+          66% { transform: translate(-5%, 15%) scale(0.9); }
+        }
+        @keyframes mesh-blob-reverse {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(-10%, -10%) scale(1.1); }
+          66% { transform: translate(5%, -15%) scale(0.9); }
+        }
+        .animate-mesh-blob { animation: mesh-blob 20s infinite alternate ease-in-out; }
+        .animate-mesh-blob-reverse { animation: mesh-blob-reverse 25s infinite alternate-reverse ease-in-out; }
+
+        /* UPDATED SQUARE GRID BACKGROUND */
+        .bg-square-grid {
+          background-image: 
+            linear-gradient(to right, currentColor 1px, transparent 1px),
+            linear-gradient(to bottom, currentColor 1px, transparent 1px);
+          background-size: 60px 60px; /* Larger squares for cleaner look */
+        }
+
+        .bg-noise {
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
 
         /* REVEAL ON SCROLL */
         .reveal {
