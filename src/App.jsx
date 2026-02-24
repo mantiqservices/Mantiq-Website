@@ -17,7 +17,7 @@ const CUSTOMERS = [
 const EVENTS = [
   { id: 1, title: { en: "Enactus Event", ar: "حدث إيناكتس" }, date: "2024", img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
   { id: 2, title: { en: "AIESEC Event", ar: "حدث آيزيك" }, date: "2024", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
-  { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://postimg.cc/1gfhC1sB=crop&q=80&w=800" },
+  { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://postimg.cc/1gfhC1sB" },
   { id: 4, title: { en: "Corporate Summit", ar: "قمة الشركات" }, date: "2024", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800" },
   { id: 5, title: { en: "Innovation Lab", ar: "مختبر الابتكار" }, date: "2023", img: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800" },
 ];
