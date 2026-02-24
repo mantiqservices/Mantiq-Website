@@ -118,6 +118,7 @@ const TRANSLATIONS = {
     name_placeholder: "Name",
     company_placeholder: "Company",
     email_placeholder: "Email",
+    phone_placeholder: "Phone Number",
     select_service: "Select Service",
     sending: "Sending...",
     mission_received: "Mission Received",
@@ -156,6 +157,7 @@ const TRANSLATIONS = {
     name_placeholder: "الاسم",
     company_placeholder: "الشركة",
     email_placeholder: "البريد الإلكتروني",
+    phone_placeholder: "رقم الهاتف",
     select_service: "اختر الخدمة",
     sending: "جاري الإرسال...",
     mission_received: "تم استلام المهمة",
@@ -164,7 +166,6 @@ const TRANSLATIONS = {
   }
 };
 
-// --- ANIMATION HOOK ---
 const useScrollReveal = () => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -180,13 +181,10 @@ const useScrollReveal = () => {
   }, []);
 };
 
-// --- COMPONENTS ---
-
 const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const t = TRANSLATIONS[lang];
 
-  // Prevent background scroll when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = 'hidden';
@@ -199,7 +197,7 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
     <>
       <nav className="fixed w-full z-[100] border-b border-slate-200 dark:border-white/5 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer group animate-float" onClick={() => onNavigate('home')}>
+          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => onNavigate('home')}>
             <div className="h-10 text-sky-500 dark:text-sky-400">
               <svg className="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
                 <g fill="none" stroke="currentColor" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
@@ -245,44 +243,22 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
         </div>
       </nav>
 
-      {/* MOBILE MENU SIDEBAR VERSION */}
-      {/* Backdrop */}
-      <div 
-        className={`fixed inset-0 z-[150] bg-slate-950/60 backdrop-blur-sm lg:hidden transition-opacity duration-500 ${mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => setMobileOpen(false)}
-      />
+      <div className={`fixed inset-0 z-[150] bg-slate-950/60 backdrop-blur-sm lg:hidden transition-opacity duration-500 ${mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setMobileOpen(false)} />
 
-      {/* Side Drawer */}
-      <div 
-        className={`fixed top-0 bottom-0 z-[200] lg:hidden w-[300px] bg-white dark:bg-slate-950 shadow-[0_0_50px_rgba(0,0,0,0.3)] transition-transform duration-500 ease-in-out ${lang === 'ar' ? 'left-0 ' + (mobileOpen ? 'translate-x-0' : '-translate-x-full') : 'right-0 ' + (mobileOpen ? 'translate-x-0' : 'translate-x-full')}`}
-      >
+      <div className={`fixed top-0 bottom-0 z-[200] lg:hidden w-[300px] bg-white dark:bg-slate-950 shadow-[0_0_50px_rgba(0,0,0,0.3)] transition-transform duration-500 ease-in-out ${lang === 'ar' ? 'left-0 ' + (mobileOpen ? 'translate-x-0' : '-translate-x-full') : 'right-0 ' + (mobileOpen ? 'translate-x-0' : 'translate-x-full')}`}>
         <div className="flex flex-col h-full p-8 pt-24 text-slate-900 dark:text-white">
           <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-widest">
             {['home', 'about', 'services', 'events', 'contact'].map((item, idx) => (
-              <button 
-                key={item} 
-                style={{ transitionDelay: `${idx * 50}ms` }}
-                onClick={() => { onNavigate(item); setMobileOpen(false); }}
-                className={`text-left hover:text-sky-500 transition-all py-2 border-b border-slate-100 dark:border-white/5 ${mobileOpen ? 'translate-x-0 opacity-100' : (lang === 'ar' ? '-translate-x-10' : 'translate-x-10') + ' opacity-0'}`}
-              >
-                {t[item === 'about' ? 'about_us' : item] || item}
-              </button>
+              <button key={item} style={{ transitionDelay: `${idx * 50}ms` }} onClick={() => { onNavigate(item); setMobileOpen(false); }} className={`text-left hover:text-sky-500 transition-all py-2 border-b border-slate-100 dark:border-white/5 ${mobileOpen ? 'translate-x-0 opacity-100' : (lang === 'ar' ? '-translate-x-10' : 'translate-x-10') + ' opacity-0'}`}>{t[item === 'about' ? 'about_us' : item] || item}</button>
             ))}
           </div>
-          
           <div className="mt-auto space-y-4">
             <div className="h-px bg-slate-200 dark:bg-white/10 w-full mb-6" />
-            <button 
-              onClick={() => { setLang(lang === 'en' ? 'ar' : 'en'); setMobileOpen(false); }} 
-              className="w-full py-4 flex items-center justify-between px-6 bg-slate-100 dark:bg-white/5 rounded-2xl font-black uppercase tracking-tighter"
-            >
+            <button onClick={() => { setLang(lang === 'en' ? 'ar' : 'en'); setMobileOpen(false); }} className="w-full py-4 flex items-center justify-between px-6 bg-slate-100 dark:bg-white/5 rounded-2xl font-black uppercase tracking-tighter">
               <span>{lang === 'en' ? 'Arabic Version' : 'النسخة الإنجليزية'}</span>
               <Globe size={18} className="text-sky-500" />
             </button>
-            <button 
-              onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileOpen(false); }} 
-              className="w-full py-4 flex items-center justify-between px-6 bg-slate-100 dark:bg-white/5 rounded-2xl font-black uppercase tracking-tighter"
-            >
+            <button onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileOpen(false); }} className="w-full py-4 flex items-center justify-between px-6 bg-slate-100 dark:bg-white/5 rounded-2xl font-black uppercase tracking-tighter">
               <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
               {theme === 'dark' ? <Sun size={18} className="text-orange-400" /> : <Moon size={18} className="text-sky-600" />}
             </button>
@@ -303,9 +279,7 @@ const PartnerMarquee = ({ lang }) => (
   <div className="w-full overflow-hidden py-10 opacity-70 dark:opacity-50 hover:opacity-100 transition-opacity">
     <div className={`flex gap-10 animate-marquee whitespace-nowrap ${lang === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
       {[...CUSTOMERS, ...CUSTOMERS].map((name, i) => (
-        <span key={i} className="text-xs font-black uppercase tracking-[0.3em] px-8 py-3 border border-slate-200 dark:border-white/10 rounded-full text-slate-900 dark:text-white transition-all hover:bg-sky-500 hover:text-white cursor-default">
-          {name}
-        </span>
+        <span key={i} className="text-xs font-black uppercase tracking-[0.3em] px-8 py-3 border border-slate-200 dark:border-white/10 rounded-full text-slate-900 dark:text-white transition-all hover:bg-sky-500 hover:text-white cursor-default">{name}</span>
       ))}
     </div>
   </div>
@@ -314,13 +288,8 @@ const PartnerMarquee = ({ lang }) => (
 const ServiceCard = ({ service, lang, onOpen, index }) => {
   const t = TRANSLATIONS[lang];
   return (
-    <div 
-      className="group reveal relative bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden hover:border-sky-500/50 transition-all duration-500 shadow-sm hover:shadow-2xl flex flex-col h-full transform hover:-translate-y-2"
-      style={{ transitionDelay: `${index * 100}ms` }}
-    >
-      <div className="h-48 overflow-hidden">
-        <img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000 ease-out" alt={service.title[lang]} />
-      </div>
+    <div className="group reveal relative bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden hover:border-sky-500/50 transition-all duration-500 shadow-sm hover:shadow-2xl flex flex-col h-full transform hover:-translate-y-2" style={{ transitionDelay: `${index * 100}ms` }}>
+      <div className="h-48 overflow-hidden"><img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000 ease-out" alt={service.title[lang]} /></div>
       <div className="p-8 flex flex-col flex-1">
         <div className={`mb-6 transition-transform group-hover:scale-110 duration-500 ${service.color}`}>{service.icon}</div>
         <h3 className="text-2xl font-black mb-4 text-slate-900 dark:text-white group-hover:text-sky-500 transition-colors">{service.title[lang]}</h3>
@@ -331,12 +300,7 @@ const ServiceCard = ({ service, lang, onOpen, index }) => {
           ))}
         </div>
         <div className="mt-auto">
-          <button 
-            onClick={() => onOpen(service)}
-            className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest bg-sky-500 text-white border-transparent hover:bg-sky-600 shadow-lg shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
-          >
-            {t.explore_more} <ArrowRight size={14} className="rtl:rotate-180 group-hover:translate-x-1 transition-transform" />
-          </button>
+          <button onClick={() => onOpen(service)} className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest bg-sky-500 text-white border-transparent hover:bg-sky-600 shadow-lg shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-2">{t.explore_more} <ArrowRight size={14} className="rtl:rotate-180 group-hover:translate-x-1 transition-transform" /></button>
         </div>
       </div>
     </div>
@@ -345,7 +309,7 @@ const ServiceCard = ({ service, lang, onOpen, index }) => {
 
 export default function App() {
   const [lang, setLang] = useState('en');
-  const [theme, setTheme] = useState('light'); // LIGHT MODE AS DEFAULT
+  const [theme, setTheme] = useState('light');
   const [activeSection, setActiveSection] = useState('home');
   const [selectedService, setSelectedService] = useState(null);
   const [showCareers, setShowCareers] = useState(false);
@@ -353,16 +317,15 @@ export default function App() {
 
   const t = TRANSLATIONS[lang];
 
+  // CONNECTED GOOGLE SCRIPT URL
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec"; 
+
   useScrollReveal();
 
   useEffect(() => {
     const handleContextMenu = (e) => e.preventDefault();
     const handleKeydown = (e) => {
-      if (
-        e.keyCode === 123 ||
-        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) ||
-        (e.ctrlKey && e.keyCode === 85)
-      ) {
+      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
         e.preventDefault();
         return false;
       }
@@ -391,44 +354,51 @@ export default function App() {
     }
   };
 
-  const handleForm = async (e) => {
+  const handleFormSubmit = async (e, sheetName) => {
     e.preventDefault();
     setFormStatus('sending');
-    setTimeout(() => {
+    
+    const formData = new FormData(e.target);
+    const data = {
+      sheetName: sheetName,
+      Name: formData.get('name'),
+      Email: formData.get('email'),
+      Phone: formData.get('phone'),
+      Company: formData.get('company'),
+      Service: formData.get('service'),
+      CV_Link: formData.get('cv_link') || ""
+    };
+
+    try {
+      await fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
       setFormStatus('success');
       e.target.reset();
       setTimeout(() => setFormStatus(null), 3000);
-    }, 1500);
+    } catch (error) {
+      setFormStatus(null);
+      console.error("Submission failed", error);
+    }
   };
 
   return (
     <div className={`${theme} ${lang === 'ar' ? 'font-arabic' : 'font-sans'} selection:bg-sky-500 selection:text-white`}>
       <div className={`bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-700 min-h-screen overflow-x-hidden ${(selectedService || showCareers) ? 'blur-md grayscale-[0.2]' : ''}`}>
         
-        {/* ENHANCED VISUAL BACKGROUND */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-          {/* Animated Mesh Blobs */}
           <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sky-500/10 dark:bg-sky-400/5 blur-[120px] rounded-full animate-mesh-blob"></div>
           <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-500/10 dark:bg-indigo-400/5 blur-[120px] rounded-full animate-mesh-blob-reverse"></div>
-          
-          {/* Subtle Square Architectural Grid (Faded) */}
           <div className="absolute inset-0 opacity-[0.15] dark:opacity-[0.05] bg-square-grid text-slate-400 dark:text-sky-400"></div>
-          
-          {/* Main Hero Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.15),transparent_70%)] transition-opacity duration-1000"></div>
-          
-          {/* Subtle Film Grain / Noise Overlay */}
           <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none mix-blend-overlay bg-noise"></div>
         </div>
 
-        <Nav 
-          lang={lang} setLang={setLang} 
-          theme={theme} setTheme={setTheme} 
-          onNavigate={scrollToSection} 
-          activeSection={activeSection}
-        />
+        <Nav lang={lang} setLang={setLang} theme={theme} setTheme={setTheme} onNavigate={scrollToSection} activeSection={activeSection} />
 
-        {/* Hero */}
         <Section id="home" className="flex flex-col justify-center items-center text-center !min-h-screen px-4 md:px-6">
           <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-8 animate-fade-in-up">
             <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
@@ -436,78 +406,44 @@ export default function App() {
           </div>
           <h1 className="text-4xl xs:text-5xl sm:text-7xl md:text-8xl lg:text-[120px] font-black leading-[1.1] md:leading-none tracking-tighter mb-10 text-slate-900 dark:text-white animate-fade-in-up w-full max-w-[95vw] mx-auto break-words" style={{ animationDelay: '100ms' }}>
             <span className="block mb-2">{lang === 'en' ? 'The Path' : 'المسار'}</span>
-            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 italic px-2 md:px-4">
-              {lang === 'en' ? 'You Should Take' : 'الذي يجب سلوكه'}
-            </span>
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 italic px-2 md:px-4">{lang === 'en' ? 'You Should Take' : 'الذي يجب سلوكه'}</span>
           </h1>
-          
           <div className="max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '250ms' }}>
-            <p className="text-base sm:text-lg md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium px-4">
-              {t.hero_desc}
-            </p>
+            <p className="text-base sm:text-lg md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium px-4">{t.hero_desc}</p>
           </div>
-
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up px-6 w-full max-w-sm sm:max-w-none mx-auto" style={{ animationDelay: '400ms' }}>
-            <button 
-              onClick={() => scrollToSection('services')}
-              className="px-10 py-5 bg-sky-500 text-white rounded-full font-black uppercase tracking-widest hover:scale-105 hover:bg-sky-400 shadow-xl shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
-            >
-              {t.services} <ChevronRight size={18} className="rtl:rotate-180" />
-            </button>
-            <button 
-              onClick={() => scrollToSection('about')}
-              className="px-10 py-5 border border-slate-200 dark:border-white/10 rounded-full font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all text-slate-900 dark:text-white"
-            >
-              {t.about_us}
-            </button>
+            <button onClick={() => scrollToSection('services')} className="px-10 py-5 bg-sky-500 text-white rounded-full font-black uppercase tracking-widest hover:scale-105 hover:bg-sky-400 shadow-xl shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-3">{t.services} <ChevronRight size={18} className="rtl:rotate-180" /></button>
+            <button onClick={() => scrollToSection('about')} className="px-10 py-5 border border-slate-200 dark:border-white/10 rounded-full font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all text-slate-900 dark:text-white">{t.about_us}</button>
           </div>
         </Section>
 
-        {/* About */}
         <Section id="about">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
             <div className="space-y-12 reveal">
               <div className="space-y-6">
                 <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">{t.about_us}</h2>
-                <div className="h-1 w-20 bg-sky-500 animate-grow-x origin-left" />
+                <div className="h-3 w-32 bg-sky-500 animate-grow-x origin-left shadow-lg" />
                 <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                  {lang === 'en' 
-                    ? 'Established in July 2023, Mantiq bridges the gap between traditional business wisdom and modern digital excellence.'
-                    : 'تأسست شركة منطق في يوليو 2023، لتعمل كجسر يربط بين حكمة الأعمال التقليدية والتميز الرقمي الحديث.'}
+                  {lang === 'en' ? 'Established in July 2023, Mantiq bridges the gap between traditional business wisdom and modern digital excellence.' : 'تأسست شركة منطق في يوليو 2023، لتعمل كجسر يربط بين حكمة الأعمال التقليدية والتميز الرقمي الحديث.'}
                 </p>
               </div>
-
               <div className="grid sm:grid-cols-2 gap-8">
                 <div className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-sky-500/30 transition-all shadow-sm hover:scale-[1.02]">
                   <Target className="text-sky-500 dark:text-sky-400 mb-4" size={32} />
                   <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{t.msg_title}</h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {lang === 'en' 
-                      ? 'Helping businesses grow smarter, operate faster, and compete stronger in a digital-first world.'
-                      : 'مساعدة الشركات على النمو بذكاء أكبر، والعمل بشكل أسرع، والمنافسة بقوة في عالم رقمي متسارع.'}
-                  </p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{lang === 'en' ? 'Helping businesses grow smarter, operate faster, and compete stronger in a digital-first world.' : 'مساعدة الشركات على النمو بذكاء أكبر، والعمل بشكل أسرع، والمنافسة بقوة في عالم رقمي متسارع.'}</p>
                 </div>
                 <div className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all shadow-sm hover:scale-[1.02]">
                   <Eye className="text-indigo-500 dark:text-indigo-400 mb-4" size={32} />
                   <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{t.vision_title}</h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {lang === 'en'
-                      ? 'To become the trusted digital partner for businesses seeking technological excellence and operational clarity.'
-                      : 'أن نكون الشريك الرقمي الموثوق للشركات التي تسعى للتميز التكنولوجي والوضوح التشغيلي.'}
-                  </p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{lang === 'en' ? 'To become the trusted digital partner for businesses seeking technological excellence and operational clarity.' : 'أن نكون الشريك الرقمي الموثوق للشركات التي تسعى للتميز التكنولوجي والوضوح التشغيلي.'}</p>
                 </div>
               </div>
             </div>
-
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { count: '210+', label: t.stats_serv, icon: <Zap /> },
-                { count: '18+', label: t.stats_proj, icon: <Binary /> },
-                { count: '14', label: t.stats_vent, icon: <Trophy /> },
-                { count: '25+', label: t.stats_experts, icon: <Users /> },
-              ].map((stat, i) => (
+              {[{ count: '210+', label: t.stats_serv, icon: <Zap /> }, { count: '18+', label: t.stats_proj, icon: <Binary /> }, { count: '14', label: t.stats_vent, icon: <Trophy /> }, { count: '25+', label: t.stats_experts, icon: <Users /> }].map((stat, i) => (
                 <div key={i} className="p-10 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] text-center space-y-4 hover:bg-sky-500/5 transition-all border border-slate-200 dark:border-white/5 shadow-sm reveal" style={{ transitionDelay: `${i * 150}ms` }}>
-                  <div className="mx-auto w-12 h-12 flex items-center justify-center text-sky-500 dark:text-sky-400 bg-sky-500/10 rounded-2xl group-hover:rotate-12 transition-transform">{stat.icon}</div>
+                  <div className="mx-auto w-12 h-12 flex items-center justify-center text-sky-500 dark:text-sky-400 bg-sky-500/10 rounded-2xl transition-transform">{stat.icon}</div>
                   <div className="text-4xl font-black text-slate-900 dark:text-white">{stat.count}</div>
                   <div className="text-[10px] font-black uppercase text-slate-500 tracking-widest">{stat.label}</div>
                 </div>
@@ -516,7 +452,6 @@ export default function App() {
           </div>
         </Section>
 
-        {/* Services */}
         <Section id="services">
           <div className="text-center mb-20 space-y-6 reveal">
             <span className="text-sky-500 font-black uppercase tracking-[0.4em] text-sm">{t.services}</span>
@@ -529,7 +464,6 @@ export default function App() {
           </div>
         </Section>
 
-        {/* Events */}
         <Section id="events">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 reveal">
             <div className="space-y-4">
@@ -551,21 +485,20 @@ export default function App() {
           </div>
         </Section>
 
-        {/* Contact Section */}
         <Section id="contact">
           <div className="max-w-4xl mx-auto reveal">
             <div className="p-12 md:p-20 bg-sky-500 rounded-[4rem] text-white flex flex-col justify-center shadow-lg dark:bg-slate-900 dark:border dark:border-white/10 transition-all hover:shadow-2xl hover:shadow-sky-500/20">
               <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8">{t.lets_build}</h2>
-              <p className="mb-12 text-lg font-bold opacity-90">
-                {lang === 'en' ? 'Reach out at' : 'تواصل معنا على'} <span className="underline cursor-pointer">Mantiq2023@gmail.com</span>
-              </p>
-              <form className="space-y-6" onSubmit={handleForm}>
+              <form className="space-y-6" onSubmit={(e) => handleFormSubmit(e, 'Leads')}>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  <input required type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
-                  <input type="text" placeholder={t.company_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                  <input required name="name" type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                  <input name="company" type="text" placeholder={t.company_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
                 </div>
-                <input required type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
-                <select className="w-full px-6 py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer rounded-t-xl">
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <input required name="email" type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                  <input required name="phone" type="tel" placeholder={t.phone_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                </div>
+                <select name="service" className="w-full px-6 py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer rounded-t-xl">
                   <option value="" className="text-slate-900">{t.select_service}</option>
                   <option value="business" className="text-slate-900">{SERVICE_DATA.business.title[lang]}</option>
                   <option value="tracking" className="text-slate-900">{SERVICE_DATA.tracking.title[lang]}</option>
@@ -580,48 +513,35 @@ export default function App() {
           </div>
         </Section>
 
-        {/* Footer */}
         <footer className="pt-10 pb-20 px-6 border-t border-slate-200 dark:border-white/5 reveal">
           <PartnerMarquee lang={lang} />
           <div className="max-w-7xl mx-auto mt-20 flex flex-col items-center gap-10">
             <div className="flex gap-6">
               <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Facebook size={20} /></a>
               <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Linkedin size={20} /></a>
-              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Mail size={20} /></a>
+              <a href="mailto:Mantiq2023@gmail.com" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Mail size={20} /></a>
             </div>
             <div className="flex flex-col items-center gap-6">
               <div className="flex flex-wrap justify-center gap-8">
                 <a href="https://mantiq-pricing.vercel.app/" target="_blank" className="text-sky-500 font-black text-xs tracking-widest uppercase hover:underline flex items-center gap-2 group">
                   <Calculator size={14} className="group-hover:rotate-12 transition-transform" /> {t.pricing}
                 </a>
-                <button 
-                  onClick={() => setShowCareers(true)}
-                  className="text-slate-500 dark:text-slate-400 font-black text-xs tracking-widest uppercase hover:text-sky-500 transition-colors flex items-center gap-2 group"
-                >
+                <button onClick={() => setShowCareers(true)} className="text-slate-500 dark:text-slate-400 font-black text-xs tracking-widest uppercase hover:text-sky-500 transition-colors flex items-center gap-2 group">
                   <Users size={14} className="group-hover:scale-110 transition-transform" /> {t.careers}
                 </button>
               </div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] text-center">
-                © 2026 MANTIQ BUSINESS SERVICES. {t.rights}
-              </p>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] text-center">© 2026 MANTIQ BUSINESS SERVICES. {t.rights}</p>
             </div>
           </div>
         </footer>
 
-        {/* Floating Scroll Nav Dots */}
         <div className="fixed right-8 top-1/2 -translate-y-1/2 z-[90] hidden xl:flex flex-col gap-6">
           {['home', 'about', 'services', 'events', 'contact'].map(section => (
-            <button 
-              key={section}
-              onClick={() => scrollToSection(section)}
-              className={`w-3 h-3 rounded-full transition-all duration-500 ease-in-out transform ${activeSection === section ? 'bg-sky-500 h-10 scale-125 shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'bg-slate-300 dark:bg-slate-700 hover:scale-150'}`}
-              title={section}
-            />
+            <button key={section} onClick={() => scrollToSection(section)} className={`w-3 h-3 rounded-full transition-all duration-500 ease-in-out transform ${activeSection === section ? 'bg-sky-500 h-10 scale-125 shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'bg-slate-300 dark:bg-slate-700 hover:scale-150'}`} title={section} />
           ))}
         </div>
       </div>
 
-      {/* SERVICE MODAL */}
       {selectedService && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 md:p-10">
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl animate-fade-in" onClick={() => setSelectedService(null)}></div>
@@ -640,9 +560,7 @@ export default function App() {
                 <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed font-light animate-fade-in" style={{ animationDelay: '300ms' }}>{selectedService.desc[lang]}</p>
                 <div className="grid md:grid-cols-2 gap-4">
                   {selectedService.features[lang].map((f, i) => (
-                    <div key={i} className="flex items-center gap-4 p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 animate-fade-in" style={{ animationDelay: `${400 + (i * 100)}ms` }}>
-                      <CheckCircle2 className="text-sky-500 flex-shrink-0" /><span className="font-bold text-lg">{f}</span>
-                    </div>
+                    <div key={i} className="flex items-center gap-4 p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 animate-fade-in" style={{ animationDelay: `${400 + (i * 100)}ms` }}><CheckCircle2 className="text-sky-500 flex-shrink-0" /><span className="font-bold text-lg">{f}</span></div>
                   ))}
                 </div>
                 <button onClick={() => { setSelectedService(null); scrollToSection('contact'); }} className="w-full py-6 md:py-8 bg-sky-500 text-white font-black uppercase tracking-widest rounded-3xl text-xl shadow-2xl shadow-sky-500/30 hover:scale-[1.02] active:scale-95 transition-all animate-fade-in" style={{ animationDelay: '800ms' }}>{t.get_started}</button>
@@ -652,7 +570,6 @@ export default function App() {
         </div>
       )}
 
-      {/* CAREERS MODAL */}
       {showCareers && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 md:p-10">
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl animate-fade-in" onClick={() => setShowCareers(false)}></div>
@@ -660,16 +577,15 @@ export default function App() {
             <button onClick={() => setShowCareers(false)} className="absolute top-8 right-8 w-12 h-12 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center"><X /></button>
             <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-6 animate-fade-in">{t.join_team}</h2>
             <p className="text-slate-600 dark:text-slate-400 mb-10 animate-fade-in" style={{ animationDelay: '100ms' }}>{t.career_msg}</p>
-            <form className="space-y-6 animate-fade-in" style={{ animationDelay: '200ms' }} onSubmit={handleForm}>
-              <input required type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-xl" />
-              <input required type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-xl" />
-              <label className="flex items-center gap-4 p-6 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl cursor-pointer hover:bg-slate-50 dark:hover:bg-white/10 transition-all">
-                <Upload className="text-sky-500" />
-                <span className="text-sm font-bold text-slate-500">{t.upload_cv}</span>
-                <input type="file" className="hidden" />
-              </label>
-              <button className="w-full py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:bg-sky-500 active:scale-95 transition-all">
-                {formStatus === 'success' ? (lang === 'en' ? 'Sent!' : 'تم الإرسال!') : t.apply}
+            <form className="space-y-6 animate-fade-in" style={{ animationDelay: '200ms' }} onSubmit={(e) => handleFormSubmit(e, 'Work')}>
+              <input required name="name" type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-xl" />
+              <input required name="email" type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-xl" />
+              <div className="space-y-4">
+                <input name="cv_link" type="url" placeholder="Paste Portfolio or Resume Link" className="w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-xl" />
+                <p className="text-[10px] opacity-60">* Please paste a public link to your CV.</p>
+              </div>
+              <button disabled={formStatus === 'sending'} className="w-full py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:bg-sky-500 active:scale-95 transition-all">
+                {formStatus === 'sending' ? t.sending : (formStatus === 'success' ? 'Sent!' : t.apply)}
               </button>
             </form>
           </div>
@@ -678,90 +594,30 @@ export default function App() {
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&family=Noto+Sans+Arabic:wght@100;400;700;900&display=swap');
-        
         body { -webkit-user-select: none; user-select: none; scroll-behavior: smooth; }
         .font-sans { font-family: 'Outfit', sans-serif; }
         .font-arabic { font-family: 'Noto Sans Arabic', sans-serif; }
-        
-        /* CUSTOM ANIMATIONS */
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { animation: marquee 15s linear infinite; }
-        
-        @keyframes fade-in-up { 
-          0% { opacity: 0; transform: translateY(30px); } 
-          100% { opacity: 1; transform: translateY(0); } 
-        }
+        .animate-marquee { animation: marquee 8s linear infinite; }
+        @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
         .animate-fade-in-up { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-        @keyframes fade-in { 
-          0% { opacity: 0; } 
-          100% { opacity: 1; } 
-        }
+        @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
         .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-
-        @keyframes grow-x { 
-          0% { transform: scaleX(0); } 
-          100% { transform: scaleX(1); } 
-        }
+        @keyframes grow-x { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
         .animate-grow-x { animation: grow-x 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-
-        @keyframes zoom-in { 
-          0% { opacity: 0; transform: scale(0.95); } 
-          100% { opacity: 1; transform: scale(1); } 
-        }
+        @keyframes zoom-in { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
         .animate-zoom-in { animation: zoom-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-        .animate-float { animation: float 5s ease-in-out infinite; }
-
-        /* MESH BACKGROUND ANIMATIONS */
-        @keyframes mesh-blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(10%, 10%) scale(1.1); }
-          66% { transform: translate(-5%, 15%) scale(0.9); }
-        }
-        @keyframes mesh-blob-reverse {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-10%, -10%) scale(1.1); }
-          66% { transform: translate(5%, -15%) scale(0.9); }
-        }
+        @keyframes mesh-blob { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(10%, 10%) scale(1.1); } 66% { transform: translate(-5%, 15%) scale(0.9); } }
+        @keyframes mesh-blob-reverse { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(-10%, -10%) scale(1.1); } 66% { transform: translate(5%, -15%) scale(0.9); } }
         .animate-mesh-blob { animation: mesh-blob 20s infinite alternate ease-in-out; }
         .animate-mesh-blob-reverse { animation: mesh-blob-reverse 25s infinite alternate-reverse ease-in-out; }
-
-        /* UPDATED SQUARE GRID BACKGROUND */
-        .bg-square-grid {
-          background-image: 
-            linear-gradient(to right, currentColor 1px, transparent 1px),
-            linear-gradient(to bottom, currentColor 1px, transparent 1px);
-          background-size: 60px 60px; /* Larger squares for cleaner look */
-        }
-
-        .bg-noise {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-
-        /* REVEAL ON SCROLL */
-        .reveal {
-          opacity: 0;
-          transform: translateY(40px);
-          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-          pointer-events: none;
-        }
-        .reveal-visible {
-          opacity: 1;
-          transform: translateY(0);
-          pointer-events: auto;
-        }
-
+        .bg-square-grid { background-image: linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px); background-size: 60px 60px; }
+        .bg-noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
+        .reveal-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
-        
         ::selection { background-color: #38bdf8; color: white; }
       `}</style>
     </div>
