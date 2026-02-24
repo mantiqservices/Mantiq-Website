@@ -87,12 +87,13 @@ const SERVICE_DATA = {
 
 const TRANSLATIONS = {
   en: {
+    logo: "Mantiq",
     tag: "Business Services Company",
     hero_title: "The Path You Should Take",
     hero_desc: "Empowering success through market knowledge and digital solutions.",
     get_started: "Get Started",
     about_us: "About Us",
-    services: "Services",
+    services: "Our Services",
     events: "Events",
     careers: "Careers",
     contact: "Contact",
@@ -109,9 +110,22 @@ const TRANSLATIONS = {
     submit: "Initiate Mission",
     apply: "Submit Application",
     pricing: "Pricing Calculator",
-    sol_profile: "Solution Profile"
+    sol_profile: "Solution Profile",
+    lets_build: "Let's Build.",
+    explore_more: "Explore More",
+    participated: "Participated",
+    mantiq_on_land: "Mantiq On Land",
+    name_placeholder: "Name",
+    company_placeholder: "Company",
+    email_placeholder: "Email",
+    select_service: "Select Service",
+    sending: "Sending...",
+    mission_received: "Mission Received",
+    rights: "ALL RIGHTS RESERVED.",
+    career_msg: "We're always looking for brilliant minds. Send us your details."
   },
   ar: {
+    logo: "منطق",
     tag: "شركة خدمات أعمال",
     hero_title: "المسار الذي يجب أن تسلكه",
     hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق والحلول الرقمية الحديثة.",
@@ -134,8 +148,36 @@ const TRANSLATIONS = {
     submit: "بدء المهمة",
     apply: "إرسال الطلب",
     pricing: "حاسبة التسعير",
-    sol_profile: "ملف الحل"
+    sol_profile: "ملف الحل",
+    lets_build: "فلنبنِ معاً.",
+    explore_more: "استكشف المزيد",
+    participated: "شاركنا في",
+    mantiq_on_land: "منطق على أرض الواقع",
+    name_placeholder: "الاسم",
+    company_placeholder: "الشركة",
+    email_placeholder: "البريد الإلكتروني",
+    select_service: "اختر الخدمة",
+    sending: "جاري الإرسال...",
+    mission_received: "تم استلام المهمة",
+    rights: "جميع الحقوق محفوظة.",
+    career_msg: "نحن دائماً نبحث عن العقول المبدعة. أرسل لنا بياناتك."
   }
+};
+
+// --- ANIMATION HOOK ---
+const useScrollReveal = () => {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 };
 
 // --- COMPONENTS ---
@@ -147,7 +189,7 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
   return (
     <nav className="fixed w-full z-[100] border-b border-slate-200 dark:border-white/5 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl transition-all duration-300">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-2 cursor-pointer group" onClick={() => onNavigate('home')}>
+        <div className="flex items-center gap-2 cursor-pointer group animate-float" onClick={() => onNavigate('home')}>
           <div className="h-10 text-sky-500 dark:text-sky-400">
             <svg className="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
               <g fill="none" stroke="currentColor" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
@@ -156,27 +198,32 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
               </g>
             </svg>
           </div>
-          <span className="text-xl font-black uppercase tracking-widest text-slate-900 dark:text-white">Mantiq</span>
+          <span className="text-xl font-black uppercase tracking-widest text-slate-900 dark:text-white transition-all group-hover:tracking-[0.2em]">
+            {t.logo}
+          </span>
         </div>
 
         <div className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-          {['about', 'services', 'events', 'careers'].map(item => (
+          {['about', 'services', 'events'].map(item => (
             <button 
               key={item}
               onClick={() => onNavigate(item)}
-              className={`hover:text-sky-500 dark:hover:text-sky-400 transition-colors ${activeSection === item ? 'text-sky-500 dark:text-sky-400' : ''}`}
+              className={`relative py-2 hover:text-sky-500 dark:hover:text-sky-400 transition-colors ${activeSection === item ? 'text-sky-500 dark:text-sky-400' : ''}`}
             >
-              {t[item === 'careers' ? 'careers' : (item === 'about' ? 'about_us' : item)]}
+              {t[item === 'about' ? 'about_us' : item]}
+              {activeSection === item && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-500 transition-all animate-grow-x" />
+              )}
             </button>
           ))}
           <div className="flex items-center gap-4 pl-8 border-l border-slate-200 dark:border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r rtl:border-l-0">
-            <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center font-black text-slate-900 dark:text-white">
+            <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center font-black text-slate-900 dark:text-white hover:scale-110 active:scale-95 transition-all">
               {lang === 'en' ? 'AR' : 'EN'}
             </button>
-            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center text-slate-900 dark:text-white">
+            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center text-slate-900 dark:text-white hover:rotate-90 transition-all duration-500">
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             </button>
-            <button onClick={() => onNavigate('contact')} className="bg-sky-500 text-white dark:text-slate-950 px-6 py-3 rounded-full hover:bg-sky-400 shadow-lg shadow-sky-500/20 transition-all font-bold">
+            <button onClick={() => onNavigate('contact')} className="bg-sky-500 text-white px-6 py-3 rounded-full hover:bg-sky-400 shadow-lg shadow-sky-500/20 active:scale-95 transition-all font-bold">
               {t.get_started}
             </button>
           </div>
@@ -188,21 +235,21 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`fixed inset-0 bg-white dark:bg-slate-950 z-[200] transition-all duration-500 ${mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+      <div className={`fixed inset-0 bg-white dark:bg-slate-950 z-[200] transition-all duration-700 ease-in-out ${mobileOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
         <div className="p-10 flex flex-col h-full text-slate-900 dark:text-white">
           <div className="flex justify-between items-center mb-16">
-            <span className="text-xl font-black tracking-widest uppercase">Mantiq</span>
+            <span className="text-xl font-black tracking-widest uppercase">{t.logo}</span>
             <button onClick={() => setMobileOpen(false)}><X size={32} /></button>
           </div>
           <div className="flex flex-col gap-8 text-3xl font-black uppercase tracking-widest">
-            {['home', 'about', 'services', 'events', 'careers', 'contact'].map((item, idx) => (
+            {['home', 'about', 'services', 'events', 'contact'].map((item, idx) => (
               <button 
                 key={item} 
-                style={{ transitionDelay: `${idx * 100}ms` }}
+                style={{ transitionDelay: `${idx * 75}ms` }}
                 onClick={() => { onNavigate(item); setMobileOpen(false); }}
-                className="text-left hover:text-sky-500 transition-all"
+                className={`text-left hover:text-sky-500 transition-all ${mobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
               >
-                {t[item === 'about' ? 'about_us' : (item === 'careers' ? 'careers' : item)] || item}
+                {t[item === 'about' ? 'about_us' : item] || item}
               </button>
             ))}
           </div>
@@ -221,16 +268,16 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
 };
 
 const Section = ({ id, children, className }) => (
-  <section id={id} className={`min-h-screen pt-32 pb-20 px-6 lg:px-20 ${className}`}>
+  <section id={id} className={`min-h-[80vh] pt-32 pb-20 px-6 lg:px-20 ${className}`}>
     <div className="max-w-7xl mx-auto">{children}</div>
   </section>
 );
 
-const PartnerMarquee = () => (
-  <div className="w-full overflow-hidden py-10 opacity-60 dark:opacity-40 hover:opacity-100 transition-opacity">
-    <div className="flex gap-10 animate-marquee whitespace-nowrap">
+const PartnerMarquee = ({ lang }) => (
+  <div className="w-full overflow-hidden py-10 opacity-70 dark:opacity-50 hover:opacity-100 transition-opacity">
+    <div className={`flex gap-10 animate-marquee whitespace-nowrap ${lang === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
       {[...CUSTOMERS, ...CUSTOMERS].map((name, i) => (
-        <span key={i} className="text-xs font-black uppercase tracking-[0.3em] px-8 py-3 border border-slate-200 dark:border-white/10 rounded-full text-slate-600 dark:text-white">
+        <span key={i} className="text-xs font-black uppercase tracking-[0.3em] px-8 py-3 border border-slate-200 dark:border-white/10 rounded-full text-slate-900 dark:text-white transition-all hover:bg-sky-500 hover:text-white cursor-default">
           {name}
         </span>
       ))}
@@ -238,38 +285,49 @@ const PartnerMarquee = () => (
   </div>
 );
 
-const ServiceCard = ({ service, lang, onOpen }) => (
-  <div className="group relative bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden hover:border-sky-500/50 transition-all duration-500 shadow-sm hover:shadow-xl">
-    <div className="h-48 overflow-hidden">
-      <img src={service.img} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" alt={service.title[lang]} />
-    </div>
-    <div className="p-8">
-      <div className={`mb-6 ${service.color}`}>{service.icon}</div>
-      <h3 className="text-2xl font-black mb-4 text-slate-900 dark:text-white">{service.title[lang]}</h3>
-      <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed line-clamp-3">{service.desc[lang]}</p>
-      <div className="flex flex-wrap gap-2 mb-8">
-        {service.features[lang].slice(0, 2).map((f, i) => (
-          <span key={i} className="text-[10px] font-bold px-3 py-1 bg-slate-200 dark:bg-white/5 text-slate-700 dark:text-white rounded-full uppercase tracking-widest">{f}</span>
-        ))}
+const ServiceCard = ({ service, lang, onOpen, index }) => {
+  const t = TRANSLATIONS[lang];
+  return (
+    <div 
+      className="group reveal relative bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden hover:border-sky-500/50 transition-all duration-500 shadow-sm hover:shadow-2xl flex flex-col h-full transform hover:-translate-y-2"
+      style={{ transitionDelay: `${index * 100}ms` }}
+    >
+      <div className="h-48 overflow-hidden">
+        <img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000 ease-out" alt={service.title[lang]} />
       </div>
-      <button 
-        onClick={() => onOpen(service)}
-        className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest bg-sky-500 text-white border-transparent hover:bg-sky-600 shadow-lg shadow-sky-500/20 transition-all flex items-center justify-center gap-2"
-      >
-        Explore More <ArrowRight size={14} className="rtl:rotate-180" />
-      </button>
+      <div className="p-8 flex flex-col flex-1">
+        <div className={`mb-6 transition-transform group-hover:scale-110 duration-500 ${service.color}`}>{service.icon}</div>
+        <h3 className="text-2xl font-black mb-4 text-slate-900 dark:text-white group-hover:text-sky-500 transition-colors">{service.title[lang]}</h3>
+        <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed line-clamp-3">{service.desc[lang]}</p>
+        <div className="flex flex-wrap gap-2 mb-8">
+          {service.features[lang].slice(0, 2).map((f, i) => (
+            <span key={i} className="text-[10px] font-bold px-3 py-1 bg-slate-200 dark:bg-white/5 text-slate-700 dark:text-white rounded-full uppercase tracking-widest group-hover:bg-sky-500/10 transition-colors">{f}</span>
+          ))}
+        </div>
+        <div className="mt-auto">
+          <button 
+            onClick={() => onOpen(service)}
+            className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest bg-sky-500 text-white border-transparent hover:bg-sky-600 shadow-lg shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            {t.explore_more} <ArrowRight size={14} className="rtl:rotate-180 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default function App() {
   const [lang, setLang] = useState('en');
   const [theme, setTheme] = useState('dark');
   const [activeSection, setActiveSection] = useState('home');
   const [selectedService, setSelectedService] = useState(null);
+  const [showCareers, setShowCareers] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
 
   const t = TRANSLATIONS[lang];
+
+  useScrollReveal();
 
   useEffect(() => {
     const handleContextMenu = (e) => e.preventDefault();
@@ -292,12 +350,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (selectedService) {
+    if (selectedService || showCareers) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-  }, [selectedService]);
+  }, [selectedService, showCareers]);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -319,11 +377,11 @@ export default function App() {
 
   return (
     <div className={`${theme} ${lang === 'ar' ? 'font-arabic' : 'font-sans'} selection:bg-sky-500 selection:text-white`}>
-      <div className={`bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-500 min-h-screen overflow-x-hidden ${selectedService ? 'blur-md grayscale-[0.2]' : ''}`}>
+      <div className={`bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-700 min-h-screen overflow-x-hidden ${(selectedService || showCareers) ? 'blur-md grayscale-[0.2]' : ''}`}>
         
         {/* Background Effects */}
         <div className="fixed inset-0 pointer-events-none opacity-20 dark:opacity-40">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.1),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.15),transparent_70%)] transition-opacity duration-1000"></div>
           <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(rgba(56,189,248,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.05)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
         </div>
 
@@ -335,30 +393,34 @@ export default function App() {
         />
 
         {/* Hero */}
-        <Section id="home" className="flex flex-col justify-center items-center text-center">
-          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-10 animate-fade-in">
+        <Section id="home" className="flex flex-col justify-center items-center text-center !min-h-screen">
+          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-10 animate-fade-in-up">
             <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-sky-500 dark:text-sky-400">{t.tag}</span>
           </div>
-          <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black leading-none tracking-tighter mb-10 text-slate-900 dark:text-white">
+          <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black leading-none tracking-tighter mb-10 text-slate-900 dark:text-white animate-fade-in-up" style={{ animationDelay: '100ms' }}>
             <span className="block">{lang === 'en' ? 'The Path' : 'المسار'}</span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 italic px-4">
               {lang === 'en' ? 'You Should Take' : 'الذي يجب سلوكه'}
             </span>
           </h1>
-          <p className="max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-12 leading-relaxed">
-            {t.hero_desc}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
+          
+          <div className="max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '250ms' }}>
+            <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+              {t.hero_desc}
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '400ms' }}>
             <button 
-              onClick={() => scrollToSection('contact')}
-              className="px-10 py-5 bg-sky-500 text-white dark:text-slate-950 rounded-full font-black uppercase tracking-widest hover:scale-105 hover:bg-sky-400 shadow-xl shadow-sky-500/20 transition-all flex items-center justify-center gap-3"
+              onClick={() => scrollToSection('services')}
+              className="px-10 py-5 bg-sky-500 text-white rounded-full font-black uppercase tracking-widest hover:scale-105 hover:bg-sky-400 shadow-xl shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
             >
-              {t.get_started} <ChevronRight size={18} />
+              {t.services} <ChevronRight size={18} className="rtl:rotate-180" />
             </button>
             <button 
               onClick={() => scrollToSection('about')}
-              className="px-10 py-5 border border-slate-200 dark:border-white/10 rounded-full font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-white/5 transition-all text-slate-900 dark:text-white"
+              className="px-10 py-5 border border-slate-200 dark:border-white/10 rounded-full font-black uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all text-slate-900 dark:text-white"
             >
               {t.about_us}
             </button>
@@ -368,25 +430,35 @@ export default function App() {
         {/* About */}
         <Section id="about">
           <div className="grid lg:grid-cols-2 gap-20 items-center">
-            <div className="space-y-12">
+            <div className="space-y-12 reveal">
               <div className="space-y-6">
                 <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">{t.about_us}</h2>
-                <div className="h-1 w-20 bg-sky-500"></div>
+                <div className="h-1 w-20 bg-sky-500 animate-grow-x origin-left" />
                 <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                  Established in July 2023, Mantiq bridges the gap between traditional business wisdom and modern digital excellence.
+                  {lang === 'en' 
+                    ? 'Established in July 2023, Mantiq bridges the gap between traditional business wisdom and modern digital excellence.'
+                    : 'تأسست شركة منطق في يوليو 2023، لتعمل كجسر يربط بين حكمة الأعمال التقليدية والتميز الرقمي الحديث.'}
                 </p>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-8">
-                <div className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-sky-500/30 transition-all shadow-sm">
+                <div className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-sky-500/30 transition-all shadow-sm hover:scale-[1.02]">
                   <Target className="text-sky-500 dark:text-sky-400 mb-4" size={32} />
                   <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{t.msg_title}</h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">Helping businesses grow smarter, operate faster, and compete stronger in a digital-first world.</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {lang === 'en' 
+                      ? 'Helping businesses grow smarter, operate faster, and compete stronger in a digital-first world.'
+                      : 'مساعدة الشركات على النمو بذكاء أكبر، والعمل بشكل أسرع، والمنافسة بقوة في عالم رقمي متسارع.'}
+                  </p>
                 </div>
-                <div className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all shadow-sm">
+                <div className="p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all shadow-sm hover:scale-[1.02]">
                   <Eye className="text-indigo-500 dark:text-indigo-400 mb-4" size={32} />
                   <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{t.vision_title}</h3>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">To become the trusted digital partner for businesses seeking technological excellence and operational clarity.</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    {lang === 'en'
+                      ? 'To become the trusted digital partner for businesses seeking technological excellence and operational clarity.'
+                      : 'أن نكون الشريك الرقمي الموثوق للشركات التي تسعى للتميز التكنولوجي والوضوح التشغيلي.'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -398,8 +470,8 @@ export default function App() {
                 { count: '14', label: t.stats_vent, icon: <Trophy /> },
                 { count: '25+', label: t.stats_experts, icon: <Users /> },
               ].map((stat, i) => (
-                <div key={i} className="p-10 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] text-center space-y-4 hover:bg-sky-500/5 transition-colors border border-slate-200 dark:border-white/5 shadow-sm">
-                  <div className="mx-auto w-12 h-12 flex items-center justify-center text-sky-500 dark:text-sky-400 bg-sky-500/10 rounded-2xl">{stat.icon}</div>
+                <div key={i} className="p-10 bg-slate-50 dark:bg-white/5 rounded-[2.5rem] text-center space-y-4 hover:bg-sky-500/5 transition-all border border-slate-200 dark:border-white/5 shadow-sm reveal" style={{ transitionDelay: `${i * 150}ms` }}>
+                  <div className="mx-auto w-12 h-12 flex items-center justify-center text-sky-500 dark:text-sky-400 bg-sky-500/10 rounded-2xl group-hover:rotate-12 transition-transform">{stat.icon}</div>
                   <div className="text-4xl font-black text-slate-900 dark:text-white">{stat.count}</div>
                   <div className="text-[10px] font-black uppercase text-slate-500 tracking-widest">{stat.label}</div>
                 </div>
@@ -410,31 +482,31 @@ export default function App() {
 
         {/* Services */}
         <Section id="services">
-          <div className="text-center mb-20 space-y-6">
+          <div className="text-center mb-20 space-y-6 reveal">
             <span className="text-sky-500 font-black uppercase tracking-[0.4em] text-sm">{t.services}</span>
             <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white">{t.hero_title}</h2>
           </div>
           <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
-            {Object.values(SERVICE_DATA).map(service => (
-              <ServiceCard key={service.id} service={service} lang={lang} onOpen={setSelectedService} />
+            {Object.values(SERVICE_DATA).map((service, idx) => (
+              <ServiceCard key={service.id} service={service} lang={lang} onOpen={setSelectedService} index={idx} />
             ))}
           </div>
         </Section>
 
         {/* Events */}
         <Section id="events">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 reveal">
             <div className="space-y-4">
-               <span className="text-sky-500 font-black uppercase tracking-[0.4em] text-sm">Participated</span>
-               <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">Mantiq On Land</h2>
+               <span className="text-sky-500 font-black uppercase tracking-[0.4em] text-sm">{t.participated}</span>
+               <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">{t.mantiq_on_land}</h2>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {EVENTS.map(event => (
-              <div key={event.id} className="group relative h-[400px] rounded-[2.5rem] overflow-hidden shadow-lg">
-                <img src={event.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80"></div>
-                <div className="absolute bottom-0 left-0 p-8 w-full">
+            {EVENTS.map((event, idx) => (
+              <div key={event.id} className="group reveal relative h-[400px] rounded-[2.5rem] overflow-hidden shadow-lg transition-transform hover:scale-[1.03] duration-500" style={{ transitionDelay: `${idx * 150}ms` }}>
+                <img src={event.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-in-out" alt={event.title[lang]} />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                <div className="absolute bottom-0 left-0 p-8 w-full transform group-hover:-translate-y-2 transition-transform">
                   <span className="text-[10px] font-black text-sky-400 mb-2 block">{event.date}</span>
                   <h3 className="text-2xl font-black text-white">{event.title[lang]}</h3>
                 </div>
@@ -443,44 +515,29 @@ export default function App() {
           </div>
         </Section>
 
-        {/* Career & Contact Split */}
-        <Section id="careers">
-          <div className="grid lg:grid-cols-2 gap-10">
-            <div className="p-12 md:p-20 bg-slate-50 dark:bg-white/5 rounded-[4rem] border border-slate-200 dark:border-white/5 hover:border-sky-500/20 transition-all flex flex-col justify-center shadow-sm">
-              <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8 text-slate-900 dark:text-white">{t.join_team}</h2>
-              <p className="text-slate-600 dark:text-slate-400 mb-12 text-lg">We are always looking for visionary developers, strategists, and analysts. Send your details to join our expert pool.</p>
-              <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleForm(e); }}>
-                <input required type="text" placeholder="Full Name" className="w-full px-6 py-5 bg-white dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all text-slate-900 dark:text-white" />
-                <input required type="email" placeholder="Email Address" className="w-full px-6 py-5 bg-white dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all text-slate-900 dark:text-white" />
-                <label className="flex items-center gap-4 p-6 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl cursor-pointer hover:bg-white dark:hover:bg-white/5 transition-all">
-                  <Upload className="text-sky-500" />
-                  <span className="text-sm font-bold text-slate-500">{t.upload_cv}</span>
-                  <input type="file" className="hidden" />
-                </label>
-                <button className="w-full py-6 bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:bg-sky-500 dark:hover:bg-sky-500 transition-all">
-                   {t.apply}
-                </button>
-              </form>
-            </div>
-
-            <div id="contact" className="p-12 md:p-20 bg-sky-500 rounded-[4rem] text-white flex flex-col justify-center shadow-lg dark:bg-slate-900 dark:border dark:border-white/10 transition-all">
-              <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8">{lang === 'en' ? "Let's Build." : "فلنبنِ معاً."}</h2>
-              <p className="mb-12 text-lg font-bold opacity-90">{t.contact_subtitle} <span className="underline cursor-pointer">Mantiq2023@gmail.com</span></p>
+        {/* Contact Section */}
+        <Section id="contact">
+          <div className="max-w-4xl mx-auto reveal">
+            <div className="p-12 md:p-20 bg-sky-500 rounded-[4rem] text-white flex flex-col justify-center shadow-lg dark:bg-slate-900 dark:border dark:border-white/10 transition-all hover:shadow-2xl hover:shadow-sky-500/20">
+              <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8">{t.lets_build}</h2>
+              <p className="mb-12 text-lg font-bold opacity-90">
+                {lang === 'en' ? 'Reach out at' : 'تواصل معنا على'} <span className="underline cursor-pointer">Mantiq2023@gmail.com</span>
+              </p>
               <form className="space-y-6" onSubmit={handleForm}>
                 <div className="grid sm:grid-cols-2 gap-6">
-                  <input required type="text" placeholder="Name" className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white" />
-                  <input type="text" placeholder="Company" className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white" />
+                  <input required type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                  <input type="text" placeholder={t.company_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
                 </div>
-                <input required type="email" placeholder="Email" className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white" />
-                <select className="w-full px-6 py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer">
-                  <option value="" className="text-slate-900">Select Service</option>
-                  <option value="business" className="text-slate-900">Business Development</option>
-                  <option value="tracking" className="text-slate-900">Tracking Systems</option>
-                  <option value="web" className="text-slate-900">Websites</option>
-                  <option value="mobile" className="text-slate-900">Mobile Apps</option>
+                <input required type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                <select className="w-full px-6 py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer rounded-t-xl">
+                  <option value="" className="text-slate-900">{t.select_service}</option>
+                  <option value="business" className="text-slate-900">{SERVICE_DATA.business.title[lang]}</option>
+                  <option value="tracking" className="text-slate-900">{SERVICE_DATA.tracking.title[lang]}</option>
+                  <option value="web" className="text-slate-900">{SERVICE_DATA.web.title[lang]}</option>
+                  <option value="mobile" className="text-slate-900">{SERVICE_DATA.mobile.title[lang]}</option>
                 </select>
-                <button disabled={formStatus === 'sending'} className="w-full py-6 bg-slate-950 dark:bg-sky-500 text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:scale-105 transition-all disabled:opacity-50 shadow-xl">
-                   {formStatus === 'sending' ? 'Sending...' : (formStatus === 'success' ? 'Mission Received' : t.submit)}
+                <button disabled={formStatus === 'sending'} className="w-full py-6 bg-slate-950 dark:bg-sky-500 text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 shadow-xl">
+                   {formStatus === 'sending' ? t.sending : (formStatus === 'success' ? t.mission_received : t.submit)}
                 </button>
               </form>
             </div>
@@ -488,92 +545,97 @@ export default function App() {
         </Section>
 
         {/* Footer */}
-        <footer className="pt-10 pb-20 px-6 border-t border-slate-200 dark:border-white/5">
-          <PartnerMarquee />
+        <footer className="pt-10 pb-20 px-6 border-t border-slate-200 dark:border-white/5 reveal">
+          <PartnerMarquee lang={lang} />
           <div className="max-w-7xl mx-auto mt-20 flex flex-col items-center gap-10">
             <div className="flex gap-6">
-              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white"><Facebook size={20} /></a>
-              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white"><Linkedin size={20} /></a>
-              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white"><Mail size={20} /></a>
+              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Facebook size={20} /></a>
+              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Linkedin size={20} /></a>
+              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Mail size={20} /></a>
             </div>
-            <div className="flex flex-col items-center gap-4">
-              <a href="https://mantiq-pricing.vercel.app/" target="_blank" className="text-sky-500 font-black text-xs tracking-widest uppercase hover:underline flex items-center gap-2">
-                <Calculator size={14} /> {t.pricing}
-              </a>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em]">
-                © 2026 MANTIQ BUSINESS SERVICES. ALL RIGHTS RESERVED.
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex flex-wrap justify-center gap-8">
+                <a href="https://mantiq-pricing.vercel.app/" target="_blank" className="text-sky-500 font-black text-xs tracking-widest uppercase hover:underline flex items-center gap-2 group">
+                  <Calculator size={14} className="group-hover:rotate-12 transition-transform" /> {t.pricing}
+                </a>
+                <button 
+                  onClick={() => setShowCareers(true)}
+                  className="text-slate-500 dark:text-slate-400 font-black text-xs tracking-widest uppercase hover:text-sky-500 transition-colors flex items-center gap-2 group"
+                >
+                  <Users size={14} className="group-hover:scale-110 transition-transform" /> {t.careers}
+                </button>
+              </div>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.4em] text-center">
+                © 2026 MANTIQ BUSINESS SERVICES. {t.rights}
               </p>
             </div>
           </div>
         </footer>
 
-        {/* Floating Side Nav (Desktop) */}
+        {/* Floating Scroll Nav Dots */}
         <div className="fixed right-8 top-1/2 -translate-y-1/2 z-[90] hidden xl:flex flex-col gap-6">
-          {['home', 'about', 'services', 'events', 'careers', 'contact'].map(section => (
+          {['home', 'about', 'services', 'events', 'contact'].map(section => (
             <button 
               key={section}
               onClick={() => scrollToSection(section)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${activeSection === section ? 'bg-sky-500 h-10 shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-500'}`}
+              className={`w-3 h-3 rounded-full transition-all duration-500 ease-in-out transform ${activeSection === section ? 'bg-sky-500 h-10 scale-125 shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'bg-slate-300 dark:bg-slate-700 hover:scale-150'}`}
+              title={section}
             />
           ))}
         </div>
       </div>
 
-      {/* MODAL POPUP (CENTERED) */}
+      {/* SERVICE MODAL */}
       {selectedService && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 md:p-10">
-          <div 
-            className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl transition-all duration-500" 
-            onClick={() => setSelectedService(null)}
-          ></div>
-          
-          <div className={`relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300 ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
-            {/* Header */}
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl animate-fade-in" onClick={() => setSelectedService(null)}></div>
+          <div className={`relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl flex flex-col overflow-hidden animate-zoom-in ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
             <div className="sticky top-0 z-10 flex items-center justify-between p-8 md:px-16 md:pt-16 bg-white dark:bg-slate-900">
-              <div className={`w-14 h-14 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center ${selectedService.color}`}>
-                {selectedService.icon}
-              </div>
-              <button 
-                onClick={() => setSelectedService(null)} 
-                className="w-14 h-14 rounded-full bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 flex items-center justify-center transition-all text-slate-900 dark:text-white"
-              >
-                <X />
-              </button>
+              <div className={`w-14 h-14 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center ${selectedService.color}`}>{selectedService.icon}</div>
+              <button onClick={() => setSelectedService(null)} className="w-14 h-14 rounded-full bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 flex items-center justify-center transition-all text-slate-900 dark:text-white"><X /></button>
             </div>
-
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto px-8 pb-16 md:px-16 md:pb-20 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto px-8 pb-16 md:px-16 md:pb-20 custom-scrollbar text-slate-900 dark:text-white">
               <div className="space-y-12">
                 <div>
-                  <span className="text-sky-500 dark:text-sky-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block">{t.sol_profile}</span>
-                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-8 text-slate-900 dark:text-white">{selectedService.title[lang]}</h2>
-                  
-                  <div className="w-full aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 shadow-lg">
-                    <img src={selectedService.img} className="w-full h-full object-cover" alt={selectedService.title[lang]} />
-                  </div>
+                  <span className="text-sky-500 dark:text-sky-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block animate-fade-in">{t.sol_profile}</span>
+                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-8 animate-fade-in" style={{ animationDelay: '100ms' }}>{selectedService.title[lang]}</h2>
+                  <div className="w-full aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-lg animate-fade-in" style={{ animationDelay: '200ms' }}><img src={selectedService.img} className="w-full h-full object-cover" alt="" /></div>
                 </div>
-
-                <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed font-light">
-                  {selectedService.desc[lang]}
-                </p>
-                
+                <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed font-light animate-fade-in" style={{ animationDelay: '300ms' }}>{selectedService.desc[lang]}</p>
                 <div className="grid md:grid-cols-2 gap-4">
                   {selectedService.features[lang].map((f, i) => (
-                    <div key={i} className="flex items-center gap-4 p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 text-slate-900 dark:text-white">
-                      <CheckCircle2 className="text-sky-500 flex-shrink-0" />
-                      <span className="font-bold text-lg">{f}</span>
+                    <div key={i} className="flex items-center gap-4 p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 animate-fade-in" style={{ animationDelay: `${400 + (i * 100)}ms` }}>
+                      <CheckCircle2 className="text-sky-500 flex-shrink-0" /><span className="font-bold text-lg">{f}</span>
                     </div>
                   ))}
                 </div>
-
-                <button 
-                  onClick={() => { setSelectedService(null); scrollToSection('contact'); }}
-                  className="w-full py-6 md:py-8 bg-sky-500 text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-3xl text-xl shadow-2xl shadow-sky-500/30 hover:scale-[1.02] active:scale-95 transition-all"
-                >
-                  {t.get_started}
-                </button>
+                <button onClick={() => { setSelectedService(null); scrollToSection('contact'); }} className="w-full py-6 md:py-8 bg-sky-500 text-white font-black uppercase tracking-widest rounded-3xl text-xl shadow-2xl shadow-sky-500/30 hover:scale-[1.02] active:scale-95 transition-all animate-fade-in" style={{ animationDelay: '800ms' }}>{t.get_started}</button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* CAREERS MODAL */}
+      {showCareers && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 md:p-10">
+          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl animate-fade-in" onClick={() => setShowCareers(false)}></div>
+          <div className={`relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[3rem] shadow-2xl p-10 md:p-16 animate-zoom-in text-slate-900 dark:text-white ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
+            <button onClick={() => setShowCareers(false)} className="absolute top-8 right-8 w-12 h-12 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center"><X /></button>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-6 animate-fade-in">{t.join_team}</h2>
+            <p className="text-slate-600 dark:text-slate-400 mb-10 animate-fade-in" style={{ animationDelay: '100ms' }}>{t.career_msg}</p>
+            <form className="space-y-6 animate-fade-in" style={{ animationDelay: '200ms' }} onSubmit={handleForm}>
+              <input required type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-xl" />
+              <input required type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-xl" />
+              <label className="flex items-center gap-4 p-6 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-2xl cursor-pointer hover:bg-slate-50 dark:hover:bg-white/10 transition-all">
+                <Upload className="text-sky-500" />
+                <span className="text-sm font-bold text-slate-500">{t.upload_cv}</span>
+                <input type="file" className="hidden" />
+              </label>
+              <button className="w-full py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:bg-sky-500 active:scale-95 transition-all">
+                {formStatus === 'success' ? (lang === 'en' ? 'Sent!' : 'تم الإرسال!') : t.apply}
+              </button>
+            </form>
           </div>
         </div>
       )}
@@ -585,20 +647,51 @@ export default function App() {
         .font-sans { font-family: 'Outfit', sans-serif; }
         .font-arabic { font-family: 'Noto Sans Arabic', sans-serif; }
         
-        @keyframes marquee {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          animation: marquee 30s linear infinite;
-        }
+        /* CUSTOM ANIMATIONS */
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .animate-marquee { animation: marquee 15s linear infinite; }
         
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes fade-in-up { 
+          0% { opacity: 0; transform: translateY(30px); } 
+          100% { opacity: 1; transform: translateY(0); } 
         }
-        .animate-fade-in {
-          animation: fade-in 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .animate-fade-in-up { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes fade-in { 
+          0% { opacity: 0; } 
+          100% { opacity: 1; } 
+        }
+        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
+
+        @keyframes grow-x { 
+          0% { transform: scaleX(0); } 
+          100% { transform: scaleX(1); } 
+        }
+        .animate-grow-x { animation: grow-x 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes zoom-in { 
+          0% { opacity: 0; transform: scale(0.95); } 
+          100% { opacity: 1; transform: scale(1); } 
+        }
+        .animate-zoom-in { animation: zoom-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        .animate-float { animation: float 5s ease-in-out infinite; }
+
+        /* REVEAL ON SCROLL */
+        .reveal {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+          pointer-events: none;
+        }
+        .reveal-visible {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
         }
 
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -606,6 +699,8 @@ export default function App() {
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #38bdf8; }
+        
+        ::selection { background-color: #38bdf8; color: white; }
       `}</style>
     </div>
   );
