@@ -9,15 +9,15 @@ import {
 // --- DATA ---
 const CUSTOMERS = [
   "EL ASEEL Development", "Omar Gharib", "ETMAM", "ALSAIF ANALYSIS", 
-  "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO", 
-  "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA","Mirror", 
+  "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO","MIRROR", 
+  "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA", 
   "START MART", "CREATIVO", "ALPHA ACADEMY", "VARM", "ART FURNITURE"
 ];
 
 const EVENTS = [
-  { id: 1, title: { en: "Enactus ", ar: "حدث إيناكتس" }, date: "2024", img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
-  { id: 2, title: { en: "AIESEC ", ar: "حدث آيزيك" }, date: "2024", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
-  { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://postimg.cc/1gfhC1sB" },
+  { id: 1, title: { en: "Enactus Event", ar: "حدث إيناكتس" }, date: "2024", img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
+  { id: 2, title: { en: "AIESEC Event", ar: "حدث آيزيك" }, date: "2024", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
+  { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=800" },
 ];
 
 const SERVICE_DATA = {
@@ -25,14 +25,15 @@ const SERVICE_DATA = {
     id: 'business',
     icon: <BarChart3 className="w-8 h-8" />,
     color: 'text-sky-500 dark:text-sky-400',
+    bgColor: 'bg-sky-500/5',
     title: { en: "Business Development", ar: "تطوير الأعمال" },
     features: { 
       en: ["Strategic Planning", "B2B Leads", "Data Analytics", "Consultancy"], 
-      ar: ["التخطيط الاستراتيجي", "توليد العملاء", "تحليل البيانات", "الاستشارات"] 
+      ar: ["التخطيط الاستراتيجي", "توليد العملاء", "التحليلات", "الاستشارات"] 
     },
     desc: { 
       en: "We create strategic growth paths by identifying untapped market opportunities and optimizing your internal operations.",
-      ar: " نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية."
+      ar: "نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية."
     },
     img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
   },
@@ -40,14 +41,15 @@ const SERVICE_DATA = {
     id: 'tracking',
     icon: <Binary className="w-8 h-8" />,
     color: 'text-indigo-500 dark:text-indigo-400',
+    bgColor: 'bg-indigo-500/5',
     title: { en: "Tracking Systems", ar: "أنظمة التتبع" },
     features: { 
-      en: ["CRM Systems", "Finance Trackers", "HR Systems"], 
-      ar: ["أنظمة CRM", "الحسابات", "الموارد البشرية"] 
+      en: ["CRM Systems", "Finance Trackers", "HR Systems", "Flow Automation"], 
+      ar: ["أنظمة CRM", "تتبع المالية", "الموارد البشرية", "أتمتة العمليات"] 
     },
     desc: {
       en: "Transform raw data into efficient digital systems with custom CRM and financial tracking ecosystems.",
-      ar: "بنحول بياناتك الخام الى نظام متكامل لادارة شركتك سواء المبياعات او الحسابات او العمليات فى الشركة."
+      ar: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ عبر أنظمة CRM وتتبع مالي مخصصة."
     },
     img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
   },
@@ -55,10 +57,11 @@ const SERVICE_DATA = {
     id: 'web',
     icon: <Layout className="w-8 h-8" />,
     color: 'text-emerald-500 dark:text-emerald-400',
+    bgColor: 'bg-emerald-500/5',
     title: { en: "Websites", ar: "المواقع الإلكترونية" },
     features: { 
-      en: ["E-commerce", "Company Profile", "SEO", "Usability Design"], 
-      ar: ["التجارة الإلكترونية", "تحسين محركات البحث", "موقع لعرض شركتك"] 
+      en: ["E-commerce", "Company Profile", "Technical SEO", "Usability Design"], 
+      ar: ["التجارة الإلكترونية", "تحسين محركات البحث", "موقع لعرض شركتك", "تصميم تجربة المستخدم"] 
     },
     desc: {
       en: "Design and develop performance-driven websites optimized for SEO, usability, and long-term scalability.",
@@ -70,14 +73,15 @@ const SERVICE_DATA = {
     id: 'mobile',
     icon: <Smartphone className="w-8 h-8" />,
     color: 'text-orange-500 dark:text-orange-400',
+    bgColor: 'bg-orange-500/5',
     title: { en: "Mobile Apps", ar: "تطبيقات الموبايل" },
     features: { 
-      en: ["UI/UX", "IOS & Android", "APIs","Chats Features", "Payment Gateways"], 
-      ar: ["تصميم واجهة المستخدم", "تكاملات من مواقع مختلفة", "دفع إلكتروني", "اندرويد و ابل "] 
+      en: ["UI/UX Design", "IOS & Android", "AI Integrations", "Payment Gateways"], 
+      ar: ["تصميم واجهة المستخدم", "تكاملات الذكاء الاصطناعي", "دفع إلكتروني", "أنظمة iOS و Android"] 
     },
     desc: {
-      en: "Native mobile experiences built for today’s mobile-first users, integrating advanced logics.",
-      ar: "تجارب أصلية لمستخدمي الموبايل تدمج المنطق المتطور وتجربة مستخدم سلسة."
+      en: "Native mobile experiences built for today’s mobile-first users, integrating advanced AI logic.",
+      ar: "تجارب أصلية لمستخدمي الموبايل تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة."
     },
     img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200"
   }
@@ -100,7 +104,6 @@ const TRANSLATIONS = {
     stats_proj: "Managed Projects",
     stats_vent: "Launched Ventures",
     stats_experts: "Intern Experts",
-    why_us: "Why Choose Us",
     msg_title: "Our Message",
     vision_title: "Our Vision",
     join_team: "Join Our Team",
@@ -108,7 +111,6 @@ const TRANSLATIONS = {
     submit: "Initiate Mission",
     apply: "Submit Application",
     pricing: "Pricing Calculator",
-    sol_profile: "Solution Profile",
     lets_build: "Let's Build.",
     explore_more: "Explore More",
     participated: "Participated",
@@ -140,7 +142,6 @@ const TRANSLATIONS = {
     stats_proj: "مشروع مدار",
     stats_vent: "مشروع انطلق",
     stats_experts: "خبير داخلي",
-    why_us: "لماذا تختارنا؟",
     msg_title: "رسالتنا",
     vision_title: "رؤيتنا",
     join_team: "انضم لفريقنا",
@@ -148,7 +149,6 @@ const TRANSLATIONS = {
     submit: "بدء المهمة",
     apply: "إرسال الطلب",
     pricing: "حاسبة التسعير",
-    sol_profile: "ملف الحل",
     lets_build: "فلنبنِ معاً.",
     explore_more: "استكشف المزيد",
     participated: "شاركنا في",
@@ -285,22 +285,55 @@ const PartnerMarquee = ({ lang }) => (
   </div>
 );
 
-const ServiceCard = ({ service, lang, onOpen, index }) => {
+const ServiceCard = ({ service, lang, index }) => {
   const t = TRANSLATIONS[lang];
   return (
-    <div className="group reveal relative bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-[2.5rem] overflow-hidden hover:border-sky-500/50 transition-all duration-500 shadow-sm hover:shadow-2xl flex flex-col h-full transform hover:-translate-y-2" style={{ transitionDelay: `${index * 100}ms` }}>
-      <div className="h-48 overflow-hidden"><img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-1000 ease-out" alt={service.title[lang]} /></div>
-      <div className="p-8 flex flex-col flex-1">
-        <div className={`mb-6 transition-transform group-hover:scale-110 duration-500 ${service.color}`}>{service.icon}</div>
-        <h3 className="text-2xl font-black mb-4 text-slate-900 dark:text-white group-hover:text-sky-500 transition-colors">{service.title[lang]}</h3>
-        <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 leading-relaxed line-clamp-3">{service.desc[lang]}</p>
-        <div className="flex flex-wrap gap-2 mb-8">
-          {service.features[lang].slice(0, 2).map((f, i) => (
-            <span key={i} className="text-[10px] font-bold px-3 py-1 bg-slate-200 dark:bg-white/5 text-slate-700 dark:text-white rounded-full uppercase tracking-widest group-hover:bg-sky-500/10 transition-colors">{f}</span>
+    <div 
+      className="group reveal relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-[2.5rem] overflow-hidden transition-all duration-700 shadow-sm hover:shadow-2xl hover:border-sky-500/50 flex flex-col h-full transform hover:-translate-y-4" 
+      style={{ transitionDelay: `${index * 150}ms` }}
+    >
+      {/* Visual Asset */}
+      <div className="h-56 relative overflow-hidden">
+        <img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" alt={service.title[lang]} />
+        <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 to-transparent opacity-60" />
+        
+        {/* Floating Icon Overlay */}
+        <div className={`absolute bottom-6 left-6 w-16 h-16 rounded-2xl backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 ${service.bgColor} ${service.color} border border-white/20 shadow-xl`}>
+          {service.icon}
+        </div>
+      </div>
+
+      <div className="p-10 pt-8 flex flex-col flex-1">
+        {/* Title & Description */}
+        <h3 className="text-3xl font-black mb-6 text-slate-900 dark:text-white group-hover:text-sky-500 transition-colors tracking-tight">
+          {service.title[lang]}
+        </h3>
+        
+        <p className="text-slate-600 dark:text-slate-400 text-lg leading-relaxed mb-10 font-medium">
+          {service.desc[lang]}
+        </p>
+
+        {/* Dynamic Feature List */}
+        <div className="space-y-4 mt-auto">
+          {service.features[lang].map((f, i) => (
+            <div 
+              key={i} 
+              className="flex items-center gap-4 transition-all duration-500 group-hover:translate-x-2"
+              style={{ transitionDelay: `${i * 100}ms` }}
+            >
+              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${service.bgColor} ${service.color} transition-all duration-500 group-hover:scale-125`}>
+                <CheckCircle2 size={16} />
+              </div>
+              <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest text-[11px]">
+                {f}
+              </span>
+            </div>
           ))}
         </div>
-        <div className="mt-auto">
-          <button onClick={() => onOpen(service)} className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest bg-sky-500 text-white border-transparent hover:bg-sky-600 shadow-lg shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-2">{t.explore_more} <ArrowRight size={14} className="rtl:rotate-180 group-hover:translate-x-1 transition-transform" /></button>
+
+        {/* Decorative Progress Accent */}
+        <div className="mt-12 h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+          <div className={`h-full w-0 group-hover:w-full transition-all duration-1000 ease-in-out bg-gradient-to-r from-sky-500 to-indigo-600`} />
         </div>
       </div>
     </div>
@@ -311,12 +344,10 @@ export default function App() {
   const [lang, setLang] = useState('en');
   const [theme, setTheme] = useState('light');
   const [activeSection, setActiveSection] = useState('home');
-  const [selectedService, setSelectedService] = useState(null);
   const [showCareers, setShowCareers] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
 
   const t = TRANSLATIONS[lang];
-
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec"; 
 
   useScrollReveal();
@@ -338,12 +369,12 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (selectedService || showCareers) {
+    if (showCareers) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
-  }, [selectedService, showCareers]);
+  }, [showCareers]);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -377,7 +408,6 @@ export default function App() {
       });
       setFormStatus('success');
       e.target.reset();
-      // Keep success message visible for 10 seconds before allowing reset
       setTimeout(() => setFormStatus(null), 10000);
     } catch (error) {
       setFormStatus(null);
@@ -387,7 +417,7 @@ export default function App() {
 
   return (
     <div className={`${theme} ${lang === 'ar' ? 'font-arabic' : 'font-sans'} selection:bg-sky-500 selection:text-white`}>
-      <div className={`bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-700 min-h-screen overflow-x-hidden ${(selectedService || showCareers) ? 'blur-md grayscale-[0.2]' : ''}`}>
+      <div className={`bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-700 min-h-screen overflow-x-hidden ${showCareers ? 'blur-md grayscale-[0.2]' : ''}`}>
         
         <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
           <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sky-500/10 dark:bg-sky-400/5 blur-[120px] rounded-full animate-mesh-blob"></div>
@@ -453,13 +483,15 @@ export default function App() {
         </Section>
 
         <Section id="services">
-          <div className="text-center mb-20 space-y-6 reveal">
+          <div className="text-center mb-24 space-y-6 reveal">
             <span className="text-sky-500 font-black uppercase tracking-[0.4em] text-sm">{t.services}</span>
-            <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 dark:text-white">{t.hero_title}</h2>
+            <h2 className="text-6xl md:text-8xl font-black tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
+              Strategic <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600">Solutions</span>
+            </h2>
           </div>
-          <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 gap-10 xl:gap-14">
             {Object.values(SERVICE_DATA).map((service, idx) => (
-              <ServiceCard key={service.id} service={service} lang={lang} onOpen={setSelectedService} index={idx} />
+              <ServiceCard key={service.id} service={service} lang={lang} index={idx} />
             ))}
           </div>
         </Section>
@@ -499,12 +531,7 @@ export default function App() {
                       {t.mission_desc}
                     </p>
                   </div>
-                  <button 
-                    onClick={() => setFormStatus(null)}
-                    className="px-8 py-3 bg-white/20 hover:bg-white/30 rounded-full text-xs font-black uppercase tracking-widest transition-all"
-                  >
-                    Send another briefing
-                  </button>
+                  <button onClick={() => setFormStatus(null)} className="px-8 py-3 bg-white/20 hover:bg-white/30 rounded-full text-xs font-black uppercase tracking-widest transition-all">Send another briefing</button>
                 </div>
               ) : (
                 <>
@@ -520,10 +547,7 @@ export default function App() {
                     </div>
                     <select name="service" className="w-full px-6 py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer rounded-t-xl">
                       <option value="" className="text-slate-900">{t.select_service}</option>
-                      <option value="business" className="text-slate-900">{SERVICE_DATA.business.title[lang]}</option>
-                      <option value="tracking" className="text-slate-900">{SERVICE_DATA.tracking.title[lang]}</option>
-                      <option value="web" className="text-slate-900">{SERVICE_DATA.web.title[lang]}</option>
-                      <option value="mobile" className="text-slate-900">{SERVICE_DATA.mobile.title[lang]}</option>
+                      {Object.values(SERVICE_DATA).map(s => <option key={s.id} value={s.id} className="text-slate-900">{s.title[lang]}</option>)}
                     </select>
                     <button disabled={formStatus === 'sending'} className="w-full py-6 bg-slate-950 dark:bg-sky-500 text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 shadow-xl flex items-center justify-center gap-3">
                       {formStatus === 'sending' && <Sparkles size={20} className="animate-spin" />}
@@ -564,34 +588,6 @@ export default function App() {
           ))}
         </div>
       </div>
-
-      {selectedService && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 md:p-10">
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl animate-fade-in" onClick={() => setSelectedService(null)}></div>
-          <div className={`relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2.5rem] md:rounded-[4rem] shadow-2xl flex flex-col overflow-hidden animate-zoom-in ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
-            <div className="sticky top-0 z-10 flex items-center justify-between p-8 md:px-16 md:pt-16 bg-white dark:bg-slate-900">
-              <div className={`w-14 h-14 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center ${selectedService.color}`}>{selectedService.icon}</div>
-              <button onClick={() => setSelectedService(null)} className="w-14 h-14 rounded-full bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 flex items-center justify-center transition-all text-slate-900 dark:text-white"><X /></button>
-            </div>
-            <div className="flex-1 overflow-y-auto px-8 pb-16 md:px-16 md:pb-20 custom-scrollbar text-slate-900 dark:text-white">
-              <div className="space-y-12">
-                <div>
-                  <span className="text-sky-500 dark:text-sky-400 text-[10px] font-black uppercase tracking-[0.4em] mb-4 block animate-fade-in">{t.sol_profile}</span>
-                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-8 animate-fade-in" style={{ animationDelay: '100ms' }}>{selectedService.title[lang]}</h2>
-                  <div className="w-full aspect-video rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-lg animate-fade-in" style={{ animationDelay: '200ms' }}><img src={selectedService.img} className="w-full h-full object-cover" alt="" /></div>
-                </div>
-                <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 leading-relaxed font-light animate-fade-in" style={{ animationDelay: '300ms' }}>{selectedService.desc[lang]}</p>
-                <div className="grid md:grid-cols-2 gap-4">
-                  {selectedService.features[lang].map((f, i) => (
-                    <div key={i} className="flex items-center gap-4 p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 animate-fade-in" style={{ animationDelay: `${400 + (i * 100)}ms` }}><CheckCircle2 className="text-sky-500 flex-shrink-0" /><span className="font-bold text-lg">{f}</span></div>
-                  ))}
-                </div>
-                <button onClick={() => { setSelectedService(null); scrollToSection('contact'); }} className="w-full py-6 md:py-8 bg-sky-500 text-white font-black uppercase tracking-widest rounded-3xl text-xl shadow-2xl shadow-sky-500/30 hover:scale-[1.02] active:scale-95 transition-all animate-fade-in" style={{ animationDelay: '800ms' }}>{t.get_started}</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showCareers && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 md:p-10">
