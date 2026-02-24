@@ -542,8 +542,8 @@ export default function App() {
           <PartnerMarquee lang={lang} />
           <div className="max-w-7xl mx-auto mt-20 flex flex-col items-center gap-10">
             <div className="flex gap-6">
-              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Facebook size={20} /></a>
-              <a href="#" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Linkedin size={20} /></a>
+              <a href="https://www.facebook.com/mantiiq" target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Facebook size={20} /></a>
+              <a href="https://www.linkedin.com/company/mantiq.services" target="_blank" rel="noopener noreferrer" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Linkedin size={20} /></a>
               <a href="mailto:Mantiq2023@gmail.com" className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Mail size={20} /></a>
             </div>
             <div className="flex flex-col items-center gap-6">
