@@ -186,84 +186,110 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const t = TRANSLATIONS[lang];
 
+  // Prevent background scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [mobileOpen]);
+
   return (
-    <nav className="fixed w-full z-[100] border-b border-slate-200 dark:border-white/5 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-2 cursor-pointer group animate-float" onClick={() => onNavigate('home')}>
-          <div className="h-10 text-sky-500 dark:text-sky-400">
-            <svg className="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-              <g fill="none" stroke="currentColor" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="200" cy="200" r="150" />
-                <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
-              </g>
-            </svg>
+    <>
+      <nav className="fixed w-full z-[100] border-b border-slate-200 dark:border-white/5 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2 cursor-pointer group animate-float" onClick={() => onNavigate('home')}>
+            <div className="h-10 text-sky-500 dark:text-sky-400">
+              <svg className="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" stroke="currentColor" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="200" cy="200" r="150" />
+                  <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
+                </g>
+              </svg>
+            </div>
+            <span className="text-xl font-black uppercase tracking-widest text-slate-900 dark:text-white transition-all group-hover:tracking-[0.2em]">
+              {t.logo}
+            </span>
           </div>
-          <span className="text-xl font-black uppercase tracking-widest text-slate-900 dark:text-white transition-all group-hover:tracking-[0.2em]">
-            {t.logo}
-          </span>
+
+          <div className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
+            {['about', 'services', 'events'].map(item => (
+              <button 
+                key={item}
+                onClick={() => onNavigate(item)}
+                className={`relative py-2 hover:text-sky-500 dark:hover:text-sky-400 transition-colors ${activeSection === item ? 'text-sky-500 dark:text-sky-400' : ''}`}
+              >
+                {t[item === 'about' ? 'about_us' : item]}
+                {activeSection === item && (
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-500 transition-all animate-grow-x" />
+                )}
+              </button>
+            ))}
+            <div className="flex items-center gap-4 pl-8 border-l border-slate-200 dark:border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r rtl:border-l-0">
+              <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center font-black text-slate-900 dark:text-white hover:scale-110 active:scale-95 transition-all">
+                {lang === 'en' ? 'AR' : 'EN'}
+              </button>
+              <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center text-slate-900 dark:text-white hover:rotate-90 transition-all duration-500">
+                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
+              <button onClick={() => onNavigate('contact')} className="bg-sky-500 text-white px-6 py-3 rounded-full hover:bg-sky-400 shadow-lg shadow-sky-500/20 active:scale-95 transition-all font-bold">
+                {t.get_started}
+              </button>
+            </div>
+          </div>
+
+          <button className="lg:hidden text-slate-900 dark:text-white p-2" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
+      </nav>
 
-        <div className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-          {['about', 'services', 'events'].map(item => (
-            <button 
-              key={item}
-              onClick={() => onNavigate(item)}
-              className={`relative py-2 hover:text-sky-500 dark:hover:text-sky-400 transition-colors ${activeSection === item ? 'text-sky-500 dark:text-sky-400' : ''}`}
-            >
-              {t[item === 'about' ? 'about_us' : item]}
-              {activeSection === item && (
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-500 transition-all animate-grow-x" />
-              )}
-            </button>
-          ))}
-          <div className="flex items-center gap-4 pl-8 border-l border-slate-200 dark:border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r rtl:border-l-0">
-            <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center font-black text-slate-900 dark:text-white hover:scale-110 active:scale-95 transition-all">
-              {lang === 'en' ? 'AR' : 'EN'}
-            </button>
-            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center text-slate-900 dark:text-white hover:rotate-90 transition-all duration-500">
-              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-            </button>
-            <button onClick={() => onNavigate('contact')} className="bg-sky-500 text-white px-6 py-3 rounded-full hover:bg-sky-400 shadow-lg shadow-sky-500/20 active:scale-95 transition-all font-bold">
-              {t.get_started}
-            </button>
-          </div>
-        </div>
+      {/* MOBILE MENU SIDEBAR VERSION */}
+      {/* Backdrop */}
+      <div 
+        className={`fixed inset-0 z-[150] bg-slate-950/60 backdrop-blur-sm lg:hidden transition-opacity duration-500 ${mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setMobileOpen(false)}
+      />
 
-        <button className="lg:hidden text-slate-900 dark:text-white" onClick={() => setMobileOpen(!mobileOpen)}>
-          {mobileOpen ? <X /> : <Menu />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <div className={`fixed inset-0 bg-white dark:bg-slate-950 z-[200] transition-all duration-700 ease-in-out ${mobileOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
-        <div className="p-10 flex flex-col h-full text-slate-900 dark:text-white">
-          <div className="flex justify-between items-center mb-16">
-            <span className="text-xl font-black tracking-widest uppercase">{t.logo}</span>
-            <button onClick={() => setMobileOpen(false)}><X size={32} /></button>
-          </div>
-          <div className="flex flex-col gap-8 text-3xl font-black uppercase tracking-widest">
+      {/* Side Drawer */}
+      <div 
+        className={`fixed top-0 bottom-0 z-[200] lg:hidden w-[300px] bg-white dark:bg-slate-950 shadow-[0_0_50px_rgba(0,0,0,0.3)] transition-transform duration-500 ease-in-out ${lang === 'ar' ? 'left-0 ' + (mobileOpen ? 'translate-x-0' : '-translate-x-full') : 'right-0 ' + (mobileOpen ? 'translate-x-0' : 'translate-x-full')}`}
+      >
+        <div className="flex flex-col h-full p-8 pt-24 text-slate-900 dark:text-white">
+          <div className="flex flex-col gap-6 text-2xl font-black uppercase tracking-widest">
             {['home', 'about', 'services', 'events', 'contact'].map((item, idx) => (
               <button 
                 key={item} 
-                style={{ transitionDelay: `${idx * 75}ms` }}
+                style={{ transitionDelay: `${idx * 50}ms` }}
                 onClick={() => { onNavigate(item); setMobileOpen(false); }}
-                className={`text-left hover:text-sky-500 transition-all ${mobileOpen ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}
+                className={`text-left hover:text-sky-500 transition-all py-2 border-b border-slate-100 dark:border-white/5 ${mobileOpen ? 'translate-x-0 opacity-100' : (lang === 'ar' ? '-translate-x-10' : 'translate-x-10') + ' opacity-0'}`}
               >
                 {t[item === 'about' ? 'about_us' : item] || item}
               </button>
             ))}
           </div>
-          <div className="mt-auto flex gap-4">
-             <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="flex-1 py-4 bg-slate-100 dark:bg-white/5 rounded-2xl font-black">
-              {lang === 'en' ? 'ARABIC' : 'ENGLISH'}
+          
+          <div className="mt-auto space-y-4">
+            <div className="h-px bg-slate-200 dark:bg-white/10 w-full mb-6" />
+            <button 
+              onClick={() => { setLang(lang === 'en' ? 'ar' : 'en'); setMobileOpen(false); }} 
+              className="w-full py-4 flex items-center justify-between px-6 bg-slate-100 dark:bg-white/5 rounded-2xl font-black uppercase tracking-tighter"
+            >
+              <span>{lang === 'en' ? 'Arabic Version' : 'النسخة الإنجليزية'}</span>
+              <Globe size={18} className="text-sky-500" />
             </button>
-            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="flex-1 py-4 bg-slate-100 dark:bg-white/5 rounded-2xl flex items-center justify-center">
-              {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
+            <button 
+              onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileOpen(false); }} 
+              className="w-full py-4 flex items-center justify-between px-6 bg-slate-100 dark:bg-white/5 rounded-2xl font-black uppercase tracking-tighter"
+            >
+              <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+              {theme === 'dark' ? <Sun size={18} className="text-orange-400" /> : <Moon size={18} className="text-sky-600" />}
             </button>
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 
