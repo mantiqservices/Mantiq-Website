@@ -10,16 +10,14 @@ import {
 const CUSTOMERS = [
   "EL ASEEL Development", "Omar Gharib", "ETMAM", "ALSAIF ANALYSIS", 
   "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO", 
-  "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA", 
+  "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA","Mirror", 
   "START MART", "CREATIVO", "ALPHA ACADEMY", "VARM", "ART FURNITURE"
 ];
 
 const EVENTS = [
-  { id: 1, title: { en: "Enactus Event", ar: "حدث إيناكتس" }, date: "2024", img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
-  { id: 2, title: { en: "AIESEC Event", ar: "حدث آيزيك" }, date: "2024", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
+  { id: 1, title: { en: "Enactus ", ar: "حدث إيناكتس" }, date: "2024", img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
+  { id: 2, title: { en: "AIESEC ", ar: "حدث آيزيك" }, date: "2024", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
   { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://postimg.cc/1gfhC1sB" },
-  { id: 4, title: { en: "Corporate Summit", ar: "قمة الشركات" }, date: "2024", img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=800" },
-  { id: 5, title: { en: "Innovation Lab", ar: "مختبر الابتكار" }, date: "2023", img: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80&w=800" },
 ];
 
 const SERVICE_DATA = {
@@ -30,11 +28,11 @@ const SERVICE_DATA = {
     title: { en: "Business Development", ar: "تطوير الأعمال" },
     features: { 
       en: ["Strategic Planning", "B2B Leads", "Data Analytics", "Consultancy"], 
-      ar: ["التخطيط الاستراتيجي", "توليد العملاء", "التحليلات", "الاستشارات"] 
+      ar: ["التخطيط الاستراتيجي", "توليد العملاء", "تحليل البيانات", "الاستشارات"] 
     },
     desc: { 
       en: "We create strategic growth paths by identifying untapped market opportunities and optimizing your internal operations.",
-      ar: "نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية."
+      ar: " نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية."
     },
     img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
   },
@@ -45,11 +43,11 @@ const SERVICE_DATA = {
     title: { en: "Tracking Systems", ar: "أنظمة التتبع" },
     features: { 
       en: ["CRM Systems", "Finance Trackers", "HR Systems"], 
-      ar: ["أنظمة CRM", "تتبع المالية", "الموارد البشرية"] 
+      ar: ["أنظمة CRM", "الحسابات", "الموارد البشرية"] 
     },
     desc: {
       en: "Transform raw data into efficient digital systems with custom CRM and financial tracking ecosystems.",
-      ar: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ عبر أنظمة CRM وتتبع مالي مخصصة."
+      ar: "بنحول بياناتك الخام الى نظام متكامل لادارة شركتك سواء المبياعات او الحسابات او العمليات فى الشركة."
     },
     img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
   },
@@ -59,7 +57,7 @@ const SERVICE_DATA = {
     color: 'text-emerald-500 dark:text-emerald-400',
     title: { en: "Websites", ar: "المواقع الإلكترونية" },
     features: { 
-      en: ["E-commerce", "Company Profile", "Technical SEO", "Usability Design"], 
+      en: ["E-commerce", "Company Profile", "SEO", "Usability Design"], 
       ar: ["التجارة الإلكترونية", "تحسين محركات البحث", "موقع لعرض شركتك"] 
     },
     desc: {
@@ -74,12 +72,12 @@ const SERVICE_DATA = {
     color: 'text-orange-500 dark:text-orange-400',
     title: { en: "Mobile Apps", ar: "تطبيقات الموبايل" },
     features: { 
-      en: ["UI/UX Design", "IOS & Android", "AI Integrations", "Payment Gateways"], 
-      ar: ["تصميم واجهة المستخدم", "تكاملات الذكاء الاصطناعي", "دفع إلكتروني"] 
+      en: ["UI/UX", "IOS & Android", "APIs","Chats Features", "Payment Gateways"], 
+      ar: ["تصميم واجهة المستخدم", "تكاملات من مواقع مختلفة", "دفع إلكتروني", "اندرويد و ابل "] 
     },
     desc: {
-      en: "Native mobile experiences built for today’s mobile-first users, integrating advanced AI logic.",
-      ar: "تجارب أصلية لمستخدمي الموبايل تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة."
+      en: "Native mobile experiences built for today’s mobile-first users, integrating advanced logics.",
+      ar: "تجارب أصلية لمستخدمي الموبايل تدمج المنطق المتطور وتجربة مستخدم سلسة."
     },
     img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200"
   }
