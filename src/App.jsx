@@ -3,7 +3,7 @@ import {
   Menu, X, Sun, Moon, ArrowRight, ArrowLeft, Globe, 
   Layout, Smartphone, BarChart3, Binary, Mail, 
   Linkedin, Facebook, CheckCircle2, ChevronRight, 
-  Target, Eye, Zap, Shield, Users, Trophy, Calculator, Upload
+  Target, Eye, Zap, Shield, Users, Trophy, Calculator, Upload, Sparkles
 } from 'lucide-react';
 
 // --- DATA ---
@@ -120,8 +120,9 @@ const TRANSLATIONS = {
     email_placeholder: "Email",
     phone_placeholder: "Phone Number",
     select_service: "Select Service",
-    sending: "Sending...",
-    mission_received: "Mission Received",
+    sending: "Analysing coordinates...",
+    mission_received: "Mission Accepted",
+    mission_desc: "Your vision is now on our radar. Our strategy team will reach out for a briefing within 24 hours.",
     rights: "ALL RIGHTS RESERVED.",
     career_msg: "We're always looking for brilliant minds. Send us your details."
   },
@@ -159,8 +160,9 @@ const TRANSLATIONS = {
     email_placeholder: "البريد الإلكتروني",
     phone_placeholder: "رقم الهاتف",
     select_service: "اختر الخدمة",
-    sending: "جاري الإرسال...",
-    mission_received: "تم استلام المهمة",
+    sending: "تحليل البيانات...",
+    mission_received: "تم قبول المهمة",
+    mission_desc: "رؤيتك الآن ضمن اهتماماتنا. سيتواصل معك فريقنا الاستراتيجي خلال ٢٤ ساعة لمناقشة التفاصيل.",
     rights: "جميع الحقوق محفوظة.",
     career_msg: "نحن دائماً نبحث عن العقول المبدعة. أرسل لنا بياناتك."
   }
@@ -317,7 +319,6 @@ export default function App() {
 
   const t = TRANSLATIONS[lang];
 
-  // CONNECTED GOOGLE SCRIPT URL
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec"; 
 
   useScrollReveal();
@@ -378,7 +379,8 @@ export default function App() {
       });
       setFormStatus('success');
       e.target.reset();
-      setTimeout(() => setFormStatus(null), 3000);
+      // Keep success message visible for 10 seconds before allowing reset
+      setTimeout(() => setFormStatus(null), 10000);
     } catch (error) {
       setFormStatus(null);
       console.error("Submission failed", error);
@@ -487,28 +489,51 @@ export default function App() {
 
         <Section id="contact">
           <div className="max-w-4xl mx-auto reveal">
-            <div className="p-12 md:p-20 bg-sky-500 rounded-[4rem] text-white flex flex-col justify-center shadow-lg dark:bg-slate-900 dark:border dark:border-white/10 transition-all hover:shadow-2xl hover:shadow-sky-500/20">
-              <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8">{t.lets_build}</h2>
-              <form className="space-y-6" onSubmit={(e) => handleFormSubmit(e, 'Leads')}>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <input required name="name" type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
-                  <input name="company" type="text" placeholder={t.company_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+            <div className="relative p-12 md:p-20 bg-sky-500 rounded-[4rem] text-white flex flex-col justify-center shadow-lg dark:bg-slate-900 dark:border dark:border-white/10 transition-all hover:shadow-2xl hover:shadow-sky-500/20 overflow-hidden min-h-[400px]">
+              {formStatus === 'success' ? (
+                <div className="text-center space-y-8 animate-fade-in flex flex-col items-center">
+                  <div className="w-24 h-24 bg-white dark:bg-sky-500/20 rounded-full flex items-center justify-center animate-bounce shadow-2xl">
+                    <CheckCircle2 size={48} className="text-sky-500 dark:text-sky-400" />
+                  </div>
+                  <div className="space-y-4">
+                    <h2 className="text-4xl md:text-6xl font-black tracking-tighter">{t.mission_received}</h2>
+                    <p className="text-lg md:text-xl font-medium opacity-90 max-w-xl mx-auto leading-relaxed">
+                      {t.mission_desc}
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => setFormStatus(null)}
+                    className="px-8 py-3 bg-white/20 hover:bg-white/30 rounded-full text-xs font-black uppercase tracking-widest transition-all"
+                  >
+                    Send another briefing
+                  </button>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  <input required name="email" type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
-                  <input required name="phone" type="tel" placeholder={t.phone_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
-                </div>
-                <select name="service" className="w-full px-6 py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer rounded-t-xl">
-                  <option value="" className="text-slate-900">{t.select_service}</option>
-                  <option value="business" className="text-slate-900">{SERVICE_DATA.business.title[lang]}</option>
-                  <option value="tracking" className="text-slate-900">{SERVICE_DATA.tracking.title[lang]}</option>
-                  <option value="web" className="text-slate-900">{SERVICE_DATA.web.title[lang]}</option>
-                  <option value="mobile" className="text-slate-900">{SERVICE_DATA.mobile.title[lang]}</option>
-                </select>
-                <button disabled={formStatus === 'sending'} className="w-full py-6 bg-slate-950 dark:bg-sky-500 text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 shadow-xl">
-                   {formStatus === 'sending' ? t.sending : (formStatus === 'success' ? t.mission_received : t.submit)}
-                </button>
-              </form>
+              ) : (
+                <>
+                  <h2 className="text-5xl md:text-7xl font-black tracking-tighter mb-8">{t.lets_build}</h2>
+                  <form className="space-y-6" onSubmit={(e) => handleFormSubmit(e, 'Leads')}>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <input required name="name" type="text" placeholder={t.name_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                      <input name="company" type="text" placeholder={t.company_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                    </div>
+                    <div className="grid sm:grid-cols-2 gap-6">
+                      <input required name="email" type="email" placeholder={t.email_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                      <input required name="phone" type="tel" placeholder={t.phone_placeholder} className="w-full px-6 py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-xl" />
+                    </div>
+                    <select name="service" className="w-full px-6 py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer rounded-t-xl">
+                      <option value="" className="text-slate-900">{t.select_service}</option>
+                      <option value="business" className="text-slate-900">{SERVICE_DATA.business.title[lang]}</option>
+                      <option value="tracking" className="text-slate-900">{SERVICE_DATA.tracking.title[lang]}</option>
+                      <option value="web" className="text-slate-900">{SERVICE_DATA.web.title[lang]}</option>
+                      <option value="mobile" className="text-slate-900">{SERVICE_DATA.mobile.title[lang]}</option>
+                    </select>
+                    <button disabled={formStatus === 'sending'} className="w-full py-6 bg-slate-950 dark:bg-sky-500 text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 shadow-xl flex items-center justify-center gap-3">
+                      {formStatus === 'sending' && <Sparkles size={20} className="animate-spin" />}
+                      {formStatus === 'sending' ? t.sending : t.submit}
+                    </button>
+                  </form>
+                </>
+              )}
             </div>
           </div>
         </Section>
