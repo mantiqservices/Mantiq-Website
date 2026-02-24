@@ -345,7 +345,7 @@ const ServiceCard = ({ service, lang, onOpen, index }) => {
 
 export default function App() {
   const [lang, setLang] = useState('en');
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light'); // LIGHT MODE AS DEFAULT
   const [activeSection, setActiveSection] = useState('home');
   const [selectedService, setSelectedService] = useState(null);
   const [showCareers, setShowCareers] = useState(false);
@@ -429,25 +429,25 @@ export default function App() {
         />
 
         {/* Hero */}
-        <Section id="home" className="flex flex-col justify-center items-center text-center !min-h-screen">
-          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-10 animate-fade-in-up">
+        <Section id="home" className="flex flex-col justify-center items-center text-center !min-h-screen px-4 md:px-6">
+          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-8 animate-fade-in-up">
             <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-sky-500 dark:text-sky-400">{t.tag}</span>
           </div>
-          <h1 className="text-6xl md:text-8xl lg:text-[120px] font-black leading-none tracking-tighter mb-10 text-slate-900 dark:text-white animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-            <span className="block">{lang === 'en' ? 'The Path' : 'المسار'}</span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 italic px-4">
+          <h1 className="text-4xl xs:text-5xl sm:text-7xl md:text-8xl lg:text-[120px] font-black leading-[1.1] md:leading-none tracking-tighter mb-10 text-slate-900 dark:text-white animate-fade-in-up w-full max-w-[95vw] mx-auto break-words" style={{ animationDelay: '100ms' }}>
+            <span className="block mb-2">{lang === 'en' ? 'The Path' : 'المسار'}</span>
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 italic px-2 md:px-4">
               {lang === 'en' ? 'You Should Take' : 'الذي يجب سلوكه'}
             </span>
           </h1>
           
           <div className="max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '250ms' }}>
-            <p className="text-lg md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+            <p className="text-base sm:text-lg md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium px-4">
               {t.hero_desc}
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '400ms' }}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up px-6 w-full max-w-sm sm:max-w-none mx-auto" style={{ animationDelay: '400ms' }}>
             <button 
               onClick={() => scrollToSection('services')}
               className="px-10 py-5 bg-sky-500 text-white rounded-full font-black uppercase tracking-widest hover:scale-105 hover:bg-sky-400 shadow-xl shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
