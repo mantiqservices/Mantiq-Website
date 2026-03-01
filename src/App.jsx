@@ -1,639 +1,843 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { 
-  Menu, X, Sun, Moon, ArrowRight, ArrowLeft, Globe, 
-  Layout, Smartphone, BarChart3, Binary, Mail, 
-  Linkedin, Facebook, CheckCircle2, ChevronRight, 
-  Target, Eye, Zap, Shield, Users, Trophy, Calculator, Upload, Sparkles
-} from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from "react";
 
-// --- DATA ---
+// ─── DATA ──────────────────────────────────────────────────────────────────────
 const CUSTOMERS = [
-  "EL ASEEL Development", "Omar Gharib", "ETMAM", "ALSAIF ANALYSIS", 
-  "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO","MIRROR", 
-  "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA", 
-  "START MART", "CREATIVO", "ALPHA ACADEMY", "VARM", "ART FURNITURE"
+  "EL ASEEL Development","Omar Gharib","ETMAM","ALSAIF ANALYSIS",
+  "ELBEDAYA","PE","RESPRESSO","COVER SPORE","SIMCO","MIRROR",
+  "ALMUHANDIS INDUSTRIES","NOURGEOUS ACCESSORIES","NAQLA",
+  "START MART","CREATIVO","ALPHA ACADEMY","VARM","ART FURNITURE"
+];
+
+const SERVICES = [
+  {
+    id: "business", num: "01",
+    title: "Business Development",
+    sub: "Growth Architecture",
+    desc: "We engineer strategic growth paths by identifying untapped market opportunities, building B2B pipelines, and optimizing internal operations for maximum velocity.",
+    tags: ["Strategic Planning","B2B Leads","Data Analytics","Consultancy"],
+    accent: "#C9A84C",
+    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
+  },
+  {
+    id: "tracking", num: "02",
+    title: "Tracking Systems",
+    sub: "Digital Infrastructure",
+    desc: "Transform raw data into powerful operational ecosystems. Custom CRM, financial tracking, HR systems, and intelligent workflow automation built for scale.",
+    tags: ["CRM Systems","Finance Trackers","HR Systems","Flow Automation"],
+    accent: "#7C9ECC",
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
+  },
+  {
+    id: "web", num: "03",
+    title: "Websites",
+    sub: "Digital Presence",
+    desc: "We build digital frontends that work as your best salesperson — engineered for performance, SEO dominance, and conversion at every touchpoint.",
+    tags: ["E-commerce","Company Profile","Technical SEO","Usability Design"],
+    accent: "#6EC99B",
+    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200"
+  },
+  {
+    id: "mobile", num: "04",
+    title: "Mobile Apps",
+    sub: "Native Experiences",
+    desc: "Native mobile applications built for today's mobile-first generation, integrating advanced AI logic and frictionless payment flows on iOS and Android.",
+    tags: ["UI/UX Design","iOS & Android","AI Integrations","Payment Gateways"],
+    accent: "#D4845A",
+    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200"
+  }
 ];
 
 const EVENTS = [
-  { id: 1, title: { en: "Enactus Event", ar: "حدث إيناكتس" }, date: "2024", img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
-  { id: 2, title: { en: "AIESEC Event", ar: "حدث آيزيك" }, date: "2024", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
-  { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=800" },
+  { id:1, title:"Enactus Event", year:"2024", img:"https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=900" },
+  { id:2, title:"AIESEC Event", year:"2024", img:"https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=900" },
+  { id:3, title:"Pe Launching Event", year:"2024", img:"https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=900" },
 ];
 
-const SERVICE_DATA = {
-  business: {
-    id: 'business',
-    icon: <BarChart3 className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
-    color: 'text-sky-500 dark:text-sky-400',
-    bgColor: 'bg-sky-500/5',
-    title: { en: "Business Development", ar: "تطوير الأعمال" },
-    features: { 
-      en: ["Strategic Planning", "B2B Leads", "Data Analytics", "Consultancy"], 
-      ar: ["التخطيط الاستراتيجي", "توليد العملاء", "التحليلات", "الاستشارات"] 
-    },
-    desc: { 
-      en: "We create strategic growth paths by identifying untapped market opportunities and optimizing your internal operations.",
-      ar: "نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية."
-    },
-    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
-  },
-  tracking: {
-    id: 'tracking',
-    icon: <Binary className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
-    color: 'text-indigo-500 dark:text-indigo-400',
-    bgColor: 'bg-indigo-500/5',
-    title: { en: "Tracking Systems", ar: "أنظمة التتبع" },
-    features: { 
-      en: ["CRM Systems", "Finance Trackers", "HR Systems", "Flow Automation"], 
-      ar: ["أنظمة CRM", "تتبع المالية", "الموارد البشرية", "أتمتة العمليات"] 
-    },
-    desc: {
-      en: "Transform raw data into efficient digital systems with custom CRM and financial tracking ecosystems.",
-      ar: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ عبر أنظمة CRM وتتبع مالي مخصصة."
-    },
-    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
-  },
-  web: {
-    id: 'web',
-    icon: <Layout className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
-    color: 'text-emerald-500 dark:text-emerald-400',
-    bgColor: 'bg-emerald-500/5',
-    title: { en: "Websites", ar: "المواقع الإلكترونية" },
-    features: { 
-      en: ["E-commerce", "Company Profile", "Technical SEO", "Usability Design"], 
-      ar: ["التجارة الإلكترونية", "تحسين محركات البحث", "موقع لعرض شركتك", "تصميم تجربة المستخدم"] 
-    },
-    desc: {
-      en: "Design and develop performance-driven websites optimized for SEO, usability, and long-term scalability.",
-      ar: "نحن نبني واجهات رقمية تعمل كأفضل بائع لديك، مصممة للأداء وقوة محركات البحث."
-    },
-    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200"
-  },
-  mobile: {
-    id: 'mobile',
-    icon: <Smartphone className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
-    color: 'text-orange-500 dark:text-orange-400',
-    bgColor: 'bg-orange-500/5',
-    title: { en: "Mobile Apps", ar: "تطبيقات الموبايل" },
-    features: { 
-      en: ["UI/UX Design", "IOS & Android", "AI Integrations", "Payment Gateways"], 
-      ar: ["تصميم واجهة المستخدم", "تكاملات الذكاء الاصطناعي", "دفع إلكتروني", "أنظمة iOS و Android"] 
-    },
-    desc: {
-      en: "Native mobile experiences built for today’s mobile-first users, integrating advanced AI logic.",
-      ar: "تجارب أصلية لمستخدمي الموبايل تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة."
-    },
-    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200"
-  }
-};
+const STATS = [
+  { n:"210+", label:"Completed Services" },
+  { n:"18+",  label:"Managed Projects" },
+  { n:"14",   label:"Launched Ventures" },
+  { n:"25+",  label:"Intern Experts" },
+];
 
-const TRANSLATIONS = {
-  en: {
-    logo: "Mantiq",
-    tag: "Business Services Company",
-    hero_title: "The Path You Should Take",
-    hero_desc: "Empowering success through market knowledge and digital solutions.",
-    get_started: "Get Started",
-    about_us: "About Us",
-    services: "Our Services",
-    events: "Events",
-    careers: "Careers",
-    contact: "Contact",
-    partners: "Our Trusted Partners",
-    stats_serv: "Completed Services",
-    stats_proj: "Managed Projects",
-    stats_vent: "Launched Ventures",
-    stats_experts: "Intern Experts",
-    msg_title: "Our Message",
-    vision_title: "Our Vision",
-    join_team: "Join Our Team",
-    upload_cv: "Upload your CV (PDF/DOC)",
-    submit: "Initiate Mission",
-    apply: "Submit Application",
-    pricing: "Pricing Calculator",
-    lets_build: "Let's Build.",
-    explore_more: "Explore More",
-    participated: "Participated",
-    mantiq_on_land: "Mantiq On Land",
-    name_placeholder: "Name",
-    company_placeholder: "Company",
-    email_placeholder: "Email",
-    phone_placeholder: "Phone Number",
-    select_service: "Select Service",
-    sending: "Analysing coordinates...",
-    mission_received: "Mission Accepted",
-    mission_desc: "Your vision is now on our radar. Our strategy team will reach out for a briefing within 24 hours.",
-    rights: "ALL RIGHTS RESERVED.",
-    career_msg: "We're always looking for brilliant minds. Send us your details."
-  },
-  ar: {
-    logo: "منطق",
-    tag: "شركة خدمات أعمال",
-    hero_title: "المسار الذي يجب أن تسلكه",
-    hero_desc: "تمكين نجاحك من خلال المعرفة بالسوق والحلول الرقمية الحديثة.",
-    get_started: "ابدأ الآن",
-    about_us: "من نحن",
-    services: "خدماتنا",
-    events: "الفعاليات",
-    careers: "فرص العمل",
-    contact: "اتصل بنا",
-    partners: "شركاؤنا الموثوقون",
-    stats_serv: "خدمة مكتملة",
-    stats_proj: "مشروع مدار",
-    stats_vent: "مشروع انطلق",
-    stats_experts: "خبير داخلي",
-    msg_title: "رسالتنا",
-    vision_title: "رؤيتنا",
-    join_team: "انضم لفريقنا",
-    upload_cv: "ارفع سيرتك الذاتية (PDF/DOC)",
-    submit: "بدء المهمة",
-    apply: "إرسال الطلب",
-    pricing: "حاسبة التسعير",
-    lets_build: "فلنبنِ معاً.",
-    explore_more: "استكشف المزيد",
-    participated: "شاركنا في",
-    mantiq_on_land: "منطق على أرض الواقع",
-    name_placeholder: "الاسم",
-    company_placeholder: "الشركة",
-    email_placeholder: "البريد الإلكتروني",
-    phone_placeholder: "رقم الهاتف",
-    select_service: "اختر الخدمة",
-    sending: "تحليل البيانات...",
-    mission_received: "تم قبول المهمة",
-    mission_desc: "رؤيتك الآن ضمن اهتماماتنا. سيتواصل معك فريقنا الاستراتيجي خلال ٢٤ ساعة لمناقشة التفاصيل.",
-    rights: "جميع الحقوق محفوظة.",
-    career_msg: "نحن دائماً نبحث عن العقول المبدعة. أرسل لنا بياناتك."
-  }
-};
-
-const useScrollReveal = () => {
+// ─── HOOKS ─────────────────────────────────────────────────────────────────────
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('reveal-visible');
-        }
-      });
-    }, { threshold: 0.1 });
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, inView];
+}
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    return () => observer.disconnect();
+function useCursor() {
+  const [pos, setPos] = useState({ x: -100, y: -100 });
+  const [hovered, setHovered] = useState(false);
+  useEffect(() => {
+    const move = (e) => setPos({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
   }, []);
-};
+  return { pos, hovered, setHovered };
+}
 
-const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const t = TRANSLATIONS[lang];
+// ─── COMPONENTS ────────────────────────────────────────────────────────────────
 
+function Cursor({ pos, hovered }) {
+  return (
+    <>
+      <div style={{
+        position:"fixed", left:pos.x, top:pos.y, width: hovered ? 48 : 12, height: hovered ? 48 : 12,
+        borderRadius:"50%", background:"#C9A84C", transform:"translate(-50%,-50%)",
+        pointerEvents:"none", zIndex:9999, transition:"width .3s,height .3s,opacity .3s",
+        mixBlendMode:"difference", opacity: 0.9
+      }} />
+      <div style={{
+        position:"fixed", left:pos.x, top:pos.y, width:40, height:40,
+        borderRadius:"50%", border:"1px solid rgba(201,168,76,0.4)", transform:"translate(-50%,-50%)",
+        pointerEvents:"none", zIndex:9998, transition:"left .12s,top .12s"
+      }} />
+    </>
+  );
+}
+
+function Reveal({ children, delay = 0, y = 40, className = "" }) {
+  const [ref, inView] = useInView();
+  return (
+    <div ref={ref} className={className} style={{
+      opacity: inView ? 1 : 0,
+      transform: inView ? "translateY(0)" : `translateY(${y}px)`,
+      transition: `opacity 0.9s cubic-bezier(.16,1,.3,1) ${delay}ms, transform 0.9s cubic-bezier(.16,1,.3,1) ${delay}ms`
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function SplitText({ text, className = "", baseDelay = 0 }) {
+  const [ref, inView] = useInView(0.1);
+  return (
+    <span ref={ref} className={className} style={{ display:"block", overflow:"hidden" }}>
+      {text.split("").map((ch, i) => (
+        <span key={i} style={{
+          display:"inline-block",
+          opacity: inView ? 1 : 0,
+          transform: inView ? "translateY(0)" : "translateY(100%)",
+          transition: `opacity 0.7s ease ${baseDelay + i * 30}ms, transform 0.7s cubic-bezier(.16,1,.3,1) ${baseDelay + i * 30}ms`,
+          whiteSpace: ch === " " ? "pre" : "normal"
+        }}>{ch}</span>
+      ))}
+    </span>
+  );
+}
+
+function GoldLine({ width = 60, delay = 0 }) {
+  const [ref, inView] = useInView();
+  return (
+    <div ref={ref} style={{
+      height: 2, width: inView ? width : 0, background: "linear-gradient(90deg,#C9A84C,#F0D080)",
+      transition: `width 1s cubic-bezier(.16,1,.3,1) ${delay}ms`, marginBottom: 32
+    }} />
+  );
+}
+
+// ─── NAV ───────────────────────────────────────────────────────────────────────
+function Nav({ active, setActive }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [mobileOpen]);
+    const fn = () => setScrolled(window.scrollY > 60);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+
+  const go = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+    setActive(id); setMenuOpen(false);
+  };
 
   return (
     <>
-      <nav className="fixed w-full z-[100] border-b border-slate-200 dark:border-white/5 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => onNavigate('home')}>
-            <div className="h-8 md:h-10 text-sky-500 dark:text-sky-400">
-              <svg className="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" stroke="currentColor" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="200" cy="200" r="150" />
-                  <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
-                </g>
-              </svg>
-            </div>
-            <span className="text-lg md:text-xl font-black uppercase tracking-widest text-slate-900 dark:text-white transition-all group-hover:tracking-[0.2em]">
-              {t.logo}
-            </span>
-          </div>
+      <nav style={{
+        position:"fixed", top:0, left:0, right:0, zIndex:500,
+        padding: scrolled ? "14px 48px" : "22px 48px",
+        display:"flex", alignItems:"center", justifyContent:"space-between",
+        background: scrolled ? "rgba(6,5,3,0.92)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px)" : "none",
+        borderBottom: scrolled ? "1px solid rgba(201,168,76,0.12)" : "none",
+        transition:"all .5s ease"
+      }}>
+        {/* Logo */}
+        <button onClick={() => go("hero")} style={{ display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer" }}>
+          <svg width="32" height="40" viewBox="0 0 400 500" fill="none" stroke="#C9A84C" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="200" cy="200" r="150"/>
+            <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
+          </svg>
+          <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, fontWeight:700, color:"#F5EDD6", letterSpacing:4, textTransform:"uppercase" }}>Mantiq</span>
+        </button>
 
-          <div className="hidden lg:flex items-center gap-8 text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-            {['about', 'services', 'events'].map(item => (
-              <button 
-                key={item}
-                onClick={() => onNavigate(item)}
-                className={`relative py-2 hover:text-sky-500 dark:hover:text-sky-400 transition-colors ${activeSection === item ? 'text-sky-500 dark:text-sky-400' : ''}`}
-              >
-                {t[item === 'about' ? 'about_us' : item]}
-                {activeSection === item && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-500 transition-all animate-grow-x" />
-                )}
-              </button>
-            ))}
-            <div className="flex items-center gap-4 pl-8 border-l border-slate-200 dark:border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r rtl:border-l-0">
-              <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center font-black text-slate-900 dark:text-white hover:scale-110 active:scale-95 transition-all">
-                {lang === 'en' ? 'AR' : 'EN'}
-              </button>
-              <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center text-slate-900 dark:text-white hover:rotate-90 transition-all duration-500">
-                {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-              </button>
-              <button onClick={() => onNavigate('contact')} className="bg-sky-500 text-white px-6 py-3 rounded-full hover:bg-sky-400 shadow-lg shadow-sky-500/20 active:scale-95 transition-all font-bold">
-                {t.get_started}
-              </button>
-            </div>
-          </div>
-
-          <button className="lg:hidden text-slate-900 dark:text-white p-2" onClick={() => setMobileOpen(!mobileOpen)}>
-            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* Desktop links */}
+        <div style={{ display:"flex", gap:40, alignItems:"center" }} className="desk-nav">
+          {["about","services","events","contact"].map(id => (
+            <button key={id} onClick={() => go(id)} style={{
+              fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:600, letterSpacing:3,
+              textTransform:"uppercase", color: active===id ? "#C9A84C" : "rgba(245,237,214,0.55)",
+              background:"none", border:"none", cursor:"pointer", transition:"color .3s",
+              borderBottom: active===id ? "1px solid #C9A84C" : "1px solid transparent", paddingBottom:2
+            }}>{id}</button>
+          ))}
+          <button onClick={() => go("contact")} style={{
+            fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3,
+            textTransform:"uppercase", color:"#0A0804", background:"#C9A84C",
+            border:"none", cursor:"pointer", padding:"10px 24px", borderRadius:2,
+            transition:"transform .2s,background .2s"
+          }} onMouseEnter={e=>e.target.style.background="#F0D080"} onMouseLeave={e=>e.target.style.background="#C9A84C"}>
+            Get Started
           </button>
         </div>
+
+        {/* Hamburger */}
+        <button onClick={() => setMenuOpen(!menuOpen)} className="mob-nav" style={{ background:"none",border:"none",cursor:"pointer",display:"none",flexDirection:"column",gap:5,padding:4 }}>
+          {[0,1,2].map(i => <div key={i} style={{ width:26,height:2,background:"#C9A84C",transition:"all .3s",
+            transform: menuOpen ? (i===0?"rotate(45deg) translate(5px,5px)":i===2?"rotate(-45deg) translate(5px,-5px)":"") : "none",
+            opacity: menuOpen && i===1 ? 0 : 1 }} />)}
+        </button>
       </nav>
 
-      <div className={`fixed inset-0 z-[150] bg-slate-950/60 backdrop-blur-sm lg:hidden transition-opacity duration-500 ${mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setMobileOpen(false)} />
-
-      <div className={`fixed top-0 bottom-0 z-[200] lg:hidden w-[280px] bg-white dark:bg-slate-950 shadow-[0_0_50px_rgba(0,0,0,0.3)] transition-transform duration-500 ease-in-out ${lang === 'ar' ? 'left-0 ' + (mobileOpen ? 'translate-x-0' : '-translate-x-full') : 'right-0 ' + (mobileOpen ? 'translate-x-0' : 'translate-x-full')}`}>
-        <div className="flex flex-col h-full p-6 pt-20 text-slate-900 dark:text-white">
-          <div className="flex flex-col gap-4 text-xl font-black uppercase tracking-widest">
-            {['home', 'about', 'services', 'events', 'contact'].map((item, idx) => (
-              <button key={item} style={{ transitionDelay: `${idx * 50}ms` }} onClick={() => { onNavigate(item); setMobileOpen(false); }} className={`text-left hover:text-sky-500 transition-all py-2 border-b border-slate-100 dark:border-white/5 ${mobileOpen ? 'translate-x-0 opacity-100' : (lang === 'ar' ? '-translate-x-10' : 'translate-x-10') + ' opacity-0'}`}>{t[item === 'about' ? 'about_us' : item] || item}</button>
-            ))}
-          </div>
-          <div className="mt-auto space-y-3">
-            <div className="h-px bg-slate-200 dark:bg-white/10 w-full mb-4" />
-            <button onClick={() => { setLang(lang === 'en' ? 'ar' : 'en'); setMobileOpen(false); }} className="w-full py-3 flex items-center justify-between px-5 bg-slate-100 dark:bg-white/5 rounded-xl font-black uppercase tracking-tighter text-sm">
-              <span>{lang === 'en' ? 'Arabic' : 'الإنجليزية'}</span>
-              <Globe size={16} className="text-sky-500" />
-            </button>
-            <button onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileOpen(false); }} className="w-full py-3 flex items-center justify-between px-5 bg-slate-100 dark:bg-white/5 rounded-xl font-black uppercase tracking-tighter text-sm">
-              <span>{theme === 'dark' ? 'Light' : 'Dark'}</span>
-              {theme === 'dark' ? <Sun size={16} className="text-orange-400" /> : <Moon size={16} className="text-sky-600" />}
-            </button>
-          </div>
-        </div>
+      {/* Mobile menu */}
+      <div style={{
+        position:"fixed", inset:0, zIndex:490, background:"rgba(6,5,3,0.97)",
+        backdropFilter:"blur(30px)", display:"flex", flexDirection:"column",
+        alignItems:"center", justifyContent:"center", gap:32,
+        opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none",
+        transition:"opacity .5s ease"
+      }}>
+        {["hero","about","services","events","contact"].map((id,i) => (
+          <button key={id} onClick={() => go(id)} style={{
+            fontFamily:"'Cormorant Garamond',serif", fontSize:40, fontWeight:300,
+            color:"#F5EDD6", background:"none", border:"none", cursor:"pointer",
+            letterSpacing:4, transform: menuOpen ? "translateY(0)" : "translateY(20px)",
+            opacity: menuOpen ? 1 : 0, transition:`all .5s ease ${i*80}ms`,
+            textTransform:"capitalize"
+          }}>{id}</button>
+        ))}
       </div>
+
+      <style>{`
+        @media(max-width:768px){.desk-nav{display:none!important}.mob-nav{display:flex!important}}
+      `}</style>
     </>
   );
-};
+}
 
-const Section = ({ id, children, className }) => (
-  <section id={id} className={`min-h-[70vh] pt-20 pb-12 md:pt-32 md:pb-20 px-4 md:px-20 ${className}`}>
-    <div className="max-w-7xl mx-auto">{children}</div>
-  </section>
-);
+// ─── HERO ──────────────────────────────────────────────────────────────────────
+function Hero({ setActive }) {
+  const [loaded, setLoaded] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
+  useEffect(() => { setTimeout(() => setLoaded(true), 100); }, []);
+  const handleMouse = useCallback((e) => {
+    setMousePos({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
+  }, []);
 
-const PartnerMarquee = ({ lang }) => (
-  <div className="w-full overflow-hidden py-8 md:py-10 opacity-70 dark:opacity-50 hover:opacity-100 transition-opacity">
-    <div className={`flex gap-6 md:gap-10 animate-marquee whitespace-nowrap ${lang === 'ar' ? 'flex-row-reverse' : 'flex-row'}`}>
-      {[...CUSTOMERS, ...CUSTOMERS].map((name, i) => (
-        <span key={i} className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] md:tracking-[0.3em] px-6 py-2 md:px-8 md:py-3 border border-slate-200 dark:border-white/10 rounded-full text-slate-900 dark:text-white transition-all hover:bg-sky-500 hover:text-white cursor-default">{name}</span>
-      ))}
-    </div>
-  </div>
-);
+  const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); setActive(id); };
 
-const ServiceCard = ({ service, lang, index }) => {
-  const t = TRANSLATIONS[lang];
   return (
-    <div 
-      className="group reveal relative bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-[2rem] md:rounded-[2.5rem] overflow-hidden transition-all duration-700 shadow-sm hover:shadow-2xl hover:border-sky-500/50 flex flex-col h-full transform hover:-translate-y-2" 
-      style={{ transitionDelay: `${index * 150}ms` }}
-    >
-      <div className="h-40 md:h-56 relative overflow-hidden">
-        <img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" alt={service.title[lang]} />
-        <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 to-transparent opacity-60" />
-        <div className={`absolute bottom-4 left-4 md:bottom-6 md:left-6 w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 ${service.bgColor} ${service.color} border border-white/20 shadow-xl`}>
-          {service.icon}
+    <section id="hero" onMouseMove={handleMouse} style={{
+      minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center",
+      position:"relative", overflow:"hidden", background:"#060503"
+    }}>
+      {/* Parallax grain bg */}
+      <div style={{
+        position:"absolute", inset:0,
+        backgroundImage:`radial-gradient(ellipse 80% 60% at ${mousePos.x*100}% ${mousePos.y*100}%, rgba(201,168,76,0.08) 0%, transparent 70%)`,
+        transition:"background-image 0.1s", pointerEvents:"none"
+      }}/>
+      {/* Grid */}
+      <div style={{
+        position:"absolute", inset:0, opacity:0.04,
+        backgroundImage:"linear-gradient(rgba(201,168,76,1) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,1) 1px,transparent 1px)",
+        backgroundSize:"80px 80px"
+      }}/>
+      {/* Glow orbs */}
+      <div style={{ position:"absolute", top:"20%", left:"10%", width:400, height:400, borderRadius:"50%", background:"radial-gradient(circle,rgba(201,168,76,0.06),transparent 70%)", animation:"orb1 12s ease-in-out infinite alternate" }}/>
+      <div style={{ position:"absolute", bottom:"15%", right:"8%", width:300, height:300, borderRadius:"50%", background:"radial-gradient(circle,rgba(124,158,204,0.07),transparent 70%)", animation:"orb2 15s ease-in-out infinite alternate-reverse" }}/>
+
+      <div style={{ position:"relative", zIndex:10, textAlign:"center", padding:"0 24px", maxWidth:1100, margin:"0 auto" }}>
+        {/* Badge */}
+        <div style={{
+          display:"inline-flex", alignItems:"center", gap:10,
+          border:"1px solid rgba(201,168,76,0.3)", padding:"8px 20px", borderRadius:2,
+          marginBottom:48,
+          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(-20px)",
+          transition:"all 1s ease 0.2s"
+        }}>
+          <div style={{ width:6, height:6, borderRadius:"50%", background:"#C9A84C", animation:"pulse 2s ease-in-out infinite" }}/>
+          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", fontWeight:600 }}>Business Services — Est. 2023</span>
+        </div>
+
+        {/* Main heading */}
+        <h1 style={{
+          fontFamily:"'Cormorant Garamond',serif",
+          fontSize:"clamp(52px,10vw,140px)",
+          fontWeight:300, lineHeight:0.9, color:"#F5EDD6",
+          letterSpacing:-2, marginBottom:16,
+          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(60px)",
+          transition:"all 1.2s cubic-bezier(.16,1,.3,1) 0.4s"
+        }}>
+          The Path<br/>
+          <em style={{ color:"#C9A84C", fontStyle:"italic" }}>You Should</em><br/>
+          Take.
+        </h1>
+
+        <p style={{
+          fontFamily:"'DM Sans',sans-serif", fontSize:"clamp(15px,2vw,19px)",
+          color:"rgba(245,237,214,0.5)", maxWidth:520, margin:"32px auto 52px",
+          lineHeight:1.8, fontWeight:300,
+          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(30px)",
+          transition:"all 1s ease 0.8s"
+        }}>
+          Empowering success through market knowledge, digital solutions, and strategic clarity for ambitious businesses.
+        </p>
+
+        {/* CTAs */}
+        <div style={{
+          display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap",
+          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(20px)",
+          transition:"all 1s ease 1s"
+        }}>
+          <button onClick={() => go("services")} style={{
+            fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3,
+            textTransform:"uppercase", color:"#0A0804", background:"#C9A84C",
+            border:"none", cursor:"pointer", padding:"16px 40px", borderRadius:2,
+            transition:"all .25s"
+          }} onMouseEnter={e=>{e.target.style.transform="scale(1.04)";e.target.style.background="#F0D080"}}
+             onMouseLeave={e=>{e.target.style.transform="scale(1)";e.target.style.background="#C9A84C"}}>
+            Explore Services
+          </button>
+          <button onClick={() => go("about")} style={{
+            fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3,
+            textTransform:"uppercase", color:"#C9A84C",
+            background:"transparent", border:"1px solid rgba(201,168,76,0.35)",
+            cursor:"pointer", padding:"16px 40px", borderRadius:2, transition:"all .25s"
+          }} onMouseEnter={e=>{e.target.style.borderColor="#C9A84C";e.target.style.background="rgba(201,168,76,0.05)"}}
+             onMouseLeave={e=>{e.target.style.borderColor="rgba(201,168,76,0.35)";e.target.style.background="transparent"}}>
+            Our Story
+          </button>
+        </div>
+
+        {/* Scroll indicator */}
+        <div style={{
+          marginTop:80, display:"flex", flexDirection:"column", alignItems:"center", gap:8,
+          opacity: loaded ? 0.5 : 0, transition:"opacity 1s ease 1.4s"
+        }}>
+          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4, color:"#C9A84C", textTransform:"uppercase" }}>Scroll</span>
+          <div style={{ width:1, height:48, background:"linear-gradient(180deg,#C9A84C,transparent)", animation:"scrollLine 2s ease-in-out infinite" }}/>
         </div>
       </div>
 
-      <div className="p-6 md:p-10 pt-6 md:pt-8 flex flex-col flex-1">
-        <h3 className="text-xl md:text-3xl font-black mb-3 md:mb-6 text-slate-900 dark:text-white group-hover:text-sky-500 transition-colors tracking-tight leading-tight">
-          {service.title[lang]}
-        </h3>
-        
-        <p className="text-sm md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed mb-6 md:mb-10 font-medium">
-          {service.desc[lang]}
-        </p>
+      {/* Corner decorations */}
+      <div style={{ position:"absolute", top:80, left:40, width:60, height:60, borderTop:"1px solid rgba(201,168,76,0.3)", borderLeft:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
+      <div style={{ position:"absolute", top:80, right:40, width:60, height:60, borderTop:"1px solid rgba(201,168,76,0.3)", borderRight:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
+      <div style={{ position:"absolute", bottom:80, left:40, width:60, height:60, borderBottom:"1px solid rgba(201,168,76,0.3)", borderLeft:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
+      <div style={{ position:"absolute", bottom:80, right:40, width:60, height:60, borderBottom:"1px solid rgba(201,168,76,0.3)", borderRight:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
+    </section>
+  );
+}
 
-        <div className="space-y-3 md:space-y-4 mt-auto">
-          {service.features[lang].map((f, i) => (
-            <div 
-              key={i} 
-              className="flex items-center gap-3 md:gap-4 transition-all duration-500 group-hover:translate-x-2"
-              style={{ transitionDelay: `${i * 100}ms` }}
-            >
-              <div className={`flex-shrink-0 w-6 h-6 md:w-8 md:h-8 rounded-full flex items-center justify-center ${service.bgColor} ${service.color} transition-all duration-500 group-hover:scale-125`}>
-                <CheckCircle2 size={12} className="md:size-4" />
-              </div>
-              <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest text-[9px] md:text-[11px]">
-                {f}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 md:mt-12 h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
-          <div className={`h-full w-0 group-hover:w-full transition-all duration-1000 ease-in-out bg-gradient-to-r from-sky-500 to-indigo-600`} />
-        </div>
+// ─── MARQUEE ───────────────────────────────────────────────────────────────────
+function Marquee() {
+  const doubled = [...CUSTOMERS, ...CUSTOMERS];
+  return (
+    <div style={{ background:"#0E0C08", borderTop:"1px solid rgba(201,168,76,0.1)", borderBottom:"1px solid rgba(201,168,76,0.1)", padding:"18px 0", overflow:"hidden" }}>
+      <div style={{ display:"flex", gap:40, animation:"marqueeX 22s linear infinite", whiteSpace:"nowrap" }}>
+        {doubled.map((name, i) => (
+          <span key={i} style={{ display:"inline-flex", alignItems:"center", gap:20 }}>
+            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:4, color:"rgba(201,168,76,0.55)", textTransform:"uppercase", fontWeight:600 }}>{name}</span>
+            <span style={{ color:"rgba(201,168,76,0.25)", fontSize:14 }}>◆</span>
+          </span>
+        ))}
       </div>
     </div>
   );
-};
+}
 
-export default function App() {
-  const [lang, setLang] = useState('en');
-  const [theme, setTheme] = useState('light');
-  const [activeSection, setActiveSection] = useState('home');
-  const [showCareers, setShowCareers] = useState(false);
-  const [formStatus, setFormStatus] = useState(null);
-
-  const t = TRANSLATIONS[lang];
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec"; 
-
-  useScrollReveal();
-
-  useEffect(() => {
-    const handleContextMenu = (e) => e.preventDefault();
-    const handleKeydown = (e) => {
-      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
-        e.preventDefault();
-        return false;
-      }
-    };
-    document.addEventListener('contextmenu', handleContextMenu);
-    document.addEventListener('keydown', handleKeydown);
-    return () => {
-      document.removeEventListener('contextmenu', handleContextMenu);
-      document.removeEventListener('keydown', handleKeydown);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (showCareers) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [showCareers]);
-
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setActiveSection(id);
-    }
-  };
-
-  const handleFormSubmit = async (e, sheetName) => {
-    e.preventDefault();
-    setFormStatus('sending');
-    
-    const formData = new FormData(e.target);
-    const data = {
-      sheetName: sheetName,
-      Name: formData.get('name'),
-      Email: formData.get('email'),
-      Phone: formData.get('phone'),
-      Company: formData.get('company'),
-      Service: formData.get('service'),
-      CV_Link: formData.get('cv_link') || ""
-    };
-
-    try {
-      await fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      setFormStatus('success');
-      e.target.reset();
-      setTimeout(() => setFormStatus(null), 10000);
-    } catch (error) {
-      setFormStatus(null);
-      console.error("Submission failed", error);
-    }
-  };
-
+// ─── ABOUT ─────────────────────────────────────────────────────────────────────
+function About() {
   return (
-    <div className={`${theme} ${lang === 'ar' ? 'font-arabic' : 'font-sans'} selection:bg-sky-500 selection:text-white`}>
-      <div className={`bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-all duration-700 min-h-screen overflow-x-hidden ${showCareers ? 'blur-md grayscale-[0.2]' : ''}`}>
-        
-        <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-sky-500/10 dark:bg-sky-400/5 blur-[120px] rounded-full animate-mesh-blob"></div>
-          <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-500/10 dark:bg-indigo-400/5 blur-[120px] rounded-full animate-mesh-blob-reverse"></div>
-          <div className="absolute inset-0 opacity-[0.15] dark:opacity-[0.05] bg-square-grid text-slate-400 dark:text-sky-400"></div>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1000px] bg-[radial-gradient(circle_at_50%_0%,rgba(56,189,248,0.15),transparent_70%)] transition-opacity duration-1000"></div>
-          <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none mix-blend-overlay bg-noise"></div>
-        </div>
+    <section id="about" style={{ background:"#060503", padding:"140px 48px" }}>
+      <div style={{ maxWidth:1200, margin:"0 auto" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:100, alignItems:"center" }} className="about-grid">
+          {/* Left */}
+          <div>
+            <Reveal delay={0}>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>About Mantiq</p>
+            </Reveal>
+            <GoldLine width={48} delay={100} />
+            <Reveal delay={150}>
+              <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(36px,5vw,72px)", fontWeight:300, color:"#F5EDD6", lineHeight:1.05, letterSpacing:-1, marginBottom:32 }}>
+                Where Business Wisdom Meets Digital Excellence
+              </h2>
+            </Reveal>
+            <Reveal delay={250}>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:16, color:"rgba(245,237,214,0.5)", lineHeight:1.9, marginBottom:24, fontWeight:300 }}>
+                Established in July 2023, Mantiq was born from a simple belief: that businesses deserve partners who understand both the human side of commerce and the precision of digital systems.
+              </p>
+            </Reveal>
+            <Reveal delay={320}>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:16, color:"rgba(245,237,214,0.5)", lineHeight:1.9, fontWeight:300 }}>
+                We bridge the gap — translating ambitious visions into measurable growth, structured operations, and lasting digital presence.
+              </p>
+            </Reveal>
 
-        <Nav lang={lang} setLang={setLang} theme={theme} setTheme={setTheme} onNavigate={scrollToSection} activeSection={activeSection} />
-
-        <Section id="home" className="flex flex-col justify-center items-center text-center !min-h-screen px-4 md:px-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 md:px-5 md:py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-6 md:mb-8 animate-fade-in-up">
-            <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-sky-500 animate-pulse"></div>
-            <span className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-sky-500 dark:text-sky-400">{t.tag}</span>
-          </div>
-          <h1 className="text-3xl xs:text-4xl sm:text-7xl md:text-8xl lg:text-[120px] font-black leading-tight md:leading-none tracking-tighter mb-8 md:mb-10 text-slate-900 dark:text-white animate-fade-in-up w-full max-w-[95vw] mx-auto break-words" style={{ animationDelay: '100ms' }}>
-            <span className="block mb-1 md:mb-2">{lang === 'en' ? 'The Path' : 'المسار'}</span>
-            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600 italic px-2 md:px-4">{lang === 'en' ? 'You Should Take' : 'الذي يجب سلوكه'}</span>
-          </h1>
-          <div className="max-w-2xl mx-auto mb-10 md:mb-12 animate-fade-in-up" style={{ animationDelay: '250ms' }}>
-            <p className="text-sm sm:text-lg md:text-2xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium px-4">{t.hero_desc}</p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center animate-fade-in-up px-6 w-full max-w-xs sm:max-w-none mx-auto" style={{ animationDelay: '400ms' }}>
-            <button onClick={() => scrollToSection('services')} className="px-8 py-4 md:px-10 md:py-5 bg-sky-500 text-white rounded-full font-black text-xs md:text-base uppercase tracking-widest hover:scale-105 hover:bg-sky-400 shadow-xl shadow-sky-500/20 active:scale-95 transition-all flex items-center justify-center gap-3">{t.services} <ChevronRight size={16} className="rtl:rotate-180" /></button>
-            <button onClick={() => scrollToSection('about')} className="px-8 py-4 md:px-10 md:py-5 border border-slate-200 dark:border-white/10 rounded-full font-black text-xs md:text-base uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all text-slate-900 dark:text-white">{t.about_us}</button>
-          </div>
-        </Section>
-
-        <Section id="about">
-          <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-center">
-            <div className="space-y-8 md:space-y-12 reveal">
-              <div className="space-y-4 md:space-y-6">
-                <h2 className="text-3xl md:text-7xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">{t.about_us}</h2>
-                <div className="h-2 md:h-3 w-20 md:w-32 bg-sky-500 animate-grow-x origin-left shadow-lg" />
-                <p className="text-base md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
-                  {lang === 'en' ? 'Established in July 2023, Mantiq bridges the gap between traditional business wisdom and modern digital excellence.' : 'تأسست شركة منطق في يوليو 2023، لتعمل كجسر يربط بين حكمة الأعمال التقليدية والتميز الرقمي الحديث.'}
-                </p>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
-                <div className="p-6 md:p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-sky-500/30 transition-all shadow-sm">
-                  <Target className="text-sky-500 dark:text-sky-400 mb-3 md:mb-4 size-6 md:size-8" />
-                  <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-slate-900 dark:text-white">{t.msg_title}</h3>
-                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{lang === 'en' ? 'Helping businesses grow smarter, operate faster, and compete stronger in a digital-first world.' : 'مساعدة الشركات على النمو بذكاء أكبر، والعمل بشكل أسرع، والمنافسة بقوة في عالم رقمي متسارع.'}</p>
-                </div>
-                <div className="p-6 md:p-8 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/5 hover:border-indigo-500/30 transition-all shadow-sm">
-                  <Eye className="text-indigo-500 dark:text-indigo-400 mb-3 md:mb-4 size-6 md:size-8" />
-                  <h3 className="text-lg md:text-xl font-bold mb-2 md:mb-3 text-slate-900 dark:text-white">{t.vision_title}</h3>
-                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{lang === 'en' ? 'To become the trusted digital partner for businesses seeking technological excellence and operational clarity.' : 'أن نكون الشريك الرقمي الموثوق للشركات التي تسعى للتميز التكنولوجي والوضوح التشغيلي.'}</p>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              {[{ count: '210+', label: t.stats_serv, icon: <Zap /> }, { count: '18+', label: t.stats_proj, icon: <Binary /> }, { count: '14', label: t.stats_vent, icon: <Trophy /> }, { count: '25+', label: t.stats_experts, icon: <Users /> }].map((stat, i) => (
-                <div key={i} className="p-6 md:p-10 bg-slate-50 dark:bg-white/5 rounded-[1.5rem] md:rounded-[2.5rem] text-center space-y-2 md:space-y-4 hover:bg-sky-500/5 transition-all border border-slate-200 dark:border-white/5 reveal" style={{ transitionDelay: `${i * 150}ms` }}>
-                  <div className="mx-auto w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-sky-500 dark:text-sky-400 bg-sky-500/10 rounded-xl md:rounded-2xl">{stat.icon}</div>
-                  <div className="text-2xl md:text-4xl font-black text-slate-900 dark:text-white">{stat.count}</div>
-                  <div className="text-[8px] md:text-[10px] font-black uppercase text-slate-500 tracking-widest">{stat.label}</div>
-                </div>
+            <div style={{ marginTop:48, display:"grid", gridTemplateColumns:"1fr 1fr", gap:24 }}>
+              {[
+                { icon:"◎", title:"Our Mission", text:"Helping businesses grow smarter, operate faster, and compete stronger in a digital-first world." },
+                { icon:"◈", title:"Our Vision", text:"To become the trusted digital partner for businesses seeking technological excellence and operational clarity." }
+              ].map((item,i) => (
+                <Reveal key={i} delay={400 + i*100}>
+                  <div style={{ padding:"24px", border:"1px solid rgba(201,168,76,0.12)", borderRadius:2, transition:"border-color .3s,background .3s", cursor:"default" }}
+                    onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(201,168,76,0.35)";e.currentTarget.style.background="rgba(201,168,76,0.03)"}}
+                    onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(201,168,76,0.12)";e.currentTarget.style.background="transparent"}}>
+                    <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, color:"#C9A84C", marginBottom:10 }}>{item.icon}</div>
+                    <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3, color:"#F5EDD6", textTransform:"uppercase", marginBottom:8 }}>{item.title}</div>
+                    <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:13, color:"rgba(245,237,214,0.45)", lineHeight:1.7, fontWeight:300 }}>{item.text}</p>
+                  </div>
+                </Reveal>
               ))}
             </div>
           </div>
-        </Section>
 
-        <Section id="services">
-          <div className="text-center mb-16 md:mb-24 space-y-4 md:space-y-6 reveal">
-            <span className="text-sky-500 font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-xs md:text-sm">{t.services}</span>
-            <h2 className="text-4xl md:text-8xl font-black tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
-              Strategic <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600">Solutions</span>
-            </h2>
+          {/* Right — Stats */}
+          <div>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:2 }}>
+              {STATS.map((s, i) => (
+                <Reveal key={i} delay={i * 120}>
+                  <div style={{
+                    padding:"52px 36px", background: i % 2 === 0 ? "#0E0C08" : "#100E09",
+                    border:"1px solid rgba(201,168,76,0.07)",
+                    transition:"background .4s,border-color .4s", cursor:"default"
+                  }}
+                    onMouseEnter={e=>{e.currentTarget.style.background="rgba(201,168,76,0.04)";e.currentTarget.style.borderColor="rgba(201,168,76,0.25)"}}
+                    onMouseLeave={e=>{e.currentTarget.style.background=i%2===0?"#0E0C08":"#100E09";e.currentTarget.style.borderColor="rgba(201,168,76,0.07)"}}>
+                    <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:64, fontWeight:300, color:"#C9A84C", lineHeight:1, marginBottom:12 }}>{s.n}</div>
+                    <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:4, color:"rgba(245,237,214,0.35)", textTransform:"uppercase", fontWeight:600 }}>{s.label}</div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+            <Reveal delay={500}>
+              <div style={{ marginTop:2, padding:"28px 36px", background:"#C9A84C", border:"none" }}>
+                <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, color:"#0A0804", fontStyle:"italic", fontWeight:500, lineHeight:1.5 }}>
+                  "Helping Egyptian businesses compete on the global stage."
+                </p>
+              </div>
+            </Reveal>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 md:gap-14">
-            {Object.values(SERVICE_DATA).map((service, idx) => (
-              <ServiceCard key={service.id} service={service} lang={lang} index={idx} />
+        </div>
+      </div>
+      <style>{`@media(max-width:900px){.about-grid{grid-template-columns:1fr!important;gap:60px!important}}`}</style>
+    </section>
+  );
+}
+
+// ─── SERVICES ──────────────────────────────────────────────────────────────────
+function Services() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const active = SERVICES[activeIdx];
+
+  return (
+    <section id="services" style={{ background:"#060503", padding:"120px 0", overflow:"hidden" }}>
+      <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 48px" }}>
+        <Reveal>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>What We Do</p>
+        </Reveal>
+        <GoldLine width={48} />
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:80, flexWrap:"wrap", gap:20 }}>
+          <Reveal>
+            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(40px,6vw,80px)", fontWeight:300, color:"#F5EDD6", lineHeight:1, letterSpacing:-1 }}>
+              Strategic<br/><em style={{ color:"#C9A84C" }}>Solutions</em>
+            </h2>
+          </Reveal>
+          <Reveal delay={150}>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"rgba(245,237,214,0.4)", maxWidth:320, lineHeight:1.8, fontWeight:300 }}>
+              Four integrated service pillars engineered to transform your business from the inside out.
+            </p>
+          </Reveal>
+        </div>
+      </div>
+
+      {/* Service selector tabs */}
+      <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 48px", display:"flex", gap:2, marginBottom:4 }} className="svc-tabs">
+        {SERVICES.map((s, i) => (
+          <button key={s.id} onClick={() => setActiveIdx(i)} style={{
+            flex:1, padding:"18px 12px", background: activeIdx===i ? "#C9A84C" : "#0E0C08",
+            border:"1px solid rgba(201,168,76,0.1)",
+            fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:3,
+            color: activeIdx===i ? "#0A0804" : "rgba(245,237,214,0.4)",
+            textTransform:"uppercase", cursor:"pointer", transition:"all .35s"
+          }}>{s.title}</button>
+        ))}
+      </div>
+
+      {/* Active service panel */}
+      <div key={active.id} style={{
+        maxWidth:1200, margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr",
+        border:"1px solid rgba(201,168,76,0.1)", animation:"fadeInUp .5s ease"
+      }} className="svc-panel">
+        {/* Image */}
+        <div style={{ position:"relative", overflow:"hidden", minHeight:480 }}>
+          <img src={active.img} alt={active.title} style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center", position:"absolute", inset:0, transition:"transform .8s ease" }}
+            onMouseEnter={e=>e.target.style.transform="scale(1.05)"}
+            onMouseLeave={e=>e.target.style.transform="scale(1)"}
+            onError={e=>{e.target.src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200"}}
+          />
+          <div style={{ position:"absolute", inset:0, background:"linear-gradient(135deg,rgba(6,5,3,0.6),rgba(6,5,3,0.2))" }}/>
+          <div style={{ position:"absolute", top:32, left:32 }}>
+            <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:64, fontWeight:300, color:"rgba(201,168,76,0.25)", lineHeight:1 }}>{active.num}</div>
+          </div>
+          <div style={{ position:"absolute", bottom:32, left:32 }}>
+            <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4, color:"#C9A84C", textTransform:"uppercase", marginBottom:6 }}>{active.sub}</div>
+            <div style={{ width:40, height:1, background:"#C9A84C" }}/>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div style={{ padding:"52px 52px", background:"#0E0C08", display:"flex", flexDirection:"column", justifyContent:"center" }}>
+          <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:42, fontWeight:300, color:"#F5EDD6", lineHeight:1.1, marginBottom:24 }}>{active.title}</h3>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:15, color:"rgba(245,237,214,0.5)", lineHeight:1.85, fontWeight:300, marginBottom:36 }}>{active.desc}</p>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:10 }}>
+            {active.tags.map((tag,i) => (
+              <span key={i} style={{
+                fontFamily:"'DM Sans',sans-serif", fontSize:9, fontWeight:700, letterSpacing:3,
+                textTransform:"uppercase", padding:"8px 16px",
+                border:`1px solid ${active.accent}44`, color:active.accent, borderRadius:1
+              }}>{tag}</span>
             ))}
           </div>
-        </Section>
+        </div>
+      </div>
+      <style>{`
+        @media(max-width:768px){.svc-panel{grid-template-columns:1fr!important}.svc-tabs{flex-direction:column!important}}
+      `}</style>
+    </section>
+  );
+}
 
-        <Section id="events">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-16 gap-6 reveal">
-            <div className="space-y-2 md:space-y-4">
-               <span className="text-sky-500 font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-xs md:text-sm">{t.participated}</span>
-               <h2 className="text-3xl md:text-7xl font-black tracking-tighter uppercase text-slate-900 dark:text-white">{t.mantiq_on_land}</h2>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {EVENTS.map((event, idx) => (
-              <div key={event.id} className="group reveal relative h-[300px] md:h-[400px] rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-lg transition-transform hover:scale-[1.03] duration-500" style={{ transitionDelay: `${idx * 150}ms` }}>
-                <img src={event.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-in-out" alt={event.title[lang]} />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
-                <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full transform group-hover:-translate-y-2 transition-transform">
-                  <span className="text-[8px] md:text-[10px] font-black text-sky-400 mb-1 md:mb-2 block">{event.date}</span>
-                  <h3 className="text-lg md:text-2xl font-black text-white leading-tight">{event.title[lang]}</h3>
+// ─── EVENTS ────────────────────────────────────────────────────────────────────
+function Events() {
+  const [hovered, setHovered] = useState(null);
+  return (
+    <section id="events" style={{ background:"#0A0804", padding:"140px 48px" }}>
+      <div style={{ maxWidth:1200, margin:"0 auto" }}>
+        <Reveal>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>Mantiq on the Ground</p>
+        </Reveal>
+        <GoldLine width={48} />
+        <Reveal delay={100}>
+          <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(36px,5.5vw,76px)", fontWeight:300, color:"#F5EDD6", lineHeight:1.05, letterSpacing:-1, marginBottom:80 }}>
+            Where We've<br/><em style={{ color:"#C9A84C" }}>Participated</em>
+          </h2>
+        </Reveal>
+
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:3 }} className="evt-grid">
+          {EVENTS.map((ev, i) => (
+            <Reveal key={ev.id} delay={i * 150}>
+              <div
+                style={{ position:"relative", overflow:"hidden", cursor:"pointer", aspectRatio:"3/4" }}
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                <img src={ev.img} alt={ev.title} style={{
+                  width:"100%", height:"100%", objectFit:"cover",
+                  transform: hovered===i ? "scale(1.08)" : "scale(1)",
+                  transition:"transform .8s cubic-bezier(.16,1,.3,1)",
+                  filter: hovered===i ? "brightness(0.75)" : "brightness(0.55)"
+                }} onError={e=>{e.target.src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=900"}} />
+                <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top,rgba(6,5,3,0.9) 0%,transparent 50%)" }}/>
+
+                {/* Number */}
+                <div style={{
+                  position:"absolute", top:20, right:20,
+                  fontFamily:"'Cormorant Garamond',serif", fontSize:52, fontWeight:300,
+                  color:"rgba(201,168,76,0.2)", lineHeight:1,
+                  transform: hovered===i ? "translateY(-5px)" : "translateY(0)", transition:"transform .5s"
+                }}>0{ev.id}</div>
+
+                {/* Info */}
+                <div style={{
+                  position:"absolute", bottom:0, left:0, right:0, padding:"28px 24px",
+                  transform: hovered===i ? "translateY(-8px)" : "translateY(0)", transition:"transform .5s ease"
+                }}>
+                  <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4, color:"#C9A84C", textTransform:"uppercase", marginBottom:6 }}>{ev.year}</div>
+                  <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:26, fontWeight:400, color:"#F5EDD6", lineHeight:1.2 }}>{ev.title}</div>
+                  <div style={{
+                    width: hovered===i ? 40 : 0, height:1, background:"#C9A84C",
+                    marginTop:12, transition:"width .5s ease .1s"
+                  }}/>
                 </div>
               </div>
-            ))}
-          </div>
-        </Section>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+      <style>{`@media(max-width:768px){.evt-grid{grid-template-columns:1fr!important}}`}</style>
+    </section>
+  );
+}
 
-        <Section id="contact">
-          <div className="max-w-4xl mx-auto reveal">
-            <div className="relative p-8 md:p-20 bg-sky-500 rounded-[2.5rem] md:rounded-[4rem] text-white flex flex-col justify-center shadow-lg dark:bg-slate-900 dark:border dark:border-white/10 transition-all hover:shadow-2xl hover:shadow-sky-500/20 overflow-hidden min-h-[350px]">
-              {formStatus === 'success' ? (
-                <div className="text-center space-y-6 md:space-y-8 animate-fade-in flex flex-col items-center">
-                  <div className="w-16 h-16 md:w-24 md:h-24 bg-white dark:bg-sky-500/20 rounded-full flex items-center justify-center animate-bounce shadow-2xl">
-                    <CheckCircle2 size={32} className="text-sky-500 dark:text-sky-400 md:size-12" />
-                  </div>
-                  <div className="space-y-3 md:space-y-4">
-                    <h2 className="text-2xl md:text-6xl font-black tracking-tighter leading-tight">{t.mission_received}</h2>
-                    <p className="text-sm md:text-xl font-medium opacity-90 max-w-xl mx-auto leading-relaxed">
-                      {t.mission_desc}
-                    </p>
-                  </div>
-                  <button onClick={() => setFormStatus(null)} className="px-6 py-2 md:px-8 md:py-3 bg-white/20 hover:bg-white/30 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest transition-all">Send another briefing</button>
+// ─── CONTACT ───────────────────────────────────────────────────────────────────
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
+
+function Contact() {
+  const [status, setStatus] = useState(null);
+  const [focused, setFocused] = useState(null);
+
+  const inputStyle = (name) => ({
+    width:"100%", padding:"16px 0", background:"transparent",
+    border:"none", borderBottom:`1px solid ${focused===name ? "#C9A84C" : "rgba(201,168,76,0.2)"}`,
+    color:"#F5EDD6", fontFamily:"'DM Sans',sans-serif", fontSize:15, fontWeight:300,
+    outline:"none", transition:"border-color .3s", boxSizing:"border-box"
+  });
+
+  const submit = async (e) => {
+    e.preventDefault();
+    setStatus("sending");
+    const fd = new FormData(e.target);
+    const data = { sheetName:"Leads", Name:fd.get("name"), Email:fd.get("email"), Phone:fd.get("phone"), Company:fd.get("company"), Service:fd.get("service"), CV_Link:"" };
+    try {
+      await fetch(SCRIPT_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) });
+      setStatus("success"); e.target.reset();
+    } catch { setStatus("error"); }
+  };
+
+  return (
+    <section id="contact" style={{ background:"#060503", padding:"140px 48px", position:"relative", overflow:"hidden" }}>
+      {/* Decorative gold vertical line */}
+      <div style={{ position:"absolute", left:"50%", top:0, bottom:0, width:1, background:"linear-gradient(180deg,transparent,rgba(201,168,76,0.08),transparent)", pointerEvents:"none" }}/>
+
+      <div style={{ maxWidth:900, margin:"0 auto" }}>
+        <div style={{ textAlign:"center", marginBottom:80 }}>
+          <Reveal>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>Begin the Conversation</p>
+          </Reveal>
+          <GoldLine width={48} delay={100} />
+          <Reveal delay={150}>
+            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(40px,6vw,88px)", fontWeight:300, color:"#F5EDD6", lineHeight:1, letterSpacing:-1 }}>
+              Let's<br/><em style={{ color:"#C9A84C" }}>Build.</em>
+            </h2>
+          </Reveal>
+          <Reveal delay={250}>
+            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:15, color:"rgba(245,237,214,0.4)", marginTop:20, lineHeight:1.7, fontWeight:300 }}>
+              Share your vision. Our strategy team responds within 24 hours.
+            </p>
+          </Reveal>
+        </div>
+
+        {status === "success" ? (
+          <Reveal>
+            <div style={{ textAlign:"center", padding:"80px 40px", border:"1px solid rgba(201,168,76,0.2)" }}>
+              <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:72, color:"#C9A84C", marginBottom:16 }}>✦</div>
+              <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:42, fontWeight:300, color:"#F5EDD6", marginBottom:16 }}>Mission Accepted</h3>
+              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"rgba(245,237,214,0.45)", lineHeight:1.8, maxWidth:400, margin:"0 auto 32px", fontWeight:300 }}>Your vision is now on our radar. Our strategy team will reach out within 24 hours.</p>
+              <button onClick={() => setStatus(null)} style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:4, textTransform:"uppercase", color:"#C9A84C", background:"transparent", border:"1px solid rgba(201,168,76,0.3)", padding:"12px 28px", cursor:"pointer" }}>Send Another</button>
+            </div>
+          </Reveal>
+        ) : (
+          <Reveal delay={200}>
+            <form onSubmit={submit} style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"0 48px" }} className="contact-form">
+              {[
+                ["Name","name","text",true],
+                ["Company","company","text",false],
+                ["Email","email","email",true],
+                ["Phone","phone","tel",true]
+              ].map(([ph,name,type,req]) => (
+                <div key={name} style={{ marginBottom:36 }}>
+                  <input required={req} name={name} type={type} placeholder={ph}
+                    onFocus={() => setFocused(name)} onBlur={() => setFocused(null)}
+                    style={inputStyle(name)}
+                  />
                 </div>
-              ) : (
-                <>
-                  <h2 className="text-3xl md:text-7xl font-black tracking-tighter mb-6 md:mb-8">{t.lets_build}</h2>
-                  <form className="space-y-4 md:space-y-6" onSubmit={(e) => handleFormSubmit(e, 'Leads')}>
-                    <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
-                      <input required name="name" type="text" placeholder={t.name_placeholder} className="w-full px-5 py-4 md:px-6 md:py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-lg text-sm md:text-base" />
-                      <input name="company" type="text" placeholder={t.company_placeholder} className="w-full px-5 py-4 md:px-6 md:py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-lg text-sm md:text-base" />
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
-                      <input required name="email" type="email" placeholder={t.email_placeholder} className="w-full px-5 py-4 md:px-6 md:py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-lg text-sm md:text-base" />
-                      <input required name="phone" type="tel" placeholder={t.phone_placeholder} className="w-full px-5 py-4 md:px-6 md:py-5 bg-black/10 dark:bg-white/5 border-b border-white/20 outline-none focus:border-white transition-all placeholder:text-slate-200 dark:placeholder:text-slate-400 text-white rounded-t-lg text-sm md:text-base" />
-                    </div>
-                    <select name="service" className="w-full px-5 py-4 md:px-6 md:py-5 bg-black/20 dark:bg-white/10 border-b border-white/20 outline-none focus:border-white transition-all text-white cursor-pointer rounded-t-lg text-sm md:text-base">
-                      <option value="" className="text-slate-900">{t.select_service}</option>
-                      {Object.values(SERVICE_DATA).map(s => <option key={s.id} value={s.id} className="text-slate-900">{s.title[lang]}</option>)}
-                    </select>
-                    <button disabled={formStatus === 'sending'} className="w-full py-5 md:py-6 bg-slate-950 dark:bg-sky-500 text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-xl md:rounded-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 shadow-xl flex items-center justify-center gap-3 text-xs md:text-base">
-                      {formStatus === 'sending' && <Sparkles size={16} className="animate-spin md:size-5" />}
-                      {formStatus === 'sending' ? t.sending : t.submit}
-                    </button>
-                  </form>
-                </>
+              ))}
+              <div style={{ gridColumn:"1/-1", marginBottom:36 }}>
+                <select name="service" onFocus={() => setFocused("service")} onBlur={() => setFocused(null)}
+                  style={{ ...inputStyle("service"), cursor:"pointer" }}>
+                  <option value="" style={{ background:"#0A0804" }}>Select a Service</option>
+                  {SERVICES.map(s => <option key={s.id} value={s.id} style={{ background:"#0A0804" }}>{s.title}</option>)}
+                </select>
+              </div>
+              {status === "error" && (
+                <div style={{ gridColumn:"1/-1", marginBottom:16, color:"#D4845A", fontFamily:"'DM Sans',sans-serif", fontSize:13 }}>Something went wrong. Please try again.</div>
               )}
-            </div>
-          </div>
-        </Section>
-
-        <footer className="pt-10 pb-16 md:pb-20 px-4 md:px-6 border-t border-slate-200 dark:border-white/5 reveal">
-          <PartnerMarquee lang={lang} />
-          <div className="max-w-7xl mx-auto mt-12 md:mt-20 flex flex-col items-center gap-8 md:gap-10">
-            <div className="flex gap-4 md:gap-6">
-              <a href="https://www.facebook.com/mantiiq" target="_blank" rel="noopener noreferrer" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl md:rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Facebook size={18} className="md:size-5" /></a>
-              <a href="https://www.linkedin.com/company/mantiq.services" target="_blank" rel="noopener noreferrer" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl md:rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Linkedin size={18} className="md:size-5" /></a>
-              <a href="mailto:Mantiq2023@gmail.com" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl md:rounded-2xl bg-slate-100 dark:bg-white/5 hover:bg-sky-500 hover:text-white dark:hover:text-slate-950 transition-all text-slate-900 dark:text-white transform hover:-translate-y-1"><Mail size={18} className="md:size-5" /></a>
-            </div>
-            <div className="flex flex-col items-center gap-4 md:gap-6">
-              <div className="flex flex-wrap justify-center gap-6 md:gap-8">
-                <a href="https://mantiq-pricing.vercel.app/" target="_blank" className="text-sky-500 font-black text-[10px] md:text-xs tracking-widest uppercase hover:underline flex items-center gap-2 group">
-                  <Calculator size={12} className="md:size-4 group-hover:rotate-12 transition-transform" /> {t.pricing}
-                </a>
-                <button onClick={() => setShowCareers(true)} className="text-slate-500 dark:text-slate-400 font-black text-[10px] md:text-xs tracking-widest uppercase hover:text-sky-500 transition-colors flex items-center gap-2 group">
-                  <Users size={12} className="md:size-4 group-hover:scale-110 transition-transform" /> {t.careers}
+              <div style={{ gridColumn:"1/-1" }}>
+                <button type="submit" disabled={status==="sending"} style={{
+                  width:"100%", padding:"20px", background: status==="sending" ? "rgba(201,168,76,0.5)" : "#C9A84C",
+                  border:"none", color:"#0A0804", fontFamily:"'DM Sans',sans-serif",
+                  fontSize:11, fontWeight:700, letterSpacing:4, textTransform:"uppercase",
+                  cursor: status==="sending" ? "default" : "pointer", transition:"all .3s"
+                }} onMouseEnter={e=>{if(status!=="sending")e.target.style.background="#F0D080"}}
+                   onMouseLeave={e=>{if(status!=="sending")e.target.style.background="#C9A84C"}}>
+                  {status==="sending" ? "Transmitting..." : "Initiate Mission →"}
                 </button>
               </div>
-              <p className="text-[8px] md:text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] md:tracking-[0.4em] text-center">© 2026 MANTIQ BUSINESS SERVICES. {t.rights}</p>
-            </div>
-          </div>
-        </footer>
+            </form>
+          </Reveal>
+        )}
+      </div>
+      <style>{`@media(max-width:600px){.contact-form{grid-template-columns:1fr!important}}`}</style>
+    </section>
+  );
+}
 
-        <div className="fixed right-4 md:right-8 top-1/2 -translate-y-1/2 z-[90] hidden md:flex flex-col gap-6">
-          {['home', 'about', 'services', 'events', 'contact'].map(section => (
-            <button key={section} onClick={() => scrollToSection(section)} className={`w-3 h-3 rounded-full transition-all duration-500 ease-in-out transform ${activeSection === section ? 'bg-sky-500 h-10 scale-125 shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'bg-slate-300 dark:bg-slate-700 hover:scale-150'}`} title={section} />
+// ─── FOOTER ────────────────────────────────────────────────────────────────────
+function Footer({ setActive }) {
+  const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); setActive(id); };
+  return (
+    <footer style={{ background:"#0A0804", borderTop:"1px solid rgba(201,168,76,0.1)", padding:"64px 48px" }}>
+      <div style={{ maxWidth:1200, margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:40, alignItems:"center" }} className="footer-grid">
+        {/* Logo */}
+        <div>
+          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
+            <svg width="24" height="30" viewBox="0 0 400 500" fill="none" stroke="#C9A84C" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="200" cy="200" r="150"/>
+              <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
+            </svg>
+            <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:18, fontWeight:700, color:"#F5EDD6", letterSpacing:4, textTransform:"uppercase" }}>Mantiq</span>
+          </div>
+          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:12, color:"rgba(245,237,214,0.3)", lineHeight:1.7, maxWidth:220, fontWeight:300 }}>Business Services Company — Est. July 2023</p>
+        </div>
+
+        {/* Links */}
+        <div style={{ textAlign:"center" }}>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:24, justifyContent:"center" }}>
+            {["about","services","events","contact"].map(id => (
+              <button key={id} onClick={() => go(id)} style={{
+                fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4,
+                textTransform:"uppercase", color:"rgba(245,237,214,0.35)",
+                background:"none", border:"none", cursor:"pointer", fontWeight:600,
+                transition:"color .2s"
+              }} onMouseEnter={e=>e.target.style.color="#C9A84C"} onMouseLeave={e=>e.target.style.color="rgba(245,237,214,0.35)"}>{id}</button>
+            ))}
+          </div>
+        </div>
+
+        {/* Socials */}
+        <div style={{ display:"flex", gap:14, justifyContent:"flex-end", flexWrap:"wrap" }}>
+          {[
+            { label:"LinkedIn", href:"https://www.linkedin.com/company/mantiq.services" },
+            { label:"Facebook", href:"https://www.facebook.com/mantiiq" },
+            { label:"Email", href:"mailto:Mantiq2023@gmail.com" },
+          ].map(s => (
+            <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{
+              fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:3,
+              color:"rgba(245,237,214,0.35)", textTransform:"uppercase", fontWeight:600,
+              textDecoration:"none", transition:"color .2s", padding:"8px 12px",
+              border:"1px solid rgba(201,168,76,0.1)", borderRadius:1
+            }} onMouseEnter={e=>e.target.style.color="#C9A84C"} onMouseLeave={e=>e.target.style.color="rgba(245,237,214,0.35)"}>{s.label}</a>
           ))}
         </div>
       </div>
 
-      {showCareers && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6 md:p-10">
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl animate-fade-in" onClick={() => setShowCareers(false)}></div>
-          <div className={`relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2rem] md:rounded-[3rem] shadow-2xl p-8 md:p-16 animate-zoom-in text-slate-900 dark:text-white ${lang === 'ar' ? 'text-right' : 'text-left'}`}>
-            <button onClick={() => setShowCareers(false)} className="absolute top-6 right-6 md:top-8 md:right-8 w-10 h-10 md:w-12 md:h-12 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center"><X size={18} /></button>
-            <h2 className="text-2xl md:text-5xl font-black tracking-tighter mb-4 md:mb-6 animate-fade-in">{t.join_team}</h2>
-            <p className="text-sm md:text-lg text-slate-600 dark:text-slate-400 mb-8 md:mb-10 animate-fade-in" style={{ animationDelay: '100ms' }}>{t.career_msg}</p>
-            <form className="space-y-4 md:space-y-6 animate-fade-in" style={{ animationDelay: '200ms' }} onSubmit={(e) => handleFormSubmit(e, 'Work')}>
-              <input required name="name" type="text" placeholder={t.name_placeholder} className="w-full px-5 py-4 md:px-6 md:py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-lg text-sm md:text-base" />
-              <input required name="email" type="email" placeholder={t.email_placeholder} className="w-full px-5 py-4 md:px-6 md:py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-lg text-sm md:text-base" />
-              <div className="space-y-2">
-                <input name="cv_link" type="url" placeholder="Paste Portfolio or Resume Link" className="w-full px-5 py-4 md:px-6 md:py-5 bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 outline-none focus:border-sky-500 transition-all rounded-t-lg text-sm md:text-base" />
-                <p className="text-[10px] opacity-60">* Please paste a public link to your CV.</p>
-              </div>
-              <button disabled={formStatus === 'sending'} className="w-full py-4 md:py-6 bg-slate-950 dark:bg-white text-white dark:text-slate-950 font-black uppercase tracking-widest rounded-xl md:rounded-2xl hover:bg-sky-500 active:scale-95 transition-all text-xs md:text-base">
-                {formStatus === 'sending' ? t.sending : (formStatus === 'success' ? 'Sent!' : t.apply)}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      <div style={{ maxWidth:1200, margin:"32px auto 0", paddingTop:24, borderTop:"1px solid rgba(201,168,76,0.07)", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:12 }}>
+        <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, color:"rgba(245,237,214,0.2)", letterSpacing:2, fontWeight:300 }}>© 2026 MANTIQ BUSINESS SERVICES. ALL RIGHTS RESERVED.</p>
+        <a href="https://mantiq-pricing.vercel.app/" target="_blank" rel="noopener noreferrer" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:3, textTransform:"uppercase", color:"#C9A84C", textDecoration:"none", fontWeight:600, opacity:0.7 }}>Pricing Calculator ↗</a>
+      </div>
+      <style>{`@media(max-width:768px){.footer-grid{grid-template-columns:1fr!important;text-align:center}.footer-grid>div:last-child{justify-content:center!important}}`}</style>
+    </footer>
+  );
+}
+
+// ─── SCROLL PROGRESS ───────────────────────────────────────────────────────────
+function ScrollProgress() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    const fn = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setP((window.scrollY / total) * 100);
+    };
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
+  return (
+    <div style={{ position:"fixed", top:0, left:0, right:0, height:2, zIndex:600, background:"rgba(201,168,76,0.1)" }}>
+      <div style={{ height:"100%", width:`${p}%`, background:"linear-gradient(90deg,#C9A84C,#F0D080)", transition:"width .1s" }}/>
+    </div>
+  );
+}
+
+// ─── SECTION NAV DOTS ──────────────────────────────────────────────────────────
+function SideNav({ active }) {
+  const sections = ["hero","about","services","events","contact"];
+  return (
+    <div style={{ position:"fixed", right:28, top:"50%", transform:"translateY(-50%)", zIndex:400, display:"flex", flexDirection:"column", gap:14 }} className="side-dots">
+      {sections.map(id => (
+        <button key={id} onClick={() => document.getElementById(id)?.scrollIntoView({behavior:"smooth"})}
+          title={id}
+          style={{
+            width:6, height: active===id ? 28 : 6, borderRadius:3,
+            background: active===id ? "#C9A84C" : "rgba(201,168,76,0.25)",
+            border:"none", cursor:"pointer", transition:"all .5s cubic-bezier(.16,1,.3,1)", padding:0
+          }}/>
+      ))}
+      <style>{`@media(max-width:768px){.side-dots{display:none!important}}`}</style>
+    </div>
+  );
+}
+
+// ─── APP ───────────────────────────────────────────────────────────────────────
+export default function App() {
+  const [active, setActive] = useState("hero");
+  const { pos, hovered, setHovered } = useCursor();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+    const sections = ["hero","about","services","events","contact"];
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
+    }, { threshold: 0.4 });
+    sections.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div style={{ background:"#060503", minHeight:"100vh", overflowX:"hidden" }}>
+      {!isMobile && <Cursor pos={pos} hovered={hovered} />}
+      <ScrollProgress />
+      <Nav active={active} setActive={setActive} />
+      <SideNav active={active} />
+      <Hero setActive={setActive} />
+      <Marquee />
+      <About />
+      <Services />
+      <Events />
+      <Contact />
+      <Footer setActive={setActive} />
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;700;900&family=Noto+Sans+Arabic:wght@100;400;700;900&display=swap');
-        body { -webkit-user-select: none; user-select: none; scroll-behavior: smooth; }
-        .font-sans { font-family: 'Outfit', sans-serif; }
-        .font-arabic { font-family: 'Noto Sans Arabic', sans-serif; }
-        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .animate-marquee { animation: marquee 8s linear infinite; }
-        @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
-        .animate-fade-in-up { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
-        .animate-fade-in { animation: fade-in 0.6s ease-out forwards; }
-        @keyframes grow-x { 0% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
-        .animate-grow-x { animation: grow-x 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes zoom-in { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-        .animate-zoom-in { animation: zoom-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        @keyframes mesh-blob { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(10%, 10%) scale(1.1); } 66% { transform: translate(-5%, 15%) scale(0.9); } }
-        @keyframes mesh-blob-reverse { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(-10%, -10%) scale(1.1); } 66% { transform: translate(5%, -15%) scale(0.9); } }
-        .animate-mesh-blob { animation: mesh-blob 20s infinite alternate ease-in-out; }
-        .animate-mesh-blob-reverse { animation: mesh-blob-reverse 25s infinite alternate-reverse ease-in-out; }
-        .bg-square-grid { background-image: linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px); background-size: 40px 40px; }
-        @media (min-width: 768px) { .bg-square-grid { background-size: 60px 60px; } }
-        .bg-noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none; }
-        .reveal-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-        @media (min-width: 768px) { .custom-scrollbar::-webkit-scrollbar { width: 6px; } }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
-        ::selection { background-color: #38bdf8; color: white; }
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { cursor: none; }
+        @media(max-width:768px){ body { cursor: auto; } }
+
+        @keyframes orb1 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(40px,30px) scale(1.15)} }
+        @keyframes orb2 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-30px,-40px) scale(1.1)} }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+        @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top;opacity:1} 50%{transform:scaleY(1);transform-origin:top;opacity:1} 51%{transform:scaleY(1);transform-origin:bottom;opacity:1} 100%{transform:scaleY(0);transform-origin:bottom;opacity:0} }
+        @keyframes marqueeX { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+        input::placeholder, textarea::placeholder { color: rgba(245,237,214,0.2); }
+        input, select, textarea { caret-color: #C9A84C; }
+        select option { background: #0A0804; color: #F5EDD6; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #060503; }
+        ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C9A84C; }
+        ::selection { background: rgba(201,168,76,0.25); color: #F5EDD6; }
       `}</style>
     </div>
   );
