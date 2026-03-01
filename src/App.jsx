@@ -544,12 +544,6 @@ export default function App() {
             </div>
           </div>
         </footer>
-
-        <div className="fixed right-4 md:right-8 top-1/2 -translate-y-1/2 z-[90] hidden md:flex flex-col gap-6">
-          {['home', 'about', 'services', 'events', 'contact'].map(section => (
-            <button key={section} onClick={() => scrollToSection(section)} className={`w-3 h-3 rounded-full transition-all duration-500 ease-in-out transform-gpu ${activeSection === section ? 'bg-sky-500 h-10 scale-125 shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'bg-slate-300 dark:bg-slate-700 hover:scale-150'}`} title={section} />
-          ))}
-        </div>
       </div>
 
       {showCareers && (
