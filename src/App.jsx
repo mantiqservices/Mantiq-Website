@@ -1,844 +1,674 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { 
+  Menu, X, Sun, Moon, ArrowRight, ArrowLeft, Globe, 
+  Layout, Smartphone, BarChart3, Binary, Mail, 
+  Linkedin, Facebook, CheckCircle2, ChevronRight, 
+  Target, Eye, Zap, Shield, Users, Trophy, Calculator, Upload, Sparkles
+} from 'lucide-react';
 
-// ─── DATA ──────────────────────────────────────────────────────────────────────
+// --- DATA ---
 const CUSTOMERS = [
-  "EL ASEEL Development","Omar Gharib","ETMAM","ALSAIF ANALYSIS",
-  "ELBEDAYA","PE","RESPRESSO","COVER SPORE","SIMCO","MIRROR",
-  "ALMUHANDIS INDUSTRIES","NOURGEOUS ACCESSORIES","NAQLA",
-  "START MART","CREATIVO","ALPHA ACADEMY","VARM","ART FURNITURE"
-];
-
-const SERVICES = [
-  {
-    id: "business", num: "01",
-    title: "Business Development",
-    sub: "Growth Architecture",
-    desc: "We engineer strategic growth paths by identifying untapped market opportunities, building B2B pipelines, and optimizing internal operations for maximum velocity.",
-    tags: ["Strategic Planning","B2B Leads","Data Analytics","Consultancy"],
-    accent: "#C9A84C",
-    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
-  },
-  {
-    id: "tracking", num: "02",
-    title: "Tracking Systems",
-    sub: "Digital Infrastructure",
-    desc: "Transform raw data into powerful operational ecosystems. Custom CRM, financial tracking, HR systems, and intelligent workflow automation built for scale.",
-    tags: ["CRM Systems","Finance Trackers","HR Systems","Flow Automation"],
-    accent: "#7C9ECC",
-    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
-  },
-  {
-    id: "web", num: "03",
-    title: "Websites",
-    sub: "Digital Presence",
-    desc: "We build digital frontends that work as your best salesperson — engineered for performance, SEO dominance, and conversion at every touchpoint.",
-    tags: ["E-commerce","Company Profile","Technical SEO","Usability Design"],
-    accent: "#6EC99B",
-    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200"
-  },
-  {
-    id: "mobile", num: "04",
-    title: "Mobile Apps",
-    sub: "Native Experiences",
-    desc: "Native mobile applications built for today's mobile-first generation, integrating advanced AI logic and frictionless payment flows on iOS and Android.",
-    tags: ["UI/UX Design","iOS & Android","AI Integrations","Payment Gateways"],
-    accent: "#D4845A",
-    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200"
-  }
+  "EL ASEEL Development", "Omar Gharib", "ETMAM", "ALSAIF ANALYSIS", 
+  "ELBEDAYA", "PE", "RESPRESSO", "COVER SPORE", "SIMCO","MIRROR", 
+  "ALMUHANDIS INDUSTRIES", "NOURGEOUS ACCESSORIES", "NAQLA", 
+  "START MART", "CREATIVO", "ALPHA ACADEMY", "VARM", "ART FURNITURE"
 ];
 
 const EVENTS = [
-  { id:1, title:"Enactus Event", year:"2024", img:"https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=900" },
-  { id:2, title:"AIESEC Event", year:"2024", img:"https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=900" },
-  { id:3, title:"Pe Launching Event", year:"2024", img:"https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=900" },
+  { id: 1, title: { en: "Enactus Event", ar: "حدث إيناكتس" }, date: "2024", img: "https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
+  { id: 2, title: { en: "AIESEC Event", ar: "حدث آيزيك" }, date: "2024", img: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
+  { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=800" },
 ];
 
-const STATS = [
-  { n:"210+", label:"Completed Services" },
-  { n:"18+",  label:"Managed Projects" },
-  { n:"14",   label:"Launched Ventures" },
-  { n:"25+",  label:"Intern Experts" },
-];
+const SERVICE_DATA = {
+  business: {
+    id: 'business',
+    num: '01',
+    icon: <BarChart3 className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
+    color: 'text-sky-500 dark:text-sky-400',
+    bgColor: 'bg-sky-500/5',
+    title: { en: "Business Development", ar: "تطوير الأعمال" },
+    features: { 
+      en: ["Strategic Planning", "B2B Leads", "Data Analytics", "Consultancy"], 
+      ar: ["التخطيط الاستراتيجي", "توليد العملاء", "التحليلات", "الاستشارات"] 
+    },
+    desc: { 
+      en: "We create strategic growth paths by identifying untapped market opportunities and optimizing your internal operations.",
+      ar: "نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية."
+    },
+    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
+  },
+  tracking: {
+    id: 'tracking',
+    num: '02',
+    icon: <Binary className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
+    color: 'text-indigo-500 dark:text-indigo-400',
+    bgColor: 'bg-indigo-500/5',
+    title: { en: "Tracking Systems", ar: "أنظمة التتبع" },
+    features: { 
+      en: ["CRM Systems", "Finance Trackers", "HR Systems", "Flow Automation"], 
+      ar: ["أنظمة CRM", "تتبع المالية", "الموارد البشرية", "أتمتة العمليات"] 
+    },
+    desc: {
+      en: "Transform raw data into efficient digital systems with custom CRM and financial tracking ecosystems.",
+      ar: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ عبر أنظمة CRM وتتبع مالي مخصصة."
+    },
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
+  },
+  web: {
+    id: 'web',
+    num: '03',
+    icon: <Layout className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
+    color: 'text-emerald-500 dark:text-emerald-400',
+    bgColor: 'bg-emerald-500/5',
+    title: { en: "Websites", ar: "المواقع الإلكترونية" },
+    features: { 
+      en: ["E-commerce", "Company Profile", "Technical SEO", "Usability Design"], 
+      ar: ["التجارة الإلكترونية", "تحسين محركات البحث", "موقع لعرض شركتك", "تصميم تجربة المستخدم"] 
+    },
+    desc: {
+      en: "Design and develop performance-driven websites optimized for SEO, usability, and long-term scalability.",
+      ar: "نحن نبني واجهات رقمية تعمل كأفضل بائع لديك، مصممة للأداء وقوة محركات البحث."
+    },
+    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200"
+  },
+  mobile: {
+    id: 'mobile',
+    num: '04',
+    icon: <Smartphone className="w-8 h-8 md:w-8 md:h-8 w-6 h-6" />,
+    color: 'text-orange-500 dark:text-orange-400',
+    bgColor: 'bg-orange-500/5',
+    title: { en: "Mobile Apps", ar: "تطبيقات الموبايل" },
+    features: { 
+      en: ["UI/UX Design", "IOS & Android", "AI Integrations", "Payment Gateways"], 
+      ar: ["تصميم واجهة المستخدم", "تكاملات الذكاء الاصطناعي", "دفع إلكتروني", "أنظمة iOS و Android"] 
+    },
+    desc: {
+      en: "Native mobile experiences built for today’s mobile-first users, integrating advanced AI logic.",
+      ar: "تجارب أصلية لمستخدمي الموبايل تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة."
+    },
+    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200"
+  }
+};
 
-// ─── HOOKS ─────────────────────────────────────────────────────────────────────
-function useInView(threshold = 0.15) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, inView];
-}
+const TRANSLATIONS = {
+  en: {
+    logo: "Mantiq",
+    tag: "Business Services · Est. July 2023",
+    hero_title_1: "The Path You",
+    hero_title_2: "Should Take",
+    hero_desc: "We help startups and established businesses grow with services tailored to their goals — from strategy to software.",
+    get_started: "Get Started",
+    about_us: "About Us",
+    services: "Our Services",
+    events: "Events",
+    careers: "Careers",
+    contact: "Contact",
+    partners: "Our Trusted Partners",
+    stats_serv: "Completed Services",
+    stats_proj: "Managed Projects",
+    stats_vent: "Businesses Launched",
+    stats_experts: "Interns Trained",
+    msg_title: "Our Message",
+    vision_title: "Our Vision",
+    join_team: "Join Our Team",
+    upload_cv: "Upload your CV (PDF/DOC)",
+    submit: "Initiate Mission",
+    apply: "Submit Application",
+    pricing: "Pricing Calculator",
+    lets_build: "Ready to Start",
+    lets_build_accent: "Your Path?",
+    lets_build_sub: "Let's talk about how MANTIQ can help take your business to the next level.",
+    explore_more: "Explore More",
+    participated: "Participated",
+    mantiq_on_land: "Mantiq On Land",
+    name_placeholder: "Your Name",
+    company_placeholder: "Company Name",
+    email_placeholder: "Email Address",
+    phone_placeholder: "Phone Number",
+    select_service: "Subject (Select Area)",
+    sending: "Analysing coordinates...",
+    mission_received: "Mission Accepted",
+    mission_desc: "Your vision is now on our radar. Our strategy team will reach out for a briefing within 24 hours.",
+    rights: "ALL RIGHTS RESERVED.",
+    career_msg: "We're always looking for brilliant minds. Send us your details.",
+    learn_more: "Learn More",
+    our_impact: "Our Impact",
+    numbers_matter: "Numbers That Matter",
+    trusted_by: "Trusted By"
+  },
+  ar: {
+    logo: "منطق",
+    tag: "خدمات أعمال · تأسست يوليو ٢٠٢٣",
+    hero_title_1: "المسار الذي",
+    hero_title_2: "يجب سلوكه",
+    hero_desc: "نساعد الشركات الناشئة والقائمة على النمو من خلال خدمات مصممة لأهدافها - من الاستراتيجية إلى البرمجيات.",
+    get_started: "ابدأ الآن",
+    about_us: "من نحن",
+    services: "خدماتنا",
+    events: "الفعاليات",
+    careers: "فرص العمل",
+    contact: "اتصل بنا",
+    partners: "شركاؤنا الموثوقون",
+    stats_serv: "خدمة مكتملة",
+    stats_proj: "مشروع مدار",
+    stats_vent: "مشروع انطلق",
+    stats_experts: "متدرب مكتمل",
+    msg_title: "رسالتنا",
+    vision_title: "رؤيتنا",
+    join_team: "انضم لفريقنا",
+    upload_cv: "ارفع سيرتك الذاتية (PDF/DOC)",
+    submit: "بدء المهمة",
+    apply: "إرسال الطلب",
+    pricing: "حاسبة التسعير",
+    lets_build: "جاهز لبدء",
+    lets_build_accent: "مسارك الخاص؟",
+    lets_build_sub: "دعنا نتحدث عن كيف يمكن لمنطق أن يساعد في نقل عملك إلى المستوى التالي.",
+    explore_more: "استكشف المزيد",
+    participated: "شاركنا في",
+    mantiq_on_land: "منطق على أرض الواقع",
+    name_placeholder: "اسمك",
+    company_placeholder: "اسم الشركة",
+    email_placeholder: "البريد الإلكتروني",
+    phone_placeholder: "رقم الهاتف",
+    select_service: "الموضوع (اختر المجال)",
+    sending: "تحليل البيانات...",
+    mission_received: "تم قبول المهمة",
+    mission_desc: "رؤيتك الآن ضمن اهتماماتنا. سيتواصل معك فريقنا الاستراتيجي خلال ٢٤ ساعة لمناقشة التفاصيل.",
+    rights: "جميع الحقوق محفوظة.",
+    career_msg: "نحن دائماً نبحث عن العقول المبدعة. أرسل لنا بياناتك.",
+    learn_more: "تعرف علينا",
+    our_impact: "تأثيرنا",
+    numbers_matter: "أرقام تهمنا",
+    trusted_by: "موثوق بنا من قبل"
+  }
+};
 
-function useCursor() {
-  const [pos, setPos] = useState({ x: -100, y: -100 });
-  const [hovered, setHovered] = useState(false);
+const AnimatedCounter = ({ target, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+  const elementRef = useRef(null);
+  const [hasStarted, setHasStarted] = useState(false);
+
   useEffect(() => {
-    const move = (e) => setPos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", move);
-    return () => window.removeEventListener("mousemove", move);
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setHasStarted(true);
+      }
+    }, { threshold: 0.1 });
+
+    if (elementRef.current) observer.observe(elementRef.current);
+    return () => observer.disconnect();
   }, []);
-  return { pos, hovered, setHovered };
-}
 
-// ─── COMPONENTS ────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    if (!hasStarted) return;
 
-function Cursor({ pos, hovered }) {
+    let start = 0;
+    const end = parseInt(target);
+    const increment = end / (duration / 16);
+    
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+
+    return () => clearInterval(timer);
+  }, [hasStarted, target, duration]);
+
+  return <span ref={elementRef}>{count}</span>;
+};
+
+const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const t = TRANSLATIONS[lang];
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+  }, [mobileOpen]);
+
   return (
     <>
-      <div style={{
-        position:"fixed", left:pos.x, top:pos.y, width: hovered ? 48 : 12, height: hovered ? 48 : 12,
-        borderRadius:"50%", background:"#C9A84C", transform:"translate(-50%,-50%)",
-        pointerEvents:"none", zIndex:9999, transition:"width .3s,height .3s,opacity .3s",
-        mixBlendMode:"difference", opacity: 0.9
-      }} />
-      <div style={{
-        position:"fixed", left:pos.x, top:pos.y, width:40, height:40,
-        borderRadius:"50%", border:"1px solid rgba(201,168,76,0.4)", transform:"translate(-50%,-50%)",
-        pointerEvents:"none", zIndex:9998, transition:"left .12s,top .12s"
-      }} />
-    </>
-  );
-}
+      <nav className="fixed w-full z-[100] border-b border-slate-200/10 bg-[#0a1628]/70 backdrop-blur-xl transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
+          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => onNavigate('home')}>
+            <div className="h-8 md:h-10 text-sky-400">
+              <svg className="h-full w-auto" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" stroke="currentColor" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="200" cy="200" r="150" />
+                  <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200" />
+                </g>
+              </svg>
+            </div>
+            <span className="text-lg md:text-xl font-black uppercase tracking-widest text-white transition-all group-hover:tracking-[0.2em] font-syne">
+              MANTI<span className="text-sky-400">Q</span>
+            </span>
+          </div>
 
-function Reveal({ children, delay = 0, y = 40, className = "" }) {
-  const [ref, inView] = useInView();
-  return (
-    <div ref={ref} className={className} style={{
-      opacity: inView ? 1 : 0,
-      transform: inView ? "translateY(0)" : `translateY(${y}px)`,
-      transition: `opacity 0.9s cubic-bezier(.16,1,.3,1) ${delay}ms, transform 0.9s cubic-bezier(.16,1,.3,1) ${delay}ms`
-    }}>
-      {children}
-    </div>
-  );
-}
+          <div className="hidden lg:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-400">
+            {['about', 'services', 'events'].map(item => (
+              <button 
+                key={item}
+                onClick={() => onNavigate(item)}
+                className={`relative py-2 hover:text-white transition-colors ${activeSection === item ? 'text-white' : ''}`}
+              >
+                {t[item === 'about' ? 'about_us' : item]}
+              </button>
+            ))}
+            <div className="flex items-center gap-4 pl-8 border-l border-white/10 rtl:pl-0 rtl:pr-8 rtl:border-r rtl:border-l-0">
+              <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center font-black text-white hover:bg-sky-500/20 transition-all">
+                {lang === 'en' ? 'AR' : 'EN'}
+              </button>
+              <button onClick={() => onNavigate('contact')} className="bg-[#1a5cff] text-white px-6 py-2.5 rounded-full hover:bg-sky-400 shadow-lg shadow-blue-500/20 active:scale-95 transition-all font-bold">
+                {t.get_started}
+              </button>
+            </div>
+          </div>
 
-function SplitText({ text, className = "", baseDelay = 0 }) {
-  const [ref, inView] = useInView(0.1);
-  return (
-    <span ref={ref} className={className} style={{ display:"block", overflow:"hidden" }}>
-      {text.split("").map((ch, i) => (
-        <span key={i} style={{
-          display:"inline-block",
-          opacity: inView ? 1 : 0,
-          transform: inView ? "translateY(0)" : "translateY(100%)",
-          transition: `opacity 0.7s ease ${baseDelay + i * 30}ms, transform 0.7s cubic-bezier(.16,1,.3,1) ${baseDelay + i * 30}ms`,
-          whiteSpace: ch === " " ? "pre" : "normal"
-        }}>{ch}</span>
-      ))}
-    </span>
-  );
-}
-
-function GoldLine({ width = 60, delay = 0 }) {
-  const [ref, inView] = useInView();
-  return (
-    <div ref={ref} style={{
-      height: 2, width: inView ? width : 0, background: "linear-gradient(90deg,#C9A84C,#F0D080)",
-      transition: `width 1s cubic-bezier(.16,1,.3,1) ${delay}ms`, marginBottom: 32
-    }} />
-  );
-}
-
-// ─── NAV ───────────────────────────────────────────────────────────────────────
-function Nav({ active, setActive }) {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  const go = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
-    setActive(id); setMenuOpen(false);
-  };
-
-  return (
-    <>
-      <nav style={{
-        position:"fixed", top:0, left:0, right:0, zIndex:500,
-        padding: scrolled ? "14px 48px" : "22px 48px",
-        display:"flex", alignItems:"center", justifyContent:"space-between",
-        background: scrolled ? "rgba(6,5,3,0.92)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(201,168,76,0.12)" : "none",
-        transition:"all .5s ease"
-      }}>
-        {/* Logo */}
-        <button onClick={() => go("hero")} style={{ display:"flex",alignItems:"center",gap:10,background:"none",border:"none",cursor:"pointer" }}>
-          <svg width="32" height="40" viewBox="0 0 400 500" fill="none" stroke="#C9A84C" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="200" cy="200" r="150"/>
-            <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
-          </svg>
-          <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, fontWeight:700, color:"#F5EDD6", letterSpacing:4, textTransform:"uppercase" }}>Mantiq</span>
-        </button>
-
-        {/* Desktop links */}
-        <div style={{ display:"flex", gap:40, alignItems:"center" }} className="desk-nav">
-          {["about","services","events","contact"].map(id => (
-            <button key={id} onClick={() => go(id)} style={{
-              fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:600, letterSpacing:3,
-              textTransform:"uppercase", color: active===id ? "#C9A84C" : "rgba(245,237,214,0.55)",
-              background:"none", border:"none", cursor:"pointer", transition:"color .3s",
-              borderBottom: active===id ? "1px solid #C9A84C" : "1px solid transparent", paddingBottom:2
-            }}>{id}</button>
-          ))}
-          <button onClick={() => go("contact")} style={{
-            fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3,
-            textTransform:"uppercase", color:"#0A0804", background:"#C9A84C",
-            border:"none", cursor:"pointer", padding:"10px 24px", borderRadius:2,
-            transition:"transform .2s,background .2s"
-          }} onMouseEnter={e=>e.target.style.background="#F0D080"} onMouseLeave={e=>e.target.style.background="#C9A84C"}>
-            Get Started
+          <button className="lg:hidden text-white p-2" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-
-        {/* Hamburger */}
-        <button onClick={() => setMenuOpen(!menuOpen)} className="mob-nav" style={{ background:"none",border:"none",cursor:"pointer",display:"none",flexDirection:"column",gap:5,padding:4 }}>
-          {[0,1,2].map(i => <div key={i} style={{ width:26,height:2,background:"#C9A84C",transition:"all .3s",
-            transform: menuOpen ? (i===0?"rotate(45deg) translate(5px,5px)":i===2?"rotate(-45deg) translate(5px,-5px)":"") : "none",
-            opacity: menuOpen && i===1 ? 0 : 1 }} />)}
-        </button>
       </nav>
 
-      {/* Mobile menu */}
-      <div style={{
-        position:"fixed", inset:0, zIndex:490, background:"rgba(6,5,3,0.97)",
-        backdropFilter:"blur(30px)", display:"flex", flexDirection:"column",
-        alignItems:"center", justifyContent:"center", gap:32,
-        opacity: menuOpen ? 1 : 0, pointerEvents: menuOpen ? "auto" : "none",
-        transition:"opacity .5s ease"
-      }}>
-        {["hero","about","services","events","contact"].map((id,i) => (
-          <button key={id} onClick={() => go(id)} style={{
-            fontFamily:"'Cormorant Garamond',serif", fontSize:40, fontWeight:300,
-            color:"#F5EDD6", background:"none", border:"none", cursor:"pointer",
-            letterSpacing:4, transform: menuOpen ? "translateY(0)" : "translateY(20px)",
-            opacity: menuOpen ? 1 : 0, transition:`all .5s ease ${i*80}ms`,
-            textTransform:"capitalize"
-          }}>{id}</button>
-        ))}
-      </div>
+      <div className={`fixed inset-0 z-[150] bg-slate-950/60 backdrop-blur-sm lg:hidden transition-opacity duration-500 ${mobileOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={() => setMobileOpen(false)} />
 
-      <style>{`
-        @media(max-width:768px){.desk-nav{display:none!important}.mob-nav{display:flex!important}}
-      `}</style>
-    </>
-  );
-}
-
-// ─── HERO ──────────────────────────────────────────────────────────────────────
-function Hero({ setActive }) {
-  const [loaded, setLoaded] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
-  useEffect(() => { setTimeout(() => setLoaded(true), 100); }, []);
-  const handleMouse = useCallback((e) => {
-    setMousePos({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
-  }, []);
-
-  const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); setActive(id); };
-
-  return (
-    <section id="hero" onMouseMove={handleMouse} style={{
-      minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center",
-      position:"relative", overflow:"hidden", background:"#060503"
-    }}>
-      {/* Parallax grain bg */}
-      <div style={{
-        position:"absolute", inset:0,
-        backgroundImage:`radial-gradient(ellipse 80% 60% at ${mousePos.x*100}% ${mousePos.y*100}%, rgba(201,168,76,0.08) 0%, transparent 70%)`,
-        transition:"background-image 0.1s", pointerEvents:"none"
-      }}/>
-      {/* Grid */}
-      <div style={{
-        position:"absolute", inset:0, opacity:0.04,
-        backgroundImage:"linear-gradient(rgba(201,168,76,1) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,1) 1px,transparent 1px)",
-        backgroundSize:"80px 80px"
-      }}/>
-      {/* Glow orbs */}
-      <div style={{ position:"absolute", top:"20%", left:"10%", width:400, height:400, borderRadius:"50%", background:"radial-gradient(circle,rgba(201,168,76,0.06),transparent 70%)", animation:"orb1 12s ease-in-out infinite alternate" }}/>
-      <div style={{ position:"absolute", bottom:"15%", right:"8%", width:300, height:300, borderRadius:"50%", background:"radial-gradient(circle,rgba(124,158,204,0.07),transparent 70%)", animation:"orb2 15s ease-in-out infinite alternate-reverse" }}/>
-
-      <div style={{ position:"relative", zIndex:10, textAlign:"center", padding:"0 24px", maxWidth:1100, margin:"0 auto" }}>
-        {/* Badge */}
-        <div style={{
-          display:"inline-flex", alignItems:"center", gap:10,
-          border:"1px solid rgba(201,168,76,0.3)", padding:"8px 20px", borderRadius:2,
-          marginBottom:48,
-          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(-20px)",
-          transition:"all 1s ease 0.2s"
-        }}>
-          <div style={{ width:6, height:6, borderRadius:"50%", background:"#C9A84C", animation:"pulse 2s ease-in-out infinite" }}/>
-          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", fontWeight:600 }}>Business Services — Est. 2023</span>
-        </div>
-
-        {/* Main heading */}
-        <h1 style={{
-          fontFamily:"'Cormorant Garamond',serif",
-          fontSize:"clamp(52px,10vw,140px)",
-          fontWeight:300, lineHeight:0.9, color:"#F5EDD6",
-          letterSpacing:-2, marginBottom:16,
-          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(60px)",
-          transition:"all 1.2s cubic-bezier(.16,1,.3,1) 0.4s"
-        }}>
-          The Path<br/>
-          <em style={{ color:"#C9A84C", fontStyle:"italic" }}>You Should</em><br/>
-          Take.
-        </h1>
-
-        <p style={{
-          fontFamily:"'DM Sans',sans-serif", fontSize:"clamp(15px,2vw,19px)",
-          color:"rgba(245,237,214,0.5)", maxWidth:520, margin:"32px auto 52px",
-          lineHeight:1.8, fontWeight:300,
-          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(30px)",
-          transition:"all 1s ease 0.8s"
-        }}>
-          Empowering success through market knowledge, digital solutions, and strategic clarity for ambitious businesses.
-        </p>
-
-        {/* CTAs */}
-        <div style={{
-          display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap",
-          opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(20px)",
-          transition:"all 1s ease 1s"
-        }}>
-          <button onClick={() => go("services")} style={{
-            fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3,
-            textTransform:"uppercase", color:"#0A0804", background:"#C9A84C",
-            border:"none", cursor:"pointer", padding:"16px 40px", borderRadius:2,
-            transition:"all .25s"
-          }} onMouseEnter={e=>{e.target.style.transform="scale(1.04)";e.target.style.background="#F0D080"}}
-             onMouseLeave={e=>{e.target.style.transform="scale(1)";e.target.style.background="#C9A84C"}}>
-            Explore Services
-          </button>
-          <button onClick={() => go("about")} style={{
-            fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3,
-            textTransform:"uppercase", color:"#C9A84C",
-            background:"transparent", border:"1px solid rgba(201,168,76,0.35)",
-            cursor:"pointer", padding:"16px 40px", borderRadius:2, transition:"all .25s"
-          }} onMouseEnter={e=>{e.target.style.borderColor="#C9A84C";e.target.style.background="rgba(201,168,76,0.05)"}}
-             onMouseLeave={e=>{e.target.style.borderColor="rgba(201,168,76,0.35)";e.target.style.background="transparent"}}>
-            Our Story
-          </button>
-        </div>
-
-        {/* Scroll indicator */}
-        <div style={{
-          marginTop:80, display:"flex", flexDirection:"column", alignItems:"center", gap:8,
-          opacity: loaded ? 0.5 : 0, transition:"opacity 1s ease 1.4s"
-        }}>
-          <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4, color:"#C9A84C", textTransform:"uppercase" }}>Scroll</span>
-          <div style={{ width:1, height:48, background:"linear-gradient(180deg,#C9A84C,transparent)", animation:"scrollLine 2s ease-in-out infinite" }}/>
-        </div>
-      </div>
-
-      {/* Corner decorations */}
-      <div style={{ position:"absolute", top:80, left:40, width:60, height:60, borderTop:"1px solid rgba(201,168,76,0.3)", borderLeft:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
-      <div style={{ position:"absolute", top:80, right:40, width:60, height:60, borderTop:"1px solid rgba(201,168,76,0.3)", borderRight:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
-      <div style={{ position:"absolute", bottom:80, left:40, width:60, height:60, borderBottom:"1px solid rgba(201,168,76,0.3)", borderLeft:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
-      <div style={{ position:"absolute", bottom:80, right:40, width:60, height:60, borderBottom:"1px solid rgba(201,168,76,0.3)", borderRight:"1px solid rgba(201,168,76,0.3)", opacity: loaded ? 1 : 0, transition:"opacity 1s ease 1.5s" }}/>
-    </section>
-  );
-}
-
-// ─── MARQUEE ───────────────────────────────────────────────────────────────────
-function Marquee() {
-  const doubled = [...CUSTOMERS, ...CUSTOMERS];
-  return (
-    <div style={{ background:"#0E0C08", borderTop:"1px solid rgba(201,168,76,0.1)", borderBottom:"1px solid rgba(201,168,76,0.1)", padding:"18px 0", overflow:"hidden" }}>
-      <div style={{ display:"flex", gap:40, animation:"marqueeX 22s linear infinite", whiteSpace:"nowrap" }}>
-        {doubled.map((name, i) => (
-          <span key={i} style={{ display:"inline-flex", alignItems:"center", gap:20 }}>
-            <span style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:4, color:"rgba(201,168,76,0.55)", textTransform:"uppercase", fontWeight:600 }}>{name}</span>
-            <span style={{ color:"rgba(201,168,76,0.25)", fontSize:14 }}>◆</span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── ABOUT ─────────────────────────────────────────────────────────────────────
-function About() {
-  return (
-    <section id="about" style={{ background:"#060503", padding:"140px 48px" }}>
-      <div style={{ maxWidth:1200, margin:"0 auto" }}>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:100, alignItems:"center" }} className="about-grid">
-          {/* Left */}
-          <div>
-            <Reveal delay={0}>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>About Mantiq</p>
-            </Reveal>
-            <GoldLine width={48} delay={100} />
-            <Reveal delay={150}>
-              <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(36px,5vw,72px)", fontWeight:300, color:"#F5EDD6", lineHeight:1.05, letterSpacing:-1, marginBottom:32 }}>
-                Where Business Wisdom Meets Digital Excellence
-              </h2>
-            </Reveal>
-            <Reveal delay={250}>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:16, color:"rgba(245,237,214,0.5)", lineHeight:1.9, marginBottom:24, fontWeight:300 }}>
-                Established in July 2023, Mantiq was born from a simple belief: that businesses deserve partners who understand both the human side of commerce and the precision of digital systems.
-              </p>
-            </Reveal>
-            <Reveal delay={320}>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:16, color:"rgba(245,237,214,0.5)", lineHeight:1.9, fontWeight:300 }}>
-                We bridge the gap — translating ambitious visions into measurable growth, structured operations, and lasting digital presence.
-              </p>
-            </Reveal>
-
-            <div style={{ marginTop:48, display:"grid", gridTemplateColumns:"1fr 1fr", gap:24 }}>
-              {[
-                { icon:"◎", title:"Our Mission", text:"Helping businesses grow smarter, operate faster, and compete stronger in a digital-first world." },
-                { icon:"◈", title:"Our Vision", text:"To become the trusted digital partner for businesses seeking technological excellence and operational clarity." }
-              ].map((item,i) => (
-                <Reveal key={i} delay={400 + i*100}>
-                  <div style={{ padding:"24px", border:"1px solid rgba(201,168,76,0.12)", borderRadius:2, transition:"border-color .3s,background .3s", cursor:"default" }}
-                    onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(201,168,76,0.35)";e.currentTarget.style.background="rgba(201,168,76,0.03)"}}
-                    onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(201,168,76,0.12)";e.currentTarget.style.background="transparent"}}>
-                    <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, color:"#C9A84C", marginBottom:10 }}>{item.icon}</div>
-                    <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:700, letterSpacing:3, color:"#F5EDD6", textTransform:"uppercase", marginBottom:8 }}>{item.title}</div>
-                    <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:13, color:"rgba(245,237,214,0.45)", lineHeight:1.7, fontWeight:300 }}>{item.text}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-
-          {/* Right — Stats */}
-          <div>
-            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:2 }}>
-              {STATS.map((s, i) => (
-                <Reveal key={i} delay={i * 120}>
-                  <div style={{
-                    padding:"52px 36px", background: i % 2 === 0 ? "#0E0C08" : "#100E09",
-                    border:"1px solid rgba(201,168,76,0.07)",
-                    transition:"background .4s,border-color .4s", cursor:"default"
-                  }}
-                    onMouseEnter={e=>{e.currentTarget.style.background="rgba(201,168,76,0.04)";e.currentTarget.style.borderColor="rgba(201,168,76,0.25)"}}
-                    onMouseLeave={e=>{e.currentTarget.style.background=i%2===0?"#0E0C08":"#100E09";e.currentTarget.style.borderColor="rgba(201,168,76,0.07)"}}>
-                    <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:64, fontWeight:300, color:"#C9A84C", lineHeight:1, marginBottom:12 }}>{s.n}</div>
-                    <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:4, color:"rgba(245,237,214,0.35)", textTransform:"uppercase", fontWeight:600 }}>{s.label}</div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-            <Reveal delay={500}>
-              <div style={{ marginTop:2, padding:"28px 36px", background:"#C9A84C", border:"none" }}>
-                <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:22, color:"#0A0804", fontStyle:"italic", fontWeight:500, lineHeight:1.5 }}>
-                  "Helping Egyptian businesses compete on the global stage."
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </div>
-      <style>{`@media(max-width:900px){.about-grid{grid-template-columns:1fr!important;gap:60px!important}}`}</style>
-    </section>
-  );
-}
-
-// ─── SERVICES ──────────────────────────────────────────────────────────────────
-function Services() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const active = SERVICES[activeIdx];
-
-  return (
-    <section id="services" style={{ background:"#060503", padding:"120px 0", overflow:"hidden" }}>
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 48px" }}>
-        <Reveal>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>What We Do</p>
-        </Reveal>
-        <GoldLine width={48} />
-        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:80, flexWrap:"wrap", gap:20 }}>
-          <Reveal>
-            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(40px,6vw,80px)", fontWeight:300, color:"#F5EDD6", lineHeight:1, letterSpacing:-1 }}>
-              Strategic<br/><em style={{ color:"#C9A84C" }}>Solutions</em>
-            </h2>
-          </Reveal>
-          <Reveal delay={150}>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"rgba(245,237,214,0.4)", maxWidth:320, lineHeight:1.8, fontWeight:300 }}>
-              Four integrated service pillars engineered to transform your business from the inside out.
-            </p>
-          </Reveal>
-        </div>
-      </div>
-
-      {/* Service selector tabs */}
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 48px", display:"flex", gap:2, marginBottom:4 }} className="svc-tabs">
-        {SERVICES.map((s, i) => (
-          <button key={s.id} onClick={() => setActiveIdx(i)} style={{
-            flex:1, padding:"18px 12px", background: activeIdx===i ? "#C9A84C" : "#0E0C08",
-            border:"1px solid rgba(201,168,76,0.1)",
-            fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:700, letterSpacing:3,
-            color: activeIdx===i ? "#0A0804" : "rgba(245,237,214,0.4)",
-            textTransform:"uppercase", cursor:"pointer", transition:"all .35s"
-          }}>{s.title}</button>
-        ))}
-      </div>
-
-      {/* Active service panel */}
-      <div key={active.id} style={{
-        maxWidth:1200, margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr",
-        border:"1px solid rgba(201,168,76,0.1)", animation:"fadeInUp .5s ease"
-      }} className="svc-panel">
-        {/* Image */}
-        <div style={{ position:"relative", overflow:"hidden", minHeight:480 }}>
-          <img src={active.img} alt={active.title} style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center", position:"absolute", inset:0, transition:"transform .8s ease" }}
-            onMouseEnter={e=>e.target.style.transform="scale(1.05)"}
-            onMouseLeave={e=>e.target.style.transform="scale(1)"}
-            onError={e=>{e.target.src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200"}}
-          />
-          <div style={{ position:"absolute", inset:0, background:"linear-gradient(135deg,rgba(6,5,3,0.6),rgba(6,5,3,0.2))" }}/>
-          <div style={{ position:"absolute", top:32, left:32 }}>
-            <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:64, fontWeight:300, color:"rgba(201,168,76,0.25)", lineHeight:1 }}>{active.num}</div>
-          </div>
-          <div style={{ position:"absolute", bottom:32, left:32 }}>
-            <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4, color:"#C9A84C", textTransform:"uppercase", marginBottom:6 }}>{active.sub}</div>
-            <div style={{ width:40, height:1, background:"#C9A84C" }}/>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div style={{ padding:"52px 52px", background:"#0E0C08", display:"flex", flexDirection:"column", justifyContent:"center" }}>
-          <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:42, fontWeight:300, color:"#F5EDD6", lineHeight:1.1, marginBottom:24 }}>{active.title}</h3>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:15, color:"rgba(245,237,214,0.5)", lineHeight:1.85, fontWeight:300, marginBottom:36 }}>{active.desc}</p>
-          <div style={{ display:"flex", flexWrap:"wrap", gap:10 }}>
-            {active.tags.map((tag,i) => (
-              <span key={i} style={{
-                fontFamily:"'DM Sans',sans-serif", fontSize:9, fontWeight:700, letterSpacing:3,
-                textTransform:"uppercase", padding:"8px 16px",
-                border:`1px solid ${active.accent}44`, color:active.accent, borderRadius:1
-              }}>{tag}</span>
+      <div className={`fixed top-0 bottom-0 z-[200] lg:hidden w-[280px] bg-[#0a1628] shadow-[0_0_50px_rgba(0,0,0,0.3)] transition-transform duration-500 ease-in-out ${lang === 'ar' ? 'left-0 ' + (mobileOpen ? 'translate-x-0' : '-translate-x-full') : 'right-0 ' + (mobileOpen ? 'translate-x-0' : 'translate-x-full')}`}>
+        <div className="flex flex-col h-full p-6 pt-20 text-white">
+          <div className="flex flex-col gap-4 text-xl font-black uppercase tracking-widest font-syne">
+            {['home', 'about', 'services', 'events', 'contact'].map((item, idx) => (
+              <button key={item} style={{ transitionDelay: `${idx * 50}ms` }} onClick={() => { onNavigate(item); setMobileOpen(false); }} className={`text-left hover:text-sky-400 transition-all py-2 border-b border-white/5 ${mobileOpen ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`}>{t[item === 'about' ? 'about_us' : item] || item}</button>
             ))}
           </div>
         </div>
       </div>
-      <style>{`
-        @media(max-width:768px){.svc-panel{grid-template-columns:1fr!important}.svc-tabs{flex-direction:column!important}}
-      `}</style>
-    </section>
+    </>
   );
-}
+};
 
-// ─── EVENTS ────────────────────────────────────────────────────────────────────
-function Events() {
-  const [hovered, setHovered] = useState(null);
+const Section = ({ id, children, className }) => (
+  <section id={id} className={`pt-20 pb-12 md:pt-32 md:pb-20 px-4 md:px-20 ${className}`}>
+    <div className="max-w-7xl mx-auto">{children}</div>
+  </section>
+);
+
+const ServiceCard = ({ service, lang, index }) => {
+  const t = TRANSLATIONS[lang];
   return (
-    <section id="events" style={{ background:"#0A0804", padding:"140px 48px" }}>
-      <div style={{ maxWidth:1200, margin:"0 auto" }}>
-        <Reveal>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>Mantiq on the Ground</p>
-        </Reveal>
-        <GoldLine width={48} />
-        <Reveal delay={100}>
-          <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(36px,5.5vw,76px)", fontWeight:300, color:"#F5EDD6", lineHeight:1.05, letterSpacing:-1, marginBottom:80 }}>
-            Where We've<br/><em style={{ color:"#C9A84C" }}>Participated</em>
-          </h2>
-        </Reveal>
+    <div 
+      className="group reveal relative bg-white/5 border border-white/10 rounded-[2rem] overflow-hidden transition-all duration-700 shadow-sm hover:shadow-2xl hover:border-sky-400/30 flex flex-col h-full transform hover:-translate-y-2" 
+      style={{ transitionDelay: `${index * 150}ms` }}
+    >
+      <div className="h-40 md:h-56 relative overflow-hidden">
+        <img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out" alt={service.title[lang]} />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1628] to-transparent opacity-60" />
+        <div className="absolute top-4 right-6 font-syne text-5xl font-black text-white/10 leading-none">
+          {service.num}
+        </div>
+        <div className={`absolute bottom-4 left-4 md:bottom-6 md:left-6 w-12 h-12 md:w-16 md:h-16 rounded-xl backdrop-blur-md flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-6 ${service.bgColor} ${service.color} border border-white/20 shadow-xl`}>
+          {service.icon}
+        </div>
+      </div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:3 }} className="evt-grid">
-          {EVENTS.map((ev, i) => (
-            <Reveal key={ev.id} delay={i * 150}>
-              <div
-                style={{ position:"relative", overflow:"hidden", cursor:"pointer", aspectRatio:"3/4" }}
-                onMouseEnter={() => setHovered(i)}
-                onMouseLeave={() => setHovered(null)}
-              >
-                <img src={ev.img} alt={ev.title} style={{
-                  width:"100%", height:"100%", objectFit:"cover",
-                  transform: hovered===i ? "scale(1.08)" : "scale(1)",
-                  transition:"transform .8s cubic-bezier(.16,1,.3,1)",
-                  filter: hovered===i ? "brightness(0.75)" : "brightness(0.55)"
-                }} onError={e=>{e.target.src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=900"}} />
-                <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top,rgba(6,5,3,0.9) 0%,transparent 50%)" }}/>
+      <div className="p-6 md:p-10 pt-6 md:pt-8 flex flex-col flex-1">
+        <h3 className="text-xl md:text-2xl font-black mb-3 text-white group-hover:text-sky-400 transition-colors tracking-tight font-syne">
+          {service.title[lang]}
+        </h3>
+        <p className="text-sm md:text-base text-slate-400 leading-relaxed mb-8 font-medium">
+          {service.desc[lang]}
+        </p>
 
-                {/* Number */}
-                <div style={{
-                  position:"absolute", top:20, right:20,
-                  fontFamily:"'Cormorant Garamond',serif", fontSize:52, fontWeight:300,
-                  color:"rgba(201,168,76,0.2)", lineHeight:1,
-                  transform: hovered===i ? "translateY(-5px)" : "translateY(0)", transition:"transform .5s"
-                }}>0{ev.id}</div>
-
-                {/* Info */}
-                <div style={{
-                  position:"absolute", bottom:0, left:0, right:0, padding:"28px 24px",
-                  transform: hovered===i ? "translateY(-8px)" : "translateY(0)", transition:"transform .5s ease"
-                }}>
-                  <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4, color:"#C9A84C", textTransform:"uppercase", marginBottom:6 }}>{ev.year}</div>
-                  <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:26, fontWeight:400, color:"#F5EDD6", lineHeight:1.2 }}>{ev.title}</div>
-                  <div style={{
-                    width: hovered===i ? 40 : 0, height:1, background:"#C9A84C",
-                    marginTop:12, transition:"width .5s ease .1s"
-                  }}/>
-                </div>
-              </div>
-            </Reveal>
+        <div className="flex flex-wrap gap-2 mt-auto">
+          {service.features[lang].map((f, i) => (
+            <span key={i} className="text-[10px] font-bold px-3 py-1 bg-sky-400/10 border border-sky-400/20 text-sky-400 rounded-full uppercase tracking-widest">
+              {f}
+            </span>
           ))}
         </div>
       </div>
-      <style>{`@media(max-width:768px){.evt-grid{grid-template-columns:1fr!important}}`}</style>
-    </section>
+    </div>
   );
-}
+};
 
-// ─── CONTACT ───────────────────────────────────────────────────────────────────
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
+export default function App() {
+  const [lang, setLang] = useState('en');
+  const [activeSection, setActiveSection] = useState('home');
+  const [showCareers, setShowCareers] = useState(false);
+  const [formStatus, setFormStatus] = useState(null);
 
-function Contact() {
-  const [status, setStatus] = useState(null);
-  const [focused, setFocused] = useState(null);
+  const t = TRANSLATIONS[lang];
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec"; 
 
-  const inputStyle = (name) => ({
-    width:"100%", padding:"16px 0", background:"transparent",
-    border:"none", borderBottom:`1px solid ${focused===name ? "#C9A84C" : "rgba(201,168,76,0.2)"}`,
-    color:"#F5EDD6", fontFamily:"'DM Sans',sans-serif", fontSize:15, fontWeight:300,
-    outline:"none", transition:"border-color .3s", boxSizing:"border-box"
-  });
+  useScrollReveal();
 
-  const submit = async (e) => {
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const glow = document.getElementById('cursor-glow');
+      if (glow) {
+        glow.style.left = `${e.clientX}px`;
+        glow.style.top = `${e.clientY}px`;
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(id);
+    }
+  };
+
+  const handleFormSubmit = async (e, sheetName) => {
     e.preventDefault();
-    setStatus("sending");
-    const fd = new FormData(e.target);
-    const data = { sheetName:"Leads", Name:fd.get("name"), Email:fd.get("email"), Phone:fd.get("phone"), Company:fd.get("company"), Service:fd.get("service"), CV_Link:"" };
+    setFormStatus('sending');
+    const formData = new FormData(e.target);
+    const data = {
+      sheetName: sheetName,
+      Name: formData.get('name'),
+      Email: formData.get('email'),
+      Phone: formData.get('phone'),
+      Company: formData.get('company'),
+      Service: formData.get('service'),
+      CV_Link: formData.get('cv_link') || ""
+    };
     try {
-      await fetch(SCRIPT_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) });
-      setStatus("success"); e.target.reset();
-    } catch { setStatus("error"); }
+      await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+      setFormStatus('success');
+      e.target.reset();
+      setTimeout(() => setFormStatus(null), 10000);
+    } catch (error) {
+      setFormStatus(null);
+    }
   };
 
   return (
-    <section id="contact" style={{ background:"#060503", padding:"140px 48px", position:"relative", overflow:"hidden" }}>
-      {/* Decorative gold vertical line */}
-      <div style={{ position:"absolute", left:"50%", top:0, bottom:0, width:1, background:"linear-gradient(180deg,transparent,rgba(201,168,76,0.08),transparent)", pointerEvents:"none" }}/>
-
-      <div style={{ maxWidth:900, margin:"0 auto" }}>
-        <div style={{ textAlign:"center", marginBottom:80 }}>
-          <Reveal>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:5, color:"#C9A84C", textTransform:"uppercase", marginBottom:20, fontWeight:600 }}>Begin the Conversation</p>
-          </Reveal>
-          <GoldLine width={48} delay={100} />
-          <Reveal delay={150}>
-            <h2 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:"clamp(40px,6vw,88px)", fontWeight:300, color:"#F5EDD6", lineHeight:1, letterSpacing:-1 }}>
-              Let's<br/><em style={{ color:"#C9A84C" }}>Build.</em>
-            </h2>
-          </Reveal>
-          <Reveal delay={250}>
-            <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:15, color:"rgba(245,237,214,0.4)", marginTop:20, lineHeight:1.7, fontWeight:300 }}>
-              Share your vision. Our strategy team responds within 24 hours.
-            </p>
-          </Reveal>
-        </div>
-
-        {status === "success" ? (
-          <Reveal>
-            <div style={{ textAlign:"center", padding:"80px 40px", border:"1px solid rgba(201,168,76,0.2)" }}>
-              <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:72, color:"#C9A84C", marginBottom:16 }}>✦</div>
-              <h3 style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:42, fontWeight:300, color:"#F5EDD6", marginBottom:16 }}>Mission Accepted</h3>
-              <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:14, color:"rgba(245,237,214,0.45)", lineHeight:1.8, maxWidth:400, margin:"0 auto 32px", fontWeight:300 }}>Your vision is now on our radar. Our strategy team will reach out within 24 hours.</p>
-              <button onClick={() => setStatus(null)} style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:4, textTransform:"uppercase", color:"#C9A84C", background:"transparent", border:"1px solid rgba(201,168,76,0.3)", padding:"12px 28px", cursor:"pointer" }}>Send Another</button>
-            </div>
-          </Reveal>
-        ) : (
-          <Reveal delay={200}>
-            <form onSubmit={submit} style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"0 48px" }} className="contact-form">
-              {[
-                ["Name","name","text",true],
-                ["Company","company","text",false],
-                ["Email","email","email",true],
-                ["Phone","phone","tel",true]
-              ].map(([ph,name,type,req]) => (
-                <div key={name} style={{ marginBottom:36 }}>
-                  <input required={req} name={name} type={type} placeholder={ph}
-                    onFocus={() => setFocused(name)} onBlur={() => setFocused(null)}
-                    style={inputStyle(name)}
-                  />
-                </div>
-              ))}
-              <div style={{ gridColumn:"1/-1", marginBottom:36 }}>
-                <select name="service" onFocus={() => setFocused("service")} onBlur={() => setFocused(null)}
-                  style={{ ...inputStyle("service"), cursor:"pointer" }}>
-                  <option value="" style={{ background:"#0A0804" }}>Select a Service</option>
-                  {SERVICES.map(s => <option key={s.id} value={s.id} style={{ background:"#0A0804" }}>{s.title}</option>)}
-                </select>
-              </div>
-              {status === "error" && (
-                <div style={{ gridColumn:"1/-1", marginBottom:16, color:"#D4845A", fontFamily:"'DM Sans',sans-serif", fontSize:13 }}>Something went wrong. Please try again.</div>
-              )}
-              <div style={{ gridColumn:"1/-1" }}>
-                <button type="submit" disabled={status==="sending"} style={{
-                  width:"100%", padding:"20px", background: status==="sending" ? "rgba(201,168,76,0.5)" : "#C9A84C",
-                  border:"none", color:"#0A0804", fontFamily:"'DM Sans',sans-serif",
-                  fontSize:11, fontWeight:700, letterSpacing:4, textTransform:"uppercase",
-                  cursor: status==="sending" ? "default" : "pointer", transition:"all .3s"
-                }} onMouseEnter={e=>{if(status!=="sending")e.target.style.background="#F0D080"}}
-                   onMouseLeave={e=>{if(status!=="sending")e.target.style.background="#C9A84C"}}>
-                  {status==="sending" ? "Transmitting..." : "Initiate Mission →"}
-                </button>
-              </div>
-            </form>
-          </Reveal>
-        )}
+    <div className={`dark bg-[#0a1628] text-white selection:bg-sky-400 selection:text-white ${lang === 'ar' ? 'font-arabic' : 'font-sans'}`}>
+      
+      {/* Visual Infrastructure */}
+      <div id="cursor-glow" className="cursor-glow" />
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 grid-bg opacity-30" />
+        <div className="orb orb-1 opacity-20" />
+        <div className="orb orb-2 opacity-15" />
+        <div className="orb orb-3 opacity-10" />
       </div>
-      <style>{`@media(max-width:600px){.contact-form{grid-template-columns:1fr!important}}`}</style>
-    </section>
-  );
-}
 
-// ─── FOOTER ────────────────────────────────────────────────────────────────────
-function Footer({ setActive }) {
-  const go = (id) => { document.getElementById(id)?.scrollIntoView({ behavior:"smooth" }); setActive(id); };
-  return (
-    <footer style={{ background:"#0A0804", borderTop:"1px solid rgba(201,168,76,0.1)", padding:"64px 48px" }}>
-      <div style={{ maxWidth:1200, margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:40, alignItems:"center" }} className="footer-grid">
-        {/* Logo */}
-        <div>
-          <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
-            <svg width="24" height="30" viewBox="0 0 400 500" fill="none" stroke="#C9A84C" strokeWidth="45" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="200" cy="200" r="150"/>
-              <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
-            </svg>
-            <span style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:18, fontWeight:700, color:"#F5EDD6", letterSpacing:4, textTransform:"uppercase" }}>Mantiq</span>
-          </div>
-          <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:12, color:"rgba(245,237,214,0.3)", lineHeight:1.7, maxWidth:220, fontWeight:300 }}>Business Services Company — Est. July 2023</p>
+      <Nav lang={lang} setLang={setLang} onNavigate={scrollToSection} activeSection={activeSection} />
+
+      {/* Hero Section */}
+      <Section id="home" className="relative !min-h-screen flex flex-col justify-center items-center text-center">
+        <div className="hero-tag animate-fade-in-up">
+          {t.tag}
+        </div>
+        <h1 className="text-4xl md:text-8xl lg:text-[110px] font-black leading-[1.05] tracking-tighter mb-10 font-syne animate-fade-in-up" style={{ animationDelay: '150ms' }}>
+          {t.hero_title_1} <br />
+          <span className="text-sky-400">{t.hero_title_2}</span>
+        </h1>
+        <p className="max-w-2xl text-slate-400 text-lg md:text-xl font-light mb-12 animate-fade-in-up px-4" style={{ animationDelay: '300ms' }}>
+          {t.hero_desc}
+        </p>
+        <div className="flex flex-wrap gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '450ms' }}>
+          <button onClick={() => scrollToSection('services')} className="btn-primary">
+            {t.services}
+          </button>
+          <button onClick={() => scrollToSection('about')} className="btn-ghost">
+            {t.learn_more}
+          </button>
         </div>
 
-        {/* Links */}
-        <div style={{ textAlign:"center" }}>
-          <div style={{ display:"flex", flexWrap:"wrap", gap:24, justifyContent:"center" }}>
-            {["about","services","events","contact"].map(id => (
-              <button key={id} onClick={() => go(id)} style={{
-                fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:4,
-                textTransform:"uppercase", color:"rgba(245,237,214,0.35)",
-                background:"none", border:"none", cursor:"pointer", fontWeight:600,
-                transition:"color .2s"
-              }} onMouseEnter={e=>e.target.style.color="#C9A84C"} onMouseLeave={e=>e.target.style.color="rgba(245,237,214,0.35)"}>{id}</button>
+        {/* Hero Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 mt-20 animate-fade-in-up" style={{ animationDelay: '600ms' }}>
+          <div className="text-center">
+            <div className="text-3xl md:text-5xl font-black text-sky-400 font-syne"><AnimatedCounter target="210" /></div>
+            <div className="text-[9px] uppercase tracking-widest text-slate-500 mt-2 font-bold">{t.stats_serv}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl md:text-5xl font-black text-sky-400 font-syne"><AnimatedCounter target="18" /></div>
+            <div className="text-[9px] uppercase tracking-widest text-slate-500 mt-2 font-bold">{t.stats_proj}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl md:text-5xl font-black text-sky-400 font-syne"><AnimatedCounter target="14" /></div>
+            <div className="text-[9px] uppercase tracking-widest text-slate-500 mt-2 font-bold">{t.stats_vent}</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl md:text-5xl font-black text-sky-400 font-syne"><AnimatedCounter target="25" />+</div>
+            <div className="text-[9px] uppercase tracking-widest text-slate-500 mt-2 font-bold">{t.stats_experts}</div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[10px] tracking-[0.2em] text-slate-500 uppercase font-bold">
+          <div className="w-px h-12 bg-gradient-to-b from-sky-400 to-transparent animate-pulse" />
+          Scroll
+        </div>
+      </Section>
+
+      {/* About Section */}
+      <Section id="about" className="grid lg:grid-cols-2 gap-20 items-center">
+        <div className="reveal">
+          <span className="text-sky-400 text-xs font-bold uppercase tracking-[0.2em] mb-4 block">{lang === 'en' ? 'Who We Are' : 'من نحن'}</span>
+          <h2 className="text-4xl md:text-7xl font-black font-syne tracking-tighter leading-none mb-8">
+            Inspiring <br />
+            <span className="text-sky-400">Innovation</span>
+          </h2>
+          <p className="text-lg text-slate-400 leading-relaxed font-light mb-10 max-w-lg">
+            {lang === 'en' 
+              ? 'MANTIQ is a business service hub dedicated to helping you start or grow your business. We combine strategy, technology, and creativity to take your venture to the next level.'
+              : 'منطق هو مركز لخدمات الأعمال مخصص لمساعدتك في بدء أو تطوير عملك. نحن نجمع بين الاستراتيجية والتكنولوجيا والإبداع لنقل مشروعك إلى المستوى التالي.'}
+          </p>
+          <button onClick={() => scrollToSection('contact')} className="btn-primary">{lang === 'en' ? 'Work With Us' : 'اعمل معنا'}</button>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 reveal" style={{ transitionDelay: '200ms' }}>
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl hover:border-sky-400/50 transition-all group">
+            <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">🚀</div>
+            <h4 className="font-syne font-bold mb-2">Launch Ready</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">Idea to execution support for new ventures.</p>
+          </div>
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl hover:border-sky-400/50 transition-all group">
+            <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">📈</div>
+            <h4 className="font-syne font-bold mb-2">Growth Focus</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">Scaling tools to reach untapped markets.</p>
+          </div>
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl hover:border-sky-400/50 transition-all group">
+            <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">🎯</div>
+            <h4 className="font-syne font-bold mb-2">Empowerment</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">Helping young minds build their future.</p>
+          </div>
+          <div className="p-8 bg-white/5 border border-white/10 rounded-3xl hover:border-sky-400/50 transition-all group">
+            <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">🤝</div>
+            <h4 className="font-syne font-bold mb-2">Partnership</h4>
+            <p className="text-xs text-slate-400 leading-relaxed">Results-driven long-term relationships.</p>
+          </div>
+        </div>
+      </Section>
+
+      {/* Services Section */}
+      <Section id="services">
+        <div className="text-center mb-16 md:mb-24 reveal">
+          <span className="text-sky-400 text-xs font-bold uppercase tracking-[0.2em] mb-4 block">{lang === 'en' ? 'What We Offer' : 'ماذا نقدم'}</span>
+          <h2 className="text-4xl md:text-6xl font-black font-syne tracking-tighter uppercase leading-none mb-6">Our Services</h2>
+          <p className="text-slate-400 text-lg max-w-xl mx-auto font-light">Four core pillars designed to cover every dimension of your business journey.</p>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+          {Object.values(SERVICE_DATA).map((service, idx) => (
+            <ServiceCard key={service.id} service={service} lang={lang} index={idx} />
+          ))}
+        </div>
+      </Section>
+
+      {/* Impact Row */}
+      <section className="bg-gradient-to-br from-[#1a5cff] via-[#0a3a99] to-[#0a1628] py-24 px-4 overflow-hidden relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(58,176,240,0.3),transparent_70%)]" />
+        <div className="max-w-7xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
+           {[
+             { val: '210', label: t.stats_serv },
+             { val: '18', label: t.stats_proj },
+             { val: '14', label: t.stats_vent },
+             { val: '25', label: t.stats_experts, plus: true }
+           ].map((item, i) => (
+             <div key={i} className="reveal" style={{ transitionDelay: `${i * 100}ms` }}>
+               <div className="text-6xl md:text-8xl font-black font-syne text-white leading-none">
+                 <AnimatedCounter target={item.val} />{item.plus && <span className="text-sky-400 text-4xl font-light">+</span>}
+               </div>
+               <div className="text-xs uppercase tracking-[0.3em] font-bold text-white/70 mt-4">{item.label}</div>
+             </div>
+           ))}
+        </div>
+      </section>
+
+      {/* Marquee */}
+      <Section id="clients" className="overflow-hidden">
+        <div className="text-center mb-16 reveal">
+          <span className="text-sky-400 text-xs font-bold uppercase tracking-[0.2em] mb-4 block">{t.trusted_by}</span>
+          <h2 className="text-4xl md:text-5xl font-black font-syne tracking-tighter uppercase leading-none">Our Partners</h2>
+        </div>
+        <div className="marquee-wrap">
+          <div className="marquee flex items-center gap-12 whitespace-nowrap">
+            {[...CUSTOMERS, ...CUSTOMERS].map((c, i) => (
+              <span key={i} className="text-xl md:text-2xl font-black font-syne uppercase text-slate-500 hover:text-sky-400 transition-colors cursor-default border border-white/10 px-8 py-3 rounded-full bg-white/5">
+                {c}
+              </span>
             ))}
           </div>
         </div>
+      </Section>
 
-        {/* Socials */}
-        <div style={{ display:"flex", gap:14, justifyContent:"flex-end", flexWrap:"wrap" }}>
-          {[
-            { label:"LinkedIn", href:"https://www.linkedin.com/company/mantiq.services" },
-            { label:"Facebook", href:"https://www.facebook.com/mantiiq" },
-            { label:"Email", href:"mailto:Mantiq2023@gmail.com" },
-          ].map(s => (
-            <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{
-              fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:3,
-              color:"rgba(245,237,214,0.35)", textTransform:"uppercase", fontWeight:600,
-              textDecoration:"none", transition:"color .2s", padding:"8px 12px",
-              border:"1px solid rgba(201,168,76,0.1)", borderRadius:1
-            }} onMouseEnter={e=>e.target.style.color="#C9A84C"} onMouseLeave={e=>e.target.style.color="rgba(245,237,214,0.35)"}>{s.label}</a>
-          ))}
+      {/* Contact Section */}
+      <Section id="contact" className="grid lg:grid-cols-2 gap-20 bg-[#112244]/50 rounded-[3rem] md:rounded-[5rem] overflow-hidden my-20 p-12 md:p-24 border border-white/5">
+        <div className="reveal">
+          <span className="text-sky-400 text-xs font-bold uppercase tracking-[0.2em] mb-4 block">Get In Touch</span>
+          <h2 className="text-4xl md:text-7xl font-black font-syne tracking-tighter leading-none mb-8">
+            {t.lets_build} <br />
+            <span className="text-sky-400">{t.lets_build_accent}</span>
+          </h2>
+          <p className="text-slate-400 text-lg font-light mb-12">{t.lets_build_sub}</p>
+          
+          <div className="space-y-8">
+            <div className="flex gap-6 items-center">
+              <div className="w-12 h-12 rounded-2xl bg-sky-400/10 border border-sky-400/20 flex items-center justify-center text-xl">✉️</div>
+              <div>
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email Address</div>
+                <div className="text-lg font-medium">Mantiq2023@gmail.com</div>
+              </div>
+            </div>
+            <div className="flex gap-6 items-center">
+              <div className="w-12 h-12 rounded-2xl bg-sky-400/10 border border-sky-400/20 flex items-center justify-center text-xl">📍</div>
+              <div>
+                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Based In</div>
+                <div className="text-lg font-medium">Suez, Egypt</div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div style={{ maxWidth:1200, margin:"32px auto 0", paddingTop:24, borderTop:"1px solid rgba(201,168,76,0.07)", display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:12 }}>
-        <p style={{ fontFamily:"'DM Sans',sans-serif", fontSize:10, color:"rgba(245,237,214,0.2)", letterSpacing:2, fontWeight:300 }}>© 2026 MANTIQ BUSINESS SERVICES. ALL RIGHTS RESERVED.</p>
-        <a href="https://mantiq-pricing.vercel.app/" target="_blank" rel="noopener noreferrer" style={{ fontFamily:"'DM Sans',sans-serif", fontSize:9, letterSpacing:3, textTransform:"uppercase", color:"#C9A84C", textDecoration:"none", fontWeight:600, opacity:0.7 }}>Pricing Calculator ↗</a>
-      </div>
-      <style>{`@media(max-width:768px){.footer-grid{grid-template-columns:1fr!important;text-align:center}.footer-grid>div:last-child{justify-content:center!important}}`}</style>
-    </footer>
-  );
-}
+        <div className="reveal" style={{ transitionDelay: '200ms' }}>
+          {formStatus === 'success' ? (
+            <div className="p-12 bg-sky-400/10 border border-sky-400/20 rounded-[2.5rem] text-center">
+               <div className="text-4xl mb-6">✅</div>
+               <h3 className="text-2xl font-black font-syne mb-4">{t.mission_received}</h3>
+               <p className="text-slate-400 text-sm leading-relaxed">{t.mission_desc}</p>
+            </div>
+          ) : (
+            <form className="space-y-4" onSubmit={(e) => handleFormSubmit(e, 'Leads')}>
+              <input required name="name" type="text" placeholder={t.name_placeholder} className="contact-input" />
+              <input required name="email" type="email" placeholder={t.email_placeholder} className="contact-input" />
+              <select name="service" className="contact-input">
+                <option value="">{t.select_service}</option>
+                {Object.values(SERVICE_DATA).map(s => <option key={s.id} value={s.id}>{s.title[lang]}</option>)}
+              </select>
+              <textarea name="msg" rows="5" placeholder="Tell us about your project..." className="contact-input resize-none" />
+              <button disabled={formStatus === 'sending'} className="btn-primary w-full justify-center">
+                {formStatus === 'sending' ? t.sending : 'Send Message →'}
+              </button>
+            </form>
+          )}
+        </div>
+      </Section>
 
-// ─── SCROLL PROGRESS ───────────────────────────────────────────────────────────
-function ScrollProgress() {
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    const fn = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setP((window.scrollY / total) * 100);
-    };
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-  return (
-    <div style={{ position:"fixed", top:0, left:0, right:0, height:2, zIndex:600, background:"rgba(201,168,76,0.1)" }}>
-      <div style={{ height:"100%", width:`${p}%`, background:"linear-gradient(90deg,#C9A84C,#F0D080)", transition:"width .1s" }}/>
-    </div>
-  );
-}
-
-// ─── SECTION NAV DOTS ──────────────────────────────────────────────────────────
-function SideNav({ active }) {
-  const sections = ["hero","about","services","events","contact"];
-  return (
-    <div style={{ position:"fixed", right:28, top:"50%", transform:"translateY(-50%)", zIndex:400, display:"flex", flexDirection:"column", gap:14 }} className="side-dots">
-      {sections.map(id => (
-        <button key={id} onClick={() => document.getElementById(id)?.scrollIntoView({behavior:"smooth"})}
-          title={id}
-          style={{
-            width:6, height: active===id ? 28 : 6, borderRadius:3,
-            background: active===id ? "#C9A84C" : "rgba(201,168,76,0.25)",
-            border:"none", cursor:"pointer", transition:"all .5s cubic-bezier(.16,1,.3,1)", padding:0
-          }}/>
-      ))}
-      <style>{`@media(max-width:768px){.side-dots{display:none!important}}`}</style>
-    </div>
-  );
-}
-
-// ─── APP ───────────────────────────────────────────────────────────────────────
-export default function App() {
-  const [active, setActive] = useState("hero");
-  const { pos, hovered, setHovered } = useCursor();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-    const sections = ["hero","about","services","events","contact"];
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); });
-    }, { threshold: 0.4 });
-    sections.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
-    return () => obs.disconnect();
-  }, []);
-
-  return (
-    <div style={{ background:"#060503", minHeight:"100vh", overflowX:"hidden" }}>
-      {!isMobile && <Cursor pos={pos} hovered={hovered} />}
-      <ScrollProgress />
-      <Nav active={active} setActive={setActive} />
-      <SideNav active={active} />
-      <Hero setActive={setActive} />
-      <Marquee />
-      <About />
-      <Services />
-      <Events />
-      <Contact />
-      <Footer setActive={setActive} />
+      <footer className="p-12 md:p-16 border-t border-white/5 bg-[#060e1a]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="text-2xl font-black font-syne">MANTI<span className="text-sky-400">Q</span></div>
+          <div className="text-xs text-slate-500 font-bold tracking-widest uppercase">© 2026 MANTIQ. {t.rights}</div>
+          <div className="flex gap-6">
+             <a href="https://www.facebook.com/mantiiq" target="_blank" className="text-slate-400 hover:text-sky-400 transition-colors"><Facebook /></a>
+             <a href="https://www.linkedin.com/company/mantiq.services" target="_blank" className="text-slate-400 hover:text-sky-400 transition-colors"><Linkedin /></a>
+          </div>
+        </div>
+      </footer>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { cursor: none; }
-        @media(max-width:768px){ body { cursor: auto; } }
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500;700&family=Noto+Sans+Arabic:wght@300;400;700;900&display=swap');
+        
+        body { background: #0a1628; color: white; overflow-x: hidden; }
+        .font-sans { font-family: 'DM Sans', sans-serif; }
+        .font-syne { font-family: 'Syne', sans-serif; }
+        .font-arabic { font-family: 'Noto Sans Arabic', sans-serif; }
 
-        @keyframes orb1 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(40px,30px) scale(1.15)} }
-        @keyframes orb2 { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-30px,-40px) scale(1.1)} }
-        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
-        @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top;opacity:1} 50%{transform:scaleY(1);transform-origin:top;opacity:1} 51%{transform:scaleY(1);transform-origin:bottom;opacity:1} 100%{transform:scaleY(0);transform-origin:bottom;opacity:0} }
-        @keyframes marqueeX { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        .cursor-glow {
+          position: fixed; width: 300px; height: 300px;
+          background: radial-gradient(circle, rgba(58,176,240,0.08) 0%, transparent 70%);
+          border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+        }
 
-        input::placeholder, textarea::placeholder { color: rgba(245,237,214,0.2); }
-        input, select, textarea { caret-color: #C9A84C; }
-        select option { background: #0A0804; color: #F5EDD6; }
+        .grid-bg {
+          background-image: 
+            linear-gradient(rgba(58,176,240,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(58,176,240,0.05) 1px, transparent 1px);
+          background-size: 60px 60px;
+        }
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #060503; }
-        ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
-        ::-webkit-scrollbar-thumb:hover { background: #C9A84C; }
-        ::selection { background: rgba(201,168,76,0.25); color: #F5EDD6; }
+        .orb { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(58,176,240,0.4) 0%, transparent 70%); animation: float 10s infinite alternate; }
+        .orb-1 { width: 600px; height: 600px; top: -100px; left: -100px; }
+        .orb-2 { width: 400px; height: 400px; bottom: 100px; right: -50px; background: radial-gradient(circle, rgba(26,92,255,0.3) 0%, transparent 70%); }
+        .orb-3 { width: 300px; height: 300px; top: 40%; right: 20%; animation-duration: 15s; }
+
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 40px) scale(1.05); } }
+
+        .btn-primary { 
+          @apply bg-[#1a5cff] text-white px-8 py-4 rounded-full font-bold uppercase text-xs tracking-widest hover:bg-sky-400 transition-all shadow-xl shadow-blue-500/20 active:scale-95 flex items-center gap-2;
+          font-family: 'DM Sans', sans-serif;
+        }
+        .btn-ghost {
+          @apply border border-white/20 bg-transparent text-white px-8 py-4 rounded-full font-bold uppercase text-xs tracking-widest hover:border-sky-400 transition-all active:scale-95;
+          font-family: 'DM Sans', sans-serif;
+        }
+
+        .contact-input {
+          @apply w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none focus:border-sky-400 transition-all text-white placeholder:text-slate-600;
+        }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal-visible { opacity: 1; transform: translateY(0); }
+
+        .hero-tag {
+          @apply inline-block bg-sky-400/10 border border-sky-400/30 text-sky-400 text-[9px] font-bold uppercase tracking-[0.3em] px-5 py-2 rounded-full mb-8;
+        }
+
+        .marquee-wrap { @apply overflow-hidden mt-12; }
+        .marquee { animation: marquee 30s linear infinite; width: max-content; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        @keyframes fade-in-up { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in-up { animation: fade-in-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
       `}</style>
     </div>
   );
+}
+
+function useScrollReveal() {
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('reveal-visible');
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 }
