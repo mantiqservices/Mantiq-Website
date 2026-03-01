@@ -250,6 +250,24 @@ const Nav = ({ lang, setLang, theme, setTheme, onNavigate, activeSection }) => {
               <button key={item} style={{ transitionDelay: `${idx * 50}ms` }} onClick={() => { onNavigate(item); setMobileOpen(false); }} className={`text-left transition-all py-2 border-b border-slate-100 dark:border-white/5 ${mobileOpen ? 'translate-x-0 opacity-100' : (lang === 'ar' ? '-translate-x-10' : 'translate-x-10') + ' opacity-0'}`}>{t[item === 'about' ? 'about_us' : item] || item}</button>
             ))}
           </div>
+          
+          {/* Mobile Options */}
+          <div className="mt-auto space-y-4">
+            <button 
+              onClick={() => { setLang(lang === 'en' ? 'ar' : 'en'); setMobileOpen(false); }} 
+              className="w-full flex items-center justify-between px-5 py-4 bg-slate-100 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10 font-black uppercase tracking-widest text-xs transition-all active:scale-95"
+            >
+              <span>{lang === 'en' ? 'Arabic Mode' : 'الوضع العربي'}</span>
+              <Globe size={16} className="text-sky-500" />
+            </button>
+            <button 
+              onClick={() => { setTheme(theme === 'dark' ? 'light' : 'dark'); setMobileOpen(false); }} 
+              className="w-full flex items-center justify-between px-5 py-4 bg-slate-100 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/10 font-black uppercase tracking-widest text-xs transition-all active:scale-95"
+            >
+              <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+              {theme === 'dark' ? <Sun size={16} className="text-orange-400" /> : <Moon size={16} className="text-indigo-400" />}
+            </button>
+          </div>
         </div>
       </div>
     </>
@@ -573,8 +591,23 @@ export default function App() {
         body { -webkit-user-select: none; user-select: none; scroll-behavior: smooth; }
         .font-sans { font-family: 'Outfit', sans-serif; }
         .font-arabic { font-family: 'Noto Sans Arabic', sans-serif; }
-        @keyframes marquee { 0% { transform: translate3d(0,0,0); } 100% { transform: translate3d(-50%,0,0); } }
-        .animate-marquee { animation: marquee 15s linear infinite; }
+        
+        @keyframes marquee { 
+          0% { transform: translate3d(0,0,0); } 
+          100% { transform: translate3d(-50%,0,0); } 
+        }
+        
+        .animate-marquee { 
+          animation: marquee 20s linear infinite; 
+        }
+
+        /* Faster marquee on mobile */
+        @media (max-width: 768px) {
+          .animate-marquee { 
+            animation-duration: 8s; 
+          }
+        }
+
         @keyframes fade-in-up { 0% { opacity: 0; transform: translate3d(0, 30px, 0); } 100% { opacity: 1; transform: translate3d(0,0,0); } }
         .animate-fade-in-up { animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
