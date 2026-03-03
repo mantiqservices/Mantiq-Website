@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail, 
   Linkedin, Facebook, CheckCircle2, ChevronRight, 
   Target, Eye, Zap, Shield, Users, Trophy, Calculator, Upload, Sparkles,
-  Phone, MapPin, Briefcase, Lightbulb, Rocket, ChevronDown
+  Phone, MapPin, Briefcase, Lightbulb, Rocket, ChevronDown, Plus
 } from 'lucide-react';
 
 // --- DATA ---
@@ -21,12 +21,13 @@ const EVENTS = [
   { id: 3, title: { en: "Pe Launching Event", ar: "حدث انطلاق Pe" }, date: "2024", img: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=800" },
 ];
 
-const SERVICE_DATA = {
-  business: {
+const SERVICE_DATA = [
+  {
     id: 'business',
+    index: '01',
     icon: <BarChart3 className="w-8 h-8" />,
-    color: 'text-sky-500 dark:text-sky-400',
-    bgColor: 'bg-sky-500/5',
+    color: 'text-sky-500',
+    bgColor: 'bg-sky-500/10',
     title: { en: "Business Development", ar: "تطوير الأعمال" },
     features: { 
       en: ["Strategic Planning", "B2B Leads", "Data Analytics", "Consultancy"], 
@@ -36,13 +37,15 @@ const SERVICE_DATA = {
       en: "We create strategic growth paths by identifying untapped market opportunities and optimizing your internal operations.",
       ar: "نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة وتحسين عملياتك الداخلية."
     },
-    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200"
+    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200",
+    gridClass: "lg:col-span-3 lg:row-span-1"
   },
-  tracking: {
+  {
     id: 'tracking',
+    index: '02',
     icon: <Binary className="w-8 h-8" />,
-    color: 'text-indigo-500 dark:text-indigo-400',
-    bgColor: 'bg-indigo-500/5',
+    color: 'text-indigo-500',
+    bgColor: 'bg-indigo-500/10',
     title: { en: "Tracking Systems", ar: "أنظمة التتبع" },
     features: { 
       en: ["CRM Systems", "Finance Trackers", "HR Systems", "Flow Automation"], 
@@ -52,13 +55,15 @@ const SERVICE_DATA = {
       en: "Transform raw data into efficient digital systems with custom CRM and financial tracking ecosystems.",
       ar: "حول بياناتك الخام إلى معلومات قابلة للتنفيذ عبر أنظمة CRM وتتبع مالي مخصصة."
     },
-    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200"
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200",
+    gridClass: "lg:col-span-2 lg:row-span-2"
   },
-  web: {
+  {
     id: 'web',
+    index: '03',
     icon: <Layout className="w-8 h-8" />,
-    color: 'text-emerald-500 dark:text-emerald-400',
-    bgColor: 'bg-emerald-500/5',
+    color: 'text-emerald-500',
+    bgColor: 'bg-emerald-500/10',
     title: { en: "Websites", ar: "المواقع الإلكترونية" },
     features: { 
       en: ["E-commerce", "Company Profile", "Technical SEO", "Usability Design"], 
@@ -68,13 +73,15 @@ const SERVICE_DATA = {
       en: "Design and develop performance-driven websites optimized for SEO, usability, and long-term scalability.",
       ar: "نحن نبني واجهات رقمية تعمل كأفضل بائع لديك، مصممة للأداء وقوة محركات البحث."
     },
-    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200"
+    img: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200",
+    gridClass: "lg:col-span-3 lg:row-span-1"
   },
-  mobile: {
+  {
     id: 'mobile',
+    index: '04',
     icon: <Smartphone className="w-8 h-8" />,
-    color: 'text-orange-500 dark:text-orange-400',
-    bgColor: 'bg-orange-500/5',
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-500/10',
     title: { en: "Mobile Apps", ar: "تطبيقات الموبايل" },
     features: { 
       en: ["UI/UX Design", "IOS & Android", "AI Integrations", "Payment Gateways"], 
@@ -84,9 +91,10 @@ const SERVICE_DATA = {
       en: "Native mobile experiences built for today’s mobile-first users, integrating advanced AI logic.",
       ar: "تجارب أصلية لمستخدمي الموبايل تدمج منطق الذكاء الاصطناعي وتجربة مستخدم سلسة."
     },
-    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200"
+    img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200",
+    gridClass: "lg:col-span-5 lg:row-span-1"
   }
-};
+];
 
 const TRANSLATIONS = {
   en: {
@@ -253,7 +261,6 @@ const PremiumSelect = ({ label, name, options, lang, required = false }) => {
           onChange={(e) => setValue(e.target.value)}
           className="w-full bg-transparent border-b-2 border-slate-100 dark:border-white/10 py-4 outline-none text-slate-900 dark:text-white appearance-none relative z-10 cursor-pointer focus:border-transparent"
         >
-          {/* Initial empty option to force an "empty" state on load */}
           <option value="" disabled hidden></option>
           {options.map((opt, i) => (
             <option key={i} value={opt.value} className="text-slate-900">{opt.label}</option>
@@ -374,31 +381,69 @@ const PartnerMarquee = ({ lang }) => {
   );
 };
 
-const ServiceCard = ({ service, lang, index }) => {
+const FantasticServiceCard = ({ service, lang, index }) => {
   const t = TRANSLATIONS[lang];
+  const isArabic = lang === 'ar';
+  
   return (
     <div 
-      className="group reveal relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[3rem] overflow-hidden flex flex-col h-full hover:shadow-2xl transition-all duration-500 hover:-translate-y-2" 
-      style={{ transitionDelay: `${index * 100}ms` }}
+      className={`group reveal relative overflow-hidden rounded-[3rem] bg-slate-900 shadow-2xl transition-all duration-700 hover:shadow-sky-500/10 ${service.gridClass}`}
+      style={{ transitionDelay: `${index * 150}ms` }}
     >
-      <div className="h-64 relative overflow-hidden">
-        <img src={service.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt={service.title[lang]} />
-        <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-slate-900 via-white/40 dark:via-slate-900/40 to-transparent" />
-        <div className={`absolute bottom-6 left-8 w-14 h-14 rounded-2xl ${service.bgColor} ${service.color} flex items-center justify-center backdrop-blur-xl border border-white/20 shadow-2xl`}>
-          {service.icon}
+      {/* Background Image with Zoom Parallax */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={service.img} 
+          className="w-full h-full object-cover transition-transform duration-[3000ms] ease-out group-hover:scale-125 group-hover:rotate-3 opacity-60 group-hover:opacity-40" 
+          alt={service.title[lang]} 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/40 to-slate-950" />
+      </div>
+
+      {/* Index Number Overlay */}
+      <div className={`absolute top-10 ${isArabic ? 'left-10' : 'right-10'} pointer-events-none select-none`}>
+        <span className="text-7xl md:text-[10rem] font-black text-white/[0.03] italic tracking-tighter leading-none transition-all duration-700 group-hover:text-sky-500/[0.08] group-hover:scale-110 block">
+          {service.index}
+        </span>
+      </div>
+
+      {/* Content Layer */}
+      <div className="relative z-10 flex flex-col h-full p-8 md:p-14 justify-between">
+        <div className="flex justify-between items-start">
+          <div className={`w-16 h-16 rounded-2xl ${service.bgColor} ${service.color} flex items-center justify-center backdrop-blur-3xl border border-white/10 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all duration-500 shadow-xl`}>
+            {service.icon}
+          </div>
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-white">{t.explore_more}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-20">
+          <h3 className="text-3xl md:text-5xl font-black text-white mb-6 leading-[0.9] tracking-tighter transition-all duration-500 group-hover:text-sky-400">
+            {service.title[lang]}
+          </h3>
+          
+          <div className="max-h-0 opacity-0 group-hover:max-h-96 group-hover:opacity-100 transition-all duration-700 ease-in-out overflow-hidden">
+            <p className="text-lg text-slate-300 mb-8 leading-relaxed font-medium">
+              {service.desc[lang]}
+            </p>
+            <div className="grid grid-cols-2 gap-y-4 gap-x-6">
+              {service.features[lang].map((f, i) => (
+                <div key={i} className="flex items-center gap-3 animate-fade-in" style={{ animationDelay: `${i * 100}ms` }}>
+                  <Plus size={12} className="text-sky-500" />
+                  <span className="text-[11px] font-bold uppercase tracking-widest text-white/70">{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="p-8 md:p-12 flex flex-col h-full">
-        <h3 className="text-2xl md:text-3xl font-black mb-4 group-hover:text-sky-500 transition-colors">{service.title[lang]}</h3>
-        <p className="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed font-medium">{service.desc[lang]}</p>
-        <div className="mt-auto pt-8 border-t border-slate-50 dark:border-white/5 grid grid-cols-2 gap-4">
-          {service.features[lang].slice(0, 4).map((f, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-sky-500" />
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">{f}</span>
-            </div>
-          ))}
-        </div>
+
+      {/* Hover Arrow (Bottom Edge) */}
+      <div className={`absolute bottom-8 ${isArabic ? 'left-12' : 'right-12'} translate-y-10 group-hover:translate-y-0 transition-transform duration-500`}>
+        <ArrowRight size={32} className={`text-sky-500 ${isArabic ? 'rotate-180' : ''}`} />
       </div>
     </div>
   );
@@ -527,17 +572,21 @@ export default function App() {
           </div>
         </Section>
 
-        {/* SERVICES */}
-        <Section id="services" className="bg-slate-50/50 dark:bg-white/[0.02]">
-          <div className="text-center mb-24 space-y-6 reveal">
-            <span className="text-sky-500 font-bold uppercase tracking-[0.4em] text-sm">{t.services}</span>
-            <h2 className="text-5xl md:text-9xl font-black tracking-tighter uppercase leading-[0.85]">
-              {t.services_headline_1} <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600">{t.services_headline_2}</span>
+        {/* SERVICES (Fantastic Redesign) */}
+        <Section id="services" className="bg-slate-50/50 dark:bg-white/[0.02] relative overflow-hidden">
+          <div className="text-center mb-24 space-y-6 reveal relative z-10">
+            <span className="text-sky-500 font-bold uppercase tracking-[0.6em] text-sm">{t.services}</span>
+            <h2 className="text-6xl md:text-[10rem] font-black tracking-tighter uppercase leading-[0.75]">
+              {t.services_headline_1} <br/> 
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-500">
+                {t.services_headline_2}
+              </span>
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-10">
-            {Object.values(SERVICE_DATA).map((service, idx) => (
-              <ServiceCard key={service.id} service={service} lang={lang} index={idx} />
+          
+          <div className="grid grid-cols-1 lg:grid-cols-5 lg:grid-rows-2 gap-6 md:gap-10 auto-rows-[450px] md:auto-rows-[600px] relative z-10">
+            {SERVICE_DATA.map((service, idx) => (
+              <FantasticServiceCard key={service.id} service={service} lang={lang} index={idx} />
             ))}
           </div>
         </Section>
@@ -613,7 +662,7 @@ export default function App() {
                       name="service" 
                       required
                       lang={lang}
-                      options={Object.values(SERVICE_DATA).map(s => ({ value: s.id, label: s.title[lang] }))}
+                      options={SERVICE_DATA.map(s => ({ value: s.id, label: s.title[lang] }))}
                     />
                     <button disabled={formStatus === 'sending'} className="group w-full py-6 bg-slate-950 dark:bg-sky-500 text-white font-black uppercase tracking-[0.3em] rounded-3xl hover:bg-slate-800 dark:hover:bg-sky-400 transition-all disabled:opacity-50 flex items-center justify-center gap-4 text-sm shadow-xl">
                       {formStatus === 'sending' ? <Sparkles size={20} className="animate-spin" /> : <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform rtl:rotate-180" />}
@@ -737,6 +786,10 @@ export default function App() {
           background-size: 60px 60px; 
         }
 
+        .premium-input {
+          @apply w-full px-0 py-4 bg-transparent border-b-2 border-slate-100 dark:border-white/10 outline-none focus:border-sky-500 transition-all text-slate-900 dark:text-white text-base placeholder:text-slate-400 placeholder:font-medium;
+        }
+
         .shadow-3xl { box-shadow: 0 50px 100px -20px rgba(0,0,0,0.1); }
         .dark .shadow-3xl { box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5); }
 
@@ -749,8 +802,12 @@ export default function App() {
 
         @keyframes zoom-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .animate-zoom-in { animation: zoom-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-        .animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+        
+        @keyframes fade-in { 
+          from { opacity: 0; transform: translateY(10px); } 
+          to { opacity: 1; transform: translateY(0); } 
+        }
+        .animate-fade-in { animation: fade-in 0.5s ease-out forwards; }
 
         ::selection { background-color: #38bdf8; color: white; }
       `}</style>
