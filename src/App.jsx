@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  Menu, X, Sun, Moon, ArrowRight, Globe,
+  Menu, X, Sun, Moon, ArrowRight, ArrowUpRight,
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
-  Target, Eye, Zap, Shield, Users, Trophy, Calculator,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Plus
+  Target, Eye, Zap, Users, Trophy, Calculator,
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe
 } from 'lucide-react';
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
@@ -18,106 +18,136 @@ const CUSTOMERS = [
 
 const EVENTS = [
   { id:1, title:{en:"Enactus Event",ar:"حدث إيناكتس"}, date:"2024",
-    img:"https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=800" },
+    img:"https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=1200" },
   { id:2, title:{en:"AIESEC Event",ar:"حدث آيزيك"}, date:"2024",
-    img:"https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=800" },
+    img:"https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=1200" },
   { id:3, title:{en:"Pe Launching Event",ar:"حدث انطلاق Pe"}, date:"2024",
-    img:"https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=800" },
+    img:"https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&q=80&w=1200" },
 ];
 
 const SERVICES = [
   {
     id:'business', index:'01',
-    icon: <BarChart3 size={22}/>,
-    accent:'#0ea5e9',
+    icon: <BarChart3 size={20}/>,
     title:{en:"Business Development",ar:"تطوير الأعمال"},
+    sub:{en:"Strategy · Leads · Analytics",ar:"استراتيجية · عملاء · تحليلات"},
     features:{en:["Strategic Planning","B2B Leads","Data Analytics","Consultancy"],ar:["التخطيط الاستراتيجي","توليد العملاء","التحليلات","الاستشارات"]},
-    desc:{en:"Strategic growth paths by identifying untapped market opportunities and accelerating revenue.",ar:"نحن نصمم مسارات نمو استراتيجية من خلال تحديد فرص السوق غير المستغلة."},
-    img:"https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1200",
-    span:'col-span-1 md:col-span-2 lg:col-span-3'
+    desc:{en:"We identify untapped market opportunities and build strategic growth paths that accelerate revenue and position your business for sustainable scale.",ar:"نحدد فرص السوق غير المستغلة ونبني مسارات نمو استراتيجية تسرّع الإيرادات وتضع عملك في مسار التوسع المستدام."},
+    img:"https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1400",
   },
   {
     id:'tracking', index:'02',
-    icon: <Binary size={22}/>,
-    accent:'#6366f1',
+    icon: <Binary size={20}/>,
     title:{en:"Tracking Systems",ar:"أنظمة التتبع"},
+    sub:{en:"CRM · Finance · HR · Automation",ar:"CRM · مالية · موارد بشرية · أتمتة"},
     features:{en:["CRM Systems","Finance Trackers","HR Systems","Flow Automation"],ar:["أنظمة CRM","تتبع المالية","الموارد البشرية","أتمتة العمليات"]},
-    desc:{en:"Transform raw data into efficient digital ecosystems with custom CRM and financial dashboards.",ar:"حول بياناتك الخام إلى أنظمة CRM وتتبع مالي مخصصة."},
-    img:"https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200",
-    span:'col-span-1 md:col-span-2 lg:col-span-2'
+    desc:{en:"Transform raw data into efficient, intelligent digital ecosystems. Custom CRM and financial dashboards built for how your business actually works.",ar:"حوّل بياناتك الخام إلى أنظمة رقمية ذكية وفعّالة. أنظمة CRM ومالية مخصصة مبنية لطريقة عمل شركتك فعلاً."},
+    img:"https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1400",
   },
   {
     id:'web', index:'03',
-    icon: <Layout size={22}/>,
-    accent:'#10b981',
+    icon: <Layout size={20}/>,
     title:{en:"Websites",ar:"المواقع الإلكترونية"},
+    sub:{en:"Design · SEO · E-commerce",ar:"تصميم · SEO · تجارة إلكترونية"},
     features:{en:["E-commerce","Company Profile","Technical SEO","Usability Design"],ar:["التجارة الإلكترونية","تحسين محركات البحث","موقع لعرض شركتك","تصميم تجربة المستخدم"]},
-    desc:{en:"Performance-driven websites that act as your best salesperson — built for SEO and conversion.",ar:"نبني واجهات رقمية تعمل كأفضل بائع لديك، مصممة للأداء وقوة محركات البحث."},
-    img:"https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1200",
-    span:'col-span-1 md:col-span-2 lg:col-span-3'
+    desc:{en:"Performance-driven websites designed to act as your best salesperson — built for search visibility, user experience, and conversion.",ar:"مواقع تعمل كأفضل مندوب مبيعات لديك — مصممة لظهور محركات البحث وتجربة المستخدم والتحويل."},
+    img:"https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=1400",
   },
   {
     id:'mobile', index:'04',
-    icon: <Smartphone size={22}/>,
-    accent:'#f97316',
+    icon: <Smartphone size={20}/>,
     title:{en:"Mobile Apps",ar:"تطبيقات الموبايل"},
+    sub:{en:"iOS · Android · AI · Payments",ar:"iOS · Android · ذكاء اصطناعي · مدفوعات"},
     features:{en:["UI/UX Design","iOS & Android","AI Integrations","Payment Gateways"],ar:["تصميم واجهة المستخدم","تكاملات الذكاء الاصطناعي","دفع إلكتروني","أنظمة iOS و Android"]},
-    desc:{en:"Native mobile experiences for today's users with embedded AI logic and seamless payments.",ar:"تجارب أصلية لمستخدمي الموبايل تدمج منطق الذكاء الاصطناعي."},
-    img:"https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1200",
-    span:'col-span-1 md:col-span-2 lg:col-span-2'
+    desc:{en:"Native mobile experiences built for today's users — with embedded AI logic, seamless UX, and integrated payment infrastructure.",ar:"تجارب موبايل أصيلة مبنية لمستخدمي اليوم — مع ذكاء اصطناعي مدمج وتجربة مستخدم سلسة وبنية تحتية للدفع."},
+    img:"https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&q=80&w=1400",
   }
 ];
 
 const T = {
   en:{
-    logo:"Mantiq", tag:"Intelligence in Business",
-    hero1:"The Path", hero2:"You Should Take",
-    heroDesc:"Modern digital infrastructure and strategic consultancy — helping businesses scale with intelligence.",
-    cta:"Get Started", aboutNav:"About",
-    servicesNav:"Services", eventsNav:"Events",
-    aboutTitle:"About Us",
-    aboutBody:"Mantiq bridges the gap between traditional business wisdom and modern digital excellence, empowering enterprises to lead with data and act with confidence.",
-    mission:"Our Mission", missionBody:"Transforming business operations through intelligent automation and data-driven strategy.",
-    vision:"Our Vision", visionBody:"To be the standard of technological integrity in the MENA region.",
-    statsA:"Completed Services", statsB:"Managed Projects", statsC:"Launched Ventures", statsD:"Expert Partners",
-    servicesTitle:"Strategic", servicesTitle2:"Solutions",
-    eventsLabel:"Involved In", eventsTitle:"Mantiq On Land",
-    customers:"Some of our customers",
-    letsB:"Let's Build.", contactDesc:"Ready to transform your vision into reality? Our strategy team will reach out within one business day.",
-    nameP:"Full Name", companyP:"Organization", emailP:"Email Address", phoneP:"Phone Number", serviceP:"Select Service",
-    submit:"Initiate Project", sending:"Syncing…", successTitle:"Project Logged",
-    successBody:"We've received your brief. A consultant will be in touch shortly.",
-    careers:"Careers", joinTeam:"Join Our Team",
-    careerMsg:"We're looking for architects of the future. Help us redefine intelligence in business.",
-    valTitle:"Our DNA", val1:"Inherent Innovation", val2:"Data Integrity", val3:"Human-First Tech",
-    applyBtn:"Send Application", cvLink:"Portfolio / Resume Link",
-    rights:"All rights reserved.", pricing:"Pricing Calculator",
-    explore:"Explore"
+    logo:"Mantiq",
+    tag:"Intelligence in Business",
+    nav_about:"About", nav_services:"Services", nav_events:"Events",
+    cta:"Get Started",
+    hero_label:"MENA Region's Digital Partner",
+    hero_line1:"The Path",
+    hero_line2:"You Should",
+    hero_line3:"Take.",
+    hero_desc:"Strategic consultancy and modern digital infrastructure — helping ambitious businesses scale with intelligence across the MENA region.",
+    scroll:"Scroll to explore",
+    about_label:"About Mantiq",
+    about_title1:"Where Strategy",
+    about_title2:"Meets Technology.",
+    about_body:"Mantiq bridges the gap between traditional business wisdom and modern digital excellence. We empower enterprises to lead with data, act with confidence, and grow without limits.",
+    mission:"Mission", mission_body:"Transforming business operations through intelligent automation and data-driven strategy.",
+    vision:"Vision", vision_body:"To be the standard of technological integrity in the MENA region.",
+    stats_a:"Completed Services", stats_b:"Managed Projects", stats_c:"Launched Ventures", stats_d:"Expert Partners",
+    services_label:"What We Do",
+    services_title1:"Strategic",
+    services_title2:"Solutions.",
+    services_body:"Four core disciplines, one unified mission: to build the digital and strategic infrastructure your business needs to thrive.",
+    learn_more:"Learn more",
+    events_label:"On The Ground",
+    events_title1:"Mantiq",
+    events_title2:"In Action.",
+    customers_label:"Trusted By",
+    contact_label:"Start a Project",
+    contact_title1:"Let's Build",
+    contact_title2:"Something.",
+    contact_body:"Tell us about your project. Our strategy team will respond within one business day.",
+    name_p:"Full Name", company_p:"Organization", email_p:"Email Address", phone_p:"Phone Number", service_p:"Select Service",
+    submit:"Submit Brief", sending:"Sending…",
+    success_title:"Brief Received.", success_body:"A consultant will be in touch within one business day.",
+    careers:"Careers", join_title:"Join the Team.",
+    career_body:"We're building the future of business intelligence in the MENA region. Looking for exceptional people to build it with.",
+    val_title:"What drives us", val_1:"Inherent Innovation", val_2:"Data Integrity", val_3:"Human-First Tech",
+    apply:"Send Application", cv_link:"Portfolio / CV Link",
+    rights:"All rights reserved.", pricing:"Pricing",
+    footer_desc:"Strategic consultancy and digital infrastructure for the MENA region.",
+    explore:"View Service",
   },
   ar:{
-    logo:"منطق", tag:"الذكاء في الأعمال",
-    hero1:"المسار", hero2:"الذي يجب سلوكه",
-    heroDesc:"بنية تحتية رقمية حديثة واستشارات استراتيجية لمساعدة الشركات على التوسع بذكاء.",
-    cta:"ابدأ الآن", aboutNav:"من نحن",
-    servicesNav:"خدماتنا", eventsNav:"الفعاليات",
-    aboutTitle:"من نحن",
-    aboutBody:"تعمل منطق كجسر يربط بين حكمة الأعمال التقليدية والتميز الرقمي الحديث.",
-    mission:"رسالتنا", missionBody:"تحويل عمليات الأعمال من خلال الأتمتة الذكية.",
-    vision:"رؤيتنا", visionBody:"أن نكون المعيار للنزاهة التكنولوجية في منطقة الشرق الأوسط.",
-    statsA:"خدمة مكتملة", statsB:"مشروع مدار", statsC:"مشروع انطلق", statsD:"خبير مشارك",
-    servicesTitle:"خدماتنا", servicesTitle2:"الاستراتيجية",
-    eventsLabel:"شاركنا في", eventsTitle:"منطق على أرض الواقع",
-    customers:"بعض من عملائنا",
-    letsB:"فلنبنِ معاً.", contactDesc:"جاهز لتحويل رؤيتك إلى حقيقة؟",
-    nameP:"الاسم الكامل", companyP:"الشركة", emailP:"البريد الإلكتروني", phoneP:"رقم الهاتف", serviceP:"اختر الخدمة",
-    submit:"بدء المشروع", sending:"جارٍ الإرسال…", successTitle:"تم تسجيل المشروع",
-    successBody:"تلقينا طلبك. سيتواصل معك أحد مستشارينا قريباً.",
-    careers:"فرص العمل", joinTeam:"انضم لفريقنا",
-    careerMsg:"نبحث عن مهندسي المستقبل.",
-    valTitle:"قيمنا", val1:"الابتكار الأصيل", val2:"نزاهة البيانات", val3:"تكنولوجيا محورها الإنسان",
-    applyBtn:"إرسال الطلب", cvLink:"رابط السيرة الذاتية",
-    rights:"جميع الحقوق محفوظة.", pricing:"حاسبة التسعير",
-    explore:"استكشف"
+    logo:"منطق",
+    tag:"الذكاء في الأعمال",
+    nav_about:"من نحن", nav_services:"خدماتنا", nav_events:"الفعاليات",
+    cta:"ابدأ الآن",
+    hero_label:"الشريك الرقمي لمنطقة الشرق الأوسط",
+    hero_line1:"المسار",
+    hero_line2:"الذي يجب",
+    hero_line3:"أن تسلكه.",
+    hero_desc:"استشارات استراتيجية وبنية تحتية رقمية حديثة — لمساعدة الشركات الطموحة على التوسع بذكاء.",
+    scroll:"اسحب للاستكشاف",
+    about_label:"عن منطق",
+    about_title1:"حيث تلتقي الاستراتيجية",
+    about_title2:"بالتكنولوجيا.",
+    about_body:"تعمل منطق كجسر بين حكمة الأعمال التقليدية والتميز الرقمي الحديث. نمكّن المؤسسات من القيادة بالبيانات والعمل بثقة والنمو دون حدود.",
+    mission:"الرسالة", mission_body:"تحويل عمليات الأعمال من خلال الأتمتة الذكية والاستراتيجية المبنية على البيانات.",
+    vision:"الرؤية", vision_body:"أن نكون معيار النزاهة التكنولوجية في منطقة الشرق الأوسط.",
+    stats_a:"خدمة مكتملة", stats_b:"مشروع مدار", stats_c:"مشروع انطلق", stats_d:"خبير مشارك",
+    services_label:"ما نقدمه",
+    services_title1:"حلول",
+    services_title2:"استراتيجية.",
+    services_body:"أربعة تخصصات أساسية، ومهمة واحدة موحدة: بناء البنية التحتية الرقمية والاستراتيجية التي يحتاجها عملك للازدهار.",
+    learn_more:"اعرف أكثر",
+    events_label:"على أرض الواقع",
+    events_title1:"منطق",
+    events_title2:"في الميدان.",
+    customers_label:"يثق بنا",
+    contact_label:"ابدأ مشروعاً",
+    contact_title1:"فلنبني",
+    contact_title2:"شيئاً.",
+    contact_body:"أخبرنا عن مشروعك. سيتواصل معك فريقنا الاستراتيجي خلال يوم عمل واحد.",
+    name_p:"الاسم الكامل", company_p:"الشركة", email_p:"البريد الإلكتروني", phone_p:"رقم الهاتف", service_p:"اختر الخدمة",
+    submit:"إرسال الموجز", sending:"جارٍ الإرسال…",
+    success_title:"تم استلام الطلب.", success_body:"سيتواصل معك أحد مستشارينا خلال يوم عمل واحد.",
+    careers:"فرص العمل", join_title:"انضم للفريق.",
+    career_body:"نحن نبني مستقبل الذكاء التجاري في منطقة الشرق الأوسط. نبحث عن أشخاص استثنائيين لبنائه معنا.",
+    val_title:"ما يحركنا", val_1:"الابتكار الأصيل", val_2:"نزاهة البيانات", val_3:"تكنولوجيا محورها الإنسان",
+    apply:"إرسال الطلب", cv_link:"رابط السيرة الذاتية",
+    rights:"جميع الحقوق محفوظة.", pricing:"التسعير",
+    footer_desc:"استشارات استراتيجية وبنية تحتية رقمية لمنطقة الشرق الأوسط.",
+    explore:"عرض الخدمة",
   }
 };
 
@@ -129,24 +159,31 @@ const useReveal = () => {
       entries => entries.forEach(e => {
         if (e.isIntersecting) { e.target.classList.add('rv'); io.unobserve(e.target); }
       }),
-      { threshold: 0.08 }
+      { threshold: 0.07 }
     );
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    setTimeout(() => {
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    }, 100);
     return () => io.disconnect();
   });
 };
 
-// ─── SMALL COMPONENTS ────────────────────────────────────────────────────────
+// ─── FLOATING FIELD ──────────────────────────────────────────────────────────
 
-const FloatingField = ({ label, name, type='text', required, isAr, as:'Tag'='input', children }) => {
+const Field = ({ label, name, type = 'text', required, as: AsTag, children, dark }) => {
+  const Tag = AsTag || 'input';
   const [focused, setFocused] = useState(false);
   const [val, setVal] = useState('');
   const active = focused || val;
+  const border = dark ? (active ? 'border-white' : 'border-white/20') : (active ? 'border-slate-900' : 'border-slate-200');
+  const textColor = dark ? 'text-white' : 'text-slate-900';
+  const labelActive = dark ? 'text-sky-400' : 'text-sky-600';
+  const labelIdle = dark ? 'text-white/40' : 'text-slate-400';
+
   return (
-    <div className="relative w-full">
-      <label className={`absolute pointer-events-none transition-all duration-200 z-10
-        ${active ? '-top-5 text-[9px] tracking-[0.2em] text-sky-400 font-bold uppercase' : 'top-3 text-sm text-slate-400'}
-        ${isAr ? 'right-0' : 'left-0'}`}>
+    <div className="relative w-full pb-1">
+      <label className={`absolute pointer-events-none transition-all duration-200 z-10 text-left
+        ${active ? `-top-5 text-[9px] tracking-[0.2em] font-bold uppercase ${labelActive}` : `top-3 text-sm font-medium ${labelIdle}`}`}>
         {label}
       </label>
       {Tag === 'select' ? (
@@ -154,18 +191,17 @@ const FloatingField = ({ label, name, type='text', required, isAr, as:'Tag'='inp
           <select required={required} name={name} value={val}
             onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
             onChange={e => setVal(e.target.value)}
-            className={`w-full bg-transparent border-b py-3 outline-none text-sm appearance-none cursor-pointer transition-colors duration-200
-              ${active ? 'border-sky-400' : 'border-white/10'} text-white`}>
+            className={`w-full bg-transparent border-b py-3 outline-none text-sm appearance-none cursor-pointer transition-colors duration-200 ${border} ${textColor}`}>
             <option value="" disabled hidden></option>
             {children}
           </select>
-          <ChevronDown size={13} className={`absolute top-3.5 pointer-events-none text-slate-500 ${focused ? 'rotate-180 text-sky-400' : ''} transition-transform duration-200 ${isAr ? 'left-0' : 'right-0'}`}/>
+          <ChevronDown size={13} className={`absolute top-3.5 right-0 pointer-events-none transition-transform duration-200 ${focused ? 'rotate-180' : ''} ${dark ? 'text-white/30' : 'text-slate-400'}`}/>
         </div>
       ) : (
         <input required={required} name={name} type={type} autoComplete="off"
           value={val} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
           onChange={e => setVal(e.target.value)}
-          className={`w-full bg-transparent border-b py-3 outline-none text-sm text-white transition-colors duration-200 ${active ? 'border-sky-400' : 'border-white/10'}`}/>
+          className={`w-full bg-transparent border-b py-3 outline-none text-sm transition-colors duration-200 ${border} ${textColor}`}/>
       )}
     </div>
   );
@@ -173,100 +209,106 @@ const FloatingField = ({ label, name, type='text', required, isAr, as:'Tag'='inp
 
 // ─── NAV ─────────────────────────────────────────────────────────────────────
 
-const Nav = ({ lang, setLang, dark, setDark, go, active }) => {
+const Nav = ({ lang, setLang, go, active }) => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const t = T[lang];
   const ar = lang === 'ar';
 
   useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', h, { passive:true });
+    const h = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', h, { passive: true });
     return () => window.removeEventListener('scroll', h);
   }, []);
 
   const links = [
-    { id:'about', label: t.aboutNav },
-    { id:'services', label: t.servicesNav },
-    { id:'events', label: t.eventsNav },
+    { id:'about', label: t.nav_about },
+    { id:'services', label: t.nav_services },
+    { id:'events', label: t.nav_events },
   ];
 
   return (
     <>
-      <nav className={`fixed top-0 inset-x-0 z-[100] transition-all duration-500
-        ${scrolled ? 'bg-[#060b14]/90 backdrop-blur-xl border-b border-white/[0.06] py-3' : 'bg-transparent py-5'}`}
-        dir={ar ? 'rtl' : 'ltr'}>
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center justify-between">
+      <nav dir={ar ? 'rtl' : 'ltr'}
+        className={`fixed top-0 inset-x-0 z-[100] transition-all duration-500
+        ${scrolled ? 'bg-white/95 backdrop-blur-xl border-b border-slate-100 py-4' : 'bg-transparent py-6'}`}>
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
+
           {/* Logo */}
-          <button onClick={() => go('home')} className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center
-              group-hover:bg-sky-500/20 group-hover:border-sky-500/40 transition-all duration-300">
-              <svg className="w-4 h-4 text-sky-400" viewBox="0 0 400 500" fill="none" stroke="currentColor" strokeWidth="50" strokeLinecap="round" strokeLinejoin="round">
+          <button onClick={() => go('home')} className="flex items-center gap-3 group">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${scrolled ? 'bg-sky-500' : 'bg-sky-500'}`}>
+              <svg className="w-4 h-4 text-white" viewBox="0 0 400 500" fill="none" stroke="currentColor" strokeWidth="55" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="200" cy="200" r="150"/>
                 <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
               </svg>
             </div>
-            <span className="text-white font-black text-sm tracking-[0.15em] uppercase">{t.logo}</span>
+            <span className={`font-black text-sm tracking-[0.18em] uppercase transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`}>
+              {t.logo}
+            </span>
           </button>
 
           {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-10">
             {links.map(l => (
               <button key={l.id} onClick={() => go(l.id)}
                 className={`text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-200
-                  ${active === l.id ? 'text-sky-400' : 'text-white/50 hover:text-white/90'}`}>
+                  ${active === l.id
+                    ? 'text-sky-500'
+                    : scrolled ? 'text-slate-500 hover:text-slate-900' : 'text-white/60 hover:text-white'}`}>
                 {l.label}
               </button>
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-5">
             <button onClick={() => setLang(ar ? 'en' : 'ar')}
-              className="text-[11px] font-bold uppercase tracking-widest text-white/50 hover:text-white transition-colors">
-              {ar ? 'EN' : 'AR'}
-            </button>
-            <button onClick={() => setDark(!dark)}
-              className="w-8 h-8 flex items-center justify-center text-white/50 hover:text-white transition-colors">
-              {dark ? <Sun size={16}/> : <Moon size={16}/>}
+              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${scrolled ? 'text-slate-400 hover:text-slate-900' : 'text-white/50 hover:text-white'}`}>
+              <Globe size={13}/> {ar ? 'EN' : 'AR'}
             </button>
             <button onClick={() => go('contact')}
-              className="px-6 py-2.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 shadow-lg shadow-sky-500/25 active:scale-95">
+              className={`px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] rounded-full transition-all duration-200 active:scale-95
+                ${scrolled ? 'bg-slate-900 text-white hover:bg-sky-600' : 'bg-white text-slate-900 hover:bg-sky-500 hover:text-white'}`}>
               {t.cta}
             </button>
           </div>
 
-          <button className="lg:hidden text-white/70 hover:text-white p-1" onClick={() => setOpen(!open)}>
-            {open ? <X size={20}/> : <Menu size={20}/>}
+          <button className={`lg:hidden p-1 transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`} onClick={() => setOpen(!open)}>
+            {open ? <X size={22}/> : <Menu size={22}/>}
           </button>
         </div>
       </nav>
 
-      {/* Mobile drawer */}
+      {/* Mobile Drawer */}
       <div className={`fixed inset-0 z-[200] lg:hidden transition-opacity duration-300 ${open ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setOpen(false)}/>
-        <div className={`absolute top-0 h-full w-72 bg-[#080f1c] border-r border-white/10 transition-transform duration-500
-          ${ar ? 'right-0 border-l border-r-0' : 'left-0'} ${open ? 'translate-x-0' : ar ? 'translate-x-full' : '-translate-x-full'}`}
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)}/>
+        <div className={`absolute top-0 h-full w-80 bg-white shadow-2xl transition-transform duration-500 flex flex-col
+          ${ar ? 'right-0' : 'left-0'} ${open ? 'translate-x-0' : ar ? 'translate-x-full' : '-translate-x-full'}`}
           dir={ar ? 'rtl' : 'ltr'}>
-          <div className="flex flex-col h-full p-7 pt-20 gap-6">
+          <div className="flex items-center gap-3 p-6 border-b border-slate-100">
+            <div className="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center">
+              <svg className="w-4 h-4 text-white" viewBox="0 0 400 500" fill="none" stroke="currentColor" strokeWidth="55" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="200" cy="200" r="150"/>
+                <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
+              </svg>
+            </div>
+            <span className="font-black text-sm tracking-[0.18em] uppercase text-slate-900">{t.logo}</span>
+          </div>
+          <div className="flex flex-col p-6 gap-1 flex-1">
             {['home', ...links.map(l => l.id), 'contact'].map(id => {
-              const label = id === 'home' ? t.logo : id === 'contact' ? t.cta : links.find(l => l.id === id)?.label || id;
+              const label = id === 'home' ? t.logo : id === 'contact' ? t.cta : links.find(l => l.id === id)?.label;
               return (
                 <button key={id} onClick={() => { go(id); setOpen(false); }}
-                  className="text-left text-white/80 hover:text-white font-bold text-lg py-2 border-b border-white/5 transition-colors">
+                  className="text-left py-3.5 font-bold text-slate-800 hover:text-sky-500 border-b border-slate-50 transition-colors text-sm tracking-wide">
                   {label}
                 </button>
               );
             })}
-            <div className="mt-auto flex gap-3">
-              <button onClick={() => { setLang(ar ? 'en' : 'ar'); setOpen(false); }}
-                className="flex-1 py-2.5 bg-white/5 rounded-xl text-[10px] font-bold uppercase tracking-widest text-white/60 hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
-                <Globe size={12}/> {ar ? 'EN' : 'AR'}
-              </button>
-              <button onClick={() => { setDark(!dark); setOpen(false); }}
-                className="flex-1 py-2.5 bg-white/5 rounded-xl text-[10px] font-bold uppercase tracking-widest text-white/60 hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
-                {dark ? <Sun size={12}/> : <Moon size={12}/>} {dark ? 'Light' : 'Dark'}
-              </button>
-            </div>
+          </div>
+          <div className="p-6 border-t border-slate-100">
+            <button onClick={() => { setLang(ar ? 'en' : 'ar'); setOpen(false); }}
+              className="w-full py-3 bg-slate-50 rounded-xl text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2">
+              <Globe size={13}/> {ar ? 'Switch to English' : 'تفعيل العربية'}
+            </button>
           </div>
         </div>
       </div>
@@ -274,58 +316,51 @@ const Nav = ({ lang, setLang, dark, setDark, go, active }) => {
   );
 };
 
-// ─── SERVICE CARD ─────────────────────────────────────────────────────────────
+// ─── SERVICE ROW ─────────────────────────────────────────────────────────────
 
-const ServiceCard = ({ s, lang, i }) => {
-  const [hov, setHov] = useState(false);
+const ServiceRow = ({ s, lang, i, isLast }) => {
+  const [open, setOpen] = useState(false);
   const t = T[lang];
+  const ar = lang === 'ar';
+
   return (
-    <div className={`reveal group relative overflow-hidden rounded-3xl cursor-default ${s.span}
-      min-h-[260px] sm:min-h-[320px]`}
-      style={{ transitionDelay: `${i * 80}ms` }}
-      onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}>
-      {/* BG image */}
-      <div className="absolute inset-0 z-0">
-        <img src={s.img} alt="" className={`w-full h-full object-cover transition-transform duration-[2.5s] ease-out ${hov ? 'scale-110' : 'scale-100'}`}/>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#060b14] via-[#060b14]/60 to-[#060b14]/20"/>
-        <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 80% 20%, ${s.accent}18 0%, transparent 60%)` }}/>
-      </div>
-
-      {/* Index watermark */}
-      <span className={`absolute top-4 ${lang === 'ar' ? 'left-4' : 'right-4'} text-[5rem] sm:text-[8rem] font-black leading-none select-none pointer-events-none z-10
-        transition-all duration-700 ${hov ? 'opacity-[0.12]' : 'opacity-[0.05]'}`}
-        style={{ color: s.accent, fontStyle: 'italic' }}>
-        {s.index}
-      </span>
-
-      {/* Content */}
-      <div className="relative z-20 flex flex-col justify-between h-full p-6 sm:p-8">
-        <div className="flex items-start justify-between">
-          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-white/10 backdrop-blur-md transition-all duration-300 ${hov ? 'scale-110' : 'scale-100'}`}
-            style={{ background: `${s.accent}20`, color: s.accent }}>
-            {s.icon}
-          </div>
-          <div className={`text-[10px] font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-white/10 bg-white/5 text-white/50 backdrop-blur-md
-            transition-all duration-300 ${hov ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-            {t.explore}
+    <div className={`reveal border-b border-slate-100 group`} style={{ transitionDelay: `${i * 60}ms` }}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between py-7 sm:py-9 gap-6 text-left hover:bg-slate-50/50 px-2 -mx-2 rounded-xl transition-colors duration-200"
+        dir={ar ? 'rtl' : 'ltr'}>
+        <div className={`flex items-center gap-6 sm:gap-10 flex-1 min-w-0 ${ar ? 'flex-row-reverse' : ''}`}>
+          <span className="text-[11px] font-black text-slate-300 tracking-[0.2em] w-8 flex-shrink-0">{s.index}</span>
+          <div className={`flex-1 min-w-0 ${ar ? 'text-right' : ''}`}>
+            <h3 className={`text-xl sm:text-3xl font-black tracking-tight text-slate-900 transition-colors group-hover:text-sky-600 leading-tight`}>
+              {s.title[lang]}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 font-medium mt-1 tracking-wide">{s.sub[lang]}</p>
           </div>
         </div>
+        <div className={`w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white text-slate-400
+          ${open ? 'bg-sky-500 border-sky-500 text-white rotate-45' : ''}`}>
+          <ArrowUpRight size={16} className="transition-transform duration-300"/>
+        </div>
+      </button>
 
-        <div>
-          <h3 className={`text-xl sm:text-2xl font-black text-white tracking-tight mb-3 transition-colors duration-300 ${hov ? '' : ''}`}
-            style={{ color: hov ? s.accent : 'white' }}>
-            {s.title[lang]}
-          </h3>
-          <div className={`overflow-hidden transition-all duration-500 ease-in-out ${hov ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}`}>
-            <p className="text-sm text-white/60 leading-relaxed mb-4">{s.desc[lang]}</p>
-            <div className="grid grid-cols-2 gap-1.5">
-              {s.features[lang].map((f, i) => (
-                <div key={i} className="flex items-center gap-1.5">
-                  <div className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: s.accent }}/>
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/50">{f}</span>
+      {/* Expanded panel */}
+      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${open ? 'max-h-[600px] opacity-100 pb-8' : 'max-h-0 opacity-0'}`}
+        dir={ar ? 'rtl' : 'ltr'}>
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 px-2">
+          <div>
+            <p className="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">{s.desc[lang]}</p>
+            <div className="grid grid-cols-2 gap-2">
+              {s.features[lang].map((f, j) => (
+                <div key={j} className={`flex items-center gap-2 ${ar ? 'flex-row-reverse' : ''}`}>
+                  <div className="w-1.5 h-1.5 rounded-full bg-sky-500 flex-shrink-0"/>
+                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{f}</span>
                 </div>
               ))}
             </div>
+          </div>
+          <div className="h-48 sm:h-56 rounded-2xl overflow-hidden">
+            <img src={s.img} alt={s.title[lang]} className="w-full h-full object-cover"/>
           </div>
         </div>
       </div>
@@ -333,20 +368,20 @@ const ServiceCard = ({ s, lang, i }) => {
   );
 };
 
-// ─── MARQUEE ──────────────────────────────────────────────────────────────────
+// ─── MARQUEE ─────────────────────────────────────────────────────────────────
 
 const Marquee = ({ lang }) => {
   const t = T[lang];
   const items = [...CUSTOMERS, ...CUSTOMERS, ...CUSTOMERS];
   return (
-    <div className="py-10">
-      <p className="text-center text-[10px] uppercase tracking-[0.4em] text-white/25 font-bold mb-8">{t.customers}</p>
+    <div className="py-12 sm:py-16 border-y border-slate-100">
+      <p className="text-center text-[10px] uppercase tracking-[0.5em] text-slate-300 font-bold mb-8">{t.customers_label}</p>
       <div className="relative overflow-hidden">
-        <div className="absolute inset-y-0 left-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to right, #060b14, transparent)' }}/>
-        <div className="absolute inset-y-0 right-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(to left, #060b14, transparent)' }}/>
+        <div className="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to right, white, transparent)' }}/>
+        <div className="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to left, white, transparent)' }}/>
         <div className="flex gap-4 w-max animate-marquee">
           {items.map((n, i) => (
-            <span key={i} className="px-5 py-2.5 rounded-full border border-white/8 bg-white/[0.03] text-[11px] font-bold uppercase tracking-wider text-white/40 whitespace-nowrap hover:border-sky-500/30 hover:text-white/60 transition-colors cursor-default">
+            <span key={i} className="px-5 py-2 rounded-full border border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap hover:border-sky-200 hover:text-sky-500 transition-colors cursor-default">
               {n}
             </span>
           ))}
@@ -356,11 +391,10 @@ const Marquee = ({ lang }) => {
   );
 };
 
-// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+// ─── MAIN ────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [lang, setLang] = useState('en');
-  const [dark, setDark] = useState(true);
   const [active, setActive] = useState('home');
   const [careers, setCareers] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
@@ -382,13 +416,13 @@ export default function App() {
         }
       }
     };
-    window.addEventListener('scroll', h, { passive:true });
+    window.addEventListener('scroll', h, { passive: true });
     return () => window.removeEventListener('scroll', h);
   }, []);
 
   const go = id => {
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior:'smooth' });
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
     setActive(id);
   };
 
@@ -398,8 +432,8 @@ export default function App() {
     const fd = new FormData(e.target);
     try {
       await fetch(scriptURL, {
-        method:'POST', mode:'no-cors',
-        body: JSON.stringify({ sheetName: sheet, Name: fd.get('name'), Email: fd.get('email'), Phone: fd.get('phone'), Company: fd.get('company'), Service: fd.get('service'), CV_Link: fd.get('cv_link')||'' })
+        method: 'POST', mode: 'no-cors',
+        body: JSON.stringify({ sheetName: sheet, Name: fd.get('name'), Email: fd.get('email'), Phone: fd.get('phone'), Company: fd.get('company'), Service: fd.get('service'), CV_Link: fd.get('cv_link') || '' })
       });
       setFormStatus('success');
       e.target.reset();
@@ -408,360 +442,459 @@ export default function App() {
   };
 
   const stats = [
-    { n:'210+', l:t.statsA, icon:<Zap size={18}/> },
-    { n:'18+',  l:t.statsB, icon:<Binary size={18}/> },
-    { n:'14',   l:t.statsC, icon:<Trophy size={18}/> },
-    { n:'25+',  l:t.statsD, icon:<Users size={18}/> },
+    { n:'210+', l: t.stats_a, icon:<Zap size={16}/> },
+    { n:'18+',  l: t.stats_b, icon:<Binary size={16}/> },
+    { n:'14',   l: t.stats_c, icon:<Trophy size={16}/> },
+    { n:'25+',  l: t.stats_d, icon:<Users size={16}/> },
   ];
 
-  // Force dark bg regardless of toggle for this design
-  const bg = dark ? '#060b14' : '#f0f4fa';
-  const text = dark ? 'text-white' : 'text-slate-900';
-
   return (
-    <div dir={ar ? 'rtl' : 'ltr'} style={{ backgroundColor: bg, color: dark ? 'white' : '#0f172a' }}
-      className={`min-h-screen font-sans selection:bg-sky-500 selection:text-white overflow-x-hidden transition-colors duration-500`}>
+    <div dir={ar ? 'rtl' : 'ltr'} className="bg-white text-slate-900 min-h-screen font-sans selection:bg-sky-100 selection:text-sky-700 overflow-x-hidden">
 
-      {/* Ambient background */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-1/4 left-1/4 w-[800px] h-[800px] rounded-full opacity-[0.035] blur-[120px]"
-          style={{ background: 'radial-gradient(circle, #38bdf8 0%, transparent 70%)' }}/>
-        <div className="absolute top-1/2 -right-1/4 w-[600px] h-[600px] rounded-full opacity-[0.025] blur-[100px]"
-          style={{ background: 'radial-gradient(circle, #818cf8 0%, transparent 70%)' }}/>
-        <div className="absolute bottom-0 left-1/3 w-[500px] h-[500px] rounded-full opacity-[0.02] blur-[80px]"
-          style={{ background: 'radial-gradient(circle, #34d399 0%, transparent 70%)' }}/>
-        {/* Grid */}
-        <div className="absolute inset-0 opacity-[0.025]"
-          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '60px 60px' }}/>
-      </div>
+      <Nav lang={lang} setLang={setLang} go={go} active={active} />
 
-      <Nav lang={lang} setLang={setLang} dark={dark} setDark={setDark} go={go} active={active}/>
-
-      {/* ── HERO ── */}
-      <section id="home" className="relative min-h-screen flex flex-col items-center justify-center text-center px-5 sm:px-8 z-10 pt-20">
-        {/* Pill */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.04] mb-8 animate-fadeUp">
-          <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse shadow-[0_0_8px_#38bdf8]"/>
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">{t.tag}</span>
+      {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
+      <section id="home" className="relative min-h-screen flex flex-col overflow-hidden bg-slate-900">
+        {/* Hero image */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000"
+            alt=""
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.6) 60%, rgba(2,6,23,0.8) 100%)' }}/>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-[9rem] font-black tracking-tighter leading-[0.92] mb-8 animate-fadeUp" style={{ animationDelay:'100ms' }}>
-          <span className="block text-white/90">{t.hero1}</span>
-          <span className="block italic" style={{ WebkitTextStroke: dark ? '1px rgba(56,189,248,0.6)' : undefined, color: 'transparent', backgroundImage: 'linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #34d399 100%)', WebkitBackgroundClip: 'text', backgroundClip: 'text' }}>
-            {t.hero2}
-          </span>
-        </h1>
+        {/* Thin top accent line */}
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10"/>
 
-        <p className="max-w-lg text-base sm:text-lg text-white/40 leading-relaxed mb-10 animate-fadeUp font-medium" style={{ animationDelay:'200ms' }}>
-          {t.heroDesc}
-        </p>
+        <div className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full">
+          {/* Label */}
+          <div className="flex items-center gap-3 mb-8 animate-fadeUp">
+            <div className="w-5 h-[2px] bg-sky-500"/>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
+          </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 animate-fadeUp" style={{ animationDelay:'320ms' }}>
-          <button onClick={() => go('services')}
-            className="w-full sm:w-auto px-8 py-3.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 shadow-2xl shadow-sky-500/30 active:scale-95 flex items-center justify-center gap-2">
-            {t.servicesNav} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/>
-          </button>
-          <button onClick={() => go('about')}
-            className="w-full sm:w-auto px-8 py-3.5 border border-white/10 hover:border-white/25 hover:bg-white/[0.04] text-white/60 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
-            {t.aboutNav}
-          </button>
+          {/* Giant headline */}
+          <h1 className="animate-fadeUp" style={{ animationDelay:'80ms' }}>
+            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88]">
+              {t.hero_line1}
+            </span>
+            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88]"
+              style={{ color:'transparent', WebkitTextStroke:'1px rgba(255,255,255,0.3)' }}>
+              {t.hero_line2}
+            </span>
+            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic">
+              {t.hero_line3}
+            </span>
+          </h1>
+
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8 animate-fadeUp" style={{ animationDelay:'180ms' }}>
+            <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium">
+              {t.hero_desc}
+            </p>
+            <div className="flex gap-3 flex-shrink-0">
+              <button onClick={() => go('services')}
+                className="px-7 py-3.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-sky-500/30">
+                {t.nav_services} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/>
+              </button>
+              <button onClick={() => go('about')}
+                className="px-7 py-3.5 border border-white/20 hover:border-white/50 text-white/70 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
+                {t.nav_about}
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Scroll hint */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce opacity-30">
-          <div className="w-[1px] h-10 bg-gradient-to-b from-transparent to-white/60"/>
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3 opacity-30 animate-bounce">
+          <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white">{t.scroll}</span>
+          <div className="w-[1px] h-8 bg-gradient-to-b from-white/80 to-transparent"/>
         </div>
       </section>
 
-      {/* ── ABOUT ── */}
-      <section id="about" className="relative z-10 py-24 sm:py-36 px-5 sm:px-8">
+      {/* ═══ ABOUT ══════════════════════════════════════════════════════════ */}
+      <section id="about" className="py-24 sm:py-36 px-6 sm:px-10">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="reveal space-y-10">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-sky-400 mb-4">{t.tag}</p>
-                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter text-white leading-[0.9]">{t.aboutTitle}</h2>
-                <div className="mt-5 h-px w-20 bg-gradient-to-r from-sky-500 to-transparent"/>
-              </div>
-              <p className="text-lg text-white/50 leading-relaxed font-medium">{t.aboutBody}</p>
-              <div className="grid sm:grid-cols-2 gap-4">
+          {/* Label */}
+          <div className="flex items-center gap-3 mb-12 reveal">
+            <div className="w-5 h-[2px] bg-sky-500"/>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400">{t.about_label}</span>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
+            <div className="reveal">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
+                <span className="block">{t.about_title1}</span>
+                <span className="block italic text-sky-500">{t.about_title2}</span>
+              </h2>
+            </div>
+
+            <div className="reveal space-y-8" style={{ transitionDelay:'100ms' }}>
+              <p className="text-lg sm:text-xl text-slate-500 leading-relaxed font-medium">{t.about_body}</p>
+
+              <div className="grid grid-cols-1 gap-4">
                 {[
-                  { icon:<Target size={20}/>, title:t.mission, body:t.missionBody, c:'#0ea5e9' },
-                  { icon:<Eye size={20}/>, title:t.vision, body:t.visionBody, c:'#818cf8' }
+                  { icon:<Target size={18}/>, title: t.mission, body: t.mission_body },
+                  { icon:<Eye size={18}/>, title: t.vision, body: t.vision_body },
                 ].map((card, i) => (
-                  <div key={i} className="p-6 rounded-2xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.05] transition-colors group">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
-                      style={{ background: `${card.c}15`, color: card.c }}>
+                  <div key={i} className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors group">
+                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:border-sky-200 transition-all">
                       {card.icon}
                     </div>
-                    <h4 className="font-black text-sm text-white mb-2">{card.title}</h4>
-                    <p className="text-xs text-white/40 leading-relaxed">{card.body}</p>
+                    <div>
+                      <h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4>
+                      <p className="text-sm text-slate-500 leading-relaxed">{card.body}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4 reveal" style={{ transitionDelay:'150ms' }}>
-              {stats.map((s, i) => (
-                <div key={i} className="p-6 sm:p-8 rounded-3xl border border-white/[0.07] bg-white/[0.03] hover:bg-white/[0.06] transition-all duration-300 group hover:-translate-y-1 hover:shadow-xl hover:shadow-black/30"
-                  style={{ transitionDelay: `${i*60}ms` }}>
-                  <div className="w-9 h-9 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center mb-5 group-hover:bg-sky-500/20 transition-colors">
-                    {s.icon}
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-black text-white mb-1.5">{s.n}</div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-white/30">{s.l}</div>
+          {/* Stats row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden mt-20 reveal" style={{ transitionDelay:'150ms' }}>
+            {stats.map((s, i) => (
+              <div key={i} className="bg-white p-8 sm:p-10 flex flex-col items-center text-center gap-3 hover:bg-sky-50/40 transition-colors group">
+                <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all">
+                  {s.icon}
                 </div>
-              ))}
-            </div>
+                <span className="text-3xl sm:text-4xl font-black text-slate-900">{s.n}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wide text-slate-400">{s.l}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── SERVICES ── */}
-      <section id="services" className="relative z-10 py-24 sm:py-36 px-5 sm:px-8">
+      {/* ═══ SERVICES ═══════════════════════════════════════════════════════ */}
+      <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 reveal">
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-sky-400 mb-4">{t.servicesNav}</p>
-            <h2 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">
-              <span className="text-white">{t.servicesTitle} </span>
-              <span className="italic" style={{ color:'transparent', backgroundImage:'linear-gradient(135deg,#38bdf8,#818cf8)', WebkitBackgroundClip:'text', backgroundClip:'text' }}>
-                {t.servicesTitle2}
-              </span>
+          {/* Label */}
+          <div className="flex items-center gap-3 mb-12 reveal">
+            <div className="w-5 h-[2px] bg-sky-500"/>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400">{t.services_label}</span>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
+            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900 reveal">
+              <span className="block">{t.services_title1}</span>
+              <span className="block italic text-sky-500">{t.services_title2}</span>
+            </h2>
+            <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium reveal" style={{ transitionDelay:'80ms' }}>
+              {t.services_body}
+            </p>
+          </div>
+
+          {/* Service rows */}
+          <div className="border-t border-slate-100">
+            {SERVICES.map((s, i) => (
+              <ServiceRow key={s.id} s={s} lang={lang} i={i} isLast={i === SERVICES.length - 1}/>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ EVENTS ═════════════════════════════════════════════════════════ */}
+      <section id="events" className="py-24 sm:py-36 px-6 sm:px-10">
+        <div className="max-w-7xl mx-auto">
+          {/* Label */}
+          <div className="flex items-center gap-3 mb-12 reveal">
+            <div className="w-5 h-[2px] bg-sky-500"/>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400">{t.events_label}</span>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] reveal">
+              <span className="block text-slate-900">{t.events_title1}</span>
+              <span className="block italic text-sky-500">{t.events_title2}</span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4 auto-rows-[280px] sm:auto-rows-[340px]">
-            {SERVICES.map((s, i) => <ServiceCard key={s.id} s={s} lang={lang} i={i}/>)}
-          </div>
-        </div>
-      </section>
 
-      {/* ── EVENTS ── */}
-      <section id="events" className="relative z-10 py-24 sm:py-36 px-5 sm:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14 reveal">
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-sky-400 mb-4">{t.eventsLabel}</p>
-            <h2 className="text-4xl sm:text-6xl font-black tracking-tighter text-white">{t.eventsTitle}</h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
             {EVENTS.map((ev, i) => (
-              <div key={ev.id} className="reveal group relative h-72 sm:h-96 rounded-3xl overflow-hidden cursor-default" style={{ transitionDelay:`${i*100}ms` }}>
+              <div key={ev.id} className="reveal group relative overflow-hidden rounded-3xl aspect-[3/4] sm:aspect-auto sm:h-[480px] cursor-default" style={{ transitionDelay:`${i*80}ms` }}>
                 <img src={ev.img} alt={ev.title[lang]} loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-[2s] ease-out group-hover:scale-105"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#060b14] via-[#060b14]/40 to-transparent"/>
-                <div className="absolute bottom-0 inset-x-0 p-6 text-center">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-400 block mb-2">{ev.date}</span>
-                  <h3 className="text-lg sm:text-xl font-black text-white">{ev.title[lang]}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CONTACT ── */}
-      <section id="contact" className="relative z-10 py-24 sm:py-36 px-5 sm:px-8">
-        <div className="max-w-5xl mx-auto reveal">
-          <div className="rounded-[2.5rem] overflow-hidden border border-white/[0.08]" style={{ background:'#0c1424' }}>
-            <div className="grid lg:grid-cols-5">
-              {/* Left panel */}
-              <div className="lg:col-span-2 p-10 sm:p-14 relative overflow-hidden flex flex-col justify-between"
-                style={{ background:'linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%)' }}>
-                <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10 blur-3xl"/>
-                <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/10 blur-2xl"/>
-                <div className="relative z-10">
-                  <h2 className="text-4xl sm:text-5xl font-black tracking-tighter text-white leading-none mb-5">{t.letsB}</h2>
-                  <p className="text-sm text-white/70 leading-relaxed">{t.contactDesc}</p>
-                </div>
-                <div className="relative z-10 mt-10 space-y-5">
-                  {[
-                    { icon:<Mail size={16}/>, label:'Email Us', val:'hello@mantiq.services' },
-                    { icon:<Phone size={16}/>, label:'Call Us', val:'+20 100 1234 567' }
-                  ].map((c,i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center text-white flex-shrink-0">{c.icon}</div>
-                      <div>
-                        <p className="text-[9px] font-bold uppercase tracking-widest text-white/50 mb-0.5">{c.label}</p>
-                        <p className="text-sm font-bold text-white">{c.val}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Right form */}
-              <div className="lg:col-span-3 p-10 sm:p-14">
-                {formStatus === 'success' ? (
-                  <div className="flex flex-col items-center justify-center h-full gap-5 py-8 text-center">
-                    <div className="w-16 h-16 rounded-full bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30">
-                      <CheckCircle2 size={28} className="text-white"/>
-                    </div>
-                    <h3 className="text-2xl font-black text-white">{t.successTitle}</h3>
-                    <p className="text-sm text-white/50 max-w-xs">{t.successBody}</p>
+                  className="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"/>
+                <div className="absolute inset-0" style={{ background:'linear-gradient(to top, rgba(2,6,23,0.9) 0%, transparent 60%)' }}/>
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-sky-600/0 group-hover:bg-sky-600/10 transition-colors duration-500"/>
+                <div className="absolute bottom-0 inset-x-0 p-7 sm:p-8">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-4 h-[2px] bg-sky-400"/>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-400">{ev.date}</span>
                   </div>
-                ) : (
-                  <form className="space-y-8" onSubmit={e => handleForm(e,'Leads')}>
-                    <div className="grid sm:grid-cols-2 gap-8">
-                      <FloatingField label={t.nameP} name="name" required isAr={ar}/>
-                      <FloatingField label={t.companyP} name="company" isAr={ar}/>
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-8">
-                      <FloatingField label={t.emailP} name="email" type="email" required isAr={ar}/>
-                      <FloatingField label={t.phoneP} name="phone" type="tel" required isAr={ar}/>
-                    </div>
-                    <FloatingField label={t.serviceP} name="service" required isAr={ar} as="select">
-                      {SERVICES.map(s => <option key={s.id} value={s.id} className="text-slate-900">{s.title[lang]}</option>)}
-                    </FloatingField>
-                    <button disabled={formStatus==='sending'}
-                      className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-40"
-                      style={{ background:'linear-gradient(135deg,#0ea5e9,#3b82f6)', boxShadow:'0 8px 32px rgba(14,165,233,0.25)' }}>
-                      {formStatus==='sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <>{t.submit}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}
-                    </button>
-                  </form>
-                )}
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">{ev.title[lang]}</h3>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="relative z-10 border-t border-white/[0.06] pt-6 pb-12 px-5 sm:px-8">
+      {/* ═══ CUSTOMERS MARQUEE ══════════════════════════════════════════════ */}
+      <div className="px-0 reveal">
         <Marquee lang={lang}/>
-        <div className="max-w-7xl mx-auto mt-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            {[Facebook, Linkedin, Mail].map((Icon, i) => (
-              <a key={i} href="#" className="w-9 h-9 rounded-xl bg-white/[0.04] border border-white/[0.07] flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.08] hover:border-white/15 transition-all">
-                <Icon size={15}/>
-              </a>
-            ))}
-          </div>
-          <div className="flex items-center gap-6">
-            <a href="https://mantiq-pricing.vercel.app/" target="_blank" rel="noopener"
-              className="text-sky-400/70 hover:text-sky-400 font-bold text-[10px] uppercase tracking-widest transition-colors flex items-center gap-1.5">
-              <Calculator size={11}/> {t.pricing}
-            </a>
-            <button onClick={() => setCareers(true)}
-              className="text-white/30 hover:text-white/70 font-bold text-[10px] uppercase tracking-widest transition-colors flex items-center gap-1.5">
-              <Users size={11}/> {t.careers}
-            </button>
-          </div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/20">
-            © 2026 MANTIQ. {t.rights}
-          </p>
-        </div>
-      </footer>
+      </div>
 
-      {/* ── CAREERS MODAL ── */}
-      {careers && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-xl" onClick={() => setCareers(false)}/>
-          <div className="relative w-full max-w-4xl rounded-[2.5rem] overflow-hidden border border-white/10 flex flex-col md:flex-row animate-zoomIn" style={{ background:'#0c1424' }}>
+      {/* ═══ CONTACT ════════════════════════════════════════════════════════ */}
+      <section id="contact" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900">
+        <div className="max-w-7xl mx-auto">
+          {/* Label */}
+          <div className="flex items-center gap-3 mb-12 reveal">
+            <div className="w-5 h-[2px] bg-sky-500"/>
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">{t.contact_label}</span>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
             {/* Left */}
-            <div className="md:w-2/5 p-10 sm:p-14 relative flex flex-col justify-between hidden md:flex" style={{ background:'linear-gradient(135deg,#0ea5e9,#3b82f6)' }}>
-              <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-white/10 blur-3xl"/>
-              <div className="relative z-10">
-                <Briefcase size={32} className="text-white mb-6"/>
-                <h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.joinTeam}</h2>
-                <p className="text-sm text-white/70 leading-relaxed">{t.careerMsg}</p>
-              </div>
-              <div className="relative z-10 space-y-4">
-                <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/40">{t.valTitle}</p>
+            <div className="reveal">
+              <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white">
+                <span className="block">{t.contact_title1}</span>
+                <span className="block italic text-sky-400">{t.contact_title2}</span>
+              </h2>
+              <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
+
+              <div className="mt-12 space-y-5">
                 {[
-                  { icon:<Lightbulb size={14}/>, label:t.val1 },
-                  { icon:<Target size={14}/>, label:t.val2 },
-                  { icon:<Rocket size={14}/>, label:t.val3 },
-                ].map((v,i) => (
-                  <div key={i} className="flex items-center gap-3 text-white/80">
-                    {v.icon}<span className="text-xs font-bold">{v.label}</span>
+                  { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' },
+                  { icon:<Phone size={16}/>, label:'Phone', val:'+20 100 1234 567' },
+                ].map((c, i) => (
+                  <div key={i} className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500/50 group-hover:text-sky-400 transition-all">
+                      {c.icon}
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-0.5">{c.label}</p>
+                      <p className="text-sm font-bold text-white/80">{c.val}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
-            {/* Right */}
-            <div className="flex-1 p-8 sm:p-12 relative">
-              <button onClick={() => setCareers(false)}
-                className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all">
-                <X size={16}/>
-              </button>
+
+            {/* Right — Form */}
+            <div className="reveal" style={{ transitionDelay:'100ms' }}>
               {formStatus === 'success' ? (
-                <div className="flex flex-col items-center justify-center h-full gap-5 py-8 text-center">
-                  <div className="w-16 h-16 rounded-full bg-sky-500 flex items-center justify-center shadow-2xl">
-                    <CheckCircle2 size={28} className="text-white"/>
+                <div className="flex flex-col gap-5 py-8">
+                  <div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30">
+                    <CheckCircle2 size={24} className="text-white"/>
                   </div>
-                  <h3 className="text-2xl font-black text-white">{t.successTitle}</h3>
-                  <p className="text-sm text-white/50">Our HR team will review your profile shortly.</p>
+                  <h3 className="text-3xl font-black text-white tracking-tight">{t.success_title}</h3>
+                  <p className="text-sm text-white/50 max-w-sm leading-relaxed">{t.success_body}</p>
                 </div>
               ) : (
-                <form className="space-y-8 h-full flex flex-col justify-center" onSubmit={e => handleForm(e,'Work')}>
-                  <div className="grid sm:grid-cols-2 gap-8">
-                    <FloatingField label={t.nameP} name="name" required isAr={ar}/>
-                    <FloatingField label={t.emailP} name="email" type="email" required isAr={ar}/>
+                <form className="space-y-9" onSubmit={e => handleForm(e, 'Leads')}>
+                  <div className="grid sm:grid-cols-2 gap-9">
+                    <Field label={t.name_p} name="name" required dark/>
+                    <Field label={t.company_p} name="company" dark/>
                   </div>
-                  <FloatingField label={t.cvLink} name="cv_link" type="url" isAr={ar}/>
-                  <button disabled={formStatus==='sending'}
-                    className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-40"
-                    style={{ background:'linear-gradient(135deg,#0ea5e9,#3b82f6)', boxShadow:'0 8px 32px rgba(14,165,233,0.25)' }}>
-                    {formStatus==='sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <>{t.applyBtn}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}
+                  <div className="grid sm:grid-cols-2 gap-9">
+                    <Field label={t.email_p} name="email" type="email" required dark/>
+                    <Field label={t.phone_p} name="phone" type="tel" required dark/>
+                  </div>
+                  <Field label={t.service_p} name="service" required dark as="select">
+                    {SERVICES.map(s => <option key={s.id} value={s.id} className="text-slate-900 bg-white">{s.title[lang]}</option>)}
+                  </Field>
+                  <button disabled={formStatus === 'sending'}
+                    className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2">
+                    {formStatus === 'sending'
+                      ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</>
+                      : <>{t.submit}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}
                   </button>
                 </form>
               )}
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ═══ FOOTER ═════════════════════════════════════════════════════════ */}
+      <footer className="py-12 sm:py-16 px-6 sm:px-10 border-t border-slate-100 reveal">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-7 h-7 rounded-lg bg-sky-500 flex items-center justify-center">
+                  <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 400 500" fill="none" stroke="currentColor" strokeWidth="55" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="200" cy="200" r="150"/>
+                    <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
+                  </svg>
+                </div>
+                <span className="font-black text-sm tracking-[0.18em] uppercase text-slate-900">{t.logo}</span>
+              </div>
+              <p className="text-xs text-slate-400 max-w-xs leading-relaxed">{t.footer_desc}</p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
+              <a href="https://mantiq-pricing.vercel.app/" target="_blank" rel="noopener"
+                className="text-sky-500 hover:text-sky-600 font-bold text-[10px] uppercase tracking-widest transition-colors flex items-center gap-1.5">
+                <Calculator size={11}/> {t.pricing}
+              </a>
+              <button onClick={() => setCareers(true)}
+                className="text-slate-400 hover:text-slate-700 font-bold text-[10px] uppercase tracking-widest transition-colors flex items-center gap-1.5">
+                <Users size={11}/> {t.careers}
+              </button>
+              <div className="flex items-center gap-3">
+                {[Facebook, Linkedin, Mail].map((Icon, i) => (
+                  <a key={i} href="#" className="w-8 h-8 rounded-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:border-sky-200 hover:text-sky-500 transition-all">
+                    <Icon size={14}/>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-300">
+              © 2026 MANTIQ BUSINESS SERVICES. {t.rights}
+            </p>
+            <button onClick={() => setLang(ar ? 'en' : 'ar')}
+              className="text-[10px] font-bold uppercase tracking-widest text-slate-300 hover:text-sky-500 transition-colors flex items-center gap-1.5">
+              <Globe size={11}/> {ar ? 'English' : 'العربية'}
+            </button>
+          </div>
+        </div>
+      </footer>
+
+      {/* ═══ CAREERS MODAL ══════════════════════════════════════════════════ */}
+      {careers && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8">
+          <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setCareers(false)}/>
+          <div className="relative w-full max-w-4xl bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
+            {/* Left panel */}
+            <div className="hidden md:flex md:w-5/12 flex-col justify-between p-12 bg-slate-900">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8">
+                  <Briefcase size={18} className="text-white"/>
+                </div>
+                <h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2>
+                <p className="text-sm text-white/50 leading-relaxed">{t.career_body}</p>
+              </div>
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-[0.35em] text-white/30 mb-5">{t.val_title}</p>
+                <div className="space-y-4">
+                  {[
+                    { icon:<Lightbulb size={14}/>, label: t.val_1 },
+                    { icon:<Target size={14}/>, label: t.val_2 },
+                    { icon:<Rocket size={14}/>, label: t.val_3 },
+                  ].map((v, i) => (
+                    <div key={i} className="flex items-center gap-3 text-white/60">
+                      <div className="text-sky-400">{v.icon}</div>
+                      <span className="text-xs font-bold uppercase tracking-wide">{v.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right form */}
+            <div className="flex-1 p-8 sm:p-12 relative">
+              <button onClick={() => setCareers(false)}
+                className="absolute top-5 right-5 w-9 h-9 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all">
+                <X size={16}/>
+              </button>
+              {formStatus === 'success' ? (
+                <div className="flex flex-col gap-5 py-6">
+                  <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center">
+                    <CheckCircle2 size={22} className="text-white"/>
+                  </div>
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight">{t.success_title}</h3>
+                  <p className="text-sm text-slate-500">Our HR team will review your profile shortly.</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-8">{t.join_title}</h3>
+                  <form className="space-y-8" onSubmit={e => handleForm(e, 'Work')}>
+                    <div className="grid sm:grid-cols-2 gap-8">
+                      <Field label={t.name_p} name="name" required/>
+                      <Field label={t.email_p} name="email" type="email" required/>
+                    </div>
+                    <Field label={t.cv_link} name="cv_link" type="url"/>
+                    <button disabled={formStatus === 'sending'}
+                      className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-slate-900 hover:bg-sky-600 transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-40 mt-4">
+                      {formStatus === 'sending'
+                        ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</>
+                        : <>{t.apply}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}
+                    </button>
+                  </form>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
+      {/* ─── GLOBAL STYLES ─────────────────────────────────────────────────── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;700&family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
 
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { overflow-x: hidden; margin: 0; }
-        .font-sans { font-family: 'Syne', sans-serif; }
+        body { margin: 0; overflow-x: hidden; }
 
+        /* Font system */
+        .font-sans { font-family: 'DM Sans', sans-serif; }
+        h1, h2, h3, .font-black { font-family: 'Playfair Display', Georgia, serif; }
+        [dir="rtl"], [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
+          font-family: 'Noto Sans Arabic', sans-serif;
+        }
+
+        /* Tracking tight override for display font */
+        .tracking-tighter { letter-spacing: -0.04em; }
+
+        /* Marquee */
         @keyframes marquee {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-33.333%); }
         }
-        .animate-marquee { animation: marquee 45s linear infinite; will-change: transform; }
-        @media(max-width:640px) { .animate-marquee { animation-duration: 22s; } }
+        .animate-marquee {
+          animation: marquee 50s linear infinite;
+          will-change: transform;
+        }
+        @media(max-width: 640px) {
+          .animate-marquee { animation-duration: 25s; }
+        }
 
+        /* Hero fade-up */
         @keyframes fadeUp {
-          from { opacity:0; transform:translateY(28px); }
+          from { opacity:0; transform:translateY(30px); }
           to   { opacity:1; transform:translateY(0); }
         }
         .animate-fadeUp {
           opacity: 0;
-          animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+          animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) forwards;
         }
 
+        /* Scroll reveal */
         .reveal {
           opacity: 0;
-          transform: translateY(36px);
-          transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+          transform: translateY(32px);
+          transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                      transform 0.9s cubic-bezier(0.16,1,0.3,1);
           will-change: opacity, transform;
+          pointer-events: none;
         }
         .rv {
           opacity: 1 !important;
           transform: translateY(0) !important;
+          pointer-events: auto;
         }
 
+        /* Modal zoom */
         @keyframes zoomIn {
-          from { opacity:0; transform:scale(0.94) translateY(12px); }
+          from { opacity:0; transform:scale(0.95) translateY(16px); }
           to   { opacity:1; transform:scale(1) translateY(0); }
         }
-        .animate-zoomIn { animation: zoomIn 0.45s cubic-bezier(0.16,1,0.3,1) forwards; }
+        .animate-zoomIn {
+          animation: zoomIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+        }
 
-        /* Fix pointer events after reveal */
-        .reveal { pointer-events: none; }
-        .rv     { pointer-events: auto; }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(56,189,248,0.3); border-radius: 2px; }
-
-        /* Arabic font override */
-        [dir="rtl"] { font-family: 'Noto Sans Arabic', sans-serif; }
+        ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
       `}</style>
     </div>
   );
