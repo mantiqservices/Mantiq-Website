@@ -168,6 +168,68 @@ const useReveal = () => {
   });
 };
 
+// Smooth scroll progress 0–1
+const useScrollProgress = () => {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    let raf;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        setProgress(h > 0 ? window.scrollY / h : 0);
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
+  }, []);
+  return progress;
+};
+
+// Parallax value for an element — returns offset in px
+const useParallax = (speed = 0.3) => {
+  const ref = useRef(null);
+  const [offset, setOffset] = useState(0);
+  useEffect(() => {
+    let raf;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
+        const center = rect.top + rect.height / 2 - window.innerHeight / 2;
+        setOffset(center * speed);
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
+  }, [speed]);
+  return [ref, offset];
+};
+
+// Scroll-linked opacity/transform for any element
+const useScrollRevealValue = (threshold = 0.15) => {
+  const ref = useRef(null);
+  const [val, setVal] = useState(0); // 0 = hidden, 1 = fully visible
+  useEffect(() => {
+    let raf;
+    const calc = () => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const start = window.innerHeight * (1 - threshold);
+      const end   = window.innerHeight * 0.2;
+      const raw   = (start - rect.top) / (start - end);
+      setVal(Math.min(1, Math.max(0, raw)));
+    };
+    const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(calc); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    calc();
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(raf); };
+  }, [threshold]);
+  return [ref, val];
+};
+
 // ─── FLOATING FIELD ──────────────────────────────────────────────────────────
 
 const Field = ({ label, name, type = 'text', required, as: AsTag, children, dark }) => {
@@ -474,6 +536,59 @@ const TiltCard = ({ children }) => {
   );
 };
 
+// ─── SECTION LABEL (animated accent line) ────────────────────────────────────
+
+const SectionLabel = ({ text, dark = false }) => {
+  const [ref, val] = useScrollRevealValue(0.3);
+  return (
+    <div ref={ref} className="flex items-center gap-3 mb-12 overflow-hidden">
+      <div style={{
+        width: `${val * 20}px`,
+        height: '2px',
+        background: '#0ea5e9',
+        transition: 'none',
+        willChange: 'width',
+        flexShrink: 0,
+      }}/>
+      <span style={{
+        opacity: val,
+        transform: `translateX(${(1 - val) * -12}px)`,
+        transition: 'none',
+        willChange: 'opacity, transform',
+      }} className={`text-[10px] font-bold uppercase tracking-[0.4em] ${dark ? 'text-white/40' : 'text-slate-400'}`}>
+        {text}
+      </span>
+    </div>
+  );
+};
+
+// ─── SCROLL REVEAL TEXT (live scroll-linked) ─────────────────────────────────
+
+const ScrollRevealText = ({ children, dark = false }) => {
+  const [ref, val] = useScrollRevealValue(0.2);
+  return (
+    <div ref={ref} style={{
+      opacity: val,
+      transform: `translateY(${(1 - val) * 40}px)`,
+      transition: 'none',
+      willChange: 'opacity, transform',
+    }}>
+      {children}
+    </div>
+  );
+};
+
+// ─── PARALLAX SECTION (wraps a section with scroll offset) ───────────────────
+
+const ParallaxBlock = ({ children, speed = 0.12, className = '' }) => {
+  const [ref, offset] = useParallax(speed);
+  return (
+    <div ref={ref} style={{ transform: `translateY(${offset}px)`, willChange: 'transform' }} className={className}>
+      {children}
+    </div>
+  );
+};
+
 // ─── MARQUEE ─────────────────────────────────────────────────────────────────
 
 const Marquee = ({ lang }) => {
@@ -510,6 +625,31 @@ export default function App() {
   const ar = lang === 'ar';
 
   useReveal();
+  const scrollProgress = useScrollProgress();
+
+  // Mouse cursor dot
+  const cursorRef = useRef(null);
+  useEffect(() => {
+    let mx = -100, my = -100, cx = -100, cy = -100;
+    let raf;
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const move = (e) => { mx = e.clientX; my = e.clientY; };
+    const animate = () => {
+      cx = lerp(cx, mx, 0.12);
+      cy = lerp(cy, my, 0.12);
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${cx - 6}px, ${cy - 6}px)`;
+      }
+      raf = requestAnimationFrame(animate);
+    };
+    window.addEventListener('mousemove', move, { passive: true });
+    raf = requestAnimationFrame(animate);
+    return () => { window.removeEventListener('mousemove', move); cancelAnimationFrame(raf); };
+  }, []);
+
+  // Hero parallax
+  const [heroImgRef, heroImgOffset] = useParallax(0.25);
+  const [heroTextRef, heroTextOffset] = useParallax(0.1);
 
   useEffect(() => {
     const ids = ['home','about','services','events','contact'];
@@ -557,6 +697,14 @@ export default function App() {
   return (
     <div dir={ar ? 'rtl' : 'ltr'} className="bg-white text-slate-900 min-h-screen font-sans selection:bg-sky-100 selection:text-sky-700 overflow-x-hidden">
 
+      {/* ── Scroll progress bar ── */}
+      <div className="fixed top-0 left-0 z-[200] h-[2px] bg-sky-500 transition-none pointer-events-none"
+        style={{ width: `${scrollProgress * 100}%`, boxShadow: '0 0 8px rgba(14,165,233,0.6)' }}/>
+
+      {/* ── Custom cursor dot (desktop) ── */}
+      <div ref={cursorRef} className="fixed top-0 left-0 z-[300] w-3 h-3 rounded-full bg-sky-500 pointer-events-none mix-blend-difference hidden lg:block"
+        style={{ willChange: 'transform', transition: 'width 0.2s, height 0.2s, opacity 0.2s' }}/>
+
       <Nav lang={lang} setLang={setLang} go={go} active={active} />
 
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
@@ -574,7 +722,8 @@ export default function App() {
         {/* Thin top accent line */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10 animate-accentPulse"/>
 
-        <div className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full">
+        <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full"
+          style={{ transform: `translateY(${heroTextOffset}px)`, willChange: 'transform' }}>
           {/* Label */}
           <div className="flex items-center gap-3 mb-8 hero-label">
             <div className="w-5 h-[2px] bg-sky-500"/>
@@ -627,21 +776,20 @@ export default function App() {
       <section id="about" className="py-24 sm:py-36 px-6 sm:px-10">
         <div className="max-w-7xl mx-auto">
           {/* Label */}
-          <div className="flex items-center gap-3 mb-12 reveal">
-            <div className="w-5 h-[2px] bg-sky-500"/>
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400">{t.about_label}</span>
-          </div>
+          <SectionLabel text={t.about_label}/>
 
           <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
-            <div className="reveal reveal-left">
+            <ScrollRevealText>
               <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
                 <span className="block">{t.about_title1}</span>
                 <span className="block italic text-sky-500">{t.about_title2}</span>
               </h2>
-            </div>
+            </ScrollRevealText>
 
             <div className="reveal space-y-8" style={{ transitionDelay:'100ms' }}>
+              <ParallaxBlock speed={0.06}>
               <p className="text-lg sm:text-xl text-slate-500 leading-relaxed font-medium">{t.about_body}</p>
+              </ParallaxBlock>
 
               <div className="grid grid-cols-1 gap-4">
                 {[
@@ -677,16 +825,15 @@ export default function App() {
       <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
           {/* Label */}
-          <div className="flex items-center gap-3 mb-12 reveal">
-            <div className="w-5 h-[2px] bg-sky-500"/>
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400">{t.services_label}</span>
-          </div>
+          <SectionLabel text={t.services_label}/>
 
           <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
-            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900 reveal">
-              <span className="block">{t.services_title1}</span>
-              <span className="block italic text-sky-500">{t.services_title2}</span>
-            </h2>
+            <ScrollRevealText>
+              <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
+                <span className="block">{t.services_title1}</span>
+                <span className="block italic text-sky-500">{t.services_title2}</span>
+              </h2>
+            </ScrollRevealText>
             <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium reveal" style={{ transitionDelay:'80ms' }}>
               {t.services_body}
             </p>
@@ -705,10 +852,7 @@ export default function App() {
       <section id="events" className="py-24 sm:py-36 px-6 sm:px-10">
         <div className="max-w-7xl mx-auto">
           {/* Label */}
-          <div className="flex items-center gap-3 mb-12 reveal">
-            <div className="w-5 h-[2px] bg-sky-500"/>
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-slate-400">{t.events_label}</span>
-          </div>
+          <SectionLabel text={t.events_label}/>
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
             <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] reveal">
@@ -719,9 +863,11 @@ export default function App() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
             {EVENTS.map((ev, i) => (
-              <div key={ev.id} className="reveal hover-lift group relative overflow-hidden rounded-3xl aspect-[3/4] sm:aspect-auto sm:h-[480px] cursor-default" style={{ transitionDelay:`${i*80}ms` }}>
-                <img src={ev.img} alt={ev.title[lang]} loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-110"/>
+              <div key={ev.id} className="reveal hover-lift group relative overflow-hidden rounded-3xl aspect-[3/4] sm:aspect-auto sm:h-[480px] cursor-default" style={{ overflow: "hidden" }} style={{ transitionDelay:`${i*80}ms` }}>
+                <ParallaxBlock speed={0.08} className="absolute inset-0 w-full h-full">
+                  <img src={ev.img} alt={ev.title[lang]} loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-110"/>
+                </ParallaxBlock>
                 <div className="absolute inset-0 transition-opacity duration-500" style={{ background:'linear-gradient(to top, rgba(2,6,23,0.92) 0%, rgba(2,6,23,0.2) 50%, transparent 100%)' }}/>
                 <div className="absolute inset-0 bg-sky-700/0 group-hover:bg-sky-700/15 transition-colors duration-700"/>
                 {/* Sky accent line that grows on hover */}
@@ -748,18 +894,17 @@ export default function App() {
       <section id="contact" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900">
         <div className="max-w-7xl mx-auto">
           {/* Label */}
-          <div className="flex items-center gap-3 mb-12 reveal">
-            <div className="w-5 h-[2px] bg-sky-500"/>
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">{t.contact_label}</span>
-          </div>
+          <SectionLabel text={t.contact_label} dark/>
 
           <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
             {/* Left */}
             <div className="reveal">
-              <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white">
-                <span className="block">{t.contact_title1}</span>
-                <span className="block italic text-sky-400">{t.contact_title2}</span>
-              </h2>
+              <ScrollRevealText dark>
+                <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white">
+                  <span className="block">{t.contact_title1}</span>
+                  <span className="block italic text-sky-400">{t.contact_title2}</span>
+                </h2>
+              </ScrollRevealText>
               <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
 
               <div className="mt-12 space-y-4">
@@ -1120,6 +1265,11 @@ export default function App() {
 
         /* ── Marquee pause on hover ── */
         .animate-marquee:hover { animation-play-state: paused; }
+
+        /* ── Cursor grow on interactive elements ── */
+        a:hover ~ div[ref], button:hover ~ div[ref] { width: 2rem; height: 2rem; }
+        a, button, [role="button"] { cursor: none; }
+        @media (max-width: 1024px) { a, button, [role="button"] { cursor: auto; } }
 
         /* ── Smooth page transitions ── */
         section { scroll-margin-top: 80px; }
