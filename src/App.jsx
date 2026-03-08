@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Menu, X, Sun, Moon, ArrowRight, ArrowUpRight,
   Layout, Smartphone, BarChart3, Binary, Mail,
@@ -262,7 +262,7 @@ const Nav = ({ lang, setLang, go, active }) => {
 
           <div className="hidden lg:flex items-center gap-5">
             <button onClick={() => setLang(ar ? 'en' : 'ar')}
-              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${scrolled ? 'text-slate-400 hover:text-slate-900' : 'text-white/50 hover:text-white'}`}>
+              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${scrolled ? 'text-sky-500 hover:text-sky-600' : 'text-white/50 hover:text-white'}`}>
               <Globe size={13}/> {ar ? 'EN' : 'AR'}
             </button>
             <button onClick={() => go('contact')}
@@ -318,52 +318,158 @@ const Nav = ({ lang, setLang, go, active }) => {
 
 // ─── SERVICE ROW ─────────────────────────────────────────────────────────────
 
-const ServiceRow = ({ s, lang, i, isLast }) => {
+const ServiceRow = ({ s, lang, i }) => {
   const [open, setOpen] = useState(false);
+  const contentRef = useRef(null);
+  const [contentH, setContentH] = useState(0);
   const t = T[lang];
   const ar = lang === 'ar';
 
+  useEffect(() => {
+    if (contentRef.current) setContentH(contentRef.current.scrollHeight);
+  }, [open, lang]);
+
   return (
-    <div className={`reveal service-line border-b border-slate-100 group`} style={{ transitionDelay: `${i * 60}ms` }}>
+    <div
+      className={`reveal service-line border-b border-slate-100 group`}
+      style={{ transitionDelay: `${i * 60}ms` }}
+    >
       <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between py-7 sm:py-9 gap-6 text-left hover:bg-slate-50/50 px-2 -mx-2 rounded-xl transition-colors duration-200"
-        dir={ar ? 'rtl' : 'ltr'}>
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between py-7 sm:py-9 gap-6 text-left px-2 -mx-2 rounded-xl transition-all duration-300 hover:px-4"
+        dir={ar ? 'rtl' : 'ltr'}
+      >
         <div className={`flex items-center gap-6 sm:gap-10 flex-1 min-w-0 ${ar ? 'flex-row-reverse' : ''}`}>
-          <span className="text-[11px] font-black text-slate-300 tracking-[0.2em] w-8 flex-shrink-0">{s.index}</span>
+          <span className={`text-[11px] font-black tracking-[0.2em] w-8 flex-shrink-0 transition-colors duration-300 ${open ? 'text-sky-500' : 'text-slate-300'}`}>
+            {s.index}
+          </span>
           <div className={`flex-1 min-w-0 ${ar ? 'text-right' : ''}`}>
-            <h3 className={`text-xl sm:text-3xl font-black tracking-tight text-slate-900 transition-colors group-hover:text-sky-600 leading-tight`}>
+            <h3 className={`text-xl sm:text-3xl font-black tracking-tight leading-tight transition-colors duration-300 ${open ? 'text-sky-600' : 'text-slate-900 group-hover:text-sky-600'}`}>
               {s.title[lang]}
             </h3>
-            <p className="text-xs sm:text-sm text-slate-400 font-medium mt-1 tracking-wide">{s.sub[lang]}</p>
+            <p className={`text-xs sm:text-sm font-medium mt-1 tracking-wide transition-colors duration-300 ${open ? 'text-sky-400' : 'text-slate-400'}`}>
+              {s.sub[lang]}
+            </p>
           </div>
         </div>
-        <div className={`w-10 h-10 rounded-full border border-slate-200 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white text-slate-400
-          ${open ? 'bg-sky-500 border-sky-500 text-white rotate-45' : ''}`}>
-          <ArrowUpRight size={16} className="transition-transform duration-300"/>
+
+        {/* Animated button */}
+        <div className={`relative w-10 h-10 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-400 overflow-hidden
+          ${open
+            ? 'bg-sky-500 border-sky-500 text-white'
+            : 'border-slate-200 text-sky-500 group-hover:border-sky-500 group-hover:bg-sky-50'}`}>
+          <ArrowUpRight size={16} className={`transition-transform duration-400 ${open ? 'rotate-90 scale-110' : 'group-hover:translate-x-0.5 group-hover:-translate-y-0.5'}`}/>
         </div>
       </button>
 
-      {/* Expanded panel */}
-      <div className={`overflow-hidden transition-all duration-500 ease-in-out ${open ? 'max-h-[600px] opacity-100 pb-8' : 'max-h-0 opacity-0'}`}
-        dir={ar ? 'rtl' : 'ltr'}>
-        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 px-2">
+      {/* Real-height accordion */}
+      <div
+        style={{
+          maxHeight: open ? `${contentH + 40}px` : '0px',
+          opacity: open ? 1 : 0,
+          transform: open ? 'translateY(0)' : 'translateY(-8px)',
+          transition: 'max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease, transform 0.4s ease',
+          overflow: 'hidden',
+        }}
+        dir={ar ? 'rtl' : 'ltr'}
+      >
+        <div ref={contentRef} className="grid md:grid-cols-2 gap-8 sm:gap-12 px-2 pb-8">
           <div>
             <p className="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">{s.desc[lang]}</p>
             <div className="grid grid-cols-2 gap-2">
               {s.features[lang].map((f, j) => (
-                <div key={j} className={`flex items-center gap-2 ${ar ? 'flex-row-reverse' : ''}`}>
+                <div
+                  key={j}
+                  className={`flex items-center gap-2 ${ar ? 'flex-row-reverse' : ''}`}
+                  style={{
+                    opacity: open ? 1 : 0,
+                    transform: open ? 'translateX(0)' : 'translateX(-10px)',
+                    transition: `opacity 0.4s ease ${j * 60 + 200}ms, transform 0.4s ease ${j * 60 + 200}ms`,
+                  }}
+                >
                   <div className="w-1.5 h-1.5 rounded-full bg-sky-500 flex-shrink-0"/>
                   <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{f}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="h-48 sm:h-56 rounded-2xl overflow-hidden">
-            <img src={s.img} alt={s.title[lang]} className="w-full h-full object-cover"/>
+          <div
+            className="h-48 sm:h-56 rounded-2xl overflow-hidden"
+            style={{
+              opacity: open ? 1 : 0,
+              transform: open ? 'scale(1)' : 'scale(0.96)',
+              transition: 'opacity 0.5s ease 0.15s, transform 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s',
+            }}
+          >
+            <img src={s.img} alt={s.title[lang]} className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"/>
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+// ─── STAT CARD (animated counter) ────────────────────────────────────────────
+
+const StatCard = ({ stat, delay }) => {
+  const [visible, setVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVisible(true); io.disconnect(); }
+    }, { threshold: 0.3 });
+    if (ref.current) io.observe(ref.current);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref}
+      className="bg-white p-8 sm:p-10 flex flex-col items-center text-center gap-3 hover:bg-sky-50/40 transition-colors duration-300 group cursor-default">
+      <div
+        className="w-9 h-9 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 group-hover:scale-110 transition-all duration-300">
+        {stat.icon}
+      </div>
+      <span
+        className="text-3xl sm:text-4xl font-black text-slate-900"
+        style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'translateY(0)' : 'translateY(16px)',
+          transition: `opacity 0.6s ease ${delay}ms, transform 0.6s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+        }}>
+        {stat.n}
+      </span>
+      <span
+        className="text-[10px] font-bold uppercase tracking-wide text-slate-400"
+        style={{
+          opacity: visible ? 1 : 0,
+          transition: `opacity 0.5s ease ${delay + 100}ms`,
+        }}>
+        {stat.l}
+      </span>
+    </div>
+  );
+};
+
+// ─── TILT CARD ────────────────────────────────────────────────────────────────
+
+const TiltCard = ({ children }) => {
+  const ref = useRef(null);
+  const handleMove = useCallback((e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 12;
+    const y = ((e.clientY - r.top) / r.height - 0.5) * -12;
+    el.style.transform = `perspective(600px) rotateX(${y}deg) rotateY(${x}deg) scale(1.02)`;
+  }, []);
+  const handleLeave = useCallback(() => {
+    if (ref.current) ref.current.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale(1)';
+  }, []);
+  return (
+    <div ref={ref} onMouseMove={handleMove} onMouseLeave={handleLeave}
+      style={{ transition: 'transform 0.15s ease', willChange: 'transform' }}>
+      {children}
     </div>
   );
 };
@@ -542,15 +648,17 @@ export default function App() {
                   { icon:<Target size={18}/>, title: t.mission, body: t.mission_body },
                   { icon:<Eye size={18}/>, title: t.vision, body: t.vision_body },
                 ].map((card, i) => (
-                  <div key={i} className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors group">
-                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:border-sky-200 transition-all">
-                      {card.icon}
+                  <TiltCard key={i}>
+                    <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
+                      <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:bg-sky-100 group-hover:border-sky-200 transition-all duration-300">
+                        {card.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4>
+                        <p className="text-sm text-slate-500 leading-relaxed">{card.body}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4>
-                      <p className="text-sm text-slate-500 leading-relaxed">{card.body}</p>
-                    </div>
-                  </div>
+                  </TiltCard>
                 ))}
               </div>
             </div>
@@ -559,13 +667,7 @@ export default function App() {
           {/* Stats row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden mt-20 reveal-scale reveal" style={{ transitionDelay:'150ms' }}>
             {stats.map((s, i) => (
-              <div key={i} className="bg-white p-8 sm:p-10 flex flex-col items-center text-center gap-3 hover:bg-sky-50/40 transition-colors group">
-                <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all">
-                  {s.icon}
-                </div>
-                <span className="text-3xl sm:text-4xl font-black text-slate-900">{s.n}</span>
-                <span className="text-[10px] font-bold uppercase tracking-wide text-slate-400">{s.l}</span>
-              </div>
+              <StatCard key={i} stat={s} delay={i * 120}/>
             ))}
           </div>
         </div>
@@ -619,16 +721,17 @@ export default function App() {
             {EVENTS.map((ev, i) => (
               <div key={ev.id} className="reveal hover-lift group relative overflow-hidden rounded-3xl aspect-[3/4] sm:aspect-auto sm:h-[480px] cursor-default" style={{ transitionDelay:`${i*80}ms` }}>
                 <img src={ev.img} alt={ev.title[lang]} loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"/>
-                <div className="absolute inset-0" style={{ background:'linear-gradient(to top, rgba(2,6,23,0.9) 0%, transparent 60%)' }}/>
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-sky-600/0 group-hover:bg-sky-600/10 transition-colors duration-500"/>
-                <div className="absolute bottom-0 inset-x-0 p-7 sm:p-8">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="w-4 h-[2px] bg-sky-400"/>
+                  className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-110"/>
+                <div className="absolute inset-0 transition-opacity duration-500" style={{ background:'linear-gradient(to top, rgba(2,6,23,0.92) 0%, rgba(2,6,23,0.2) 50%, transparent 100%)' }}/>
+                <div className="absolute inset-0 bg-sky-700/0 group-hover:bg-sky-700/15 transition-colors duration-700"/>
+                {/* Sky accent line that grows on hover */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-sky-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"/>
+                <div className="absolute bottom-0 inset-x-0 p-7 sm:p-8 translate-y-2 group-hover:translate-y-0 transition-transform duration-400">
+                  <div className="flex items-center gap-2 mb-3 opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-4 h-[2px] bg-sky-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"/>
                     <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-400">{ev.date}</span>
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">{ev.title[lang]}</h3>
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight transition-colors duration-300 group-hover:text-sky-100">{ev.title[lang]}</h3>
                 </div>
               </div>
             ))}
@@ -659,19 +762,22 @@ export default function App() {
               </h2>
               <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
 
-              <div className="mt-12 space-y-5">
+              <div className="mt-12 space-y-4">
                 {[
                   { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' },
                   { icon:<Phone size={16}/>, label:'Phone', val:'+20 100 1234 567' },
                 ].map((c, i) => (
-                  <div key={i} className="flex items-center gap-4 group">
-                    <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500/50 group-hover:text-sky-400 transition-all">
+                  <div key={i}
+                    className="flex items-center gap-4 group p-4 rounded-2xl border border-white/5 hover:border-sky-500/30 hover:bg-white/[0.04] transition-all duration-300 cursor-default"
+                    style={{ transitionDelay: `${i * 60}ms` }}>
+                    <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
                       {c.icon}
                     </div>
                     <div>
                       <p className="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-0.5">{c.label}</p>
-                      <p className="text-sm font-bold text-white/80">{c.val}</p>
+                      <p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors duration-300">{c.val}</p>
                     </div>
+                    <ArrowUpRight size={14} className="ml-auto text-white/0 group-hover:text-sky-400 transition-all duration-300 translate-x-2 group-hover:translate-x-0"/>
                   </div>
                 ))}
               </div>
@@ -701,10 +807,11 @@ export default function App() {
                     {SERVICES.map(s => <option key={s.id} value={s.id} className="text-slate-900 bg-white">{s.title[lang]}</option>)}
                   </Field>
                   <button disabled={formStatus === 'sending'}
-                    className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2">
+                    className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:bg-sky-600 transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2 overflow-hidden group/btn">
+                    <span className="absolute inset-0 bg-white/10 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>
                     {formStatus === 'sending'
                       ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</>
-                      : <>{t.submit}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}
+                      : <span className="relative flex items-center gap-3">{t.submit}<ChevronRight size={14} className={`transition-transform duration-300 group-hover/btn:translate-x-1 ${ar ? 'rotate-180' : ''}`}/></span>}
                   </button>
                 </form>
               )}
@@ -741,7 +848,9 @@ export default function App() {
               </button>
               <div className="flex items-center gap-3">
                 {[Facebook, Linkedin, Mail].map((Icon, i) => (
-                  <a key={i} href="#" className="w-8 h-8 rounded-lg border border-slate-100 flex items-center justify-center text-slate-400 hover:border-sky-200 hover:text-sky-500 transition-all">
+                  <a key={i} href="#"
+                    className="w-8 h-8 rounded-lg border border-sky-100 bg-sky-50 flex items-center justify-center text-sky-500 hover:bg-sky-500 hover:text-white hover:border-sky-500 hover:-translate-y-1 transition-all duration-200"
+                    style={{ transitionDelay: `${i * 40}ms` }}>
                     <Icon size={14}/>
                   </a>
                 ))}
@@ -1000,6 +1109,43 @@ export default function App() {
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
         ::-webkit-scrollbar-thumb:hover { background: #0ea5e9; }
+
+        /* ── Service row hover indent ── */
+        .service-line button:hover { padding-left: 1rem !important; padding-right: 1rem !important; }
+
+        /* ── Form field focus glow ── */
+        input:focus, select:focus {
+          caret-color: #0ea5e9;
+        }
+
+        /* ── Marquee pause on hover ── */
+        .animate-marquee:hover { animation-play-state: paused; }
+
+        /* ── Smooth page transitions ── */
+        section { scroll-margin-top: 80px; }
+
+        /* ── Button ripple ── */
+        @keyframes ripple {
+          from { transform: scale(0); opacity: 0.3; }
+          to   { transform: scale(4); opacity: 0; }
+        }
+
+        /* ── Nav link underline slide ── */
+        .nav-link { position: relative; }
+        .nav-link::after {
+          content: '';
+          position: absolute;
+          bottom: -2px; left: 0; right: 0;
+          height: 1.5px;
+          background: #0ea5e9;
+          transform: scaleX(0);
+          transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+          transform-origin: left;
+        }
+        .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+
+        /* ── Event card text slide ── */
+        .duration-400 { transition-duration: 400ms; }
       `}</style>
     </div>
   );
