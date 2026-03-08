@@ -162,7 +162,7 @@ const useReveal = () => {
       { threshold: 0.07 }
     );
     setTimeout(() => {
-      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => io.observe(el));
     }, 100);
     return () => io.disconnect();
   });
@@ -324,7 +324,7 @@ const ServiceRow = ({ s, lang, i, isLast }) => {
   const ar = lang === 'ar';
 
   return (
-    <div className={`reveal border-b border-slate-100 group`} style={{ transitionDelay: `${i * 60}ms` }}>
+    <div className={`reveal service-line border-b border-slate-100 group`} style={{ transitionDelay: `${i * 60}ms` }}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between py-7 sm:py-9 gap-6 text-left hover:bg-slate-50/50 px-2 -mx-2 rounded-xl transition-colors duration-200"
@@ -466,34 +466,34 @@ export default function App() {
         </div>
 
         {/* Thin top accent line */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10"/>
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10 animate-accentPulse"/>
 
         <div className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full">
           {/* Label */}
-          <div className="flex items-center gap-3 mb-8 animate-fadeUp">
+          <div className="flex items-center gap-3 mb-8 hero-label">
             <div className="w-5 h-[2px] bg-sky-500"/>
             <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
           </div>
 
           {/* Giant headline */}
-          <h1 className="animate-fadeUp" style={{ animationDelay:'80ms' }}>
-            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88]">
+          <h1>
+            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">
               {t.hero_line1}
             </span>
-            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88]"
+            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88] hero-word-2"
               style={{ color:'transparent', WebkitTextStroke:'1px rgba(255,255,255,0.3)' }}>
               {t.hero_line2}
             </span>
-            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic">
+            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">
               {t.hero_line3}
             </span>
           </h1>
 
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8 animate-fadeUp" style={{ animationDelay:'180ms' }}>
-            <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium">
+          <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+            <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium hero-desc">
               {t.hero_desc}
             </p>
-            <div className="flex gap-3 flex-shrink-0">
+            <div className="flex gap-3 flex-shrink-0 hero-btns">
               <button onClick={() => go('services')}
                 className="px-7 py-3.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-sky-500/30">
                 {t.nav_services} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/>
@@ -506,10 +506,14 @@ export default function App() {
           </div>
         </div>
 
-        {/* Scroll hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3 opacity-30 animate-bounce">
-          <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-white">{t.scroll}</span>
-          <div className="w-[1px] h-8 bg-gradient-to-b from-white/80 to-transparent"/>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 right-8 sm:right-12 z-10 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-80 transition-opacity cursor-pointer" onClick={() => go('about')}>
+          <div className="w-6 h-9 rounded-full border-2 border-white/40 flex items-start justify-center pt-1.5">
+            <div className="w-0.5 h-2 bg-white rounded-full animate-scrollDot"/>
+          </div>
+        </div>
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 sm:hidden opacity-30 cursor-pointer animate-chevronBounce" onClick={() => go('about')}>
+          <ChevronDown size={22} className="text-white"/>
         </div>
       </section>
 
@@ -523,7 +527,7 @@ export default function App() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
-            <div className="reveal">
+            <div className="reveal reveal-left">
               <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
                 <span className="block">{t.about_title1}</span>
                 <span className="block italic text-sky-500">{t.about_title2}</span>
@@ -553,7 +557,7 @@ export default function App() {
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden mt-20 reveal" style={{ transitionDelay:'150ms' }}>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden mt-20 reveal-scale reveal" style={{ transitionDelay:'150ms' }}>
             {stats.map((s, i) => (
               <div key={i} className="bg-white p-8 sm:p-10 flex flex-col items-center text-center gap-3 hover:bg-sky-50/40 transition-colors group">
                 <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all">
@@ -613,7 +617,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6">
             {EVENTS.map((ev, i) => (
-              <div key={ev.id} className="reveal group relative overflow-hidden rounded-3xl aspect-[3/4] sm:aspect-auto sm:h-[480px] cursor-default" style={{ transitionDelay:`${i*80}ms` }}>
+              <div key={ev.id} className="reveal hover-lift group relative overflow-hidden rounded-3xl aspect-[3/4] sm:aspect-auto sm:h-[480px] cursor-default" style={{ transitionDelay:`${i*80}ms` }}>
                 <img src={ev.img} alt={ev.title[lang]} loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105"/>
                 <div className="absolute inset-0" style={{ background:'linear-gradient(to top, rgba(2,6,23,0.9) 0%, transparent 60%)' }}/>
@@ -827,38 +831,30 @@ export default function App() {
 
       {/* ─── GLOBAL STYLES ─────────────────────────────────────────────────── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500;700&family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
 
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { margin: 0; overflow-x: hidden; }
 
-        /* Font system */
         .font-sans { font-family: 'DM Sans', sans-serif; }
         h1, h2, h3, .font-black { font-family: 'Playfair Display', Georgia, serif; }
         [dir="rtl"], [dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 {
           font-family: 'Noto Sans Arabic', sans-serif;
         }
-
-        /* Tracking tight override for display font */
         .tracking-tighter { letter-spacing: -0.04em; }
 
-        /* Marquee */
+        /* ── Marquee ── */
         @keyframes marquee {
           0%   { transform: translateX(0); }
           100% { transform: translateX(-33.333%); }
         }
-        .animate-marquee {
-          animation: marquee 50s linear infinite;
-          will-change: transform;
-        }
-        @media(max-width: 640px) {
-          .animate-marquee { animation-duration: 25s; }
-        }
+        .animate-marquee { animation: marquee 50s linear infinite; will-change: transform; }
+        @media(max-width: 640px) { .animate-marquee { animation-duration: 25s; } }
 
-        /* Hero fade-up */
+        /* ── Hero staggered fade-up ── */
         @keyframes fadeUp {
-          from { opacity:0; transform:translateY(30px); }
+          from { opacity:0; transform:translateY(36px); }
           to   { opacity:1; transform:translateY(0); }
         }
         .animate-fadeUp {
@@ -866,10 +862,26 @@ export default function App() {
           animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) forwards;
         }
 
-        /* Scroll reveal */
+        /* ── Scroll dot inside mouse ── */
+        @keyframes scrollDot {
+          0%   { transform: translateY(0); opacity: 1; }
+          60%  { transform: translateY(12px); opacity: 0; }
+          61%  { transform: translateY(0); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+        .animate-scrollDot { animation: scrollDot 1.8s ease-in-out infinite; }
+
+        /* ── Mobile chevron bounce ── */
+        @keyframes chevronBounce {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(6px); }
+        }
+        .animate-chevronBounce { animation: chevronBounce 1.6s ease-in-out infinite; }
+
+        /* ── Scroll reveal: fade + slide up ── */
         .reveal {
           opacity: 0;
-          transform: translateY(32px);
+          transform: translateY(40px);
           transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
                       transform 0.9s cubic-bezier(0.16,1,0.3,1);
           will-change: opacity, transform;
@@ -881,16 +893,109 @@ export default function App() {
           pointer-events: auto;
         }
 
-        /* Modal zoom */
+        /* ── Reveal variants ── */
+        .reveal-left {
+          opacity: 0;
+          transform: translateX(-40px);
+          transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                      transform 0.9s cubic-bezier(0.16,1,0.3,1);
+          will-change: opacity, transform;
+          pointer-events: none;
+        }
+        .reveal-right {
+          opacity: 0;
+          transform: translateX(40px);
+          transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+                      transform 0.9s cubic-bezier(0.16,1,0.3,1);
+          will-change: opacity, transform;
+          pointer-events: none;
+        }
+        .reveal-left.rv, .reveal-right.rv {
+          opacity: 1 !important;
+          transform: translateX(0) !important;
+          pointer-events: auto;
+        }
+
+        /* ── Scale reveal for stats ── */
+        .reveal-scale {
+          opacity: 0;
+          transform: scale(0.94);
+          transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+                      transform 0.7s cubic-bezier(0.16,1,0.3,1);
+          will-change: opacity, transform;
+          pointer-events: none;
+        }
+        .reveal-scale.rv {
+          opacity: 1 !important;
+          transform: scale(1) !important;
+          pointer-events: auto;
+        }
+
+        /* ── Number counter animation ── */
+        @keyframes countUp {
+          from { opacity:0; transform: translateY(20px); }
+          to   { opacity:1; transform: translateY(0); }
+        }
+        .animate-countUp { animation: countUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+        /* ── Accent line grow ── */
+        @keyframes lineGrow {
+          from { transform: scaleX(0); transform-origin: left; }
+          to   { transform: scaleX(1); transform-origin: left; }
+        }
+        .animate-lineGrow { animation: lineGrow 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+        /* ── Hover lift ── */
+        .hover-lift { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -12px rgba(0,0,0,0.12); }
+
+        /* ── Service row line slide ── */
+        .service-line {
+          position: relative;
+          overflow: hidden;
+        }
+        .service-line::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
+          height: 1px;
+          background: #0ea5e9;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        .service-line:hover::after { transform: scaleX(1); }
+
+        /* ── Staggered hero words ── */
+        .hero-word-1 { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0ms forwards; opacity:0; }
+        .hero-word-2 { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 120ms forwards; opacity:0; }
+        .hero-word-3 { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 240ms forwards; opacity:0; }
+        .hero-label  { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0ms forwards; opacity:0; }
+        .hero-desc   { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 360ms forwards; opacity:0; }
+        .hero-btns   { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 480ms forwards; opacity:0; }
+
+        /* ── Image reveal with clip ── */
+        @keyframes clipReveal {
+          from { clip-path: inset(0 100% 0 0); }
+          to   { clip-path: inset(0 0% 0 0); }
+        }
+        .animate-clipReveal { animation: clipReveal 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+        /* ── Subtle pulse on accent dot ── */
+        @keyframes accentPulse {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.4; }
+        }
+        .animate-accentPulse { animation: accentPulse 2s ease-in-out infinite; }
+
+        /* ── Modal zoom ── */
         @keyframes zoomIn {
           from { opacity:0; transform:scale(0.95) translateY(16px); }
           to   { opacity:1; transform:scale(1) translateY(0); }
         }
-        .animate-zoomIn {
-          animation: zoomIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
-        }
+        .animate-zoomIn { animation: zoomIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
 
-        /* Custom scrollbar */
+        /* ── Custom scrollbar ── */
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
