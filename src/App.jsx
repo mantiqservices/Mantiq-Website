@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy, Calculator,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield
 } from 'lucide-react';
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
@@ -380,7 +380,7 @@ const Nav = ({ lang, setLang, go, active }) => {
 
 // ─── SERVICE ROW ─────────────────────────────────────────────────────────────
 
-const ServiceRow = ({ s, lang, i }) => {
+const ServiceRow = ({ s, lang, i, onBookConsult }) => {
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
   const [contentH, setContentH] = useState(0);
@@ -455,15 +455,43 @@ const ServiceRow = ({ s, lang, i }) => {
               ))}
             </div>
           </div>
-          <div
-            className="h-48 sm:h-56 rounded-2xl overflow-hidden"
-            style={{
-              opacity: open ? 1 : 0,
-              transform: open ? 'scale(1)' : 'scale(0.96)',
-              transition: 'opacity 0.5s ease 0.15s, transform 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s',
-            }}
-          >
-            <img src={s.img} alt={s.title[lang]} className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"/>
+          <div className="flex flex-col gap-4">
+            <div
+              className="h-48 sm:h-56 rounded-2xl overflow-hidden"
+              style={{
+                opacity: open ? 1 : 0,
+                transform: open ? 'scale(1)' : 'scale(0.96)',
+                transition: 'opacity 0.5s ease 0.15s, transform 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s',
+              }}
+            >
+              <img src={s.img} alt={s.title[lang]} className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"/>
+            </div>
+            {onBookConsult && (
+              <button
+                onClick={e => { e.stopPropagation(); onBookConsult(); }}
+                style={{
+                  opacity: open ? 1 : 0,
+                  transform: open ? 'translateY(0)' : 'translateY(10px)',
+                  transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s',
+                }}
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
+                    <CalendarCheck size={16} className="text-white"/>
+                  </div>
+                  <div className="text-left">
+                    <p className="text-white font-black text-xs uppercase tracking-[0.15em]">
+                      {lang === 'ar' ? 'احجز استشارة' : 'Book a Consultation'}
+                    </p>
+                    <p className="text-white/70 text-[10px] font-medium">
+                      {lang === 'ar' ? 'جلسة استراتيجية — $20' : 'Strategy session — $20'}
+                    </p>
+                  </div>
+                </div>
+                <ArrowUpRight size={16} className="text-white/80 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200 flex-shrink-0"/>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -619,6 +647,8 @@ export default function App() {
   const [active, setActive] = useState('home');
   const [careers, setCareers] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
+  const [consultModal, setConsultModal] = useState(false);
+  const [consultStatus, setConsultStatus] = useState(null);
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
 
   const t = T[lang];
@@ -626,26 +656,6 @@ export default function App() {
 
   useReveal();
   const scrollProgress = useScrollProgress();
-
-  // Mouse cursor dot
-  const cursorRef = useRef(null);
-  useEffect(() => {
-    let mx = -100, my = -100, cx = -100, cy = -100;
-    let raf;
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const move = (e) => { mx = e.clientX; my = e.clientY; };
-    const animate = () => {
-      cx = lerp(cx, mx, 0.12);
-      cy = lerp(cy, my, 0.12);
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(${cx - 6}px, ${cy - 6}px)`;
-      }
-      raf = requestAnimationFrame(animate);
-    };
-    window.addEventListener('mousemove', move, { passive: true });
-    raf = requestAnimationFrame(animate);
-    return () => { window.removeEventListener('mousemove', move); cancelAnimationFrame(raf); };
-  }, []);
 
   // Hero parallax
   const [heroImgRef, heroImgOffset] = useParallax(0.25);
@@ -700,10 +710,6 @@ export default function App() {
       {/* ── Scroll progress bar ── */}
       <div className="fixed top-0 left-0 z-[200] h-[2px] bg-sky-500 transition-none pointer-events-none"
         style={{ width: `${scrollProgress * 100}%`, boxShadow: '0 0 8px rgba(14,165,233,0.6)' }}/>
-
-      {/* ── Custom cursor dot (desktop) ── */}
-      <div ref={cursorRef} className="fixed top-0 left-0 z-[300] w-3 h-3 rounded-full bg-sky-500 pointer-events-none mix-blend-difference hidden lg:block"
-        style={{ willChange: 'transform', transition: 'width 0.2s, height 0.2s, opacity 0.2s' }}/>
 
       <Nav lang={lang} setLang={setLang} go={go} active={active} />
 
@@ -842,7 +848,7 @@ export default function App() {
           {/* Service rows */}
           <div className="border-t border-slate-100">
             {SERVICES.map((s, i) => (
-              <ServiceRow key={s.id} s={s} lang={lang} i={i} isLast={i === SERVICES.length - 1}/>
+              <ServiceRow key={s.id} s={s} lang={lang} i={i} isLast={i === SERVICES.length - 1} onBookConsult={s.id === 'business' ? () => setConsultModal(true) : null}/>
             ))}
           </div>
         </div>
@@ -1014,6 +1020,137 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* ═══ CONSULTATION MODAL ═════════════════════════════════════════════ */}
+      {consultModal && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-xl animate-fadeIn" onClick={() => { setConsultModal(false); setConsultStatus(null); }}/>
+          <div className="relative w-full max-w-lg bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
+
+            {/* Top gradient header */}
+            <div className="relative bg-slate-900 px-8 pt-8 pb-6 overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-sky-500/20 blur-2xl"/>
+              <div className="absolute -bottom-6 -left-6 w-32 h-32 rounded-full bg-indigo-500/15 blur-2xl"/>
+              <button onClick={() => { setConsultModal(false); setConsultStatus(null); }}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all">
+                <X size={15}/>
+              </button>
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/30">
+                    <CalendarCheck size={18} className="text-white"/>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/40 mb-0.5">
+                      {lang === 'ar' ? 'منطق للأعمال' : 'Mantiq Business'}
+                    </p>
+                    <h3 className="text-white font-black text-lg tracking-tight">
+                      {lang === 'ar' ? 'استشارة استراتيجية' : 'Strategy Consultation'}
+                    </h3>
+                  </div>
+                </div>
+
+                {/* Session details pills */}
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { icon:<CreditCard size={11}/>, label: lang === 'ar' ? '$20 للجلسة' : '$20 per session' },
+                    { icon:<Clock size={11}/>, label: lang === 'ar' ? '45 دقيقة' : '45 minutes' },
+                    { icon:<Shield size={11}/>, label: lang === 'ar' ? 'مضمون أو استرداد' : 'Money-back guarantee' },
+                  ].map((pill, i) => (
+                    <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
+                      <span className="text-sky-400">{pill.icon}</span>
+                      <span className="text-[10px] font-bold text-white/70 uppercase tracking-wide">{pill.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Form body */}
+            <div className="px-8 py-7">
+              {consultStatus === 'success' ? (
+                <div className="flex flex-col items-center text-center gap-4 py-6 animate-fadeUp">
+                  <div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/25">
+                    <CheckCircle2 size={24} className="text-white"/>
+                  </div>
+                  <h4 className="text-xl font-black text-slate-900 tracking-tight">
+                    {lang === 'ar' ? 'تم الحجز!' : "You're booked!"}
+                  </h4>
+                  <p className="text-sm text-slate-500 max-w-xs leading-relaxed">
+                    {lang === 'ar'
+                      ? 'تلقينا طلبك. سيتواصل معك مستشارنا لتأكيد الموعد وتفاصيل الدفع.'
+                      : "We've received your request. Our consultant will reach out to confirm your slot and payment details."}
+                  </p>
+                  <button onClick={() => { setConsultModal(false); setConsultStatus(null); }}
+                    className="mt-2 px-6 py-2.5 bg-slate-900 hover:bg-sky-600 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
+                    {lang === 'ar' ? 'إغلاق' : 'Close'}
+                  </button>
+                </div>
+              ) : (
+                <form
+                  className="space-y-5"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    setConsultStatus('sending');
+                    const fd = new FormData(e.target);
+                    try {
+                      await fetch(scriptURL, {
+                        method: 'POST', mode: 'no-cors',
+                        body: JSON.stringify({
+                          sheetName: 'Consultations',
+                          Name: fd.get('c_name'),
+                          Email: fd.get('c_email'),
+                          Phone: fd.get('c_phone'),
+                          Company: fd.get('c_company'),
+                          Goal: fd.get('c_goal'),
+                          Service: 'Business Consultation — $20',
+                        })
+                      });
+                      setConsultStatus('success');
+                    } catch { setConsultStatus(null); }
+                  }}
+                >
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <Field label={lang === 'ar' ? 'الاسم الكامل' : 'Full Name'} name="c_name" required dark={false}/>
+                    <Field label={lang === 'ar' ? 'الشركة' : 'Company'} name="c_company" dark={false}/>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <Field label={lang === 'ar' ? 'البريد الإلكتروني' : 'Email Address'} name="c_email" type="email" required dark={false}/>
+                    <Field label={lang === 'ar' ? 'رقم الهاتف' : 'Phone Number'} name="c_phone" type="tel" required dark={false}/>
+                  </div>
+                  <Field label={lang === 'ar' ? 'ما هدفك الرئيسي؟' : "What's your main goal?"} name="c_goal" dark={false}/>
+
+                  {/* Price summary */}
+                  <div className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-100 mt-1">
+                    <div>
+                      <p className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-0.5">
+                        {lang === 'ar' ? 'إجمالي الجلسة' : 'Session Total'}
+                      </p>
+                      <p className="text-2xl font-black text-slate-900">$20</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[10px] text-slate-400 leading-relaxed max-w-[140px]">
+                        {lang === 'ar' ? 'يُدفع عند التأكيد' : 'Payment due on confirmation'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button disabled={consultStatus === 'sending'}
+                    className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50 shadow-xl shadow-sky-500/20 overflow-hidden group/btn mt-1">
+                    <span className="absolute inset-0 bg-white/10 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>
+                    {consultStatus === 'sending'
+                      ? <><Sparkles size={14} className="animate-spin"/> {lang === 'ar' ? 'جارٍ الإرسال…' : 'Sending…'}</>
+                      : <span className="relative flex items-center gap-2">
+                          <CalendarCheck size={14}/>
+                          {lang === 'ar' ? 'تأكيد الحجز — $20' : 'Confirm Booking — $20'}
+                        </span>}
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ═══ CAREERS MODAL ══════════════════════════════════════════════════ */}
       {careers && (
@@ -1242,6 +1379,13 @@ export default function App() {
         }
         .animate-accentPulse { animation: accentPulse 2s ease-in-out infinite; }
 
+        /* ── Fade in (for modal backdrop) ── */
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        .animate-fadeIn { animation: fadeIn 0.3s ease forwards; }
+
         /* ── Modal zoom ── */
         @keyframes zoomIn {
           from { opacity:0; transform:scale(0.95) translateY(16px); }
@@ -1266,10 +1410,7 @@ export default function App() {
         /* ── Marquee pause on hover ── */
         .animate-marquee:hover { animation-play-state: paused; }
 
-        /* ── Cursor grow on interactive elements ── */
-        a:hover ~ div[ref], button:hover ~ div[ref] { width: 2rem; height: 2rem; }
-        a, button, [role="button"] { cursor: none; }
-        @media (max-width: 1024px) { a, button, [role="button"] { cursor: auto; } }
+
 
         /* ── Smooth page transitions ── */
         section { scroll-margin-top: 80px; }
