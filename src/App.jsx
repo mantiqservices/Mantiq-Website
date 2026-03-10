@@ -947,7 +947,7 @@ export default function App() {
               <div className="mt-12 space-y-4">
                 {[
                   { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' },
-                  { icon:<Phone size={16}/>, label:'Phone', val:'+20 100 1234 567' },
+                  { icon:<Phone size={16}/>, label:'Phone', val:'+201280103450' },
                 ].map((c, i) => (
                   <div key={i}
                     className="flex items-center gap-4 group p-4 rounded-2xl border border-white/5 hover:border-sky-500/30 hover:bg-white/[0.04] transition-all duration-300 cursor-default"
@@ -1453,5 +1453,6 @@ export default function App() {
     </div>
   );
 }
+
 
 
