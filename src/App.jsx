@@ -1040,7 +1040,7 @@ export default function App() {
 
           <div className="mt-8 pt-8 border-t border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-300">
-              © 2026 MANTIQ size="1.1em"/>. {t.rights}
+              © 2026 MANTIQ . {t.rights}
             </p>
             <button onClick={() => setLang(ar ? 'en' : 'ar')}
               className="text-[10px] font-bold uppercase tracking-widest text-slate-300 hover:text-sky-500 transition-colors flex items-center gap-1.5">
@@ -1453,4 +1453,5 @@ export default function App() {
     </div>
   );
 }
+
 
