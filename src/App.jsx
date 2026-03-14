@@ -221,7 +221,6 @@ const useScrollRevealValue = (threshold = 0.15) => {
       const end   = window.innerHeight * 0.2;
       const divisor = start - end;
       
-      // منع القسمة على صفر التي تسبب خطأ NaN
       if (Math.abs(divisor) < 0.1) {
         setVal(rect.top <= start ? 1 : 0);
       } else {
@@ -442,7 +441,9 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
             </div>
 
             {onBookConsult && (
-              <button onClick={e => { e.stopPropagation(); onBookConsult(); }} style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25">
+              <button onClick={e => { e.stopPropagation(); onBookConsult(); }} 
+                style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} 
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25 animate-buttonEntry">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0"><CalendarCheck size={16} className="text-white"/></div>
                   <div className="text-left">
@@ -455,7 +456,9 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
             )}
 
             {onBookDemo && (
-              <button onClick={e => { e.stopPropagation(); onBookDemo(); }} style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-indigo-600/25">
+              <button onClick={e => { e.stopPropagation(); onBookDemo(); }} 
+                style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} 
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25 animate-buttonEntry">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0"><MonitorPlay size={16} className="text-white"/></div>
                   <div className="text-left">
@@ -527,7 +530,6 @@ const TiltCard = ({ children }) => {
 
 const SectionLabel = ({ text, dark = false }) => {
   const [ref, val] = useScrollRevealValue(0.3);
-  // فحص أمان إضافي للقيم
   const safeVal = isNaN(val) ? 0 : val;
   return (
     <div ref={ref} className="flex items-center gap-3 mb-12 overflow-hidden">
@@ -849,23 +851,31 @@ export default function App() {
         </div>
       )}
 
-      {/* ═══ نافذة العرض التجريبي ═════════════════════════════════════════ */}
+      {/* ═══ نافذة العرض التجريبي (Demo Modal) ═════════════════════════════════════════ */}
       {demoModal && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-xl animate-fadeIn" onClick={() => { setDemoModal(false); setDemoStatus(null); }}/>
           <div className="relative w-full max-w-lg bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
-            <div className="relative bg-indigo-700 px-8 pt-8 pb-6 overflow-hidden">
+            <div className="relative bg-sky-500 px-8 pt-8 pb-6 overflow-hidden">
               <button onClick={() => { setDemoModal(false); setDemoStatus(null); }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all"><X size={15}/></button>
               <div className="relative z-10"><div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center"><MonitorPlay size={18} className="text-white"/></div><div><p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-0.5">{ar ? 'أنظمة ذكية' : 'Intelligent Systems'}</p><h3 className="text-white font-black text-lg tracking-tight">{ar ? 'عرض تجريبي' : 'Book a Live Demo'}</h3></div></div></div>
             </div>
             <div className="px-8 py-7">
               {demoStatus === 'success' ? (
-                <div className="flex flex-col items-center text-center gap-4 py-6 animate-fadeUp"><div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-xl"><CheckCircle2 size={24} className="text-white"/></div><h4 className="text-xl font-black text-slate-900 tracking-tight">{ar ? 'تم الاستلام!' : "Demo Requested!"}</h4><button onClick={() => { setDemoModal(false); setDemoStatus(null); }} className="mt-2 px-6 py-2.5 bg-slate-900 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full">OK</button></div>
+                <div className="flex flex-col items-center text-center gap-4 py-6 animate-fadeUp"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-xl"><CheckCircle2 size={24} className="text-white"/></div><h4 className="text-xl font-black text-slate-900 tracking-tight">{ar ? 'تم الاستلام!' : "Demo Requested!"}</h4><button onClick={() => { setDemoModal(false); setDemoStatus(null); }} className="mt-2 px-6 py-2.5 bg-slate-900 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full">OK</button></div>
               ) : (
                 <form className="space-y-5" onSubmit={e => handleActionForm(e, 'Demos', setDemoStatus)}>
                   <div className="grid sm:grid-cols-2 gap-5"><Field label="Name" name="name" required/><Field label="Company" name="company"/></div>
                   <div className="grid sm:grid-cols-2 gap-5"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
-                  <button disabled={demoStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl">{demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><MonitorPlay size={14}/>Request Free Walkthrough</span>}</button>
+                  {/* System Selection List */}
+                  <Field label="System Type" name="system" required as="select">
+                    <option value="CRM" className="text-slate-900">CRM</option>
+                    <option value="Sales" className="text-slate-900">Sales</option>
+                    <option value="Finance" className="text-slate-900">Finance</option>
+                    <option value="HR" className="text-slate-900">HR</option>
+                    <option value="Educational Academy" className="text-slate-900">Educational Academy</option>
+                  </Field>
+                  <button disabled={demoStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-sky-500/20">{demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><MonitorPlay size={14}/>Request Free Walkthrough</span>}</button>
                 </form>
               )}
             </div>
@@ -928,6 +938,12 @@ export default function App() {
         .hero-label { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0ms forwards; opacity:0; }
         .hero-desc { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 360ms forwards; opacity:0; }
         .hero-btns { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 480ms forwards; opacity:0; }
+
+        @keyframes buttonEntry {
+          from { opacity: 0; transform: scale(0.9) translateY(10px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-buttonEntry { animation: buttonEntry 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .animate-fadeIn { animation: fadeIn 0.3s ease forwards; }
