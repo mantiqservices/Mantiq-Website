@@ -622,14 +622,18 @@ export default function App() {
     setActive(id);
   };
 
+  // Improved handleForm to be generic for Leads and Work
   const handleForm = async (e, sheet) => {
     e.preventDefault();
     setFormStatus('sending');
     const fd = new FormData(e.target);
+    const data = { sheetName: sheet };
+    fd.forEach((value, key) => { data[key] = value; });
+    
     try {
       await fetch(scriptURL, {
         method: 'POST', mode: 'no-cors',
-        body: JSON.stringify({ sheetName: sheet, Name: fd.get('name'), Email: fd.get('email'), Phone: fd.get('phone'), Company: fd.get('company'), Service: fd.get('service'), CV_Link: fd.get('cv_link') || '' })
+        body: JSON.stringify(data)
       });
       setFormStatus('success');
       e.target.reset();
@@ -641,10 +645,10 @@ export default function App() {
     e.preventDefault();
     setter('sending');
     const fd = new FormData(e.target);
-    const data = {};
+    const data = { sheetName: sheet };
     fd.forEach((value, key) => { data[key] = value; });
     try {
-      await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ ...data, sheetName: sheet }) });
+      await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
       setter('success');
     } catch(e) { setter(null); }
   };
