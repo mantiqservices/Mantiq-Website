@@ -7,7 +7,7 @@ import {
   Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay
 } from 'lucide-react';
 
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// ─── البيانات ──────────────────────────────────────────────────────────────────
 
 const CUSTOMERS = [
   "EL ASEEL Development","Omar Gharib","ETMAM","ALSAIF ANALYSIS",
@@ -154,7 +154,7 @@ const T = {
   }
 };
 
-// ─── HOOKS ───────────────────────────────────────────────────────────────────
+// ─── الخطافات (Hooks) ─────────────────────────────────────────────────────────
 
 const useReveal = () => {
   useEffect(() => {
@@ -219,8 +219,16 @@ const useScrollRevealValue = (threshold = 0.15) => {
       const rect = ref.current.getBoundingClientRect();
       const start = window.innerHeight * (1 - threshold);
       const end   = window.innerHeight * 0.2;
-      const raw   = (start - rect.top) / (start - end);
-      setVal(Math.min(1, Math.max(0, raw)));
+      const divisor = start - end;
+      
+      // منع القسمة على صفر التي تسبب خطأ NaN
+      if (Math.abs(divisor) < 0.1) {
+        setVal(rect.top <= start ? 1 : 0);
+      } else {
+        const raw = (start - rect.top) / divisor;
+        const safeVal = Math.min(1, Math.max(0, raw));
+        setVal(isNaN(safeVal) ? 0 : safeVal);
+      }
     };
     const onScroll = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(calc); };
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -230,7 +238,7 @@ const useScrollRevealValue = (threshold = 0.15) => {
   return [ref, val];
 };
 
-// ─── FLOATING FIELD ──────────────────────────────────────────────────────────
+// ─── حقل الإدخال العائم ──────────────────────────────────────────────────────────
 
 const Field = ({ label, name, type = 'text', required, as: AsTag, children, dark }) => {
   const Tag = AsTag || 'input';
@@ -269,7 +277,7 @@ const Field = ({ label, name, type = 'text', required, as: AsTag, children, dark
   );
 };
 
-// ─── LOGO Q ──────────────────────────────────────────────────────────────────
+// ─── الشعار (Logo) ──────────────────────────────────────────────────────────────────
 
 const LogoQ = ({ size = '1.3em' }) => (
   <svg
@@ -292,7 +300,7 @@ const LogoText = ({ className = '', color }) => (
   </span>
 );
 
-// ─── NAV ─────────────────────────────────────────────────────────────────────
+// ─── القائمة (Nav) ─────────────────────────────────────────────────────────────────────
 
 const Nav = ({ lang, setLang, go, active }) => {
   const [open, setOpen] = useState(false);
@@ -387,7 +395,7 @@ const Nav = ({ lang, setLang, go, active }) => {
   );
 };
 
-// ─── SERVICE ROW ─────────────────────────────────────────────────────────────
+// ─── سطر الخدمة (Service Row) ─────────────────────────────────────────────────────────────
 
 const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
   const [open, setOpen] = useState(false);
@@ -422,9 +430,9 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
 
       <div style={{ maxHeight: open ? `${contentH + 40}px` : '0px', opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(-8px)', transition: 'max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease, transform 0.4s ease', overflow: 'hidden' }} dir={ar ? 'rtl' : 'ltr'}>
         <div ref={contentRef} className="grid md:grid-cols-2 gap-8 sm:gap-12 px-2 pb-8">
-          <div>
+          <div className="flex flex-col">
             <p className="text-slate-600 leading-relaxed text-sm sm:text-base mb-6">{s.desc[lang]}</p>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 mb-8">
               {s.features[lang].map((f, j) => (
                 <div key={j} className={`flex items-center gap-2 ${ar ? 'flex-row-reverse' : ''}`} style={{ opacity: open ? 1 : 0, transform: open ? 'translateX(0)' : 'translateX(-10px)', transition: `opacity 0.4s ease ${j * 60 + 200}ms, transform 0.4s ease ${j * 60 + 200}ms` }}>
                   <div className="w-1.5 h-1.5 rounded-full bg-sky-500 flex-shrink-0"/>
@@ -432,12 +440,7 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
                 </div>
               ))}
             </div>
-          </div>
-          <div className="flex flex-col gap-4">
-            <div className="h-48 sm:h-56 rounded-2xl overflow-hidden" style={{ opacity: open ? 1 : 0, transform: open ? 'scale(1)' : 'scale(0.96)', transition: 'opacity 0.5s ease 0.15s, transform 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s' }}>
-              <img src={s.img} alt={s.title[lang]} className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"/>
-            </div>
-            {/* Consultation Button (Business) */}
+
             {onBookConsult && (
               <button onClick={e => { e.stopPropagation(); onBookConsult(); }} style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25">
                 <div className="flex items-center gap-3">
@@ -450,7 +453,7 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
                 <ArrowUpRight size={16} className="text-white/80 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200 flex-shrink-0"/>
               </button>
             )}
-            {/* Demo Button (Tracking) */}
+
             {onBookDemo && (
               <button onClick={e => { e.stopPropagation(); onBookDemo(); }} style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-indigo-600/25">
                 <div className="flex items-center gap-3">
@@ -464,13 +467,18 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
               </button>
             )}
           </div>
+          <div className="flex flex-col gap-4">
+            <div className="h-48 sm:h-56 rounded-2xl overflow-hidden" style={{ opacity: open ? 1 : 0, transform: open ? 'scale(1)' : 'scale(0.96)', transition: 'opacity 0.5s ease 0.15s, transform 0.5s cubic-bezier(0.16,1,0.3,1) 0.15s' }}>
+              <img src={s.img} alt={s.title[lang]} className="w-full h-full object-cover transition-transform duration-[2s] hover:scale-105"/>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-// ─── STAT CARD ───────────────────────────────────────────────────────────────
+// ─── بطاقة الإحصائيات (Stat Card) ───────────────────────────────────────────────────────────────
 
 const StatCard = ({ stat, delay }) => {
   const [visible, setVisible] = useState(false);
@@ -493,7 +501,7 @@ const StatCard = ({ stat, delay }) => {
   );
 };
 
-// ─── TILT CARD ────────────────────────────────────────────────────────────────
+// ─── بطاقة الميلان (Tilt Card) ────────────────────────────────────────────────────────────────
 
 const TiltCard = ({ children }) => {
   const ref = useRef(null);
@@ -515,14 +523,16 @@ const TiltCard = ({ children }) => {
   );
 };
 
-// ─── UTILITY COMPONENTS ──────────────────────────────────────────────────────
+// ─── المكونات المساعدة ──────────────────────────────────────────────────────
 
 const SectionLabel = ({ text, dark = false }) => {
   const [ref, val] = useScrollRevealValue(0.3);
+  // فحص أمان إضافي للقيم
+  const safeVal = isNaN(val) ? 0 : val;
   return (
     <div ref={ref} className="flex items-center gap-3 mb-12 overflow-hidden">
-      <div style={{ width: `${val * 20}px`, height: '2px', background: '#0ea5e9', transition: 'none', willChange: 'width', flexShrink: 0 }}/>
-      <span style={{ opacity: val, transform: `translateX(${(1 - val) * -12}px)`, transition: 'none', willChange: 'opacity, transform' }} className={`text-[10px] font-bold uppercase tracking-[0.4em] ${dark ? 'text-white/40' : 'text-slate-400'}`}>
+      <div style={{ width: `${safeVal * 20}px`, height: '2px', background: '#0ea5e9', transition: 'none', willChange: 'width', flexShrink: 0 }}/>
+      <span style={{ opacity: safeVal, transform: `translateX(${(1 - safeVal) * -12}px)`, transition: 'none', willChange: 'opacity, transform' }} className={`text-[10px] font-bold uppercase tracking-[0.4em] ${dark ? 'text-white/40' : 'text-slate-400'}`}>
         {text}
       </span>
     </div>
@@ -531,8 +541,9 @@ const SectionLabel = ({ text, dark = false }) => {
 
 const ScrollRevealText = ({ children, dark = false }) => {
   const [ref, val] = useScrollRevealValue(0.2);
+  const safeVal = isNaN(val) ? 0 : val;
   return (
-    <div ref={ref} style={{ opacity: val, transform: `translateY(${(1 - val) * 40}px)`, transition: 'none', willChange: 'opacity, transform' }}>
+    <div ref={ref} style={{ opacity: safeVal, transform: `translateY(${(1 - safeVal) * 40}px)`, transition: 'none', willChange: 'opacity, transform' }}>
       {children}
     </div>
   );
@@ -541,7 +552,7 @@ const ScrollRevealText = ({ children, dark = false }) => {
 const ParallaxBlock = ({ children, speed = 0.12, className = '' }) => {
   const [ref, offset] = useParallax(speed);
   return (
-    <div ref={ref} style={{ transform: `translateY(${offset}px)`, willChange: 'transform' }} className={className}>
+    <div ref={ref} style={{ transform: `translateY(${isNaN(offset) ? 0 : offset}px)`, willChange: 'transform' }} className={className}>
       {children}
     </div>
   );
@@ -566,7 +577,7 @@ const Marquee = ({ lang }) => {
   );
 };
 
-// ─── MAIN ────────────────────────────────────────────────────────────────────
+// ─── التطبيق الرئيسي (App) ────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [lang, setLang] = useState('en');
@@ -650,16 +661,16 @@ export default function App() {
 
       <Nav lang={lang} setLang={setLang} go={go} active={active} />
 
-      {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
+      {/* ═══ قمة الموقع (Hero) ═══════════════════════════════════════════════════════════ */}
       <section id="home" className="relative min-h-screen flex flex-col overflow-hidden bg-slate-900">
         <div className="absolute inset-0 overflow-hidden" ref={heroImgRef}>
-          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover opacity-30" style={{ transform: `translateY(${heroImgOffset}px)`, willChange: 'transform' }}/>
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover opacity-30" style={{ transform: `translateY(${isNaN(heroImgOffset) ? 0 : heroImgOffset}px)`, willChange: 'transform' }}/>
           <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.6) 60%, rgba(2,6,23,0.8) 100%)' }}/>
         </div>
 
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10 animate-accentPulse"/>
 
-        <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform: `translateY(${heroTextOffset}px)`, willChange: 'transform' }}>
+        <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform: `translateY(${isNaN(heroTextOffset) ? 0 : heroTextOffset}px)`, willChange: 'transform' }}>
           <div className="flex items-center gap-3 mb-8 hero-label">
             <div className="w-5 h-[2px] bg-sky-500"/>
             <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
@@ -691,7 +702,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ═══ ABOUT ══════════════════════════════════════════════════════════ */}
+      {/* ═══ من نحن (About) ══════════════════════════════════════════════════════════ */}
       <section id="about" className="py-24 sm:py-36 px-6 sm:px-10">
         <div className="max-w-7xl mx-auto">
           <SectionLabel text={t.about_label}/>
@@ -717,7 +728,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ═══ SERVICES ═══════════════════════════════════════════════════════ */}
+      {/* ═══ الخدمات (Services) ═══════════════════════════════════════════════════════ */}
       <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
           <SectionLabel text={t.services_label}/>
@@ -740,7 +751,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ═══ EVENTS ═════════════════════════════════════════════════════════ */}
+      {/* ═══ الفعاليات (Events) ═════════════════════════════════════════════════════════ */}
       <section id="events" className="py-24 sm:py-36 px-6 sm:px-10">
         <div className="max-w-7xl mx-auto">
           <SectionLabel text={t.events_label}/>
@@ -766,7 +777,7 @@ export default function App() {
 
       <Marquee lang={lang}/>
 
-      {/* ═══ CONTACT ════════════════════════════════════════════════════════ */}
+      {/* ═══ التواصل (Contact) ════════════════════════════════════════════════════════ */}
       <section id="contact" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <SectionLabel text={t.contact_label} dark/>
@@ -800,7 +811,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* ═══ FOOTER ═════════════════════════════════════════════════════════ */}
+      {/* ═══ التذييل (Footer) ═════════════════════════════════════════════════════════ */}
       <footer className="py-12 sm:py-16 px-6 sm:px-10 border-t border-slate-100 reveal">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div><div className="mb-3">{lang === 'ar' ? <span className="font-normal text-xl tracking-[0.18em] uppercase text-slate-900">{t.logo}</span> : <LogoText className="font-normal text-xl tracking-[0.18em] uppercase" color="#0f172a"/>}</div><p className="text-xs text-slate-400 max-w-xs leading-relaxed">{t.footer_desc}</p></div>
@@ -814,7 +825,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* ═══ CONSULTATION MODAL (Business) ══════════════════════════════════ */}
+      {/* ═══ نافذة الاستشارة ══════════════════════════════════ */}
       {consultModal && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-xl animate-fadeIn" onClick={() => { setConsultModal(false); setConsultStatus(null); }}/>
@@ -838,7 +849,7 @@ export default function App() {
         </div>
       )}
 
-      {/* ═══ DEMO MODAL (Tracking) ═════════════════════════════════════════ */}
+      {/* ═══ نافذة العرض التجريبي ═════════════════════════════════════════ */}
       {demoModal && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
           <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-xl animate-fadeIn" onClick={() => { setDemoModal(false); setDemoStatus(null); }}/>
@@ -862,7 +873,7 @@ export default function App() {
         </div>
       )}
 
-      {/* ═══ CAREERS MODAL ══════════════════════════════════════════════════ */}
+      {/* ═══ نافذة فرص العمل ══════════════════════════════════════════════════ */}
       {careers && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8">
           <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setCareers(false)}/>
@@ -881,7 +892,7 @@ export default function App() {
         </div>
       )}
 
-      {/* ─── GLOBAL STYLES ─────────────────────────────────────────────────── */}
+      {/* ─── الأنماط العالمية (Global Styles) ─────────────────────────────────────────────────── */}
       <style>{`
         @import url('https://fonts.cdnfonts.com/css/now');
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
