@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy, Calculator,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload
 } from 'lucide-react';
 
 // ─── البيانات ──────────────────────────────────────────────────────────────────
@@ -105,7 +105,7 @@ const T = {
     careers:"Careers", join_title:"Join the Team.",
     career_body:"We're building the future of business intelligence in the MENA region. Looking for exceptional people to build it with.",
     val_title:"What drives us", val_1:"Inherent Innovation", val_2:"Data Integrity", val_3:"Human-First Tech",
-    apply:"Send Application", cv_link:"Portfolio / CV Link",
+    apply:"Send Application", cv_link:"Upload CV",
     rights:"All rights reserved.", pricing:"Pricing",
     footer_desc:"Strategic consultancy and digital infrastructure for the MENA region.",
     explore:"View Service",
@@ -147,7 +147,7 @@ const T = {
     careers:"فرص العمل", join_title:"انضم للفريق.",
     career_body:"نحن نبني مستقبل الذكاء التجاري في منطقة الشرق الأوسط. نبحث عن أشخاص استثنائيين لبنائه معنا.",
     val_title:"ما يحركنا", val_1:"الابتكار الأصيل", val_2:"نزاهة البيانات", val_3:"تكنولوجيا محورها الإنسان",
-    apply:"إرسال الطلب", cv_link:"رابط السيرة الذاتية",
+    apply:"إرسال الطلب", cv_link:"رفع السيرة الذاتية",
     rights:"جميع الحقوق محفوظة.", pricing:"التسعير",
     footer_desc:"استشارات استراتيجية وبنية تحتية رقمية لمنطقة الشرق الأوسط.",
     explore:"عرض الخدمة",
@@ -590,6 +590,7 @@ export default function App() {
   const [consultStatus, setConsultStatus] = useState(null);
   const [demoModal, setDemoModal] = useState(false);
   const [demoStatus, setDemoStatus] = useState(null);
+  const [selectedFileName, setSelectedFileName] = useState('');
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
 
   const t = T[lang];
@@ -622,13 +623,32 @@ export default function App() {
     setActive(id);
   };
 
-  // Improved handleForm to be generic for Leads and Work
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFileName(file.name);
+    }
+  };
+
   const handleForm = async (e, sheet) => {
     e.preventDefault();
     setFormStatus('sending');
     const fd = new FormData(e.target);
     const data = { sheetName: sheet };
-    fd.forEach((value, key) => { data[key] = value; });
+    
+    // Process form data including file conversion to base64
+    for (let [key, value] of fd.entries()) {
+      if (value instanceof File && value.name) {
+        const base64 = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(value);
+        });
+        data[key] = base64; // This sends the file content as base64 string
+      } else {
+        data[key] = value;
+      }
+    }
     
     try {
       await fetch(scriptURL, {
@@ -637,6 +657,7 @@ export default function App() {
       });
       setFormStatus('success');
       e.target.reset();
+      setSelectedFileName('');
       setTimeout(() => setFormStatus(null), 10000);
     } catch(e) { setFormStatus(null); }
   };
@@ -899,7 +920,46 @@ export default function App() {
             <div className="flex-1 p-8 sm:p-12 relative">
               <button onClick={() => setCareers(false)} className="absolute top-5 right-5 w-9 h-9 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-all"><X size={16}/></button>
               {formStatus === 'success' ? (<div className="flex flex-col gap-5 py-6"><div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center"><CheckCircle2 size={22} className="text-white"/></div><h3 className="text-2xl font-black text-slate-900 tracking-tight">{t.success_title}</h3></div>) : (
-                <div className="space-y-2"><h3 className="text-2xl font-black text-slate-900 tracking-tight mb-8">{t.join_title}</h3><form className="space-y-8" onSubmit={e => handleForm(e, 'Work')}><div className="grid sm:grid-cols-2 gap-8"><Field label="Name" name="name" required/><Field label="Email" name="email" type="email" required/></div><Field label="Portfolio Link" name="cv_link" type="url"/><button disabled={formStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-slate-900 flex items-center justify-center gap-3 mt-4">{formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <>{t.apply}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}</button></form></div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-8">{t.join_title}</h3>
+                  <form className="space-y-8" onSubmit={e => handleForm(e, 'Work')}>
+                    <div className="grid sm:grid-cols-2 gap-8">
+                      <Field label="Name" name="name" required/>
+                      <Field label="Email" name="email" type="email" required/>
+                    </div>
+                    
+                    {/* File Upload Field */}
+                    <div className="relative group">
+                      <label className="absolute -top-5 text-[9px] tracking-[0.2em] font-bold uppercase text-sky-600">
+                        {t.cv_link}
+                      </label>
+                      <div className="relative mt-2">
+                        <input 
+                          type="file" 
+                          name="cv_file" 
+                          id="cv_file"
+                          accept=".pdf,.doc,.docx" 
+                          required 
+                          onChange={handleFileChange}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        />
+                        <div className="w-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl py-6 px-4 flex flex-col items-center justify-center gap-2 group-hover:border-sky-300 group-hover:bg-sky-50 transition-all">
+                          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-sky-500 shadow-sm transition-colors">
+                            <Upload size={18}/>
+                          </div>
+                          <span className="text-xs font-bold text-slate-500 text-center">
+                            {selectedFileName || (lang === 'ar' ? 'اسحب الملف هنا أو اضغط للرفع' : 'Drop your CV here or click to upload')}
+                          </span>
+                          <span className="text-[10px] text-slate-400 uppercase tracking-widest">PDF, DOC (MAX 2MB)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button disabled={formStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-slate-900 flex items-center justify-center gap-3 mt-4">
+                      {formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <>{t.apply}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}
+                    </button>
+                  </form>
+                </div>
               )}
             </div>
           </div>
