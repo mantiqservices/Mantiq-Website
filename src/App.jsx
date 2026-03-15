@@ -879,7 +879,7 @@ export default function App() {
                     <option value="HR" className="text-slate-900">HR</option>
                     <option value="Educational Academy" className="text-slate-900">Educational Academy</option>
                   </Field>
-                  <button disabled={demoStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-sky-500/20">{demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><MonitorPlay size={14}/>Request Free Walkthrough</span>}</button>
+                  <button disabled={demoStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-sky-500/20">{demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><MonitorPlay size={14}/>Request Free Walkthrough</span>}</button>
                 </form>
               )}
             </div>
@@ -911,7 +911,17 @@ export default function App() {
         @import url('https://fonts.cdnfonts.com/css/now');
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
 
-        * { box-sizing: border-box; }
+        /* Hide Scrollbars while maintaining functionality */
+        * { 
+          box-sizing: border-box; 
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE/Edge */
+        }
+        
+        *::-webkit-scrollbar {
+          display: none; /* Chrome/Safari/Opera */
+        }
+
         html { scroll-behavior: smooth; }
         body { margin: 0; overflow-x: hidden; font-family: 'Now', sans-serif; }
         [dir="rtl"], [dir="rtl"] h1, [dir="rtl"] h2 { font-family: 'Noto Sans Arabic', sans-serif; }
