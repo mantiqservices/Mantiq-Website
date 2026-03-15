@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy, Calculator,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor
 } from 'lucide-react';
 
 // ─── البيانات ──────────────────────────────────────────────────────────────────
@@ -119,7 +119,11 @@ const T = {
     demos_label: "Experience Logic",
     demos_title1: "Live",
     demos_title2: "Ecosystems.",
-    demos_body: "Interact with our managed ecosystems and system architectures in real-time."
+    demos_body: "Interact with our managed ecosystems and system architectures in real-time.",
+    demos_mobile_msg: "For the best interactive experience, please view this section on a laptop or desktop computer.",
+    demos_mobile_btn: "View Anyway",
+    demo_form_title: "Request System Walkthrough",
+    demo_form_btn: "Confirm Demo Request"
   },
   ar:{
     logo:"منطق",
@@ -172,7 +176,11 @@ const T = {
     demos_label: "تجربة المنطق",
     demos_title1: "أنظمة",
     demos_title2: "حية.",
-    demos_body: "تفاعل مع بيئاتنا المُدارة وبنية أنظمتنا في الوقت الفعلي."
+    demos_body: "تفاعل مع بيئاتنا المُدارة وبنية أنظمتنا في الوقت الفعلي.",
+    demos_mobile_msg: "للحصول على أفضل تجربة تفاعلية، يرجى تصفح هذا القسم من خلال جهاز لابتوب أو كمبيوتر مكتبي.",
+    demos_mobile_btn: "عرض على أي حال",
+    demo_form_title: "طلب عرض حي للنظام",
+    demo_form_btn: "تأكيد طلب العرض"
   }
 };
 
@@ -323,7 +331,7 @@ const LogoText = ({ className = '', color }) => (
 
 // ─── القائمة (Nav) ─────────────────────────────────────────────────────────────────────
 
-const Nav = ({ lang, setLang, go, active }) => {
+const Nav = ({ lang, setLang, go, active, currentPage }) => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const t = T[lang];
@@ -338,7 +346,7 @@ const Nav = ({ lang, setLang, go, active }) => {
   const links = [
     { id:'about', label: t.nav_about },
     { id:'services', label: t.nav_services },
-    { id:'demos', label: t.nav_demos },
+    { id:'demos', label: t.nav_demos, isPage: true },
     { id:'events', label: t.nav_events },
   ];
 
@@ -346,13 +354,13 @@ const Nav = ({ lang, setLang, go, active }) => {
     <>
       <nav dir={ar ? 'rtl' : 'ltr'}
         className={`fixed top-0 inset-x-0 z-[100] transition-all duration-500
-        ${scrolled ? 'bg-white/95 backdrop-blur-xl border-b border-slate-100 py-4' : 'bg-transparent py-6'}`}>
+        ${scrolled || currentPage !== 'home' ? 'bg-white/95 backdrop-blur-xl border-b border-slate-100 py-4' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
 
           <button onClick={() => go('home')} className="flex items-center group">
             {lang === 'ar'
-              ? <span className={`font-normal text-xl tracking-[0.18em] uppercase transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`}>{t.logo}</span>
-              : <LogoText className={`font-normal text-xl tracking-[0.18em] uppercase transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`} color={scrolled ? '#0f172a' : '#ffffff'}/>
+              ? <span className={`font-normal text-xl tracking-[0.18em] uppercase transition-colors ${scrolled || currentPage !== 'home' ? 'text-slate-900' : 'text-white'}`}>{t.logo}</span>
+              : <LogoText className={`font-normal text-xl tracking-[0.18em] uppercase transition-colors ${scrolled || currentPage !== 'home' ? 'text-slate-900' : 'text-white'}`} color={scrolled || currentPage !== 'home' ? '#0f172a' : '#ffffff'}/>
             }
           </button>
 
@@ -360,9 +368,9 @@ const Nav = ({ lang, setLang, go, active }) => {
             {links.map(l => (
               <button key={l.id} onClick={() => go(l.id)}
                 className={`text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-200
-                  ${active === l.id
+                  ${active === l.id || (currentPage === l.id)
                     ? 'text-sky-500'
-                    : scrolled ? 'text-slate-500 hover:text-slate-900' : 'text-white/60 hover:text-white'}`}>
+                    : (scrolled || currentPage !== 'home') ? 'text-slate-500 hover:text-slate-900' : 'text-white/60 hover:text-white'}`}>
                 {l.label}
               </button>
             ))}
@@ -370,17 +378,17 @@ const Nav = ({ lang, setLang, go, active }) => {
 
           <div className="hidden lg:flex items-center gap-5">
             <button onClick={() => setLang(ar ? 'en' : 'ar')}
-              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${scrolled ? 'text-sky-500 hover:text-sky-600' : 'text-white/50 hover:text-white'}`}>
+              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${(scrolled || currentPage !== 'home') ? 'text-sky-500 hover:text-sky-600' : 'text-white/50 hover:text-white'}`}>
               <Globe size={13}/> {ar ? 'EN' : 'AR'}
             </button>
             <button onClick={() => go('contact')}
               className={`px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.18em] rounded-full transition-all duration-200 active:scale-95
-                ${scrolled ? 'bg-slate-900 text-white hover:bg-sky-600' : 'bg-white text-slate-900 hover:bg-sky-500 hover:text-white'}`}>
+                ${(scrolled || currentPage !== 'home') ? 'bg-slate-900 text-white hover:bg-sky-600' : 'bg-white text-slate-900 hover:bg-sky-500 hover:text-white'}`}>
               {t.cta}
             </button>
           </div>
 
-          <button className={`lg:hidden p-1 transition-colors ${scrolled ? 'text-slate-900' : 'text-white'}`} onClick={() => setOpen(!open)}>
+          <button className={`lg:hidden p-1 transition-colors ${scrolled || currentPage !== 'home' ? 'text-slate-900' : 'text-white'}`} onClick={() => setOpen(!open)}>
             {open ? <X size={22}/> : <Menu size={22}/>}
           </button>
         </div>
@@ -419,7 +427,7 @@ const Nav = ({ lang, setLang, go, active }) => {
 
 // ─── سطر الخدمة (Service Row) ─────────────────────────────────────────────────────────────
 
-const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
+const ServiceRow = ({ s, lang, i, onBookConsult, onViewDemos }) => {
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
   const [contentH, setContentH] = useState(0);
@@ -478,15 +486,15 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onBookDemo }) => {
               </button>
             )}
 
-            {onBookDemo && (
-              <button onClick={e => { e.stopPropagation(); onBookDemo(); }} 
+            {onViewDemos && (
+              <button onClick={e => { e.stopPropagation(); onViewDemos(); }} 
                 style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} 
                 className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25 animate-buttonEntry">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0"><MonitorPlay size={16} className="text-white"/></div>
                   <div className="text-left">
-                    <p className="text-white font-black text-xs uppercase tracking-[0.15em]">{lang === 'ar' ? 'احجز عرضاً تجريبياً' : 'Book a Demo'}</p>
-                    <p className="text-white/70 text-[10px] font-medium">{lang === 'ar' ? 'جولة في النظام — مجاناً' : 'System walkthrough — Free'}</p>
+                    <p className="text-white font-black text-xs uppercase tracking-[0.15em]">{lang === 'ar' ? 'عرض النماذج الحية' : 'View Live Demos'}</p>
+                    <p className="text-white/70 text-[10px] font-medium">{lang === 'ar' ? 'استكشف الأنظمة' : 'Explore systems'}</p>
                   </div>
                 </div>
                 <ArrowUpRight size={16} className="text-white/80 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200 flex-shrink-0"/>
@@ -606,14 +614,15 @@ const Marquee = ({ lang }) => {
 
 export default function App() {
   const [lang, setLang] = useState('en');
+  const [page, setPage] = useState('home'); // home | demos
   const [active, setActive] = useState('home');
   const [careers, setCareers] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
   const [consultModal, setConsultModal] = useState(false);
   const [consultStatus, setConsultStatus] = useState(null);
-  const [demoModal, setDemoModal] = useState(false);
   const [demoStatus, setDemoStatus] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
+  const [hideMobileWarning, setHideMobileWarning] = useState(false);
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
 
   const t = T[lang];
@@ -626,7 +635,8 @@ export default function App() {
   const [heroTextRef, heroTextOffset] = useParallax(0.1);
 
   useEffect(() => {
-    const ids = ['home','about','services','demos','events','contact'];
+    if (page !== 'home') return;
+    const ids = ['home','about','services','events','contact'];
     const h = () => {
       for (const id of ids) {
         const el = document.getElementById(id);
@@ -638,11 +648,25 @@ export default function App() {
     };
     window.addEventListener('scroll', h, { passive: true });
     return () => window.removeEventListener('scroll', h);
-  }, []);
+  }, [page]);
 
   const go = id => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (id === 'demos') {
+      setPage('demos');
+      window.scrollTo(0, 0);
+      return;
+    }
+    
+    if (page !== 'home') {
+      setPage('home');
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
     setActive(id);
   };
 
@@ -693,6 +717,7 @@ export default function App() {
     try {
       await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
       setter('success');
+      e.target.reset();
     } catch(e) { setter(null); }
   };
 
@@ -708,241 +733,292 @@ export default function App() {
 
       <div className="fixed top-0 left-0 z-[200] h-[2px] bg-sky-500 transition-none pointer-events-none" style={{ width: `${scrollProgress * 100}%`, boxShadow: '0 0 8px rgba(14,165,233,0.6)' }}/>
 
-      <Nav lang={lang} setLang={setLang} go={go} active={active} />
+      <Nav lang={lang} setLang={setLang} go={go} active={active} currentPage={page} />
 
-      {/* ═══ قمة الموقع (Hero) ═══════════════════════════════════════════════════════════ */}
-      <section id="home" className="relative min-h-screen flex flex-col overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 overflow-hidden" ref={heroImgRef}>
-          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover opacity-30" style={{ transform: `translateY(${isNaN(heroImgOffset) ? 0 : heroImgOffset}px)`, willChange: 'transform' }}/>
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.6) 60%, rgba(2,6,23,0.8) 100%)' }}/>
-        </div>
-
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10 animate-accentPulse"/>
-
-        <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform: `translateY(${isNaN(heroTextOffset) ? 0 : heroTextOffset}px)`, willChange: 'transform' }}>
-          <div className="flex items-center gap-3 mb-8 hero-label">
-            <div className="w-5 h-[2px] bg-sky-500"/>
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
-          </div>
-
-          <h1>
-            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">{t.hero_line1}</span>
-            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88] hero-word-2" style={{ color:'transparent', WebkitTextStroke:'1.5px #ffffff' }}>
-              {t.hero_line2}
-            </span>
-            <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">{t.hero_line3}</span>
-          </h1>
-
-          <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
-            <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium hero-desc">{t.hero_desc}</p>
-            <div className="flex gap-3 flex-shrink-0 hero-btns">
-              <button onClick={() => go('services')} className="px-7 py-3.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-sky-500/30">
-                {t.nav_services} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/>
-              </button>
-              <button onClick={() => go('about')} className="px-7 py-3.5 border border-white/20 hover:border-white/50 text-white/70 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
-                {t.nav_about}
-              </button>
+      {page === 'home' ? (
+        <>
+          {/* ═══ قمة الموقع (Hero) ═══════════════════════════════════════════════════════════ */}
+          <section id="home" className="relative min-h-screen flex flex-col overflow-hidden bg-slate-900">
+            <div className="absolute inset-0 overflow-hidden" ref={heroImgRef}>
+              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover opacity-30" style={{ transform: `translateY(${isNaN(heroImgOffset) ? 0 : heroImgOffset}px)`, willChange: 'transform' }}/>
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.6) 60%, rgba(2,6,23,0.8) 100%)' }}/>
             </div>
-          </div>
-        </div>
 
-        <div className="absolute bottom-8 right-8 sm:right-12 z-10 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-80 transition-opacity cursor-pointer" onClick={() => go('about')}>
-          <div className="w-6 h-9 rounded-full border-2 border-white/40 flex items-start justify-center pt-1.5"><div className="w-0.5 h-2 bg-white rounded-full animate-scrollDot"/></div>
-        </div>
-      </section>
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10 animate-accentPulse"/>
 
-      {/* ═══ من نحن (About) ══════════════════════════════════════════════════════════ */}
-      <section id="about" className="py-24 sm:py-36 px-6 sm:px-10">
-        <div className="max-w-7xl mx-auto">
-          <SectionLabel text={t.about_label}/>
-          <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
-            <ScrollRevealText><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900"><span className="block">{t.about_title1}</span><span className="block italic text-sky-500">{t.about_title2}</span></h2></ScrollRevealText>
-            <div className="reveal space-y-8" style={{ transitionDelay:'100ms' }}>
-              <ParallaxBlock speed={0.06}><p className="text-lg sm:text-xl text-slate-500 leading-relaxed font-medium">{t.about_body}</p></ParallaxBlock>
-              <div className="grid grid-cols-1 gap-4">
-                {[ { icon:<Target size={18}/>, title: t.mission, body: t.mission_body }, { icon:<Eye size={18}/>, title: t.vision, body: t.vision_body } ].map((card, i) => (
-                  <TiltCard key={i}>
-                    <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
-                      <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:bg-sky-100 group-hover:border-sky-200 transition-all duration-300">{card.icon}</div>
-                      <div><h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4><p className="text-sm text-slate-500 leading-relaxed">{card.body}</p></div>
+            <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform: `translateY(${isNaN(heroTextOffset) ? 0 : heroTextOffset}px)`, willChange: 'transform' }}>
+              <div className="flex items-center gap-3 mb-8 hero-label">
+                <div className="w-5 h-[2px] bg-sky-500"/>
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
+              </div>
+
+              <h1>
+                <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">{t.hero_line1}</span>
+                <span className="block text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88] hero-word-2" style={{ color:'transparent', WebkitTextStroke:'1.5px #ffffff' }}>
+                  {t.hero_line2}
+                </span>
+                <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">{t.hero_line3}</span>
+              </h1>
+
+              <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
+                <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium hero-desc">{t.hero_desc}</p>
+                <div className="flex gap-3 flex-shrink-0 hero-btns">
+                  <button onClick={() => go('services')} className="px-7 py-3.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-sky-500/30">
+                    {t.nav_services} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/>
+                  </button>
+                  <button onClick={() => go('about')} className="px-7 py-3.5 border border-white/20 hover:border-white/50 text-white/70 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
+                    {t.nav_about}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute bottom-8 right-8 sm:right-12 z-10 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-80 transition-opacity cursor-pointer" onClick={() => go('about')}>
+              <div className="w-6 h-9 rounded-full border-2 border-white/40 flex items-start justify-center pt-1.5"><div className="w-0.5 h-2 bg-white rounded-full animate-scrollDot"/></div>
+            </div>
+          </section>
+
+          {/* ═══ من نحن (About) ══════════════════════════════════════════════════════════ */}
+          <section id="about" className="py-24 sm:py-36 px-6 sm:px-10">
+            <div className="max-w-7xl mx-auto">
+              <SectionLabel text={t.about_label}/>
+              <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
+                <ScrollRevealText><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900"><span className="block">{t.about_title1}</span><span className="block italic text-sky-500">{t.about_title2}</span></h2></ScrollRevealText>
+                <div className="reveal space-y-8" style={{ transitionDelay:'100ms' }}>
+                  <ParallaxBlock speed={0.06}><p className="text-lg sm:text-xl text-slate-500 leading-relaxed font-medium">{t.about_body}</p></ParallaxBlock>
+                  <div className="grid grid-cols-1 gap-4">
+                    {[ { icon:<Target size={18}/>, title: t.mission, body: t.mission_body }, { icon:<Eye size={18}/>, title: t.vision, body: t.vision_body } ].map((card, i) => (
+                      <TiltCard key={i}>
+                        <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
+                          <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:bg-sky-100 group-hover:border-sky-200 transition-all duration-300">{card.icon}</div>
+                          <div><h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4><p className="text-sm text-slate-500 leading-relaxed">{card.body}</p></div>
+                        </div>
+                      </TiltCard>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden mt-20 reveal-scale reveal" style={{ transitionDelay:'150ms' }}>
+                {stats.map((s, i) => <StatCard key={i} stat={s} delay={i * 120}/>)}
+              </div>
+            </div>
+          </section>
+
+          {/* ═══ لماذا تختارنا (Why Choose Us) ══════════════════════════════════════════════ */}
+          <section className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900 overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/5 blur-[120px] rounded-full -mr-64 -mt-64"/>
+            <div className="max-w-7xl mx-auto relative z-10">
+              <SectionLabel text={t.why_label} dark/>
+              <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-center">
+                <div className="reveal">
+                  <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.why_title1}</span><span className="block italic text-sky-400">{t.why_title2}</span></h2></ScrollRevealText>
+                  <div className="mt-12 space-y-6">
+                    {[ 
+                      { icon:<Gem size={18}/>, t: t.why_1_t, d: t.why_1_d }, 
+                      { icon:<Cpu size={18}/>, t: t.why_2_t, d: t.why_2_d },
+                      { icon:<Timer size={18}/>, t: t.why_3_t, d: t.why_3_d },
+                      { icon:<Globe size={18}/>, t: t.why_4_t, d: t.why_4_d }
+                    ].map((item, i) => (
+                      <div key={i} className="flex gap-5 group" style={{ transitionDelay: `${i * 100}ms` }}>
+                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all duration-300 flex-shrink-0">{item.icon}</div>
+                        <div>
+                          <h4 className="text-white font-bold text-base uppercase tracking-wide mb-1">{item.t}</h4>
+                          <p className="text-white/40 text-sm leading-relaxed max-w-sm">{item.d}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="reveal relative hidden lg:block">
+                  <div className="aspect-square rounded-3xl overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1400" alt="Precision" className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"/>
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"/>
+                    <div className="absolute bottom-8 left-8 right-8 p-8 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+                       <div className="flex items-center gap-3 mb-2">
+                         <ShieldCheck className="text-sky-400" size={20}/>
+                         <span className="text-white font-black uppercase text-xs tracking-widest">{ar ? 'معايير النزاهة' : 'Integrity Standards'}</span>
+                       </div>
+                       <p className="text-white/50 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
                     </div>
-                  </TiltCard>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ═══ الخدمات (Services) ═══════════════════════════════════════════════════════ */}
+          <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
+            <div className="max-w-7xl mx-auto">
+              <SectionLabel text={t.services_label}/>
+              <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
+                <ScrollRevealText><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900"><span className="block">{t.services_title1}</span><span className="block italic text-sky-500">{t.services_title2}</span></h2></ScrollRevealText>
+                <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium reveal" style={{ transitionDelay:'80ms' }}>{t.services_body}</p>
+              </div>
+              <div className="border-t border-slate-100">
+                {SERVICES.map((s, i) => (
+                  <ServiceRow 
+                    key={s.id} 
+                    s={s} 
+                    lang={lang} 
+                    i={i} 
+                    onBookConsult={s.id === 'business' ? () => setConsultModal(true) : null}
+                    onViewDemos={s.id === 'tracking' ? () => go('demos') : null}
+                  />
                 ))}
               </div>
             </div>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden mt-20 reveal-scale reveal" style={{ transitionDelay:'150ms' }}>
-            {stats.map((s, i) => <StatCard key={i} stat={s} delay={i * 120}/>)}
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* ═══ لماذا تختارنا (Why Choose Us) ══════════════════════════════════════════════ */}
-      <section className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/5 blur-[120px] rounded-full -mr-64 -mt-64"/>
-        <div className="max-w-7xl mx-auto relative z-10">
-          <SectionLabel text={t.why_label} dark/>
-          <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-center">
-            <div className="reveal">
-              <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.why_title1}</span><span className="block italic text-sky-400">{t.why_title2}</span></h2></ScrollRevealText>
-              <div className="mt-12 space-y-6">
-                {[ 
-                  { icon:<Gem size={18}/>, t: t.why_1_t, d: t.why_1_d }, 
-                  { icon:<Cpu size={18}/>, t: t.why_2_t, d: t.why_2_d },
-                  { icon:<Timer size={18}/>, t: t.why_3_t, d: t.why_3_d },
-                  { icon:<Globe size={18}/>, t: t.why_4_t, d: t.why_4_d }
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-5 group" style={{ transitionDelay: `${i * 100}ms` }}>
-                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all duration-300 flex-shrink-0">{item.icon}</div>
-                    <div>
-                      <h4 className="text-white font-bold text-base uppercase tracking-wide mb-1">{item.t}</h4>
-                      <p className="text-white/40 text-sm leading-relaxed max-w-sm">{item.d}</p>
+          {/* ═══ الفعاليات (Events) ═════════════════════════════════════════════════════════ */}
+          <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
+            <div className="max-w-7xl mx-auto">
+              <SectionLabel text={t.events_label}/>
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+                <h2 className="text-4xl sm:text-7xl font-black tracking-tighter leading-[0.9] reveal">
+                  <span className="block text-slate-900">{lang === 'ar' ? t.events_title1 : <LogoText color="#0f172a" className="text-4xl sm:text-7xl"/>}</span>
+                  <span className="block italic text-sky-500">{t.events_title2}</span>
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                {EVENTS.map((ev, i) => (
+                  <div key={ev.id} className="reveal hover-lift group relative overflow-hidden rounded-3xl cursor-default" style={{ transitionDelay:`${i*60}ms` }}>
+                    <div className="aspect-square sm:aspect-auto sm:h-72">
+                      <ParallaxBlock speed={0.06} className="absolute inset-0 w-full h-full"><img src={ev.img} alt="" loading="lazy" className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-110"/></ParallaxBlock>
+                      <div className="absolute inset-0 bg-sky-700/0 group-hover:bg-sky-700/10 transition-colors duration-700"/>
+                      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-sky-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"/>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="reveal relative hidden lg:block">
-              <div className="aspect-square rounded-3xl overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1400" alt="Precision" className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"/>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"/>
-                <div className="absolute bottom-8 left-8 right-8 p-8 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-                   <div className="flex items-center gap-3 mb-2">
-                     <ShieldCheck className="text-sky-400" size={20}/>
-                     <span className="text-white font-black uppercase text-xs tracking-widest">{ar ? 'معايير النزاهة' : 'Integrity Standards'}</span>
-                   </div>
-                   <p className="text-white/50 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* ═══ الخدمات (Services) ═══════════════════════════════════════════════════════ */}
-      <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
-        <div className="max-w-7xl mx-auto">
-          <SectionLabel text={t.services_label}/>
-          <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
-            <ScrollRevealText><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900"><span className="block">{t.services_title1}</span><span className="block italic text-sky-500">{t.services_title2}</span></h2></ScrollRevealText>
-            <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium reveal" style={{ transitionDelay:'80ms' }}>{t.services_body}</p>
-          </div>
-          <div className="border-t border-slate-100">
-            {SERVICES.map((s, i) => (
-              <ServiceRow 
-                key={s.id} 
-                s={s} 
-                lang={lang} 
-                i={i} 
-                onBookConsult={s.id === 'business' ? () => setConsultModal(true) : null}
-                onBookDemo={s.id === 'tracking' ? () => setDemoModal(true) : null}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+          <Marquee lang={lang}/>
 
-      {/* ═══ العروض الحية (Live Demos Page) ═════════════════════════════════════════════ */}
-      <section id="demos" className="py-24 sm:py-36 px-6 sm:px-10">
-        <div className="max-w-7xl mx-auto">
-          <SectionLabel text={t.demos_label}/>
-          <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
-            <ScrollRevealText>
-              <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
-                <span className="block">{t.demos_title1}</span>
-                <span className="block italic text-sky-500">{t.demos_title2}</span>
-              </h2>
-            </ScrollRevealText>
-            <div className="reveal flex flex-col gap-4" style={{ transitionDelay:'80ms' }}>
-              <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium">{t.demos_body}</p>
-              <a href="https://demos-mantiq.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sky-500 hover:text-sky-600 transition-colors w-fit">
-                Open in Fullscreen <ExternalLink size={12}/>
-              </a>
-            </div>
-          </div>
-
-          <div className="reveal reveal-scale mt-12 bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 p-2 sm:p-4">
-             <div className="w-full bg-slate-800/50 h-8 flex items-center px-4 gap-2 mb-2 sm:mb-4 rounded-xl">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/40"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/40"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500/40"></div>
-                <div className="flex-1 ml-4 bg-slate-900/50 h-5 rounded-md flex items-center px-3">
-                   <span className="text-[8px] text-slate-500 font-bold tracking-tight">https://demos.mantiq.services/interactive-view</span>
-                </div>
-             </div>
-             <div className="relative rounded-2xl overflow-hidden bg-white">
-                <iframe 
-                  src="https://demos-mantiq.vercel.app/" 
-                  width="100%" 
-                  height="700px" 
-                  style={{ border: 'none', display: 'block' }} 
-                  title="Mantiq Demos"
-                  className="w-full min-h-[500px] sm:min-h-[700px]"
-                ></iframe>
-             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ الفعاليات (Events) ═════════════════════════════════════════════════════════ */}
-      <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
-        <div className="max-w-7xl mx-auto">
-          <SectionLabel text={t.events_label}/>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
-            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] reveal">
-              <span className="block text-slate-900">{lang === 'ar' ? t.events_title1 : <LogoText color="#0f172a"/>}</span>
-              <span className="block italic text-sky-500">{t.events_title2}</span>
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-            {EVENTS.map((ev, i) => (
-              <div key={ev.id} className="reveal hover-lift group relative overflow-hidden rounded-3xl cursor-default" style={{ transitionDelay:`${i*60}ms` }}>
-                <div className="aspect-square sm:aspect-auto sm:h-72">
-                  <ParallaxBlock speed={0.06} className="absolute inset-0 w-full h-full"><img src={ev.img} alt="" loading="lazy" className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-110"/></ParallaxBlock>
-                  <div className="absolute inset-0 bg-sky-700/0 group-hover:bg-sky-700/10 transition-colors duration-700"/>
-                  <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-sky-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"/>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Marquee lang={lang}/>
-
-      {/* ═══ التواصل (Contact) ════════════════════════════════════════════════════════ */}
-      <section id="contact" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900">
-        <div className="max-w-7xl mx-auto">
-          <SectionLabel text={t.contact_label} dark/>
-          <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
-            <div className="reveal">
-              <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.contact_title1}</span><span className="block italic text-sky-400">{t.contact_title2}</span></h2></ScrollRevealText>
-              <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
-              <div className="mt-12 space-y-4">
-                {[ { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' }, { icon:<Phone size={16}/>, label:'Phone', val:'+201280103450' } ].map((c, i) => (
-                  <div key={i} className="flex items-center gap-4 group p-4 rounded-2xl border border-white/5 hover:border-sky-500/30 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
-                    <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">{c.icon}</div>
-                    <div><p className="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-0.5">{c.label}</p><p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors duration-300">{c.val}</p></div>
-                    <ArrowUpRight size={14} className="ml-auto text-white/0 group-hover:text-sky-400 transition-all duration-300 translate-x-2 group-hover:translate-x-0"/>
+          {/* ═══ التواصل (Contact) ════════════════════════════════════════════════════════ */}
+          <section id="contact" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900">
+            <div className="max-w-7xl mx-auto">
+              <SectionLabel text={t.contact_label} dark/>
+              <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
+                <div className="reveal">
+                  <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.contact_title1}</span><span className="block italic text-sky-400">{t.contact_title2}</span></h2></ScrollRevealText>
+                  <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
+                  <div className="mt-12 space-y-4">
+                    {[ { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' }, { icon:<Phone size={16}/>, label:'Phone', val:'+201280103450' } ].map((c, i) => (
+                      <div key={i} className="flex items-center gap-4 group p-4 rounded-2xl border border-white/5 hover:border-sky-500/30 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
+                        <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">{c.icon}</div>
+                        <div><p className="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-0.5">{c.label}</p><p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors duration-300">{c.val}</p></div>
+                        <ArrowUpRight size={14} className="ml-auto text-white/0 group-hover:text-sky-400 transition-all duration-300 translate-x-2 group-hover:translate-x-0"/>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+                <div className="reveal" style={{ transitionDelay:'100ms' }}>
+                  {formStatus === 'success' ? (
+                    <div className="flex flex-col gap-5 py-8"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30"><CheckCircle2 size={24} className="text-white"/></div><h3 className="text-3xl font-black text-white tracking-tight">{t.success_title}</h3><p className="text-sm text-white/50 max-w-sm leading-relaxed">{t.success_body}</p></div>
+                  ) : (
+                    <form className="space-y-9" onSubmit={e => handleForm(e, 'Leads')}>
+                      <div className="grid sm:grid-cols-2 gap-9"><Field label={t.name_p} name="name" required dark/><Field label={t.company_p} name="company" dark/></div>
+                      <div className="grid sm:grid-cols-2 gap-9"><Field label={t.email_p} name="email" type="email" required dark/><Field label={t.phone_p} name="phone" type="tel" required dark/></div>
+                      <Field label={t.service_p} name="service" required dark as="select">{SERVICES.map(s => <option key={s.id} value={s.id} className="text-slate-900 bg-white">{s.title[lang]}</option>)}</Field>
+                      <button disabled={formStatus === 'sending'} className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:bg-sky-600 transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2 overflow-hidden group/btn"><span className="absolute inset-0 bg-white/10 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>{formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <span className="relative flex items-center gap-3">{t.submit}<ChevronRight size={14} className={`transition-transform duration-300 group-hover/btn:translate-x-1 ${ar ? 'rotate-180' : ''}`}/></span>}</button>
+                    </form>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="reveal" style={{ transitionDelay:'100ms' }}>
-              {formStatus === 'success' ? (
-                <div className="flex flex-col gap-5 py-8"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30"><CheckCircle2 size={24} className="text-white"/></div><h3 className="text-3xl font-black text-white tracking-tight">{t.success_title}</h3><p className="text-sm text-white/50 max-w-sm leading-relaxed">{t.success_body}</p></div>
+          </section>
+        </>
+      ) : (
+        /* ═══ العروض الحية (Dedicated Demos Page) ═════════════════════════════════════════════ */
+        <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen">
+          <div className="max-w-7xl mx-auto">
+            <SectionLabel text={t.demos_label}/>
+            <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
+              <ScrollRevealText>
+                <h2 className="text-4xl sm:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
+                  <span className="block">{t.demos_title1}</span>
+                  <span className="block italic text-sky-500">{t.demos_title2}</span>
+                </h2>
+              </ScrollRevealText>
+              <div className="reveal flex flex-col gap-4" style={{ transitionDelay:'80ms' }}>
+                <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium">{t.demos_body}</p>
+              </div>
+            </div>
+
+            <div className="reveal reveal-scale bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 p-2 sm:p-4 relative mb-24">
+              {/* Mobile View Overlay Message */}
+              {!hideMobileWarning && (
+                  <div className="lg:hidden absolute inset-0 z-20 bg-slate-900/95 flex flex-col items-center justify-center p-8 text-center gap-6 backdrop-blur-sm">
+                    <div className="w-16 h-16 rounded-3xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
+                        <Monitor size={32}/>
+                    </div>
+                    <p className="text-white font-medium text-sm leading-relaxed max-w-xs">{t.demos_mobile_msg}</p>
+                    <button 
+                      onClick={() => setHideMobileWarning(true)}
+                      className="px-6 py-3 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all">
+                      {t.demos_mobile_btn}
+                    </button>
+                  </div>
+              )}
+
+              <div className="w-full bg-slate-800/50 h-8 flex items-center px-4 gap-2 mb-2 sm:mb-4 rounded-xl">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/40"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/40"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/40"></div>
+                  <div className="flex-1 ml-4 bg-slate-900/50 h-5 rounded-md flex items-center px-3 overflow-hidden">
+                    <span className="text-[8px] text-slate-500 font-bold tracking-tight truncate">https://demos.mantiq.services/interactive-view</span>
+                  </div>
+              </div>
+              <div className="relative rounded-2xl overflow-hidden bg-white">
+                  <iframe 
+                    src="https://demos-mantiq.vercel.app/" 
+                    width="100%" 
+                    height="700px" 
+                    style={{ border: 'none', display: 'block' }} 
+                    title="Mantiq Demos"
+                    className="w-full min-h-[500px] sm:min-h-[700px]"
+                  ></iframe>
+              </div>
+            </div>
+
+            {/* Demos Request Form At Bottom */}
+            <div className="max-w-3xl mx-auto py-16 px-8 rounded-[3rem] bg-slate-50 border border-slate-100 reveal">
+              {demoStatus === 'success' ? (
+                <div className="flex flex-col items-center text-center gap-4 py-12">
+                  <div className="w-16 h-16 rounded-3xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/20"><CheckCircle2 size={32} className="text-white"/></div>
+                  <h4 className="text-2xl font-black text-slate-900 tracking-tight">{ar ? 'تم الاستلام!' : "Request Received!"}</h4>
+                  <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{ar ? 'سيتواصل معك فريقنا التقني لترتيب عرض حي لنظامك المختار.' : 'Our technical team will reach out to arrange a live walkthrough for your chosen system.'}</p>
+                </div>
               ) : (
-                <form className="space-y-9" onSubmit={e => handleForm(e, 'Leads')}>
-                  <div className="grid sm:grid-cols-2 gap-9"><Field label={t.name_p} name="name" required dark/><Field label={t.company_p} name="company" dark/></div>
-                  <div className="grid sm:grid-cols-2 gap-9"><Field label={t.email_p} name="email" type="email" required dark/><Field label={t.phone_p} name="phone" type="tel" required dark/></div>
-                  <Field label={t.service_p} name="service" required dark as="select">{SERVICES.map(s => <option key={s.id} value={s.id} className="text-slate-900 bg-white">{s.title[lang]}</option>)}</Field>
-                  <button disabled={formStatus === 'sending'} className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:bg-sky-600 transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2 overflow-hidden group/btn"><span className="absolute inset-0 bg-white/10 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>{formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <span className="relative flex items-center gap-3">{t.submit}<ChevronRight size={14} className={`transition-transform duration-300 group-hover/btn:translate-x-1 ${ar ? 'rotate-180' : ''}`}/></span>}</button>
-                </form>
+                <>
+                  <div className="flex items-center gap-4 mb-10">
+                    <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center shadow-lg"><MonitorPlay size={22} className="text-white"/></div>
+                    <div>
+                      <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{t.demo_form_title}</h3>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{ar ? 'خطط ذكية لأعمال ذكية' : 'Smart Plans for Smart Businesses'}</p>
+                    </div>
+                  </div>
+                  <form className="space-y-8" onSubmit={e => handleActionForm(e, 'Demos', setDemoStatus)}>
+                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Name" name="name" required/><Field label="Company" name="company"/></div>
+                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
+                    <Field label="System Type" name="system" required as="select">
+                      <option value="CRM" className="text-slate-900">CRM</option>
+                      <option value="Sales" className="text-slate-900">Sales</option>
+                      <option value="Finance" className="text-slate-900">Finance</option>
+                      <option value="HR" className="text-slate-900">HR</option>
+                      <option value="Educational Academy" className="text-slate-900">Educational Academy</option>
+                    </Field>
+                    <button disabled={demoStatus === 'sending'} className="w-full py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-slate-900 hover:bg-sky-600 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl">
+                      {demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2">{t.demo_form_btn} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/></span>}
+                    </button>
+                  </form>
+                </>
               )}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ═══ التذييل (Footer) ═════════════════════════════════════════════════════════ */}
       <footer className="py-12 sm:py-16 px-6 sm:px-10 border-t border-slate-100 reveal">
@@ -975,38 +1051,6 @@ export default function App() {
                   <div className="grid sm:grid-cols-2 gap-5"><Field label="Full Name" name="name" required/><Field label="Company" name="company"/></div>
                   <div className="grid sm:grid-cols-2 gap-5"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
                   <button disabled={consultStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl">{consultStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><CalendarCheck size={14}/>Confirm Booking — $20</span>}</button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ نافذة العرض التجريبي (Demo Modal) ═════════════════════════════════════════ */}
-      {demoModal && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
-          <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-xl animate-fadeIn" onClick={() => { setDemoModal(false); setDemoStatus(null); }}/>
-          <div className="relative w-full max-w-lg bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
-            <div className="relative bg-sky-500 px-8 pt-8 pb-6 overflow-hidden">
-              <button onClick={() => { setDemoModal(false); setDemoStatus(null); }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all"><X size={15}/></button>
-              <div className="relative z-10"><div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center"><MonitorPlay size={18} className="text-white"/></div><div><p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/60 mb-0.5">{ar ? 'أنظمة ذكية' : 'Intelligent Systems'}</p><h3 className="text-white font-black text-lg tracking-tight">{ar ? 'عرض تجريبي' : 'Book a Live Demo'}</h3></div></div></div>
-            </div>
-            <div className="px-8 py-7">
-              {demoStatus === 'success' ? (
-                <div className="flex flex-col items-center text-center gap-4 py-6 animate-fadeUp"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-xl"><CheckCircle2 size={24} className="text-white"/></div><h4 className="text-xl font-black text-slate-900 tracking-tight">{ar ? 'تم الاستلام!' : "Demo Requested!"}</h4><button onClick={() => { setDemoModal(false); setDemoStatus(null); }} className="mt-2 px-6 py-2.5 bg-slate-900 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full">OK</button></div>
-              ) : (
-                <form className="space-y-5" onSubmit={e => handleActionForm(e, 'Demos', setDemoStatus)}>
-                  <div className="grid sm:grid-cols-2 gap-5"><Field label="Name" name="name" required/><Field label="Company" name="company"/></div>
-                  <div className="grid sm:grid-cols-2 gap-5"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
-                  {/* System Selection List */}
-                  <Field label="System Type" name="system" required as="select">
-                    <option value="CRM" className="text-slate-900">CRM</option>
-                    <option value="Sales" className="text-slate-900">Sales</option>
-                    <option value="Finance" className="text-slate-900">Finance</option>
-                    <option value="HR" className="text-slate-900">HR</option>
-                    <option value="Educational Academy" className="text-slate-900">Educational Academy</option>
-                  </Field>
-                  <button disabled={demoStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-sky-500/20">{demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><MonitorPlay size={14}/>Request Free Walkthrough</span>}</button>
                 </form>
               )}
             </div>
