@@ -74,8 +74,7 @@ const T = {
     nav_about:"About", nav_services:"Services", nav_events:"Events", nav_demos:"View Demos",
     cta:"Get Started",
     hero_label:"MENA Region's Digital Partner",
-    hero_line1:"The Path",
-    hero_line2:"You Should",
+    hero_line1:"The Path You Should",
     hero_line3:"Take.",
     hero_desc:"Strategic consultancy and modern digital infrastructure — helping ambitious businesses scale with intelligence across the MENA region.",
     scroll:"Scroll to explore",
@@ -129,8 +128,7 @@ const T = {
     nav_about:"من نحن", nav_services:"خدماتنا", nav_events:"الفعاليات", nav_demos:"نماذج حية",
     cta:"ابدأ الآن",
     hero_label:"الشريك الرقمي لمنطقة الشرق الأوسط",
-    hero_line1:"المسار",
-    hero_line2:"الذي يجب",
+    hero_line1:"المسار الذى يجب",
     hero_line3:"أن تسلكه.",
     hero_desc:"استشارات استراتيجية وبنية تحتية رقمية حديثة — لمساعدة الشركات الطموحة على التوسع بذكاء.",
     scroll:"اسحب للاستكشاف",
@@ -775,9 +773,6 @@ export default function App() {
 
               <h1>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">{t.hero_line1}</span>
-                <span className="block text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[1] hero-word-2" style={{ color:'transparent', WebkitTextStroke:'2.5px #ffffff' }}>
-                  {t.hero_line2}
-                </span>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">{t.hero_line3}</span>
               </h1>
 
