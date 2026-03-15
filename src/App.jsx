@@ -775,7 +775,7 @@ export default function App() {
 
               <h1>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">{t.hero_line1}</span>
-                <span className="block text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88] hero-word-2" style={{ color:'transparent', WebkitTextStroke:'1.5px #ffffff' }}>
+                <span className="block text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88] hero-word-2" style={{ color:'transparent', WebkitTextStroke:'2.5px #ffffff' }}>
                   {t.hero_line2}
                 </span>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">{t.hero_line3}</span>
