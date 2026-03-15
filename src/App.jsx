@@ -120,8 +120,6 @@ const T = {
     demos_title1: "Live",
     demos_title2: "Ecosystems.",
     demos_body: "Interact with our managed ecosystems and system architectures in real-time.",
-    demos_mobile_msg: "For the best interactive experience, please view this section on a laptop or desktop computer.",
-    demos_mobile_btn: "View Anyway",
     demo_form_title: "Request System Walkthrough",
     demo_form_btn: "Confirm Demo Request"
   },
@@ -177,8 +175,6 @@ const T = {
     demos_title1: "أنظمة",
     demos_title2: "حية.",
     demos_body: "تفاعل مع بيئاتنا المُدارة وبنية أنظمتنا في الوقت الفعلي.",
-    demos_mobile_msg: "للحصول على أفضل تجربة تفاعلية، يرجى تصفح هذا القسم من خلال جهاز لابتوب أو كمبيوتر مكتبي.",
-    demos_mobile_btn: "عرض على أي حال",
     demo_form_title: "طلب عرض حي للنظام",
     demo_form_btn: "تأكيد طلب العرض"
   }
@@ -622,7 +618,8 @@ export default function App() {
   const [consultStatus, setConsultStatus] = useState(null);
   const [demoStatus, setDemoStatus] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
-  const [hideMobileWarning, setHideMobileWarning] = useState(false);
+  const [demoScale, setDemoScale] = useState(1);
+  const demoContainerRef = useRef(null);
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
 
   const t = T[lang];
@@ -633,6 +630,30 @@ export default function App() {
 
   const [heroImgRef, heroImgOffset] = useParallax(0.25);
   const [heroTextRef, heroTextOffset] = useParallax(0.1);
+
+  // Forcing Desktop View logic for iframe
+  useEffect(() => {
+    if (page !== 'demos') return;
+    const updateScale = () => {
+      if (demoContainerRef.current) {
+        const containerWidth = demoContainerRef.current.offsetWidth;
+        const desktopWidth = 1280; // Standard desktop breakpoint
+        if (containerWidth < desktopWidth) {
+          setDemoScale(containerWidth / desktopWidth);
+        } else {
+          setDemoScale(1);
+        }
+      }
+    };
+    window.addEventListener('resize', updateScale);
+    updateScale();
+    // Re-check after a small delay to ensure DOM is fully ready
+    const timer = setTimeout(updateScale, 100);
+    return () => {
+      window.removeEventListener('resize', updateScale);
+      clearTimeout(timer);
+    };
+  }, [page]);
 
   useEffect(() => {
     if (page !== 'home') return;
@@ -947,21 +968,6 @@ export default function App() {
             </div>
 
             <div className="reveal reveal-scale bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 p-2 sm:p-4 relative mb-24">
-              {/* Mobile View Overlay Message */}
-              {!hideMobileWarning && (
-                  <div className="lg:hidden absolute inset-0 z-20 bg-slate-900/95 flex flex-col items-center justify-center p-8 text-center gap-6 backdrop-blur-sm">
-                    <div className="w-16 h-16 rounded-3xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400">
-                        <Monitor size={32}/>
-                    </div>
-                    <p className="text-white font-medium text-sm leading-relaxed max-w-xs">{t.demos_mobile_msg}</p>
-                    <button 
-                      onClick={() => setHideMobileWarning(true)}
-                      className="px-6 py-3 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all">
-                      {t.demos_mobile_btn}
-                    </button>
-                  </div>
-              )}
-
               <div className="w-full bg-slate-800/50 h-8 flex items-center px-4 gap-2 mb-2 sm:mb-4 rounded-xl">
                   <div className="w-2.5 h-2.5 rounded-full bg-red-500/40"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-500/40"></div>
@@ -970,14 +976,28 @@ export default function App() {
                     <span className="text-[8px] text-slate-500 font-bold tracking-tight truncate">https://demos.mantiq.services/interactive-view</span>
                   </div>
               </div>
-              <div className="relative rounded-2xl overflow-hidden bg-white">
+              
+              {/* Forced Desktop Container */}
+              <div 
+                ref={demoContainerRef} 
+                className="relative rounded-2xl overflow-hidden bg-white" 
+                style={{ height: `${700 * demoScale}px` }}
+              >
                   <iframe 
                     src="https://demos-mantiq.vercel.app/" 
-                    width="100%" 
-                    height="700px" 
-                    style={{ border: 'none', display: 'block' }} 
                     title="Mantiq Demos"
-                    className="w-full min-h-[500px] sm:min-h-[700px]"
+                    style={{ 
+                      width: '1280px', 
+                      height: '700px', 
+                      border: 'none', 
+                      display: 'block',
+                      transform: `scale(${demoScale})`,
+                      transformOrigin: 'top left',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0
+                    }} 
+                    className="max-w-none"
                   ></iframe>
               </div>
             </div>
