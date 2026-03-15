@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy, Calculator,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink
 } from 'lucide-react';
 
 // ─── البيانات ──────────────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ const T = {
   en:{
     logo:"Mantiq",
     tag:"Intelligence in Business",
-    nav_about:"About", nav_services:"Services", nav_events:"Events",
+    nav_about:"About", nav_services:"Services", nav_events:"Events", nav_demos:"View Demos",
     cta:"Get Started",
     hero_label:"MENA Region's Digital Partner",
     hero_line1:"The Path",
@@ -115,12 +115,16 @@ const T = {
     why_1_t:"Strategic Intelligence", why_1_d:"We don't just build code; we build logic based on deep business strategy.",
     why_2_t:"Custom Ecosystems", why_2_d:"No templates. We design intelligent digital environments tailored to your workflow.",
     why_3_t:"Execution Speed", why_3_d:"Agile development cycles that move as fast as your business growth.",
-    why_4_t:"MENA Expertise", why_4_d:"Deep understanding of regional market dynamics and user behavior."
+    why_4_t:"MENA Expertise", why_4_d:"Deep understanding of regional market dynamics and user behavior.",
+    demos_label: "Experience Logic",
+    demos_title1: "Live",
+    demos_title2: "Ecosystems.",
+    demos_body: "Interact with our managed ecosystems and system architectures in real-time."
   },
   ar:{
     logo:"منطق",
     tag:"الذكاء في الأعمال",
-    nav_about:"من نحن", nav_services:"خدماتنا", nav_events:"الفعاليات",
+    nav_about:"من نحن", nav_services:"خدماتنا", nav_events:"الفعاليات", nav_demos:"نماذج حية",
     cta:"ابدأ الآن",
     hero_label:"الشريك الرقمي لمنطقة الشرق الأوسط",
     hero_line1:"المسار",
@@ -164,7 +168,11 @@ const T = {
     why_1_t:"ذكاء استراتيجي", why_1_d:"نحن لا نبني أكواداً فقط، بل نبني منطقاً قائماً على استراتيجية عمل عميقة.",
     why_2_t:"أنظمة مخصصة", why_2_d:"لا نستخدم قوالب جاهزة. نصمم بيئات رقمية ذكية تناسب سير عملك تماماً.",
     why_3_t:"سرعة التنفيذ", why_3_d:"دورات تطوير رشيقة تتحرك بنفس سرعة نمو وتوسع أعمالك.",
-    why_4_t:"خبرة إقليمية", why_4_d:"فهم عميق لديناميكيات السوق وسلوك المستخدمين في منطقة الشرق الأوسط."
+    why_4_t:"خبرة إقليمية", why_4_d:"فهم عميق لديناميكيات السوق وسلوك المستخدمين في منطقة الشرق الأوسط.",
+    demos_label: "تجربة المنطق",
+    demos_title1: "أنظمة",
+    demos_title2: "حية.",
+    demos_body: "تفاعل مع بيئاتنا المُدارة وبنية أنظمتنا في الوقت الفعلي."
   }
 };
 
@@ -330,6 +338,7 @@ const Nav = ({ lang, setLang, go, active }) => {
   const links = [
     { id:'about', label: t.nav_about },
     { id:'services', label: t.nav_services },
+    { id:'demos', label: t.nav_demos },
     { id:'events', label: t.nav_events },
   ];
 
@@ -617,7 +626,7 @@ export default function App() {
   const [heroTextRef, heroTextOffset] = useParallax(0.1);
 
   useEffect(() => {
-    const ids = ['home','about','services','events','contact'];
+    const ids = ['home','about','services','demos','events','contact'];
     const h = () => {
       for (const id of ids) {
         const el = document.getElementById(id);
@@ -833,8 +842,50 @@ export default function App() {
         </div>
       </section>
 
+      {/* ═══ العروض الحية (Live Demos Page) ═════════════════════════════════════════════ */}
+      <section id="demos" className="py-24 sm:py-36 px-6 sm:px-10">
+        <div className="max-w-7xl mx-auto">
+          <SectionLabel text={t.demos_label}/>
+          <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
+            <ScrollRevealText>
+              <h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
+                <span className="block">{t.demos_title1}</span>
+                <span className="block italic text-sky-500">{t.demos_title2}</span>
+              </h2>
+            </ScrollRevealText>
+            <div className="reveal flex flex-col gap-4" style={{ transitionDelay:'80ms' }}>
+              <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium">{t.demos_body}</p>
+              <a href="https://demos-mantiq.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-sky-500 hover:text-sky-600 transition-colors w-fit">
+                Open in Fullscreen <ExternalLink size={12}/>
+              </a>
+            </div>
+          </div>
+
+          <div className="reveal reveal-scale mt-12 bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 p-2 sm:p-4">
+             <div className="w-full bg-slate-800/50 h-8 flex items-center px-4 gap-2 mb-2 sm:mb-4 rounded-xl">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/40"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/40"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500/40"></div>
+                <div className="flex-1 ml-4 bg-slate-900/50 h-5 rounded-md flex items-center px-3">
+                   <span className="text-[8px] text-slate-500 font-bold tracking-tight">https://demos.mantiq.services/interactive-view</span>
+                </div>
+             </div>
+             <div className="relative rounded-2xl overflow-hidden bg-white">
+                <iframe 
+                  src="https://demos-mantiq.vercel.app/" 
+                  width="100%" 
+                  height="700px" 
+                  style={{ border: 'none', display: 'block' }} 
+                  title="Mantiq Demos"
+                  className="w-full min-h-[500px] sm:min-h-[700px]"
+                ></iframe>
+             </div>
+          </div>
+        </div>
+      </section>
+
       {/* ═══ الفعاليات (Events) ═════════════════════════════════════════════════════════ */}
-      <section id="events" className="py-24 sm:py-36 px-6 sm:px-10">
+      <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
         <div className="max-w-7xl mx-auto">
           <SectionLabel text={t.events_label}/>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
