@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy, Calculator,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu
 } from 'lucide-react';
 
 // ─── البيانات ──────────────────────────────────────────────────────────────────
@@ -109,6 +109,13 @@ const T = {
     rights:"All rights reserved.", pricing:"Pricing",
     footer_desc:"Strategic consultancy and digital infrastructure for the MENA region.",
     explore:"View Service",
+    why_label:"Why Mantiq",
+    why_title1:"Built for",
+    why_title2:"Precision.",
+    why_1_t:"Strategic Intelligence", why_1_d:"We don't just build code; we build logic based on deep business strategy.",
+    why_2_t:"Custom Ecosystems", why_2_d:"No templates. We design intelligent digital environments tailored to your workflow.",
+    why_3_t:"Execution Speed", why_3_d:"Agile development cycles that move as fast as your business growth.",
+    why_4_t:"MENA Expertise", why_4_d:"Deep understanding of regional market dynamics and user behavior."
   },
   ar:{
     logo:"منطق",
@@ -151,6 +158,13 @@ const T = {
     rights:"جميع الحقوق محفوظة.", pricing:"التسعير",
     footer_desc:"استشارات استراتيجية وبنية تحتية رقمية لمنطقة الشرق الأوسط.",
     explore:"عرض الخدمة",
+    why_label:"لماذا منطق؟",
+    why_title1:"بنيت من أجل",
+    why_title2:"الدقة.",
+    why_1_t:"ذكاء استراتيجي", why_1_d:"نحن لا نبني أكواداً فقط، بل نبني منطقاً قائماً على استراتيجية عمل عميقة.",
+    why_2_t:"أنظمة مخصصة", why_2_d:"لا نستخدم قوالب جاهزة. نصمم بيئات رقمية ذكية تناسب سير عملك تماماً.",
+    why_3_t:"سرعة التنفيذ", why_3_d:"دورات تطوير رشيقة تتحرك بنفس سرعة نمو وتوسع أعمالك.",
+    why_4_t:"خبرة إقليمية", why_4_d:"فهم عميق لديناميكيات السوق وسلوك المستخدمين في منطقة الشرق الأوسط."
   }
 };
 
@@ -636,7 +650,6 @@ export default function App() {
     const fd = new FormData(e.target);
     const data = { sheetName: sheet };
     
-    // Process form data including file conversion to base64
     for (let [key, value] of fd.entries()) {
       if (value instanceof File && value.name) {
         const base64 = await new Promise((resolve) => {
@@ -644,7 +657,7 @@ export default function App() {
           reader.onload = () => resolve(reader.result);
           reader.readAsDataURL(value);
         });
-        data[key] = base64; // This sends the file content as base64 string
+        data[key] = base64;
       } else {
         data[key] = value;
       }
@@ -751,6 +764,48 @@ export default function App() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-slate-100 border border-slate-100 rounded-3xl overflow-hidden mt-20 reveal-scale reveal" style={{ transitionDelay:'150ms' }}>
             {stats.map((s, i) => <StatCard key={i} stat={s} delay={i * 120}/>)}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ لماذا تختارنا (Why Choose Us) ══════════════════════════════════════════════ */}
+      <section className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/5 blur-[120px] rounded-full -mr-64 -mt-64"/>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <SectionLabel text={t.why_label} dark/>
+          <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-center">
+            <div className="reveal">
+              <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.why_title1}</span><span className="block italic text-sky-400">{t.why_title2}</span></h2></ScrollRevealText>
+              <div className="mt-12 space-y-6">
+                {[ 
+                  { icon:<Gem size={18}/>, t: t.why_1_t, d: t.why_1_d }, 
+                  { icon:<Cpu size={18}/>, t: t.why_2_t, d: t.why_2_d },
+                  { icon:<Timer size={18}/>, t: t.why_3_t, d: t.why_3_d },
+                  { icon:<Globe size={18}/>, t: t.why_4_t, d: t.why_4_d }
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-5 group" style={{ transitionDelay: `${i * 100}ms` }}>
+                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all duration-300 flex-shrink-0">{item.icon}</div>
+                    <div>
+                      <h4 className="text-white font-bold text-base uppercase tracking-wide mb-1">{item.t}</h4>
+                      <p className="text-white/40 text-sm leading-relaxed max-w-sm">{item.d}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="reveal relative hidden lg:block">
+              <div className="aspect-square rounded-3xl overflow-hidden relative">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1400" alt="Precision" className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"/>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"/>
+                <div className="absolute bottom-8 left-8 right-8 p-8 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
+                   <div className="flex items-center gap-3 mb-2">
+                     <ShieldCheck className="text-sky-400" size={20}/>
+                     <span className="text-white font-black uppercase text-xs tracking-widest">{ar ? 'معايير النزاهة' : 'Integrity Standards'}</span>
+                   </div>
+                   <p className="text-white/50 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -900,7 +955,7 @@ export default function App() {
                     <option value="HR" className="text-slate-900">HR</option>
                     <option value="Educational Academy" className="text-slate-900">Educational Academy</option>
                   </Field>
-                  <button disabled={demoStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-sky-500/20">{demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><MonitorPlay size={14}/>Request Free Walkthrough</span>}</button>
+                  <button disabled={demoStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl shadow-sky-500/20">{demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><MonitorPlay size={14}/>Request Free Walkthrough</span>}</button>
                 </form>
               )}
             </div>
