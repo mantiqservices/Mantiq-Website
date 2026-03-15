@@ -25,7 +25,6 @@ const EVENTS = [
   { id:6, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/1%20(1).png" },
   { id:7, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/6%20(2).png" },
   { id:8, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/6%20(1).png" },
-  { id:9, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/2%20(1).png" },
 ];
 
 const SERVICES = [
