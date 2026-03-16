@@ -978,7 +978,7 @@ export default function App() {
                 style={{ height: `${700 * demoScale}px` }}
               >
                   <iframe 
-                    src="https://tracking-systems-demos.vercel.app/" 
+                    src="https://tracking-systems-demos.vercel.app//" 
                     title="Mantiq Demos"
                     style={{ 
                       width: '1280px', 
