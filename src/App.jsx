@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy, Calculator,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings
 } from 'lucide-react';
 
 // ─── البيانات ──────────────────────────────────────────────────────────────────
@@ -25,6 +25,7 @@ const EVENTS = [
   { id:6, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/1%20(1).png" },
   { id:7, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/6%20(2).png" },
   { id:8, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/6%20(1).png" },
+  { id:9, img:"https://raw.githubusercontent.com/mantiqservices/Mantiqwebsites-assets/15db4b093766f112b1ee610f485e0e645807f39c/2%20(1).png" },
 ];
 
 const SERVICES = [
@@ -73,7 +74,8 @@ const T = {
     nav_about:"About", nav_services:"Services", nav_events:"Events", nav_demos:"View Demos",
     cta:"Get Started",
     hero_label:"MENA Region's Digital Partner",
-    hero_line1:"The Path You Should",
+    hero_line1:"The Path",
+    hero_line2:"You Should",
     hero_line3:"Take.",
     hero_desc:"Strategic consultancy and modern digital infrastructure — helping ambitious businesses scale with intelligence across the MENA region.",
     scroll:"Scroll to explore",
@@ -115,9 +117,10 @@ const T = {
     why_3_t:"Execution Speed", why_3_d:"Agile development cycles that move as fast as your business growth.",
     why_4_t:"MENA Expertise", why_4_d:"Deep understanding of regional market dynamics and user behavior.",
     demos_label: "Experience Logic",
-    demos_title1: "Live",
+    demos_title1: "Digital",
     demos_title2: "Ecosystems.",
-    demos_body: "Interact with our managed ecosystems and system architectures in real-time.",
+    demos_body: "Explore the architectures of our managed digital solutions.",
+    demo_status_msg: "We are working on this feature with professional way.",
     demo_form_title: "Request System Walkthrough",
     demo_form_btn: "Confirm Demo Request"
   },
@@ -127,7 +130,8 @@ const T = {
     nav_about:"من نحن", nav_services:"خدماتنا", nav_events:"الفعاليات", nav_demos:"نماذج حية",
     cta:"ابدأ الآن",
     hero_label:"الشريك الرقمي لمنطقة الشرق الأوسط",
-    hero_line1:"المسار الذى يجب",
+    hero_line1:"المسار",
+    hero_line2:"الذي يجب",
     hero_line3:"أن تسلكه.",
     hero_desc:"استشارات استراتيجية وبنية تحتية رقمية حديثة — لمساعدة الشركات الطموحة على التوسع بذكاء.",
     scroll:"اسحب للاستكشاف",
@@ -170,8 +174,9 @@ const T = {
     why_4_t:"خبرة إقليمية", why_4_d:"فهم عميق لديناميكيات السوق وسلوك المستخدمين في منطقة الشرق الأوسط.",
     demos_label: "تجربة المنطق",
     demos_title1: "أنظمة",
-    demos_title2: "حية.",
-    demos_body: "تفاعل مع بيئاتنا المُدارة وبنية أنظمتنا في الوقت الفعلي.",
+    demos_title2: "رقمية.",
+    demos_body: "استكشف معماريات حلولنا الرقمية المُدارة.",
+    demo_status_msg: "نحن نعمل على تطوير هذه الميزة بطريقة احترافية تليق بكم.",
     demo_form_title: "طلب عرض حي للنظام",
     demo_form_btn: "تأكيد طلب العرض"
   }
@@ -188,7 +193,8 @@ const useReveal = () => {
       { threshold: 0.07 }
     );
     setTimeout(() => {
-      document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => io.observe(el));
+      const items = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+      items.forEach(el => io.observe(el));
     }, 100);
     return () => io.disconnect();
   });
@@ -361,7 +367,7 @@ const Nav = ({ lang, setLang, go, active, currentPage }) => {
             {links.map(l => (
               <button key={l.id} onClick={() => go(l.id)}
                 className={`text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-200
-                  ${active === l.id || (currentPage === l.id)
+                  ${active === l.id || (currentPage === l.id && id === 'demos')
                     ? 'text-sky-500'
                     : (scrolled || currentPage !== 'home') ? 'text-slate-500 hover:text-slate-900' : 'text-white/60 hover:text-white'}`}>
                 {l.label}
@@ -371,7 +377,7 @@ const Nav = ({ lang, setLang, go, active, currentPage }) => {
 
           <div className="hidden lg:flex items-center gap-5">
             <button onClick={() => setLang(ar ? 'en' : 'ar')}
-              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${(scrolled || currentPage !== 'home') ? 'text-sky-500 hover:text-sky-600' : 'text-white/80 hover:text-white'}`}>
+              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${(scrolled || currentPage !== 'home') ? 'text-sky-500 hover:text-sky-600' : 'text-white/50 hover:text-white'}`}>
               <Globe size={13}/> {ar ? 'EN' : 'AR'}
             </button>
             <button onClick={() => go('contact')}
@@ -615,8 +621,6 @@ export default function App() {
   const [consultStatus, setConsultStatus] = useState(null);
   const [demoStatus, setDemoStatus] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
-  const [demoScale, setDemoScale] = useState(1);
-  const demoContainerRef = useRef(null);
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
 
   const t = T[lang];
@@ -627,30 +631,6 @@ export default function App() {
 
   const [heroImgRef, heroImgOffset] = useParallax(0.25);
   const [heroTextRef, heroTextOffset] = useParallax(0.1);
-
-  // Forcing Desktop View logic for iframe
-  useEffect(() => {
-    if (page !== 'demos') return;
-    const updateScale = () => {
-      if (demoContainerRef.current) {
-        const containerWidth = demoContainerRef.current.offsetWidth;
-        const desktopWidth = 1280; // Standard desktop breakpoint
-        if (containerWidth < desktopWidth) {
-          setDemoScale(containerWidth / desktopWidth);
-        } else {
-          setDemoScale(1);
-        }
-      }
-    };
-    window.addEventListener('resize', updateScale);
-    updateScale();
-    // Re-check after a small delay to ensure DOM is fully ready
-    const timer = setTimeout(updateScale, 100);
-    return () => {
-      window.removeEventListener('resize', updateScale);
-      clearTimeout(timer);
-    };
-  }, [page]);
 
   useEffect(() => {
     if (page !== 'home') return;
@@ -755,7 +735,7 @@ export default function App() {
 
       {page === 'home' ? (
         <>
-          {/* ═══ قمة الموقع (Hero) ═══════════════════════════════════════════════════════════ */}
+          {/* ═══ Hero ═══════════════════════════════════════════════════════════ */}
           <section id="home" className="relative min-h-screen flex flex-col overflow-hidden bg-slate-900">
             <div className="absolute inset-0 overflow-hidden" ref={heroImgRef}>
               <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover opacity-30" style={{ transform: `translateY(${isNaN(heroImgOffset) ? 0 : heroImgOffset}px)`, willChange: 'transform' }}/>
@@ -767,21 +747,24 @@ export default function App() {
             <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform: `translateY(${isNaN(heroTextOffset) ? 0 : heroTextOffset}px)`, willChange: 'transform' }}>
               <div className="flex items-center gap-3 mb-8 hero-label">
                 <div className="w-5 h-[2px] bg-sky-500"/>
-                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/80">{t.hero_label}</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
               </div>
 
               <h1>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">{t.hero_line1}</span>
+                <span className="block text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88] hero-word-2" style={{ color:'transparent', WebkitTextStroke:'1.5px #ffffff' }}>
+                  {t.hero_line2}
+                </span>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">{t.hero_line3}</span>
               </h1>
 
               <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
-                <p className="max-w-md text-base sm:text-lg text-white/80 leading-relaxed font-medium hero-desc">{t.hero_desc}</p>
+                <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium hero-desc">{t.hero_desc}</p>
                 <div className="flex gap-3 flex-shrink-0 hero-btns">
                   <button onClick={() => go('services')} className="px-7 py-3.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-sky-500/30">
                     {t.nav_services} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/>
                   </button>
-                  <button onClick={() => go('about')} className="px-7 py-3.5 border border-white/20 hover:border-white/80 text-white/70 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
+                  <button onClick={() => go('about')} className="px-7 py-3.5 border border-white/20 hover:border-white/50 text-white/70 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
                     {t.nav_about}
                   </button>
                 </div>
@@ -793,7 +776,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ من نحن (About) ══════════════════════════════════════════════════════════ */}
+          {/* ═══ About ══════════════════════════════════════════════════════════ */}
           <section id="about" className="py-24 sm:py-36 px-6 sm:px-10">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.about_label}/>
@@ -804,7 +787,7 @@ export default function App() {
                   <div className="grid grid-cols-1 gap-4">
                     {[ { icon:<Target size={18}/>, title: t.mission, body: t.mission_body }, { icon:<Eye size={18}/>, title: t.vision, body: t.vision_body } ].map((card, i) => (
                       <TiltCard key={i}>
-                        <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/80 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
+                        <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
                           <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:bg-sky-100 group-hover:border-sky-200 transition-all duration-300">{card.icon}</div>
                           <div><h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4><p className="text-sm text-slate-500 leading-relaxed">{card.body}</p></div>
                         </div>
@@ -819,7 +802,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ لماذا تختارنا (Why Choose Us) ══════════════════════════════════════════════ */}
+          {/* ═══ Why Choose Us ══════════════════════════════════════════════ */}
           <section className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900 overflow-hidden relative">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/5 blur-[120px] rounded-full -mr-64 -mt-64"/>
             <div className="max-w-7xl mx-auto relative z-10">
@@ -835,7 +818,7 @@ export default function App() {
                       { icon:<Globe size={18}/>, t: t.why_4_t, d: t.why_4_d }
                     ].map((item, i) => (
                       <div key={i} className="flex gap-5 group" style={{ transitionDelay: `${i * 100}ms` }}>
-                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/80 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all duration-300 flex-shrink-0">{item.icon}</div>
+                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all duration-300 flex-shrink-0">{item.icon}</div>
                         <div>
                           <h4 className="text-white font-bold text-base uppercase tracking-wide mb-1">{item.t}</h4>
                           <p className="text-white/40 text-sm leading-relaxed max-w-sm">{item.d}</p>
@@ -848,12 +831,12 @@ export default function App() {
                   <div className="aspect-square rounded-3xl overflow-hidden relative">
                     <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1400" alt="Precision" className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"/>
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"/>
-                    <div className="absolute bottom-8 left-8 right-8 p-8 bg-white/5 backdrop-blur-md rounded-2xl border border-white/80">
+                    <div className="absolute bottom-8 left-8 right-8 p-8 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
                        <div className="flex items-center gap-3 mb-2">
                          <ShieldCheck className="text-sky-400" size={20}/>
                          <span className="text-white font-black uppercase text-xs tracking-widest">{ar ? 'معايير النزاهة' : 'Integrity Standards'}</span>
                        </div>
-                       <p className="text-white/80 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
+                       <p className="text-white/50 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
                     </div>
                   </div>
                 </div>
@@ -861,8 +844,8 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ الخدمات (Services) ═══════════════════════════════════════════════════════ */}
-          <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/80">
+          {/* ═══ Services ═══════════════════════════════════════════════════════ */}
+          <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.services_label}/>
               <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
@@ -884,8 +867,8 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ الفعاليات (Events) ═════════════════════════════════════════════════════════ */}
-          <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/80">
+          {/* ═══ Events ═════════════════════════════════════════════════════════ */}
+          <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.events_label}/>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
@@ -899,7 +882,7 @@ export default function App() {
                   <div key={ev.id} className="reveal hover-lift group relative overflow-hidden rounded-3xl cursor-default" style={{ transitionDelay:`${i*60}ms` }}>
                     <div className="aspect-square sm:aspect-auto sm:h-72">
                       <ParallaxBlock speed={0.06} className="absolute inset-0 w-full h-full"><img src={ev.img} alt="" loading="lazy" className="w-full h-full object-cover transition-transform duration-[3s] ease-out group-hover:scale-110"/></ParallaxBlock>
-                      <div className="absolute inset-0 bg-sky-700/0 group-hover:bg-sky-700/80 transition-colors duration-700"/>
+                      <div className="absolute inset-0 bg-sky-700/0 group-hover:bg-sky-700/10 transition-colors duration-700"/>
                       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-sky-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"/>
                     </div>
                   </div>
@@ -910,18 +893,18 @@ export default function App() {
 
           <Marquee lang={lang}/>
 
-          {/* ═══ التواصل (Contact) ════════════════════════════════════════════════════════ */}
+          {/* ═══ Contact ════════════════════════════════════════════════════════ */}
           <section id="contact" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.contact_label} dark/>
               <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
                 <div className="reveal">
                   <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.contact_title1}</span><span className="block italic text-sky-400">{t.contact_title2}</span></h2></ScrollRevealText>
-                  <p className="mt-8 text-base sm:text-lg text-white/80 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
+                  <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
                   <div className="mt-12 space-y-4">
                     {[ { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' }, { icon:<Phone size={16}/>, label:'Phone', val:'+201280103450' } ].map((c, i) => (
                       <div key={i} className="flex items-center gap-4 group p-4 rounded-2xl border border-white/5 hover:border-sky-500/30 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
-                        <div className="w-10 h-10 rounded-xl border border-white/80 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">{c.icon}</div>
+                        <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">{c.icon}</div>
                         <div><p className="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-0.5">{c.label}</p><p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors duration-300">{c.val}</p></div>
                         <ArrowUpRight size={14} className="ml-auto text-white/0 group-hover:text-sky-400 transition-all duration-300 translate-x-2 group-hover:translate-x-0"/>
                       </div>
@@ -930,13 +913,13 @@ export default function App() {
                 </div>
                 <div className="reveal" style={{ transitionDelay:'100ms' }}>
                   {formStatus === 'success' ? (
-                    <div className="flex flex-col gap-5 py-8"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30"><CheckCircle2 size={24} className="text-white"/></div><h3 className="text-3xl font-black text-white tracking-tight">{t.success_title}</h3><p className="text-sm text-white/80 max-w-sm leading-relaxed">{t.success_body}</p></div>
+                    <div className="flex flex-col gap-5 py-8"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30"><CheckCircle2 size={24} className="text-white"/></div><h3 className="text-3xl font-black text-white tracking-tight">{t.success_title}</h3><p className="text-sm text-white/50 max-w-sm leading-relaxed">{t.success_body}</p></div>
                   ) : (
                     <form className="space-y-9" onSubmit={e => handleForm(e, 'Leads')}>
                       <div className="grid sm:grid-cols-2 gap-9"><Field label={t.name_p} name="name" required dark/><Field label={t.company_p} name="company" dark/></div>
                       <div className="grid sm:grid-cols-2 gap-9"><Field label={t.email_p} name="email" type="email" required dark/><Field label={t.phone_p} name="phone" type="tel" required dark/></div>
                       <Field label={t.service_p} name="service" required dark as="select">{SERVICES.map(s => <option key={s.id} value={s.id} className="text-slate-900 bg-white">{s.title[lang]}</option>)}</Field>
-                      <button disabled={formStatus === 'sending'} className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:bg-sky-600 transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2 overflow-hidden group/btn"><span className="absolute inset-0 bg-white/80 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>{formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <span className="relative flex items-center gap-3">{t.submit}<ChevronRight size={14} className={`transition-transform duration-300 group-hover/btn:translate-x-1 ${ar ? 'rotate-180' : ''}`}/></span>}</button>
+                      <button disabled={formStatus === 'sending'} className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:bg-sky-600 transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2 overflow-hidden group/btn"><span className="absolute inset-0 bg-white/10 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>{formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <span className="relative flex items-center gap-3">{t.submit}<ChevronRight size={14} className={`transition-transform duration-300 group-hover/btn:translate-x-1 ${ar ? 'rotate-180' : ''}`}/></span>}</button>
                     </form>
                   )}
                 </div>
@@ -945,7 +928,7 @@ export default function App() {
           </section>
         </>
       ) : (
-        /* ═══ العروض الحية (Dedicated Demos Page) ═════════════════════════════════════════════ */
+        /* ═══ Dedicated Demos Page (Updated with Professional Message) ═════════════════════════════════════════════ */
         <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen">
           <div className="max-w-7xl mx-auto">
             <SectionLabel text={t.demos_label}/>
@@ -961,39 +944,36 @@ export default function App() {
               </div>
             </div>
 
-            <div className="reveal reveal-scale bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/80 border border-slate-800 p-2 sm:p-4 relative mb-24">
-              <div className="w-full bg-slate-800/80 h-8 flex items-center px-4 gap-2 mb-2 sm:mb-4 rounded-xl">
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/40"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/40"></div>
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/40"></div>
-                  <div className="flex-1 ml-4 bg-slate-900/80 h-5 rounded-md flex items-center px-3 overflow-hidden">
-                    <span className="text-[8px] text-slate-500 font-bold tracking-tight truncate">https://demos.mantiq.services/interactive-view</span>
-                  </div>
-              </div>
-              
-              {/* Forced Desktop Container */}
-              <div 
-                ref={demoContainerRef} 
-                className="relative rounded-2xl overflow-hidden bg-white" 
-                style={{ height: `${700 * demoScale}px` }}
-              >
-                  <iframe 
-                    src="https://tracking-systems-demos.vercel.app/" 
-                    title="Mantiq Demos"
-                    style={{ 
-                      width: '1280px', 
-                      height: '700px', 
-                      border: 'none', 
-                      display: 'block',
-                      transform: `scale(${demoScale})`,
-                      transformOrigin: 'top left',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0
-                    }} 
-                    className="max-w-none"
-                  ></iframe>
-              </div>
+            {/* Professional Message Placeholder */}
+            <div className="reveal reveal-scale bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 relative mb-24 min-h-[400px] flex items-center justify-center group overflow-hidden">
+                {/* Background Decorations */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full group-hover:bg-sky-500/20 transition-all duration-700"></div>
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-sky-500/5 blur-[80px] rounded-full"></div>
+                
+                <div className="relative z-10 flex flex-col items-center text-center p-12 gap-8">
+                    <div className="relative">
+                        <div className="w-20 h-20 rounded-3xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 animate-pulse">
+                            <Settings size={40} className="animate-spin-slow"/>
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-sky-500 shadow-xl">
+                            <Zap size={14}/>
+                        </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                        <h3 className="text-white font-black text-2xl sm:text-3xl tracking-tight leading-tight">
+                            {t.demo_status_msg}
+                        </h3>
+                        <p className="text-white/30 text-xs sm:text-sm font-bold uppercase tracking-[0.4em]">
+                           {ar ? 'نحن قادمون قريباً' : 'System Logic - Coming Soon'}
+                        </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-sky-500 animate-ping"></div>
+                        <span className="text-[10px] text-sky-400 font-black uppercase tracking-widest">{ar ? 'تحت التطوير' : 'In Development'}</span>
+                    </div>
+                </div>
             </div>
 
             {/* Demos Request Form At Bottom */}
@@ -1034,7 +1014,7 @@ export default function App() {
         </section>
       )}
 
-      {/* ═══ التذييل (Footer) ═════════════════════════════════════════════════════════ */}
+      {/* ═══ Footer ═════════════════════════════════════════════════════════ */}
       <footer className="py-12 sm:py-16 px-6 sm:px-10 border-t border-slate-100 reveal">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div><div className="mb-3">{lang === 'ar' ? <span className="font-normal text-xl tracking-[0.18em] uppercase text-slate-900">{t.logo}</span> : <LogoText className="font-normal text-xl tracking-[0.18em] uppercase" color="#0f172a"/>}</div><p className="text-xs text-slate-400 max-w-xs leading-relaxed">{t.footer_desc}</p></div>
@@ -1048,37 +1028,13 @@ export default function App() {
         </div>
       </footer>
 
-      {/* ═══ نافذة الاستشارة ══════════════════════════════════ */}
-      {consultModal && (
-        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
-          <div className="absolute inset-0 bg-slate-900/75 backdrop-blur-xl animate-fadeIn" onClick={() => { setConsultModal(false); setConsultStatus(null); }}/>
-          <div className="relative w-full max-w-lg bg-white rounded-[2rem] shadow-2xl overflow-hidden animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
-            <div className="relative bg-slate-900 px-8 pt-8 pb-6 overflow-hidden">
-              <button onClick={() => { setConsultModal(false); setConsultStatus(null); }} className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/80 flex items-center justify-center text-white/60 hover:bg-white/20 hover:text-white transition-all"><X size={15}/></button>
-              <div className="relative z-10"><div className="flex items-center gap-3 mb-4"><div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center shadow-lg"><CalendarCheck size={18} className="text-white"/></div><div><p className="text-[9px] font-bold uppercase tracking-[0.3em] text-white/40 mb-0.5">{lang === 'ar' ? 'منطق للأعمال' : 'Mantiq Business'}</p><h3 className="text-white font-black text-lg tracking-tight">{lang === 'ar' ? 'استشارة استراتيجية' : 'Strategy Consultation'}</h3></div></div><div className="flex flex-wrap gap-2">{[ { icon:<CreditCard size={11}/>, label: ar ? '$20 للجلسة' : '$20 per session' }, { icon:<Clock size={11}/>, label: ar ? '45 دقيقة' : '45 minutes' } ].map((pill, i) => (<div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 border border-white/80"><span className="text-sky-400">{pill.icon}</span><span className="text-[10px] font-bold text-white/70 uppercase tracking-wide">{pill.label}</span></div>))}</div></div>
-            </div>
-            <div className="px-8 py-7">
-              {consultStatus === 'success' ? (
-                <div className="flex flex-col items-center text-center gap-4 py-6 animate-fadeUp"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-xl"><CheckCircle2 size={24} className="text-white"/></div><h4 className="text-xl font-black text-slate-900 tracking-tight">{ar ? 'تم الحجز!' : "You're booked!"}</h4><button onClick={() => { setConsultModal(false); setConsultStatus(null); }} className="mt-2 px-6 py-2.5 bg-slate-900 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full">{ar ? 'إغلاق' : 'Close'}</button></div>
-              ) : (
-                <form className="space-y-5" onSubmit={e => handleActionForm(e, 'Consultations', setConsultStatus)}>
-                  <div className="grid sm:grid-cols-2 gap-5"><Field label="Full Name" name="name" required/><Field label="Company" name="company"/></div>
-                  <div className="grid sm:grid-cols-2 gap-5"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
-                  <button disabled={consultStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl">{consultStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2"><CalendarCheck size={14}/>Confirm Booking — $20</span>}</button>
-                </form>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ═══ نافذة فرص العمل ══════════════════════════════════════════════════ */}
+      {/* ═══ Careers Modal ══════════════════════════════════════════════════ */}
       {careers && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8">
           <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setCareers(false)}/>
           <div className="relative w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
             <div className="hidden md:flex md:w-5/12 flex-col justify-between p-12 bg-slate-900">
-              <div><div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8"><Briefcase size={18} className="text-white"/></div><h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2><p className="text-sm text-white/80 leading-relaxed">{t.career_body}</p></div>
+              <div><div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8"><Briefcase size={18} className="text-white"/></div><h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2><p className="text-sm text-white/50 leading-relaxed">{t.career_body}</p></div>
               <div className="space-y-4">{[ { icon:<Lightbulb size={14}/>, label: t.val_1 }, { icon:<Target size={14}/>, label: t.val_2 }, { icon:<Rocket size={14}/>, label: t.val_3 } ].map((v, i) => (<div key={i} className="flex items-center gap-3 text-white/60"><div className="text-sky-400">{v.icon}</div><span className="text-xs font-bold uppercase tracking-wide">{v.label}</span></div>))}</div>
             </div>
             <div className="flex-1 p-8 sm:p-12 relative">
@@ -1130,21 +1086,13 @@ export default function App() {
         </div>
       )}
 
-      {/* ─── الأنماط العالمية (Global Styles) ─────────────────────────────────────────────────── */}
+      {/* ─── Styles ─────────────────────────────────────────────────── */}
       <style>{`
         @import url('https://fonts.cdnfonts.com/css/now');
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
 
-        /* Hide Scrollbars while maintaining functionality */
-        * { 
-          box-sizing: border-box; 
-          scrollbar-width: none; /* Firefox */
-          -ms-overflow-style: none; /* IE/Edge */
-        }
-        
-        *::-webkit-scrollbar {
-          display: none; /* Chrome/Safari/Opera */
-        }
+        * { box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
+        *::-webkit-scrollbar { display: none; }
 
         html { scroll-behavior: smooth; }
         body { margin: 0; overflow-x: hidden; font-family: 'Now', sans-serif; }
@@ -1152,7 +1100,6 @@ export default function App() {
 
         @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
         .animate-marquee { animation: marquee 50s linear infinite; }
-        @media(max-width: 640px) { .animate-marquee { animation-duration: 25s; } }
 
         @keyframes fadeUp { from { opacity:0; transform:translateY(36px); } to { opacity:1; transform:translateY(0); } }
         .animate-fadeUp { opacity: 0; animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) forwards; }
@@ -1177,10 +1124,7 @@ export default function App() {
         .hero-desc { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 360ms forwards; opacity:0; }
         .hero-btns { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 480ms forwards; opacity:0; }
 
-        @keyframes buttonEntry {
-          from { opacity: 0; transform: scale(0.9) translateY(10px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
-        }
+        @keyframes buttonEntry { from { opacity: 0; transform: scale(0.9) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .animate-buttonEntry { animation: buttonEntry 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -1188,6 +1132,9 @@ export default function App() {
 
         @keyframes zoomIn { from { opacity:0; transform:scale(0.95) translateY(16px); } to { opacity:1; transform:scale(1) translateY(0); } }
         .animate-zoomIn { animation: zoomIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+        .animate-spin-slow { animation: spin 8s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
     </div>
   );
