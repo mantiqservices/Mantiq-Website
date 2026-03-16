@@ -371,7 +371,7 @@ const Nav = ({ lang, setLang, go, active, currentPage }) => {
 
           <div className="hidden lg:flex items-center gap-5">
             <button onClick={() => setLang(ar ? 'en' : 'ar')}
-              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${(scrolled || currentPage !== 'home') ? 'text-sky-500 hover:text-sky-600' : 'text-white/50 hover:text-white'}`}>
+              className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${(scrolled || currentPage !== 'home') ? 'text-sky-500 hover:text-sky-600' : 'text-white/10 hover:text-white'}`}>
               <Globe size={13}/> {ar ? 'EN' : 'AR'}
             </button>
             <button onClick={() => go('contact')}
@@ -767,7 +767,7 @@ export default function App() {
             <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform: `translateY(${isNaN(heroTextOffset) ? 0 : heroTextOffset}px)`, willChange: 'transform' }}>
               <div className="flex items-center gap-3 mb-8 hero-label">
                 <div className="w-5 h-[2px] bg-sky-500"/>
-                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/10">{t.hero_label}</span>
               </div>
 
               <h1>
@@ -776,12 +776,12 @@ export default function App() {
               </h1>
 
               <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
-                <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium hero-desc">{t.hero_desc}</p>
+                <p className="max-w-md text-base sm:text-lg text-white/10 leading-relaxed font-medium hero-desc">{t.hero_desc}</p>
                 <div className="flex gap-3 flex-shrink-0 hero-btns">
                   <button onClick={() => go('services')} className="px-7 py-3.5 bg-sky-500 hover:bg-sky-400 text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200 active:scale-95 flex items-center gap-2 shadow-lg shadow-sky-500/30">
                     {t.nav_services} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/>
                   </button>
-                  <button onClick={() => go('about')} className="px-7 py-3.5 border border-white/20 hover:border-white/50 text-white/70 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
+                  <button onClick={() => go('about')} className="px-7 py-3.5 border border-white/20 hover:border-white/10 text-white/70 hover:text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-full transition-all duration-200">
                     {t.nav_about}
                   </button>
                 </div>
@@ -804,7 +804,7 @@ export default function App() {
                   <div className="grid grid-cols-1 gap-4">
                     {[ { icon:<Target size={18}/>, title: t.mission, body: t.mission_body }, { icon:<Eye size={18}/>, title: t.vision, body: t.vision_body } ].map((card, i) => (
                       <TiltCard key={i}>
-                        <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
+                        <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/10 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
                           <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:bg-sky-100 group-hover:border-sky-200 transition-all duration-300">{card.icon}</div>
                           <div><h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4><p className="text-sm text-slate-500 leading-relaxed">{card.body}</p></div>
                         </div>
@@ -853,7 +853,7 @@ export default function App() {
                          <ShieldCheck className="text-sky-400" size={20}/>
                          <span className="text-white font-black uppercase text-xs tracking-widest">{ar ? 'معايير النزاهة' : 'Integrity Standards'}</span>
                        </div>
-                       <p className="text-white/50 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
+                       <p className="text-white/10 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
                     </div>
                   </div>
                 </div>
@@ -862,7 +862,7 @@ export default function App() {
           </section>
 
           {/* ═══ الخدمات (Services) ═══════════════════════════════════════════════════════ */}
-          <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
+          <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/10">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.services_label}/>
               <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
@@ -885,7 +885,7 @@ export default function App() {
           </section>
 
           {/* ═══ الفعاليات (Events) ═════════════════════════════════════════════════════════ */}
-          <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
+          <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/10">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.events_label}/>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
@@ -917,7 +917,7 @@ export default function App() {
               <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-start">
                 <div className="reveal">
                   <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.contact_title1}</span><span className="block italic text-sky-400">{t.contact_title2}</span></h2></ScrollRevealText>
-                  <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
+                  <p className="mt-8 text-base sm:text-lg text-white/10 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
                   <div className="mt-12 space-y-4">
                     {[ { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' }, { icon:<Phone size={16}/>, label:'Phone', val:'+201280103450' } ].map((c, i) => (
                       <div key={i} className="flex items-center gap-4 group p-4 rounded-2xl border border-white/5 hover:border-sky-500/30 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
@@ -930,7 +930,7 @@ export default function App() {
                 </div>
                 <div className="reveal" style={{ transitionDelay:'100ms' }}>
                   {formStatus === 'success' ? (
-                    <div className="flex flex-col gap-5 py-8"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30"><CheckCircle2 size={24} className="text-white"/></div><h3 className="text-3xl font-black text-white tracking-tight">{t.success_title}</h3><p className="text-sm text-white/50 max-w-sm leading-relaxed">{t.success_body}</p></div>
+                    <div className="flex flex-col gap-5 py-8"><div className="w-14 h-14 rounded-2xl bg-sky-500 flex items-center justify-center shadow-2xl shadow-sky-500/30"><CheckCircle2 size={24} className="text-white"/></div><h3 className="text-3xl font-black text-white tracking-tight">{t.success_title}</h3><p className="text-sm text-white/10 max-w-sm leading-relaxed">{t.success_body}</p></div>
                   ) : (
                     <form className="space-y-9" onSubmit={e => handleForm(e, 'Leads')}>
                       <div className="grid sm:grid-cols-2 gap-9"><Field label={t.name_p} name="name" required dark/><Field label={t.company_p} name="company" dark/></div>
@@ -962,11 +962,11 @@ export default function App() {
             </div>
 
             <div className="reveal reveal-scale bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 p-2 sm:p-4 relative mb-24">
-              <div className="w-full bg-slate-800/50 h-8 flex items-center px-4 gap-2 mb-2 sm:mb-4 rounded-xl">
+              <div className="w-full bg-slate-800/10 h-8 flex items-center px-4 gap-2 mb-2 sm:mb-4 rounded-xl">
                   <div className="w-2.5 h-2.5 rounded-full bg-red-500/40"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-500/40"></div>
                   <div className="w-2.5 h-2.5 rounded-full bg-green-500/40"></div>
-                  <div className="flex-1 ml-4 bg-slate-900/50 h-5 rounded-md flex items-center px-3 overflow-hidden">
+                  <div className="flex-1 ml-4 bg-slate-900/10 h-5 rounded-md flex items-center px-3 overflow-hidden">
                     <span className="text-[8px] text-slate-500 font-bold tracking-tight truncate">https://demos.mantiq.services/interactive-view</span>
                   </div>
               </div>
@@ -1078,7 +1078,7 @@ export default function App() {
           <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setCareers(false)}/>
           <div className="relative w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
             <div className="hidden md:flex md:w-5/12 flex-col justify-between p-12 bg-slate-900">
-              <div><div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8"><Briefcase size={18} className="text-white"/></div><h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2><p className="text-sm text-white/50 leading-relaxed">{t.career_body}</p></div>
+              <div><div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8"><Briefcase size={18} className="text-white"/></div><h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2><p className="text-sm text-white/10 leading-relaxed">{t.career_body}</p></div>
               <div className="space-y-4">{[ { icon:<Lightbulb size={14}/>, label: t.val_1 }, { icon:<Target size={14}/>, label: t.val_2 }, { icon:<Rocket size={14}/>, label: t.val_3 } ].map((v, i) => (<div key={i} className="flex items-center gap-3 text-white/60"><div className="text-sky-400">{v.icon}</div><span className="text-xs font-bold uppercase tracking-wide">{v.label}</span></div>))}</div>
             </div>
             <div className="flex-1 p-8 sm:p-12 relative">
