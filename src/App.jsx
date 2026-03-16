@@ -120,7 +120,7 @@ const T = {
     demos_title1: "Digital",
     demos_title2: "Ecosystems.",
     demos_body: "Explore the architectures of our managed digital solutions.",
-    demo_status_msg: "We are working on this feature with professional way.",
+    demo_status_msg: "We are working on this feature.",
     demo_form_title: "Request System Walkthrough",
     demo_form_btn: "Confirm Demo Request"
   },
