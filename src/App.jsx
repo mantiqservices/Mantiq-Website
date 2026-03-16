@@ -367,7 +367,7 @@ const Nav = ({ lang, setLang, go, active, currentPage }) => {
             {links.map(l => (
               <button key={l.id} onClick={() => go(l.id)}
                 className={`text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-200
-                  ${active === l.id || (currentPage === l.id && id === 'demos')
+                  ${active === l.id || (currentPage === 'demos' && l.id === 'demos')
                     ? 'text-sky-500'
                     : (scrolled || currentPage !== 'home') ? 'text-slate-500 hover:text-slate-900' : 'text-white/60 hover:text-white'}`}>
                 {l.label}
