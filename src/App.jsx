@@ -599,12 +599,15 @@ const Marquee = ({ lang }) => {
     <div className="py-12 sm:py-16 border-y border-slate-100">
       <p className="text-center text-[10px] uppercase tracking-[0.5em] text-slate-300 font-bold mb-8">{t.customers_label}</p>
       <div className="relative overflow-hidden">
-        <div className="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to right, white, transparent)' }}/>
-        <div className="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to left, white, transparent)' }}/>
-        <div className="flex gap-4 w-max animate-marquee">
-          {items.map((n, i) => (
-            <span key={i} className="px-5 py-2 rounded-full border border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap hover:border-sky-200 hover:text-sky-500 transition-colors cursor-default">{n}</span>
-          ))}
+        {/* Force LTR direction for the marquee container to prevent animation issues in RTL mode */}
+        <div className="relative overflow-hidden" dir="ltr">
+          <div className="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to right, white, transparent)' }}/>
+          <div className="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to left, white, transparent)' }}/>
+          <div className="flex gap-4 w-max animate-marquee">
+            {items.map((n, i) => (
+              <span key={i} className="px-5 py-2 rounded-full border border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap hover:border-sky-200 hover:text-sky-500 transition-colors cursor-default">{n}</span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
