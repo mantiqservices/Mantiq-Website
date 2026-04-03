@@ -120,8 +120,10 @@ const T = {
     demos_title2: "Ecosystems.",
     demos_body: "Explore the architectures of our managed digital solutions.",
     demo_status_msg: "We are working on this feature.",
-    demo_form_title: "Request System Walkthrough",
-    demo_form_btn: "Confirm Demo Request"
+    demo_form_title: "Request System Demos",
+    demo_form_btn: "Confirm Demo Request",
+    consult_title: "Book Strategy Session",
+    consult_btn: "Confirm Consultation"
   },
   ar:{
     logo:"منطق",
@@ -175,8 +177,10 @@ const T = {
     demos_title2: "رقمية.",
     demos_body: "استكشف معماريات حلولنا الرقمية المُدارة.",
     demo_status_msg: "نحن نعمل على تطوير هذه الميزة بطريقة احترافية تليق بكم.",
-    demo_form_title: "طلب عرض حي للنظام",
-    demo_form_btn: "تأكيد طلب العرض"
+    demo_form_title: "طلب عرض حي للنماذج",
+    demo_form_btn: "تأكيد طلب العرض",
+    consult_title: "حجز جلسة استراتيجية",
+    consult_btn: "تأكيد حجز الاستشارة"
   }
 };
 
@@ -471,7 +475,7 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onViewDemos }) => {
             {onBookConsult && (
               <button onClick={e => { e.stopPropagation(); onBookConsult(); }} 
                 style={{ opacity: open ? 1 : 0, transform: open ? 'translateY(0)' : 'translateY(10px)', transition: 'opacity 0.4s ease 0.35s, transform 0.4s ease 0.35s' }} 
-                className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25 animate-buttonEntry">
+                className="w-full flex items-center justify-between gap-3 px-5 py-4 rounded-2xl bg-sky-500 hover:bg-sky-400 active:scale-[0.98] transition-all duration-200 group/btn shadow-lg shadow-sky-500/25 animate-buttonEntry mb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0"><CalendarCheck size={16} className="text-white"/></div>
                   <div className="text-left">
@@ -714,6 +718,7 @@ export default function App() {
       await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
       setter('success');
       e.target.reset();
+      setTimeout(() => setter(null), 10000);
     } catch(e) { setter(null); }
   };
 
@@ -750,9 +755,6 @@ export default function App() {
 
               <h1>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">{t.hero_line1}</span>
-                <span className="block text-4xl sm:text-7xl md:text-9xl font-black tracking-tighter leading-[0.88] hero-word-2" style={{ color:'transparent', WebkitTextStroke:'1.5px #ffffff' }}>
-                  {t.hero_line2}
-                </span>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">{t.hero_line3}</span>
               </h1>
 
@@ -786,7 +788,7 @@ export default function App() {
                     {[ { icon:<Target size={18}/>, title: t.mission, body: t.mission_body }, { icon:<Eye size={18}/>, title: t.vision, body: t.vision_body } ].map((card, i) => (
                       <TiltCard key={i}>
                         <div className="flex gap-5 p-6 rounded-2xl border border-slate-100 bg-slate-50/50 hover:border-sky-100 hover:bg-sky-50/30 transition-colors duration-300 group h-full">
-                          <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:bg-sky-100 group-hover:border-sky-200 transition-all duration-300">{card.icon}</div>
+                          <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-500 flex-shrink-0 shadow-sm transition-all duration-300 group-hover:bg-sky-500 group-hover:text-white">{card.icon}</div>
                           <div><h4 className="font-black text-sm text-slate-900 uppercase tracking-wide mb-1.5">{card.title}</h4><p className="text-sm text-slate-500 leading-relaxed">{card.body}</p></div>
                         </div>
                       </TiltCard>
@@ -899,15 +901,6 @@ export default function App() {
                 <div className="reveal">
                   <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.contact_title1}</span><span className="block italic text-sky-400">{t.contact_title2}</span></h2></ScrollRevealText>
                   <p className="mt-8 text-base sm:text-lg text-white/50 leading-relaxed max-w-sm font-medium">{t.contact_body}</p>
-                  <div className="mt-12 space-y-4">
-                    {[ { icon:<Mail size={16}/>, label:'Email', val:'hello@mantiq.services' }, { icon:<Phone size={16}/>, label:'Phone', val:'+201280103450' } ].map((c, i) => (
-                      <div key={i} className="flex items-center gap-4 group p-4 rounded-2xl border border-white/5 hover:border-sky-500/30 hover:bg-white/[0.04] transition-all duration-300 cursor-default">
-                        <div className="w-10 h-10 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:border-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">{c.icon}</div>
-                        <div><p className="text-[9px] font-bold uppercase tracking-widest text-white/30 mb-0.5">{c.label}</p><p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors duration-300">{c.val}</p></div>
-                        <ArrowUpRight size={14} className="ml-auto text-white/0 group-hover:text-sky-400 transition-all duration-300 translate-x-2 group-hover:translate-x-0"/>
-                      </div>
-                    ))}
-                  </div>
                 </div>
                 <div className="reveal" style={{ transitionDelay:'100ms' }}>
                   {formStatus === 'success' ? (
@@ -926,7 +919,7 @@ export default function App() {
           </section>
         </>
       ) : (
-        /* ═══ Dedicated Demos Page (Updated with Professional Message) ═════════════════════════════════════════════ */
+        /* ═══ Dedicated Demos Page ═════════════════════════════════════════════ */
         <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen">
           <div className="max-w-7xl mx-auto">
             <SectionLabel text={t.demos_label}/>
@@ -942,9 +935,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Professional Message Placeholder */}
             <div className="reveal reveal-scale bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 relative mb-24 min-h-[400px] flex items-center justify-center group overflow-hidden">
-                {/* Background Decorations */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full group-hover:bg-sky-500/20 transition-all duration-700"></div>
                 <div className="absolute bottom-0 left-0 w-64 h-64 bg-sky-500/5 blur-[80px] rounded-full"></div>
                 
@@ -974,7 +965,6 @@ export default function App() {
                 </div>
             </div>
 
-            {/* Demos Request Form At Bottom */}
             <div className="max-w-3xl mx-auto py-16 px-8 rounded-[3rem] bg-slate-50 border border-slate-100 reveal">
               {demoStatus === 'success' ? (
                 <div className="flex flex-col items-center text-center gap-4 py-12">
@@ -1026,6 +1016,41 @@ export default function App() {
         </div>
       </footer>
 
+      {/* ═══ Consultation Modal (NEW & ACTIVATED) ═══════════════════════════════ */}
+      {consultModal && (
+        <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8 animate-fadeIn">
+          <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setConsultModal(false)}/>
+          <div className="relative w-full max-w-xl bg-white rounded-[2rem] p-8 sm:p-12 shadow-2xl animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
+            <button onClick={() => setConsultModal(false)} className="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-all"><X size={16}/></button>
+            
+            {consultStatus === 'success' ? (
+                <div className="flex flex-col items-center text-center gap-5 py-12">
+                  <div className="w-16 h-16 rounded-3xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/20 animate-bounce"><CheckCircle2 size={32} className="text-white"/></div>
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight">{ar ? 'تم تأكيد طلبك' : 'Strategy Request Sent'}</h3>
+                  <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{ar ? 'سيتواصل معك مستشارنا الاستراتيجي خلال يوم عمل واحد لترتيب الموعد.' : 'Our strategic consultant will contact you within one business day to arrange the session.'}</p>
+                </div>
+            ) : (
+                <>
+                  <div className="flex items-center gap-4 mb-10">
+                    <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-lg"><CalendarCheck size={24}/></div>
+                    <div>
+                      <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{t.consult_title}</h3>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-600">{ar ? 'جلسة استراتيجية — $20' : 'Strategic Business Session'}</p>
+                    </div>
+                  </div>
+                  <form className="space-y-8" onSubmit={e => handleActionForm(e, 'Consultations', setConsultStatus)}>
+                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Name" name="name" required/><Field label="Organization" name="company"/></div>
+                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
+                    <button disabled={consultStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-slate-900 hover:bg-sky-500 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                      {consultStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <>{t.consult_btn} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/></>}
+                    </button>
+                  </form>
+                </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ═══ Careers Modal ══════════════════════════════════════════════════ */}
       {careers && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8">
@@ -1046,7 +1071,6 @@ export default function App() {
                       <Field label="Email" name="email" type="email" required/>
                     </div>
                     
-                    {/* File Upload Field */}
                     <div className="relative group">
                       <label className="absolute -top-5 text-[9px] tracking-[0.2em] font-bold uppercase text-sky-600">
                         {t.cv_link}
