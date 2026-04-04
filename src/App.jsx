@@ -105,7 +105,7 @@ const T = {
     career_body:"We're building the future of business intelligence in the MENA region. Looking for exceptional people to build it with.",
     val_title:"What drives us", val_1:"Inherent Innovation", val_2:"Data Integrity", val_3:"Human-First Tech",
     apply:"Send Application", cv_link:"Upload CV",
-    rights:"All rights reserved.", pricing:"Pricing",
+    rights:"All rights reserved.", pricing:"",
     footer_desc:"Strategic consultancy and digital infrastructure for the MENA region.",
     explore:"View Service",
     why_label:"Why Mantiq",
