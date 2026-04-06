@@ -105,9 +105,9 @@ const T = {
     career_body:"We're building the future of business intelligence in the MENA region. Looking for exceptional people to build it with.",
     val_title:"What drives us", val_1:"Inherent Innovation", val_2:"Data Integrity", val_3:"Human-First Tech",
     apply:"Send Application", cv_link:"Upload CV",
-    exp_brief_p: "Professional Experience Brief",
+    exp_brief_p: "Application & Experience Brief",
     rights:"All rights reserved.", pricing:"",
-    footer_desc:"Strategic consultancy and digital infrastructure for the MENA region.",
+    footer_desc:"Strategic consultancy and digital infrastructure for the MENV region.",
     explore:"View Service",
     why_label:"Why Mantiq",
     why_title1:"Why choose",
@@ -165,7 +165,7 @@ const T = {
     career_body:"نحن نبني مستقبل الذكاء التجاري في منطقة الشرق الأوسط. نبحث عن أشخاص استثنائيين لبنائه معنا.",
     val_title:"ما يحركنا", val_1:"الابتكار الأصيل", val_2:"نزاهة البيانات", val_3:"تكنولوجيا محورها الإنسان",
     apply:"إرسال الطلب", cv_link:"رفع السيرة الذاتية",
-    exp_brief_p: "نبذة مختصرة عن الخبرة العملية",
+    exp_brief_p: "نبذة عن الخبرة وسر التقديم",
     rights:"جميع الحقوق محفوظة.", pricing:"",
     footer_desc:"استشارات استراتيجية وبنية تحتية رقمية لمنطقة الشرق الأوسط.",
     explore:"عرض الخدمة",
@@ -708,7 +708,9 @@ export default function App() {
           reader.onload = () => resolve(reader.result);
           reader.readAsDataURL(value);
         });
-        // We explicitly send both the filename and the base64 content
+        
+        // Fix: We provide the direct key name so the Apps Script header-mapping works
+        data[key] = base64; 
         data[`${key}_name`] = value.name;
         data[`${key}_data`] = base64;
       } else {
@@ -717,7 +719,6 @@ export default function App() {
     }
     
     try {
-      // Use standard fetch if possible, or XHR for wider compatibility with Apps Script no-cors
       await fetch(scriptURL, {
         method: 'POST',
         mode: 'no-cors',
@@ -1063,7 +1064,7 @@ export default function App() {
                       <Field label={t.email_p} name="email" type="email" required/>
                     </div>
                     
-                    {/* NEW FIELD: BRIEF ABOUT EXPERIENCE */}
+                    {/* UPDATED: Brief about Experience / Application rationale */}
                     <Field label={t.exp_brief_p} name="brief" required as="textarea" />
 
                     <div className="relative group">
