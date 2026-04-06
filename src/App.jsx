@@ -3,7 +3,7 @@ import {
   Menu, X, Sun, Moon, ArrowRight, ArrowUpRight,
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
-  Target, Eye, Zap, Users, Trophy, Calculator,
+  Target, Eye, Zap, Users, Trophy,
   Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings
 } from 'lucide-react';
 
