@@ -4,7 +4,7 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings,Calculator
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings, Calculator, FileText
 } from 'lucide-react';
 
 // ─── البيانات ──────────────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ const T = {
   en:{
     logo:"Mantiq",
     tag:"Intelligence in Business",
-    nav_about:"About", nav_services:"Services", nav_events:"Events", nav_demos:"View Demos",
+    nav_about:"About", nav_services:"Services", nav_events:"Events", nav_demos:"View Demos", nav_careers: "Careers",
     cta:"Get Started",
     hero_label:"MENA Region's Digital Partner",
     hero_line1:"The Path You Should",
@@ -105,6 +105,7 @@ const T = {
     career_body:"We're building the future of business intelligence in the MENA region. Looking for exceptional people to build it with.",
     val_title:"What drives us", val_1:"Inherent Innovation", val_2:"Data Integrity", val_3:"Human-First Tech",
     apply:"Send Application", cv_link:"Upload CV",
+    exp_brief_p: "Professional Experience Brief",
     rights:"All rights reserved.", pricing:"",
     footer_desc:"Strategic consultancy and digital infrastructure for the MENA region.",
     explore:"View Service",
@@ -123,12 +124,14 @@ const T = {
     demo_form_title: "Request System Demos",
     demo_form_btn: "Confirm Demo Request",
     consult_title: "Book Strategy Session",
-    consult_btn: "Confirm Consultation"
+    consult_btn: "Confirm Consultation",
+    careers_section_title: "Architect the future with us.",
+    careers_section_body: "We are always looking for logic-driven minds in strategy, engineering, and design."
   },
   ar:{
     logo:"منطق",
     tag:"الذكاء في الأعمال",
-    nav_about:"من نحن", nav_services:"خدماتنا", nav_events:"الفعاليات", nav_demos:"نماذج حية",
+    nav_about:"من نحن", nav_services:"خدماتنا", nav_events:"الفعاليات", nav_demos:"نماذج حية", nav_careers: "التوظيف",
     cta:"ابدأ الآن",
     hero_label:"الشريك الرقمي لمنطقة الشرق الأوسط",
     hero_line1:"المسار الذى يجب",
@@ -162,6 +165,7 @@ const T = {
     career_body:"نحن نبني مستقبل الذكاء التجاري في منطقة الشرق الأوسط. نبحث عن أشخاص استثنائيين لبنائه معنا.",
     val_title:"ما يحركنا", val_1:"الابتكار الأصيل", val_2:"نزاهة البيانات", val_3:"تكنولوجيا محورها الإنسان",
     apply:"إرسال الطلب", cv_link:"رفع السيرة الذاتية",
+    exp_brief_p: "نبذة مختصرة عن الخبرة العملية",
     rights:"جميع الحقوق محفوظة.", pricing:"",
     footer_desc:"استشارات استراتيجية وبنية تحتية رقمية لمنطقة الشرق الأوسط.",
     explore:"عرض الخدمة",
@@ -180,7 +184,9 @@ const T = {
     demo_form_title: "طلب عرض حي للنماذج",
     demo_form_btn: "تأكيد طلب العرض",
     consult_title: "حجز جلسة استراتيجية",
-    consult_btn: "تأكيد حجز الاستشارة"
+    consult_btn: "تأكيد حجز الاستشارة",
+    careers_section_title: "صمم المستقبل معنا.",
+    careers_section_body: "نبحث دائمًا عن العقول المدفوعة بالمنطق في الاستراتيجية والهندسة والتصميم."
   }
 };
 
@@ -297,6 +303,11 @@ const Field = ({ label, name, type = 'text', required, as: AsTag, children, dark
           </select>
           <ChevronDown size={13} className={`absolute top-3.5 right-0 pointer-events-none transition-transform duration-200 ${focused ? 'rotate-180' : ''} ${dark ? 'text-white/30' : 'text-slate-400'}`}/>
         </div>
+      ) : Tag === 'textarea' ? (
+        <textarea required={required} name={name} autoComplete="off" rows="3"
+          value={val} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
+          onChange={e => setVal(e.target.value)}
+          className={`w-full bg-transparent border-b py-3 outline-none text-sm transition-colors duration-200 resize-none ${border} ${textColor}`}/>
       ) : (
         <input required={required} name={name} type={type} autoComplete="off"
           value={val} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
@@ -332,7 +343,7 @@ const LogoText = ({ className = '', color }) => (
 
 // ─── القائمة (Nav) ─────────────────────────────────────────────────────────────────────
 
-const Nav = ({ lang, setLang, go, active, currentPage }) => {
+const Nav = ({ lang, setLang, go, active, currentPage, openCareers }) => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const t = T[lang];
@@ -349,6 +360,7 @@ const Nav = ({ lang, setLang, go, active, currentPage }) => {
     { id:'services', label: t.nav_services },
     { id:'demos', label: t.nav_demos, isPage: true },
     { id:'events', label: t.nav_events },
+    { id:'careers_nav', label: t.nav_careers, isCareers: true },
   ];
 
   return (
@@ -367,7 +379,7 @@ const Nav = ({ lang, setLang, go, active, currentPage }) => {
 
           <div className="hidden lg:flex items-center gap-10">
             {links.map(l => (
-              <button key={l.id} onClick={() => go(l.id)}
+              <button key={l.id} onClick={() => l.isCareers ? openCareers() : go(l.id)}
                 className={`text-[11px] font-bold uppercase tracking-[0.18em] transition-colors duration-200
                   ${active === l.id || (currentPage === 'demos' && l.id === 'demos')
                     ? 'text-sky-500'
@@ -405,9 +417,13 @@ const Nav = ({ lang, setLang, go, active, currentPage }) => {
           </div>
           <div className="flex flex-col p-6 gap-1 flex-1">
             {['home', ...links.map(l => l.id), 'contact'].map(id => {
-              const label = id === 'home' ? t.logo : id === 'contact' ? t.cta : links.find(l => l.id === id)?.label;
+              const link = links.find(l => l.id === id);
+              const label = id === 'home' ? t.logo : id === 'contact' ? t.cta : link?.label;
               return (
-                <button key={id} onClick={() => { go(id); setOpen(false); }}
+                <button key={id} onClick={() => { 
+                  if (link?.isCareers) { openCareers(); } else { go(id); }
+                  setOpen(false); 
+                }}
                   className="text-left py-3.5 font-bold text-slate-800 hover:text-sky-500 border-b border-slate-50 transition-colors text-sm tracking-wide">
                   {label}
                 </button>
@@ -599,7 +615,6 @@ const Marquee = ({ lang }) => {
     <div className="py-12 sm:py-16 border-y border-slate-100">
       <p className="text-center text-[10px] uppercase tracking-[0.5em] text-slate-300 font-bold mb-8">{t.customers_label}</p>
       <div className="relative overflow-hidden">
-        {/* Force LTR direction for the marquee container to prevent animation issues in RTL mode */}
         <div className="relative overflow-hidden" dir="ltr">
           <div className="absolute inset-y-0 left-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to right, white, transparent)' }}/>
           <div className="absolute inset-y-0 right-0 w-20 z-10 pointer-events-none" style={{ background:'linear-gradient(to left, white, transparent)' }}/>
@@ -618,7 +633,7 @@ const Marquee = ({ lang }) => {
 
 export default function App() {
   const [lang, setLang] = useState('en');
-  const [page, setPage] = useState('home'); // home | demos
+  const [page, setPage] = useState('home'); 
   const [active, setActive] = useState('home');
   const [careers, setCareers] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
@@ -693,22 +708,30 @@ export default function App() {
           reader.onload = () => resolve(reader.result);
           reader.readAsDataURL(value);
         });
-        data[key] = base64;
+        // We explicitly send both the filename and the base64 content
+        data[`${key}_name`] = value.name;
+        data[`${key}_data`] = base64;
       } else {
         data[key] = value;
       }
     }
     
     try {
+      // Use standard fetch if possible, or XHR for wider compatibility with Apps Script no-cors
       await fetch(scriptURL, {
-        method: 'POST', mode: 'no-cors',
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
+      
       setFormStatus('success');
       e.target.reset();
       setSelectedFileName('');
       setTimeout(() => setFormStatus(null), 10000);
-    } catch(e) { setFormStatus(null); }
+    } catch(e) { 
+      setFormStatus(null); 
+    }
   };
 
   const handleActionForm = async (e, sheet, setter) => {
@@ -737,7 +760,7 @@ export default function App() {
 
       <div className="fixed top-0 left-0 z-[200] h-[2px] bg-sky-500 transition-none pointer-events-none" style={{ width: `${scrollProgress * 100}%`, boxShadow: '0 0 8px rgba(14,165,233,0.6)' }}/>
 
-      <Nav lang={lang} setLang={setLang} go={go} active={active} currentPage={page} />
+      <Nav lang={lang} setLang={setLang} go={go} active={active} currentPage={page} openCareers={() => setCareers(true)} />
 
       {page === 'home' ? (
         <>
@@ -773,10 +796,6 @@ export default function App() {
                 </div>
               </div>
             </div>
-
-            <div className="absolute bottom-8 right-8 sm:right-12 z-10 hidden sm:flex flex-col items-center gap-2 opacity-40 hover:opacity-80 transition-opacity cursor-pointer" onClick={() => go('about')}>
-              <div className="w-6 h-9 rounded-full border-2 border-white/40 flex items-start justify-center pt-1.5"><div className="w-0.5 h-2 bg-white rounded-full animate-scrollDot"/></div>
-            </div>
           </section>
 
           {/* ═══ About ══════════════════════════════════════════════════════════ */}
@@ -805,48 +824,6 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ Why Choose Us ══════════════════════════════════════════════ */}
-          <section className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900 overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/5 blur-[120px] rounded-full -mr-64 -mt-64"/>
-            <div className="max-w-7xl mx-auto relative z-10">
-              <SectionLabel text={t.why_label} dark/>
-              <div className="grid lg:grid-cols-2 gap-16 sm:gap-24 items-center">
-                <div className="reveal">
-                  <ScrollRevealText dark><h2 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] text-white"><span className="block">{t.why_title1}</span><span className="block italic text-sky-400">{t.why_title2}</span></h2></ScrollRevealText>
-                  <div className="mt-12 space-y-6">
-                    {[ 
-                      { icon:<Gem size={18}/>, t: t.why_1_t, d: t.why_1_d }, 
-                      { icon:<Cpu size={18}/>, t: t.why_2_t, d: t.why_2_d },
-                      { icon:<Timer size={18}/>, t: t.why_3_t, d: t.why_3_d },
-                      { icon:<Globe size={18}/>, t: t.why_4_t, d: t.why_4_d }
-                    ].map((item, i) => (
-                      <div key={i} className="flex gap-5 group" style={{ transitionDelay: `${i * 100}ms` }}>
-                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white group-hover:border-sky-500 transition-all duration-300 flex-shrink-0">{item.icon}</div>
-                        <div>
-                          <h4 className="text-white font-bold text-base uppercase tracking-wide mb-1">{item.t}</h4>
-                          <p className="text-white/40 text-sm leading-relaxed max-w-sm">{item.d}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="reveal relative hidden lg:block">
-                  <div className="aspect-square rounded-3xl overflow-hidden relative">
-                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=1400" alt="Precision" className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000"/>
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"/>
-                    <div className="absolute bottom-8 left-8 right-8 p-8 bg-white/5 backdrop-blur-md rounded-2xl border border-white/10">
-                       <div className="flex items-center gap-3 mb-2">
-                         <ShieldCheck className="text-sky-400" size={20}/>
-                         <span className="text-white font-black uppercase text-xs tracking-widest">{ar ? 'معايير النزاهة' : 'Integrity Standards'}</span>
-                       </div>
-                       <p className="text-white/50 text-xs leading-relaxed">{ar ? 'نلتزم بأعلى درجات الأمان والخصوصية في معالجة بيانات شركائنا.' : 'We adhere to the highest security and privacy standards in processing our partners data.'}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
           {/* ═══ Services ═══════════════════════════════════════════════════════ */}
           <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
             <div className="max-w-7xl mx-auto">
@@ -870,8 +847,21 @@ export default function App() {
             </div>
           </section>
 
+          {/* ═══ Careers Section (NEW HIGHLIGHT) ═══════════════════════════════════ */}
+          <section className="py-24 sm:py-36 px-6 sm:px-10 bg-sky-500">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
+              <div className="reveal">
+                <h2 className="text-4xl sm:text-6xl font-black tracking-tighter text-white leading-tight mb-4">{t.careers_section_title}</h2>
+                <p className="text-white/80 text-lg sm:text-xl font-medium max-w-xl">{t.careers_section_body}</p>
+              </div>
+              <button onClick={() => setCareers(true)} className="px-10 py-5 bg-white text-sky-600 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
+                {lang === 'ar' ? 'اعرض الفرص المتاحة' : 'View Open Roles'} <Users size={16}/>
+              </button>
+            </div>
+          </section>
+
           {/* ═══ Events ═════════════════════════════════════════════════════════ */}
-          <section id="events" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
+          <section id="events" className="py-24 sm:py-36 px-6 sm:px-10">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.events_label}/>
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
@@ -1010,7 +1000,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div><div className="mb-3">{lang === 'ar' ? <span className="font-normal text-xl tracking-[0.18em] uppercase text-slate-900">{t.logo}</span> : <LogoText className="font-normal text-xl tracking-[0.18em] uppercase" color="#0f172a"/>}</div><p className="text-xs text-slate-400 max-w-xs leading-relaxed">{t.footer_desc}</p></div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
-            <button onClick={() => setCareers(true)} className="text-slate-400 hover:text-slate-700 font-bold text-[10px] uppercase tracking-widest transition-colors flex items-center gap-1.5"><Users size={11}/> {t.careers}</button>
+            <button onClick={() => setCareers(true)} className="text-sky-500 hover:text-sky-600 font-black text-[10px] uppercase tracking-widest transition-colors flex items-center gap-1.5"><Users size={11}/> {t.careers}</button>
             <div className="flex items-center gap-3">{[ { Icon: Facebook, url: 'https://www.facebook.com/share/1Dss3Eqybc' }, { Icon: Linkedin, url: 'https://www.linkedin.com/company/mantiq.services' }, { Icon: Mail, url: 'mailto:hello@mantiq.services' } ].map(({ Icon, url }, i) => (
               <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg border border-sky-100 bg-sky-50 flex items-center justify-center text-sky-500 hover:bg-sky-500 hover:text-white hover:border-sky-500 hover:-translate-y-1 transition-all duration-200" style={{ transitionDelay: `${i * 40}ms` }}><Icon size={14}/></a>
             ))}</div>
@@ -1018,7 +1008,7 @@ export default function App() {
         </div>
       </footer>
 
-      {/* ═══ Consultation Modal (NEW & ACTIVATED) ═══════════════════════════════ */}
+      {/* ═══ Consultation Modal ═══════════════════════════════ */}
       {consultModal && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8 animate-fadeIn">
           <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setConsultModal(false)}/>
@@ -1062,17 +1052,20 @@ export default function App() {
               <div><div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8"><Briefcase size={18} className="text-white"/></div><h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2><p className="text-sm text-white/50 leading-relaxed">{t.career_body}</p></div>
               <div className="space-y-4">{[ { icon:<Lightbulb size={14}/>, label: t.val_1 }, { icon:<Target size={14}/>, label: t.val_2 }, { icon:<Rocket size={14}/>, label: t.val_3 } ].map((v, i) => (<div key={i} className="flex items-center gap-3 text-white/60"><div className="text-sky-400">{v.icon}</div><span className="text-xs font-bold uppercase tracking-wide">{v.label}</span></div>))}</div>
             </div>
-            <div className="flex-1 p-8 sm:p-12 relative">
-              <button onClick={() => setCareers(false)} className="absolute top-5 right-5 w-9 h-9 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-all"><X size={16}/></button>
+            <div className="flex-1 p-8 sm:p-12 relative overflow-y-auto max-h-[90vh]">
+              <button onClick={() => setCareers(false)} className="absolute top-5 right-5 w-9 h-9 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-all z-20"><X size={16}/></button>
               {formStatus === 'success' ? (<div className="flex flex-col gap-5 py-6"><div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center"><CheckCircle2 size={22} className="text-white"/></div><h3 className="text-2xl font-black text-slate-900 tracking-tight">{t.success_title}</h3></div>) : (
                 <div className="space-y-2">
                   <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-8">{t.join_title}</h3>
                   <form className="space-y-8" onSubmit={e => handleForm(e, 'Work')}>
                     <div className="grid sm:grid-cols-2 gap-8">
-                      <Field label="Name" name="name" required/>
-                      <Field label="Email" name="email" type="email" required/>
+                      <Field label={t.name_p} name="name" required/>
+                      <Field label={t.email_p} name="email" type="email" required/>
                     </div>
                     
+                    {/* NEW FIELD: BRIEF ABOUT EXPERIENCE */}
+                    <Field label={t.exp_brief_p} name="brief" required as="textarea" />
+
                     <div className="relative group">
                       <label className="absolute -top-5 text-[9px] tracking-[0.2em] font-bold uppercase text-sky-600">
                         {t.cv_link}
