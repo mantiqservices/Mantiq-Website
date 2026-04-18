@@ -139,7 +139,7 @@ const TEMPLATES = [
     rating: 4.8, reviews: 31, downloads: 276,
     pages: ["Feed","Shop","Drop","Lookbook","Cart"],
     features: ["Drop countdown timer","Animated marquee ticker","Grayscale-to-color hover","Size guide modal"],
-    complexity: "Advanced", time: "4–6 days"
+    complexity: "Advanced", time: "6–8 days"
   },
   {
     id: 4,
@@ -151,7 +151,7 @@ const TEMPLATES = [
     rating: 4.6, reviews: 14, downloads: 145,
     pages: ["Home","Shop","Compare","Cart","Checkout"],
     features: ["Spec comparison table","Stock urgency tags","Sticky add-to-cart bar","Search with filters"],
-    complexity: "Intermediate", time: "2–3 days"
+    complexity: "Intermediate", time: "8–12 days"
   },
   {
     id: 5,
@@ -163,7 +163,7 @@ const TEMPLATES = [
     rating: 4.8, reviews: 27, downloads: 389,
     pages: ["Profile","Services","Clients","Contact"],
     features: ["Client logo wall","Timeline achievements","Booking integration","PDF resume export"],
-    complexity: "Starter", time: "1–2 days"
+    complexity: "Starter", time: "2–3 days"
   },
   {
     id: 6,
@@ -176,7 +176,7 @@ const TEMPLATES = [
     rating: 5.0, reviews: 42, downloads: 534,
     pages: ["Index","Work","Studio","Process","Contact"],
     features: ["Bento grid layout","Custom cursor animation","Horizontal scroll gallery","Lenis smooth scroll"],
-    complexity: "Advanced", time: "5–7 days"
+    complexity: "Advanced", time: "3–4 days"
   },
   {
     id: 7,
