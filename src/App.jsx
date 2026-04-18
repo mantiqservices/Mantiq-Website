@@ -4,7 +4,8 @@ import {
   Layout, Smartphone, BarChart3, Binary, Mail,
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy,
-  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings, Calculator, FileText
+  Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings, Calculator, FileText,
+  ShoppingBag, User, Search, Code, Building
 } from 'lucide-react';
 
 // ─── البيانات ──────────────────────────────────────────────────────────────────
@@ -67,6 +68,623 @@ const SERVICES = [
   }
 ];
 
+// ─── Templates Gallery Data ──────────────────────────────────────────────────
+
+const CATEGORIES = [
+  { id: "All", icon: Layout },
+  { id: "E-Commerce", icon: ShoppingBag },
+  { id: "Profiles", icon: Building }
+];
+
+const TEMPLATES = [
+  // E-COMMERCE (4 Templates)
+  {
+    id: 1,
+    title: "Luxe Accessories",
+    category: "E-Commerce",
+    description: "Premium e-commerce template for high-end jewelry, watches, and accessories. Features a luxurious gold and dark aesthetic.",
+    image: "https://images.unsplash.com/photo-1599643478524-4624419205b3?auto=format&fit=crop&w=800&q=80",
+    tags: ["React", "E-Commerce", "Stripe API"],
+    isNew: true
+  },
+  {
+    id: 2,
+    title: "Glow Cosmetics",
+    category: "E-Commerce",
+    description: "Clean, soft, and minimalist storefront tailored for beauty, skincare, and cosmetics brands.",
+    image: "https://images.unsplash.com/photo-1596462502278-27bf85033878?auto=format&fit=crop&w=800&q=80",
+    tags: ["Next.js", "Tailwind", "Cart"]
+  },
+  {
+    id: 3,
+    title: "URBN Clothing",
+    category: "E-Commerce",
+    description: "High-contrast, edgy streetwear fashion storefront with dynamic grids and hype-focused marketing elements.",
+    image: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=800&q=80",
+    tags: ["Vue.js", "Shopify Headless"]
+  },
+  {
+    id: 4,
+    title: "TechGear Mobile",
+    category: "E-Commerce",
+    description: "Modern, high-conversion tech store layout designed for mobile accessories, chargers, and gadgets.",
+    image: "https://images.unsplash.com/photo-1611314643773-40eab71bd0eb?auto=format&fit=crop&w=800&q=80",
+    tags: ["React", "Redux", "Payment"],
+    isNew: true
+  },
+  // PROFILES & COMPANIES (4 Templates)
+  {
+    id: 5,
+    title: "Pro Business Developer",
+    category: "Profiles",
+    description: "Sleek, results-oriented personal profile for business developers, consultants, and independent professionals.",
+    image: "https://images.unsplash.com/photo-1560250097001-a47b36f8636e?auto=format&fit=crop&w=800&q=80",
+    tags: ["HTML5", "CSS3", "GSAP"]
+  },
+  {
+    id: 6,
+    title: "Studio Kroma Branding",
+    category: "Profiles",
+    description: "Vibrant, bento-grid style creative agency portfolio with dark mode aesthetics and smooth scroll effects.",
+    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
+    tags: ["React", "Framer Motion"],
+    isNew: true
+  },
+  {
+    id: 7,
+    title: "Vertex Corporate",
+    category: "Profiles",
+    description: "Professional, trustworthy, and clean corporate profile template suitable for B2B enterprises and services.",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
+    tags: ["Next.js", "Tailwind CSS"]
+  },
+  {
+    id: 8,
+    title: "Aseel Real Estate",
+    category: "Profiles",
+    description: "Luxurious property listing and real estate company profile featuring large imagery and elegant typography.",
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+    tags: ["React", "Mapbox API"],
+    isNew: true
+  }
+];
+
+// Helper to generate a scrollable mock HTML preview for the templates
+const generateDummyTemplate = (template) => {
+  const head = `
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;700;900&family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap');
+        body { margin: 0; overflow-x: hidden; scroll-behavior: smooth; }
+        .font-serif { font-family: 'Bodoni Moda', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        .font-tech { font-family: 'Space Grotesk', sans-serif; }
+        .font-modern { font-family: 'Outfit', sans-serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .page-view { display: none; }
+        .page-view.active { display: block; animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      </style>
+      <script>
+        function navigateTo(pageId) {
+          document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
+          const target = document.getElementById('page-' + pageId);
+          if(target) target.classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      </script>
+    </head>
+  `;
+
+  let body = '';
+
+  if (template.id === 1) {
+    // 1. Luxe Accessories Store
+    body = `
+      <div class="bg-[#111] font-sans text-white min-h-screen flex flex-col">
+        <header class="px-8 py-6 flex justify-between items-center sticky top-0 z-30 bg-[#111]/90 backdrop-blur-md border-b border-[#333]">
+          <h1 class="text-2xl font-serif tracking-widest uppercase cursor-pointer text-[#D4AF37]" onclick="navigateTo('home')">Luxe.</h1>
+          <div class="hidden md:flex gap-8 text-xs tracking-[0.2em] uppercase font-bold text-gray-400">
+            <button onclick="navigateTo('home')" class="hover:text-[#D4AF37] transition">Home</button>
+            <button onclick="navigateTo('shop')" class="hover:text-[#D4AF37] transition">Collections</button>
+          </div>
+          <div class="flex gap-6 text-lg text-gray-400">
+            <i class="fas fa-search cursor-pointer hover:text-[#D4AF37]"></i>
+            <div class="relative cursor-pointer hover:text-[#D4AF37]">
+               <i class="fas fa-shopping-bag"></i>
+               <span class="absolute -bottom-2 -right-2 bg-[#D4AF37] text-black text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+            </div>
+          </div>
+        </header>
+        <div id="page-home" class="page-view active flex-1">
+          <section class="relative h-[80vh] flex items-center justify-center">
+            <img src="https://images.unsplash.com/photo-1599643478524-4624419205b3?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent"></div>
+            <div class="relative z-10 text-center text-white p-6">
+              <span class="text-xs uppercase tracking-[0.4em] font-bold text-[#D4AF37] mb-4 block">New Arrivals</span>
+              <h2 class="text-5xl md:text-7xl font-serif mb-8">Elegance in Details.</h2>
+              <button onclick="navigateTo('shop')" class="border border-[#D4AF37] text-[#D4AF37] px-10 py-3 uppercase tracking-[0.2em] text-xs font-bold hover:bg-[#D4AF37] hover:text-black transition duration-300">Shop Now</button>
+            </div>
+          </section>
+          <section class="py-24 px-6 max-w-7xl mx-auto w-full text-center">
+            <h3 class="text-3xl font-serif mb-16 text-white">Curated For You</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+              ${[
+                { img: "1515562141206-a4f0b2f56708", name: "Onyx Chronograph", price: "4,500" },
+                { img: "1611591437281-460bfbe1220a", name: "Gold Halo Ring", price: "2,200" },
+                { img: "1596944924616-7b38e7cfcac5", name: "Pearl Drop Earrings", price: "1,850" }
+              ].map(p => `
+              <div class="group cursor-pointer border border-[#333] p-4 rounded-xl hover:border-[#D4AF37] transition">
+                <div class="relative aspect-square overflow-hidden mb-6 rounded-lg">
+                  <img src="https://images.unsplash.com/photo-${p.img}?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000" />
+                </div>
+                <h4 class="text-sm font-bold tracking-wider uppercase text-gray-200">${p.name}</h4>
+                <p class="text-[#D4AF37] font-serif text-lg mt-2">EGP ${p.price}</p>
+              </div>
+              `).join('')}
+            </div>
+          </section>
+        </div>
+        <div id="page-shop" class="page-view flex-1 py-16 px-6 max-w-7xl mx-auto w-full">
+          <h2 class="text-4xl font-serif mb-12 border-b border-[#333] pb-6">All Accessories</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            ${[
+              { img: "1515562141206-a4f0b2f56708", n: "Onyx Chronograph", p: "4,500" },
+              { img: "1611591437281-460bfbe1220a", n: "Gold Halo Ring", p: "2,200" },
+              { img: "1596944924616-7b38e7cfcac5", n: "Pearl Earrings", p: "1,850" },
+              { img: "1599643478524-4624419205b3", n: "Chain Necklace", p: "3,100" },
+              { img: "1573408301145-b98c4af0118e", n: "Leather Handbag", p: "6,500" },
+              { img: "1601121141461-9d6647bca1ed", n: "Diamond Bracelet", p: "12,000" },
+              { img: "1611591437281-460bfbe1220a", n: "Silver Band", p: "1,100" },
+              { img: "1542291026-7eec264c27ff", n: "Classic Shades", p: "2,400" }
+            ].map(item => `
+              <div class="group cursor-pointer">
+                <div class="aspect-square overflow-hidden mb-4 rounded-lg bg-[#222]">
+                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+                </div>
+                <h4 class="text-xs font-bold uppercase tracking-wide text-gray-300 group-hover:text-[#D4AF37] transition">${item.n}</h4>
+                <p class="font-serif text-[#D4AF37] mt-1">EGP ${item.p}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <footer class="bg-black py-12 text-center text-xs text-gray-500 uppercase tracking-widest border-t border-[#333] mt-auto">
+           <p>&copy; 2026 Luxe Accessories Egypt.</p>
+        </footer>
+      </div>
+    `;
+  } else if (template.id === 2) {
+    // 2. Glow Cosmetics
+    body = `
+      <div class="bg-[#FAF7F2] font-sans text-[#4A4A4A] min-h-screen flex flex-col">
+        <header class="px-8 py-5 flex justify-between items-center sticky top-0 z-30 bg-[#FAF7F2]/90 backdrop-blur-md">
+          <div class="flex gap-6 font-medium text-sm tracking-wide">
+            <button onclick="navigateTo('home')" class="hover:text-[#D98A82] transition">Discover</button>
+            <button onclick="navigateTo('shop')" class="hover:text-[#D98A82] transition">Shop Skincare</button>
+          </div>
+          <h1 class="text-3xl font-playfair italic font-bold tracking-tight text-[#333]" onclick="navigateTo('home')" style="cursor:pointer;">Glow.</h1>
+          <div class="flex gap-6 text-xl text-[#333]">
+             <i class="far fa-user cursor-pointer"></i>
+             <i class="fas fa-shopping-bag cursor-pointer text-[#D98A82]"></i>
+          </div>
+        </header>
+        <div id="page-home" class="page-view active flex-1">
+          <section class="relative h-[70vh] flex items-center justify-center bg-[#F2E8DF] mx-4 rounded-3xl overflow-hidden mt-4">
+            <img src="https://images.unsplash.com/photo-1596462502278-27bf85033878?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-80" />
+            <div class="relative z-10 text-center bg-white/70 backdrop-blur-sm p-10 rounded-2xl max-w-lg">
+              <h2 class="text-5xl font-playfair text-[#333] mb-4">Pure Radiance</h2>
+              <p class="mb-8 text-[#666]">Vegan, cruelty-free skincare formulated for your natural glow.</p>
+              <button onclick="navigateTo('shop')" class="bg-[#D98A82] text-white px-8 py-3 rounded-full font-bold tracking-wide hover:bg-[#C27A73] transition shadow-lg shadow-[#D98A82]/30">Shop Collection</button>
+            </div>
+          </section>
+          <section class="py-20 px-6 max-w-6xl mx-auto text-center">
+            <h3 class="text-3xl font-playfair mb-12 text-[#333]">Best Sellers</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
+              ${[
+                { img: "1620916566398-39f1143ab7be", name: "Hydrating Face Cream", price: "650" },
+                { img: "1556228578-0d85b1a4d571", name: "Velvet Matte Lipstick", price: "420" },
+                { img: "1608248593890-dc56ba0567e4", name: "Vitamin C Serum", price: "890" }
+              ].map(p => `
+              <div class="group cursor-pointer">
+                <div class="relative aspect-square overflow-hidden rounded-2xl mb-4 bg-[#F2E8DF]">
+                  <img src="https://images.unsplash.com/photo-${p.img}?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                </div>
+                <h4 class="font-bold text-[#333]">${p.name}</h4>
+                <p class="text-[#D98A82] font-medium mt-1">EGP ${p.price}</p>
+              </div>
+              `).join('')}
+            </div>
+          </section>
+        </div>
+        <div id="page-shop" class="page-view flex-1 py-12 px-6 max-w-6xl mx-auto w-full">
+          <h2 class="text-4xl font-playfair mb-10 text-[#333]">Skincare Essentials</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
+            ${[
+              { img: "1620916566398-39f1143ab7be", n: "Face Cream", p: "650" },
+              { img: "1608248593890-dc56ba0567e4", n: "Vitamin Serum", p: "890" },
+              { img: "1556228578-0d85b1a4d571", n: "Lipstick Duo", p: "420" },
+              { img: "1596462502278-27bf85033878", n: "Cleansing Oil", p: "550" },
+              { img: "1615397323626-d6682701f464", n: "Rose Toner", p: "380" },
+              { img: "1571781256007-8822002f5a6b", n: "Clay Mask", p: "450" },
+              { img: "1620916566398-39f1143ab7be", n: "Eye Cream", p: "720" },
+              { img: "1608248593890-dc56ba0567e4", n: "Night Repair", p: "950" }
+            ].map(item => `
+              <div class="group cursor-pointer text-center">
+                <div class="aspect-square overflow-hidden mb-4 rounded-2xl bg-[#F2E8DF]">
+                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                </div>
+                <h4 class="font-bold text-[#333] text-sm">${item.n}</h4>
+                <p class="text-[#D98A82] text-sm mt-1">EGP ${item.p}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <footer class="bg-[#F2E8DF] py-10 text-center text-sm font-medium text-[#888] mt-auto">
+           <p>Glow Cosmetics Egypt &copy; 2026</p>
+        </footer>
+      </div>
+    `;
+  } else if (template.id === 3) {
+    // 3. URBN Clothes (Fashion)
+    body = `
+      <div class="bg-black font-tech text-white min-h-screen flex flex-col selection:bg-[#ff3366] selection:text-white">
+        <div class="bg-[#ff3366] text-black overflow-hidden py-2 whitespace-nowrap border-b-2 border-black relative z-30">
+           <div class="animate-[marquee_15s_linear_infinite] inline-block font-black uppercase text-sm tracking-widest">
+              NEW DROP OUT NOW // FREE SHIPPING IN EGYPT ON ORDERS OVER 2000 EGP // 
+           </div>
+           <style>@keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }</style>
+        </div>
+        <header class="bg-black border-b border-zinc-800 p-5 sticky top-0 z-20 flex justify-between items-center">
+          <div class="flex gap-6 font-bold uppercase text-sm tracking-widest">
+            <button onclick="navigateTo('home')" class="hover:text-[#ff3366] transition">Feed</button>
+            <button onclick="navigateTo('shop')" class="hover:text-[#ff3366] transition">Shop</button>
+          </div>
+          <h1 class="text-4xl font-black italic tracking-tighter cursor-pointer select-none" onclick="navigateTo('home')">URBN<span class="text-[#ff3366]">THREADS</span></h1>
+          <div class="flex gap-6 text-xl">
+             <i class="fas fa-shopping-cart cursor-pointer hover:text-[#ff3366]"></i>
+          </div>
+        </header>
+        <div id="page-home" class="page-view active w-full flex-1">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 p-1 bg-zinc-900">
+             <div class="md:col-span-2 lg:col-span-2 relative bg-black aspect-[16/9] md:aspect-auto md:h-[70vh] flex items-center justify-center group overflow-hidden cursor-pointer" onclick="navigateTo('shop')">
+                <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=1200&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition duration-700 grayscale group-hover:grayscale-0" />
+                <div class="relative z-10 text-center pointer-events-none p-4">
+                   <h2 class="text-6xl md:text-9xl font-black italic tracking-tighter text-transparent w-text-stroke leading-none">DROP<br/>004</h2>
+                   <style>.w-text-stroke { -webkit-text-stroke: 2px white; color: transparent; }</style>
+                   <button class="mt-8 bg-[#ff3366] text-black font-black uppercase tracking-widest px-8 py-3 text-sm pointer-events-auto hover:bg-white transition">Shop The Drop</button>
+                </div>
+             </div>
+             <div class="relative bg-zinc-800 aspect-square md:aspect-auto md:h-[70vh] group overflow-hidden cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" />
+                <div class="absolute inset-0 p-6 flex flex-col justify-between z-10">
+                   <span class="bg-white text-black font-black px-2 py-1 text-[10px] self-start uppercase">Footwear</span>
+                   <div><h3 class="text-2xl font-black italic uppercase">Retro Hi-Tops</h3><p class="text-[#ff3366] font-bold">EGP 2,400</p></div>
+                </div>
+             </div>
+          </div>
+        </div>
+        <div id="page-shop" class="page-view w-full p-6 lg:p-12 flex-1">
+          <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-12 border-b border-zinc-800 pb-6">All Gear.</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+             ${[
+               { img: "1552374196-1ab2a1c593e8", name: "Retro Hi-Tops", p: "2,400" },
+               { img: "1556821840-3a63f95609a7", name: "Nylon Anorak", p: "3,200" },
+               { img: "1578681994506-b09e18b6a6c6", name: "Heavy Hoodie", p: "1,500" },
+               { img: "1617331721458-bd3fa364a5d8", name: "Utility Vest", p: "1,850" },
+               { img: "1523381294911-8d3cead13475", name: "Graphic Tee", p: "850" },
+               { img: "1503342217505-b0a15ec3261c", name: "Cargo Pants", p: "1,900" },
+               { img: "1608231387042-66d1773070a5", name: "Beanie Red", p: "450" },
+               { img: "1591047139829-19fc9b441221", name: "Crossbody Bag", p: "950" }
+             ].map(item => `
+              <div class="group cursor-pointer">
+                <div class="relative bg-zinc-900 aspect-[3/4] mb-4 overflow-hidden border border-zinc-800">
+                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-90 group-hover:opacity-100" />
+                  <button class="absolute bottom-0 w-full bg-white text-black py-4 font-black uppercase tracking-widest text-sm transform translate-y-full group-hover:translate-y-0 transition duration-300">Add to Cart</button>
+                </div>
+                <h4 class="font-black italic uppercase text-lg group-hover:text-[#ff3366] transition">${item.name}</h4>
+                <p class="text-zinc-400 font-bold">EGP ${item.p}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (template.id === 4) {
+    // 4. TechGear Mobile Accessories
+    body = `
+      <div class="bg-[#F8FAFC] font-sans text-slate-900 min-h-screen flex flex-col">
+        <header class="px-8 py-5 flex justify-between items-center sticky top-0 z-30 bg-white/80 backdrop-blur-md shadow-sm">
+          <h1 class="text-2xl font-black tracking-tight text-blue-600 cursor-pointer" onclick="navigateTo('home')">TechGear<i class="fas fa-bolt ml-1 text-yellow-400"></i></h1>
+          <div class="hidden md:flex gap-8 font-bold text-sm text-slate-600">
+            <button onclick="navigateTo('home')" class="hover:text-blue-600 transition">Home</button>
+            <button onclick="navigateTo('shop')" class="hover:text-blue-600 transition">Accessories</button>
+          </div>
+          <button class="bg-slate-900 text-white px-5 py-2 rounded-lg font-bold text-sm hover:bg-blue-600 transition"><i class="fas fa-shopping-cart mr-2"></i>Cart</button>
+        </header>
+        <div id="page-home" class="page-view active flex-1">
+          <section class="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
+            <div class="md:w-1/2">
+              <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6 inline-block">Premium Quality</span>
+              <h2 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-slate-900">Power Up<br/>Your Tech.</h2>
+              <p class="text-lg text-slate-500 mb-8 font-medium">Discover top-tier mobile cases, fast chargers, and durable cables engineered for your daily life.</p>
+              <button onclick="navigateTo('shop')" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-600/30">Shop Collection</button>
+            </div>
+            <div class="md:w-1/2 relative">
+               <img src="https://images.unsplash.com/photo-1611314643773-40eab71bd0eb?auto=format&fit=crop&w=800&q=80" class="w-full h-[500px] object-cover rounded-[3rem] shadow-2xl shadow-blue-900/10" />
+            </div>
+          </section>
+        </div>
+        <div id="page-shop" class="page-view flex-1 py-16 px-6 max-w-7xl mx-auto w-full">
+          <h2 class="text-3xl font-black mb-10 text-slate-900">All Accessories</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            ${[
+              { img: "1611314643773-40eab71bd0eb", n: "Silicone Phone Case", p: "350" },
+              { img: "1585338107529-f47285a73e44", n: "Fast Power Bank", p: "1,200" },
+              { img: "1605236453806-6ff36851218e", n: "Pod Leather Case", p: "450" },
+              { img: "1583394838336-acd977736f90", n: "Type-C Cable 2M", p: "250" },
+              { img: "1611314643773-40eab71bd0eb", n: "Clear Armor Case", p: "400" },
+              { img: "1585338107529-f47285a73e44", n: "Wireless Desk Charger", p: "850" },
+              { img: "1605236453806-6ff36851218e", n: "Pod Silicon Skin", p: "150" },
+              { img: "1583394838336-acd977736f90", n: "Dual Car Charger", p: "380" }
+            ].map(item => `
+              <div class="group cursor-pointer bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+                <div class="aspect-square overflow-hidden mb-4 rounded-xl bg-slate-50">
+                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 mix-blend-multiply" />
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm">${item.n}</h4>
+                <p class="text-blue-600 font-black mt-1">EGP ${item.p}</p>
+                <button class="w-full mt-4 bg-slate-100 text-slate-700 py-2 rounded-lg text-xs font-bold uppercase hover:bg-blue-600 hover:text-white transition">Add</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  } else if (template.id === 5) {
+    // 5. Business Developer Profile
+    body = `
+      <div class="bg-white font-sans text-slate-900 min-h-screen flex flex-col">
+        <header class="px-8 py-6 flex justify-between items-center sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100">
+          <h1 class="text-xl font-bold tracking-tight cursor-pointer" onclick="navigateTo('home')">Omar<span class="text-blue-600">Gharib.</span></h1>
+          <nav class="hidden md:flex gap-8 font-semibold text-sm text-slate-500">
+            <button onclick="navigateTo('home')" class="hover:text-blue-600 transition">Profile</button>
+            <button onclick="navigateTo('services')" class="hover:text-blue-600 transition">Expertise</button>
+          </nav>
+          <button class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-md hover:bg-blue-700 transition">Hire Me</button>
+        </header>
+        <div id="page-home" class="page-view active flex-1 px-6 max-w-6xl mx-auto w-full py-20 flex flex-col md:flex-row items-center gap-16">
+          <div class="md:w-1/2">
+            <span class="text-blue-600 font-bold uppercase tracking-widest text-xs mb-4 block">Senior Business Developer</span>
+            <h2 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-slate-900">Driving<br/>Scalable<br/>Growth.</h2>
+            <p class="text-lg text-slate-500 mb-8 leading-relaxed">I help B2B companies in Egypt and the MENA region build strategic partnerships, optimize sales pipelines, and achieve exponential revenue growth.</p>
+            <div class="flex gap-4">
+               <button onclick="navigateTo('services')" class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-600 transition">View My Services</button>
+            </div>
+          </div>
+          <div class="md:w-1/2">
+            <img src="https://images.unsplash.com/photo-1560250097001-a47b36f8636e?auto=format&fit=crop&w=800&q=80" class="w-full h-[600px] object-cover rounded-3xl shadow-2xl" />
+          </div>
+        </div>
+        <div id="page-services" class="page-view flex-1 bg-slate-50 py-20 px-6">
+           <div class="max-w-6xl mx-auto">
+              <h2 class="text-4xl font-black mb-12 text-center text-slate-900">Core Expertise</h2>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+                    <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Market Expansion</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Identifying new territories and executing market entry strategies tailored for the Egyptian landscape.</p>
+                 </div>
+                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+                    <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-handshake"></i></div>
+                    <h3 class="text-xl font-bold mb-3">B2B Partnerships</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Building and nurturing high-value corporate relationships and closing enterprise-level deals.</p>
+                 </div>
+                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+                    <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-filter"></i></div>
+                    <h3 class="text-xl font-bold mb-3">Sales Optimization</h3>
+                    <p class="text-slate-500 text-sm leading-relaxed">Restructuring sales funnels and CRM workflows to maximize lead conversion rates.</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </div>
+    `;
+  } else if (template.id === 6) {
+    // 6. Studio Kroma Branding (Agency)
+    body = `
+      <div class="bg-[#0f0f0f] font-modern text-[#f0f0f0] min-h-screen flex flex-col selection:bg-[#ccff00] selection:text-black">
+        <header class="p-6 md:p-8 flex justify-between items-center sticky top-0 z-50 mix-blend-difference bg-[#0f0f0f]/80 backdrop-blur-md">
+          <div class="text-2xl font-bold tracking-tight cursor-pointer flex items-center gap-2" onclick="navigateTo('home')">
+             <div class="w-6 h-6 bg-[#ccff00] rounded-full"></div> KROMA.
+          </div>
+          <nav class="flex gap-8 font-semibold text-sm">
+            <button onclick="navigateTo('home')" class="hover:text-[#ccff00] transition">Index</button>
+            <button onclick="navigateTo('work')" class="hover:text-[#ccff00] transition">Work</button>
+          </nav>
+        </header>
+        <div id="page-home" class="page-view active flex-1">
+          <section class="px-6 md:px-12 py-20 flex flex-col justify-center min-h-[70vh]">
+            <h1 class="text-5xl md:text-8xl lg:text-[10vw] font-bold tracking-tighter leading-[0.9] mb-8">
+              Visual <span class="text-[#ccff00] italic">identities</span><br/>that perform.
+            </h1>
+            <p class="text-xl md:text-3xl max-w-3xl font-light text-[#a0a0a0] mb-12">Studio Kroma is a Cairo-based branding agency crafting bold visual systems and digital experiences for modern brands.</p>
+            <button onclick="navigateTo('work')" class="bg-[#ccff00] text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition self-start">See Our Work</button>
+          </section>
+          <section class="px-6 md:px-12 pb-24">
+             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+                <div class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer" onclick="navigateTo('work')">
+                   <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                   <div class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black to-transparent">
+                      <h3 class="text-4xl font-bold mb-2">Neon Dynamics</h3><p class="text-[#ccff00] font-medium">Brand Identity / 3D</p>
+                   </div>
+                </div>
+                <div class="relative rounded-3xl bg-[#1a1a1a] p-8 flex flex-col justify-between border border-[#333]">
+                   <div class="text-5xl text-[#ccff00]"><i class="fas fa-layer-group"></i></div>
+                   <div><h3 class="text-2xl font-bold mb-2">Branding</h3><p class="opacity-70 text-sm">Logos, Guidelines, Strategy</p></div>
+                </div>
+                <div class="relative rounded-3xl bg-[#1a1a1a] p-8 flex flex-col justify-between border border-[#333]">
+                   <div class="text-5xl text-[#ccff00]"><i class="fas fa-desktop"></i></div>
+                   <div><h3 class="text-2xl font-bold mb-2">Web Design</h3><p class="opacity-70 text-sm">UI/UX, Webflow, React</p></div>
+                </div>
+             </div>
+          </section>
+        </div>
+        <div id="page-work" class="page-view px-6 md:px-12 py-12 w-full flex-1">
+           <h2 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-16">Selected<br/><span class="text-[#ccff00]">Archive.</span></h2>
+           <div class="space-y-24 pb-24">
+             ${[
+               { img: "1550745165-9bc0b252726f", title: "Neon Dynamics", cat: "Brand Identity", color: "ccff00" },
+               { img: "1618005182384-a83a8bd57fbe", title: "Abstract Data", cat: "Data Visualization", color: "00ffff" }
+             ].map((p) => `
+             <div class="group cursor-pointer">
+               <div class="relative overflow-hidden rounded-3xl aspect-[16/9] mb-8 bg-[#1a1a1a]">
+                  <img src="https://images.unsplash.com/photo-${p.img}?auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+               </div>
+               <div class="flex justify-between items-center border-b border-[#333] pb-6 group-hover:border-[#${p.color}] transition">
+                 <h3 class="font-bold text-3xl md:text-5xl tracking-tight">${p.title}</h3>
+                 <span class="text-lg text-[#a0a0a0] font-medium hidden md:block">${p.cat}</span>
+               </div>
+             </div>
+             `).join('')}
+           </div>
+        </div>
+      </div>
+    `;
+  } else if (template.id === 7) {
+    // 7. Vertex Corporate Profile
+    body = `
+      <div class="bg-white font-sans text-slate-800 min-h-screen flex flex-col">
+        <header class="px-8 py-5 flex justify-between items-center sticky top-0 z-30 bg-white shadow-sm">
+          <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
+             <div class="w-8 h-8 bg-blue-700 rounded flex items-center justify-center text-white font-bold text-xl"><i class="fas fa-v"></i></div>
+             <h1 class="text-2xl font-bold tracking-tight text-slate-900">Vertex</h1>
+          </div>
+          <nav class="hidden md:flex gap-8 font-semibold text-sm text-slate-600">
+            <button onclick="navigateTo('home')" class="hover:text-blue-700 transition">Company</button>
+            <button onclick="navigateTo('services')" class="hover:text-blue-700 transition">Capabilities</button>
+          </nav>
+          <button class="bg-slate-900 text-white px-5 py-2 rounded font-medium text-sm hover:bg-blue-700 transition">Contact Us</button>
+        </header>
+        <div id="page-home" class="page-view active flex-1">
+          <section class="relative h-[60vh] flex items-center bg-slate-900">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" />
+            <div class="relative z-10 px-8 md:px-16 max-w-4xl text-white">
+               <h2 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">Excellence in Enterprise Solutions.</h2>
+               <p class="text-lg text-blue-100 mb-8 max-w-2xl">Vertex provides world-class operational management and corporate consultancy for businesses across Egypt.</p>
+               <button onclick="navigateTo('services')" class="bg-blue-600 px-8 py-3 rounded text-white font-bold hover:bg-blue-500 transition">Explore Capabilities</button>
+            </div>
+          </section>
+          <section class="py-20 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
+             <div class="md:w-1/2">
+                <h3 class="text-blue-700 font-bold uppercase tracking-widest text-sm mb-2">Our Mission</h3>
+                <h2 class="text-4xl font-bold text-slate-900 mb-6">Empowering Corporate Growth</h2>
+                <p class="text-slate-600 leading-relaxed mb-6">Established in 2015, Vertex has grown to become a cornerstone of corporate strategy in the MENA region. We believe in sustainable scaling, ethical business practices, and data-driven decision making.</p>
+                <ul class="space-y-3 text-slate-700 font-medium">
+                   <li><i class="fas fa-check text-blue-600 mr-2"></i> 500+ Enterprise Clients</li>
+                   <li><i class="fas fa-check text-blue-600 mr-2"></i> ISO 9001 Certified</li>
+                   <li><i class="fas fa-check text-blue-600 mr-2"></i> Regional Expertise</li>
+                </ul>
+             </div>
+             <div class="md:w-1/2">
+                <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" class="rounded-xl shadow-xl w-full" />
+             </div>
+          </section>
+        </div>
+        <div id="page-services" class="page-view flex-1 py-20 px-8 max-w-7xl mx-auto w-full">
+           <h2 class="text-4xl font-bold text-slate-900 mb-12 text-center">Our Capabilities</h2>
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default">
+                 <i class="fas fa-chart-pie text-4xl text-blue-600 mb-6"></i>
+                 <h3 class="text-xl font-bold mb-3">Financial Advisory</h3>
+                 <p class="text-slate-600 text-sm leading-relaxed">Comprehensive financial restructuring and audit services for large scale enterprises.</p>
+              </div>
+              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default">
+                 <i class="fas fa-users-cog text-4xl text-blue-600 mb-6"></i>
+                 <h3 class="text-xl font-bold mb-3">HR Management</h3>
+                 <p class="text-slate-600 text-sm leading-relaxed">Talent acquisition, organizational structuring, and payroll management systems.</p>
+              </div>
+              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default">
+                 <i class="fas fa-globe text-4xl text-blue-600 mb-6"></i>
+                 <h3 class="text-xl font-bold mb-3">Global Logistics</h3>
+                 <p class="text-slate-600 text-sm leading-relaxed">Supply chain optimization and international trade consultation.</p>
+              </div>
+           </div>
+        </div>
+      </div>
+    `;
+  } else if (template.id === 8) {
+    // 8. Aseel Real Estate
+    body = `
+      <div class="bg-[#FDFBF7] font-serif text-[#2B3A30] min-h-screen flex flex-col">
+        <header class="px-8 py-6 flex justify-between items-center sticky top-0 z-30 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#E8E2D2]">
+          <h1 class="text-3xl font-serif font-bold text-[#1A231C] cursor-pointer" onclick="navigateTo('home')">Aseel.</h1>
+          <nav class="hidden md:flex gap-8 text-sm font-sans font-bold tracking-widest uppercase text-[#556658]">
+            <button onclick="navigateTo('home')" class="hover:text-[#C5A880] transition">Home</button>
+            <button onclick="navigateTo('properties')" class="hover:text-[#C5A880] transition">Properties</button>
+          </nav>
+          <button class="border border-[#C5A880] text-[#C5A880] px-6 py-2 font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#C5A880] hover:text-white transition">Contact</button>
+        </header>
+        <div id="page-home" class="page-view active flex-1">
+          <section class="relative h-[80vh] mx-4 mt-4 rounded-[2rem] overflow-hidden flex items-center justify-center">
+            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-[#1A231C]/40"></div>
+            <div class="relative z-10 text-center text-white p-6 max-w-3xl">
+              <span class="text-xs uppercase font-sans tracking-[0.3em] font-bold text-[#C5A880] mb-6 block">Luxury Real Estate Egypt</span>
+              <h2 class="text-5xl md:text-7xl font-serif mb-8 leading-tight">Extraordinary Homes for Extraordinary Lives.</h2>
+              <button onclick="navigateTo('properties')" class="bg-[#C5A880] text-white px-10 py-4 font-sans uppercase tracking-[0.2em] text-xs font-bold hover:bg-white hover:text-[#2B3A30] transition duration-300">View Portfolio</button>
+            </div>
+          </section>
+          <section class="py-24 px-6 max-w-7xl mx-auto w-full text-center">
+             <h3 class="text-4xl font-serif mb-4">Featured Property</h3>
+             <p class="font-sans text-[#556658] mb-12 max-w-2xl mx-auto">Discover unparalleled luxury in the heart of New Cairo. Architecture that breathes elegance.</p>
+             <div class="relative rounded-3xl overflow-hidden group cursor-pointer" onclick="navigateTo('properties')">
+                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" class="w-full h-[500px] object-cover group-hover:scale-105 transition duration-1000" />
+                <div class="absolute bottom-0 w-full p-8 bg-gradient-to-t from-[#1A231C] to-transparent text-left text-white">
+                   <h4 class="text-3xl font-serif mb-2">The Crown Villa</h4>
+                   <p class="font-sans text-[#C5A880] font-bold tracking-widest uppercase text-sm">EGP 25,000,000</p>
+                </div>
+             </div>
+          </section>
+        </div>
+        <div id="page-properties" class="page-view flex-1 py-20 px-6 max-w-7xl mx-auto w-full">
+          <div class="flex justify-between items-end mb-12 border-b border-[#E8E2D2] pb-6">
+             <h2 class="text-4xl font-serif">Exclusive Portfolio</h2>
+             <span class="font-sans text-sm font-bold uppercase tracking-widest text-[#C5A880]">4 Properties</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            ${[
+              { img: "1600596542815-ffad4c1539a9", n: "The Crown Villa", p: "25,000,000", loc: "New Cairo" },
+              { img: "1512917774080-9991f1c4c750", n: "Modern Duplex", p: "12,500,000", loc: "Zayed City" },
+              { img: "1600607686527-6fb886090705", n: "Lakefront Mansion", p: "45,000,000", loc: "North Coast" },
+              { img: "1583608205713-38cbed115b88", n: "Oasis Townhouse", p: "8,900,000", loc: "October City" }
+            ].map(item => `
+              <div class="group cursor-pointer">
+                <div class="relative overflow-hidden mb-4 rounded-xl aspect-[4/3]">
+                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000" />
+                  <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 font-sans text-xs font-bold uppercase tracking-widest text-[#2B3A30] rounded">${item.loc}</div>
+                </div>
+                <h4 class="text-2xl font-serif group-hover:text-[#C5A880] transition">${item.n}</h4>
+                <p class="font-sans text-[#556658] font-bold tracking-widest mt-2 text-sm">EGP ${item.p}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  return `<!DOCTYPE html><html>${head}<body class="antialiased">${body}</body></html>`;
+};
+
+// ─── Translations & Dictionary ───────────────────────────────────────────────
+
 const T = {
   en:{
     logo:"Mantiq",
@@ -107,7 +725,7 @@ const T = {
     apply:"Send Application", cv_link:"Upload CV",
     exp_brief_p: "Application & Experience Brief",
     rights:"All rights reserved.", pricing:"",
-    footer_desc:"Strategic consultancy and digital infrastructure for the MENV region.",
+    footer_desc:"Strategic consultancy and digital infrastructure for the MENA region.",
     explore:"View Service",
     why_label:"Why Mantiq",
     why_title1:"Why choose",
@@ -119,14 +737,33 @@ const T = {
     demos_label: "Experience Logic",
     demos_title1: "Digital",
     demos_title2: "Ecosystems.",
-    demos_body: "Explore the architectures of our managed digital solutions.",
+    demos_body: "Explore the architectures of our managed digital solutions and categorized pre-built architectures.",
     demo_status_msg: "We are working on this feature.",
-    demo_form_title: "Request System Demos",
+    demo_form_title: "Request System Customization",
     demo_form_btn: "Confirm Demo Request",
     consult_title: "Book Strategy Session",
     consult_btn: "Confirm Consultation",
     careers_section_title: "Architect the future with us.",
-    careers_section_body: "We are always looking for logic-driven minds in strategy, engineering, and design."
+    careers_section_body: "We are always looking for logic-driven minds in strategy, engineering, and design.",
+    
+    // Gallery specific
+    search_placeholder: "Search templates (e.g., 'E-Commerce', 'Profile')...",
+    all_templates: "All Templates",
+    e_commerce: "E-Commerce",
+    portfolio: "Company & Personal Profiles",
+    mobile_apps: "Mobile Apps",
+    showing: "Showing",
+    templates_found: "templates",
+    in_cat: "in",
+    no_templates: "No templates found",
+    no_templates_desc: "We couldn't find any templates matching your search criteria. Try adjusting your filters.",
+    clear_filters: "Clear all filters",
+    live_preview: "Live Preview",
+    view_details: "View Details",
+    get_template: "Request Template",
+    close_preview: "Close Preview",
+    new_badge: "NEW",
+    feat_cat: "Featured Categories"
   },
   ar:{
     logo:"منطق",
@@ -179,14 +816,33 @@ const T = {
     demos_label: "تجربة المنطق",
     demos_title1: "أنظمة",
     demos_title2: "رقمية.",
-    demos_body: "استكشف معماريات حلولنا الرقمية المُدارة.",
+    demos_body: "استكشف معماريات حلولنا الرقمية المُدارة والنماذج والتطبيقات الحية.",
     demo_status_msg: "نحن نعمل على تطوير هذه الميزة بطريقة احترافية تليق بكم.",
-    demo_form_title: "طلب عرض حي للنماذج",
+    demo_form_title: "طلب تخصيص للأنظمة",
     demo_form_btn: "تأكيد طلب العرض",
     consult_title: "حجز جلسة استراتيجية",
     consult_btn: "تأكيد حجز الاستشارة",
     careers_section_title: "صمم المستقبل معنا.",
-    careers_section_body: "نبحث دائمًا عن العقول المدفوعة بالمنطق في الاستراتيجية والهندسة والتصميم."
+    careers_section_body: "نبحث دائمًا عن العقول المدفوعة بالمنطق في الاستراتيجية والهندسة والتصميم.",
+    
+    // Gallery specific
+    search_placeholder: "ابحث عن النماذج (مثل: 'متجر'، 'شركات')...",
+    all_templates: "جميع النماذج",
+    e_commerce: "متاجر إلكترونية",
+    portfolio: "ملفات الشركات والأفراد",
+    mobile_apps: "تطبيقات جوال",
+    showing: "عرض",
+    templates_found: "نماذج",
+    in_cat: "في فئة",
+    no_templates: "لم يتم العثور على نماذج",
+    no_templates_desc: "لم نتمكن من العثور على نماذج تطابق بحثك. حاول تعديل الفلاتر.",
+    clear_filters: "مسح جميع الفلاتر",
+    live_preview: "معاينة حية",
+    view_details: "عرض التفاصيل",
+    get_template: "طلب النموذج",
+    close_preview: "إغلاق المعاينة",
+    new_badge: "جديد",
+    feat_cat: "الفئات المميزة"
   }
 };
 
@@ -641,6 +1297,13 @@ export default function App() {
   const [consultStatus, setConsultStatus] = useState(null);
   const [demoStatus, setDemoStatus] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
+  
+  // Gallery specific state
+  const [activeCategory, setActiveCategory] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [previewTemplate, setPreviewTemplate] = useState(null);
+  const [previewDevice, setPreviewDevice] = useState('desktop');
+
   const scriptURL = "https://script.google.com/macros/s/AKfycbyqSvxZ8nzURA776SWa-ccrTtO0xmp4-X7z1B64Kzc6SljwfkDE-3W2J5yTngjcZIxpfw/exec";
 
   const t = T[lang];
@@ -709,7 +1372,6 @@ export default function App() {
           reader.readAsDataURL(value);
         });
         
-        // Fix: We provide the direct key name so the Apps Script header-mapping works
         data[key] = base64; 
         data[`${key}_name`] = value.name;
         data[`${key}_data`] = base64;
@@ -755,6 +1417,14 @@ export default function App() {
     { n:'14',   l: t.stats_c, icon:<Trophy size={16}/> },
     { n:'25+',  l: t.stats_d, icon:<Users size={16}/> },
   ];
+
+  // Filter templates
+  const filteredTemplates = TEMPLATES.filter(template => {
+    const matchesCategory = activeCategory === "All" || template.category === activeCategory;
+    const matchesSearch = template.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          template.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <div dir={ar ? 'rtl' : 'ltr'} className="bg-white text-slate-900 min-h-screen font-sans selection:bg-sky-100 selection:text-sky-700 overflow-x-hidden">
@@ -841,14 +1511,14 @@ export default function App() {
                     lang={lang} 
                     i={i} 
                     onBookConsult={s.id === 'business' ? () => setConsultModal(true) : null}
-                    onViewDemos={s.id === 'tracking' ? () => go('demos') : null}
+                    onViewDemos={s.id === 'tracking' || s.id === 'web' || s.id === 'mobile' ? () => go('demos') : null}
                   />
                 ))}
               </div>
             </div>
           </section>
 
-          {/* ═══ Careers Section (NEW HIGHLIGHT) ═══════════════════════════════════ */}
+          {/* ═══ Careers Section ═════════════════════════════════════════════════ */}
           <section className="py-24 sm:py-36 px-6 sm:px-10 bg-sky-500">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
               <div className="reveal">
@@ -913,10 +1583,11 @@ export default function App() {
           </section>
         </>
       ) : (
-        /* ═══ Dedicated Demos Page ═════════════════════════════════════════════ */
-        <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen">
+        /* ═══ Dedicated Demos & Gallery Page ═════════════════════════════════════════════ */
+        <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen bg-slate-50">
           <div className="max-w-7xl mx-auto">
             <SectionLabel text={t.demos_label}/>
+            
             <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
               <ScrollRevealText>
                 <h2 className="text-4xl sm:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
@@ -929,42 +1600,152 @@ export default function App() {
               </div>
             </div>
 
-            <div className="reveal reveal-scale bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-sky-500/10 border border-slate-800 relative mb-24 min-h-[400px] flex items-center justify-center group overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-sky-500/10 blur-[100px] rounded-full group-hover:bg-sky-500/20 transition-all duration-700"></div>
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-sky-500/5 blur-[80px] rounded-full"></div>
-                
-                <div className="relative z-10 flex flex-col items-center text-center p-12 gap-8">
-                    <div className="relative">
-                        <div className="w-20 h-20 rounded-3xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 animate-pulse">
-                            <Settings size={40} className="animate-spin-slow"/>
-                        </div>
-                        <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-sky-500 shadow-xl">
-                            <Zap size={14}/>
-                        </div>
-                    </div>
-                    
-                    <div className="space-y-3">
-                        <h3 className="text-white font-black text-2xl sm:text-3xl tracking-tight leading-tight">
-                            {t.demo_status_msg}
-                        </h3>
-                        <p className="text-white/30 text-xs sm:text-sm font-bold uppercase tracking-[0.4em]">
-                           {ar ? 'نحن قادمون قريباً' : 'System Logic - Coming Soon'}
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-sky-500 animate-ping"></div>
-                        <span className="text-[10px] text-sky-400 font-black uppercase tracking-widest">{ar ? 'تحت التطوير' : 'In Development'}</span>
-                    </div>
+            {/* --- GALLERY SECTION --- */}
+            <div className="mb-24 reveal reveal-scale" style={{ transitionDelay:'150ms' }}>
+              
+              {/* Search Bar */}
+              <div className="max-w-2xl mx-auto relative mb-12 shadow-sm rounded-2xl">
+                <div className={`absolute inset-y-0 ${ar ? 'right-0 pr-5' : 'left-0 pl-5'} flex items-center pointer-events-none`}>
+                  <Search size={20} className="text-slate-400" />
                 </div>
+                <input 
+                  type="text" 
+                  placeholder={t.search_placeholder} 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={`w-full ${ar ? 'pr-12 pl-5' : 'pl-12 pr-5'} py-5 rounded-2xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all text-sm font-medium`}
+                />
+              </div>
+
+              {/* Category Filters */}
+              <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6 border-b border-slate-200 pb-6">
+                <h2 className="text-2xl font-black text-slate-900 hidden lg:block tracking-tight">{t.feat_cat}</h2>
+                <div className="flex overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 w-full md:w-auto hide-scrollbar gap-2 sm:gap-3">
+                  {CATEGORIES.map(category => {
+                    const Icon = category.icon;
+                    const isActive = activeCategory === category.id;
+                    const catLabel = category.id === "All" ? t.all_templates : category.id === "E-Commerce" ? t.e_commerce : t.portfolio;
+                    return (
+                      <button
+                        key={category.id}
+                        onClick={() => setActiveCategory(category.id)}
+                        className={`whitespace-nowrap flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${
+                          isActive 
+                            ? 'bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/20' 
+                            : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300 hover:bg-sky-50'
+                        }`}
+                      >
+                        <Icon size={16} className={isActive ? "text-white" : "text-slate-400"} />
+                        {catLabel}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Results Count */}
+              <div className="mb-8 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                {t.showing} {filteredTemplates.length} {t.templates_found}
+                {activeCategory !== "All" && <span> {t.in_cat} <span className="text-sky-500">{activeCategory === "E-Commerce" ? t.e_commerce : t.portfolio}</span></span>}
+              </div>
+
+              {/* Templates Grid */}
+              {filteredTemplates.length === 0 ? (
+                <div className="text-center py-20 bg-white rounded-[2rem] border border-slate-200 border-dashed">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 text-slate-400 mb-4 border border-slate-100">
+                    <Search size={32} />
+                  </div>
+                  <h3 className="text-xl font-black text-slate-900 mb-2">{t.no_templates}</h3>
+                  <p className="text-slate-500 max-w-sm mx-auto font-medium text-sm">
+                    {t.no_templates_desc}
+                  </p>
+                  <button 
+                    onClick={() => { setSearchQuery(""); setActiveCategory("All"); }}
+                    className="mt-6 text-sky-600 font-bold hover:underline text-sm uppercase tracking-wider"
+                  >
+                    {t.clear_filters}
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredTemplates.map(template => (
+                    <div key={template.id} className="group flex flex-col bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-200 transition-all duration-300">
+                      
+                      {/* Image Container */}
+                      <div className="relative h-64 overflow-hidden bg-slate-100 border-b border-slate-100">
+                        <img 
+                          src={template.image} 
+                          alt={template.title} 
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                        />
+                        <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors"></div>
+                        
+                        {/* Badges */}
+                        <div className={`absolute top-4 ${ar ? 'right-4' : 'left-4'} flex flex-col gap-2 items-start`}>
+                          <span className="bg-white/95 backdrop-blur text-slate-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1.5">
+                            {template.category === 'E-Commerce' && <ShoppingBag size={12} className="text-sky-500"/>}
+                            {template.category === 'Profiles' && <Building size={12} className="text-sky-500"/>}
+                            {template.category === "E-Commerce" ? t.e_commerce : t.portfolio}
+                          </span>
+                          {template.isNew && (
+                            <span className="bg-sky-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-sm self-start">
+                              {t.new_badge}
+                            </span>
+                          )}
+                        </div>
+                        
+                        {/* Overlay Action */}
+                        <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[2px]">
+                          <button 
+                            onClick={() => setPreviewTemplate(template)}
+                            className="bg-white text-slate-900 font-bold text-xs uppercase tracking-wider py-3 px-6 rounded-xl flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all hover:bg-sky-50 hover:text-sky-600"
+                          >
+                            {t.live_preview} <ExternalLink size={16} />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="p-8 flex flex-col flex-1">
+                        <h3 className="text-xl font-black tracking-tight text-slate-900 mb-2 group-hover:text-sky-600 transition-colors">
+                          {template.title}
+                        </h3>
+                        <p className="text-slate-500 text-sm mb-6 line-clamp-2 flex-1 leading-relaxed">
+                          {template.description}
+                        </p>
+                        
+                        {/* Tech Stack Tags */}
+                        <div className="flex flex-wrap gap-2 mb-8">
+                          {template.tags.map(tag => (
+                            <span key={tag} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500 border border-slate-200">
+                              <Code size={10} /> {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Footer Actions */}
+                        <div className="pt-5 border-t border-slate-100 flex items-center justify-between mt-auto">
+                          <button onClick={() => setPreviewTemplate(template)} className="text-sky-500 font-bold text-xs uppercase tracking-widest hover:text-sky-700 flex items-center gap-1 transition-colors">
+                            {t.view_details} <ChevronRight size={14} className={ar ? 'rotate-180' : ''}/>
+                          </button>
+                          <button onClick={() => setDemoStatus('show_form')} className="bg-slate-900 hover:bg-sky-500 text-white text-xs font-black uppercase tracking-widest py-3 px-5 rounded-xl transition-colors shadow-sm">
+                            {t.get_template}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="max-w-3xl mx-auto py-16 px-8 rounded-[3rem] bg-slate-50 border border-slate-100 reveal">
+            {/* General Customization Request Form */}
+            <div className="max-w-3xl mx-auto py-16 px-8 sm:px-12 rounded-[3rem] bg-white border border-slate-200 shadow-xl reveal">
               {demoStatus === 'success' ? (
                 <div className="flex flex-col items-center text-center gap-4 py-12">
                   <div className="w-16 h-16 rounded-3xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/20"><CheckCircle2 size={32} className="text-white"/></div>
                   <h4 className="text-2xl font-black text-slate-900 tracking-tight">{ar ? 'تم الاستلام!' : "Request Received!"}</h4>
-                  <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{ar ? 'سيتواصل معك فريقنا التقني لترتيب عرض حي لنظامك المختار.' : 'Our technical team will reach out to arrange a live walkthrough for your chosen system.'}</p>
+                  <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{ar ? 'سيتواصل معك فريقنا التقني لترتيب عرض حي لنظامك المختار.' : 'Our technical team will reach out to arrange a live walkthrough for your chosen system or template.'}</p>
                 </div>
               ) : (
                 <>
@@ -972,18 +1753,18 @@ export default function App() {
                     <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center shadow-lg"><MonitorPlay size={22} className="text-white"/></div>
                     <div>
                       <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{t.demo_form_title}</h3>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{ar ? 'خطط ذكية لأعمال ذكية' : 'Smart Plans for Smart Businesses'}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{ar ? 'تطوير وتخصيص كامل' : 'Full Customization & Development'}</p>
                     </div>
                   </div>
                   <form className="space-y-8" onSubmit={e => handleActionForm(e, 'Demos', setDemoStatus)}>
-                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Name" name="name" required/><Field label="Company" name="company"/></div>
-                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
-                    <Field label="System Type" name="system" required as="select">
-                      <option value="CRM" className="text-slate-900">CRM</option>
-                      <option value="Sales" className="text-slate-900">Sales</option>
-                      <option value="Finance" className="text-slate-900">Finance</option>
-                      <option value="HR" className="text-slate-900">HR</option>
-                      <option value="Educational Academy" className="text-slate-900">Educational Academy</option>
+                    <div className="grid sm:grid-cols-2 gap-8"><Field label={t.name_p} name="name" required/><Field label={t.company_p} name="company"/></div>
+                    <div className="grid sm:grid-cols-2 gap-8"><Field label={t.email_p} name="email" type="email" required/><Field label={t.phone_p} name="phone" type="tel" required/></div>
+                    <Field label={ar ? 'نوع النظام / القالب' : 'System / Template'} name="system" required as="select">
+                      <option value="Template Inquiry" className="text-slate-900">Mantiq Template Customization</option>
+                      <option value="CRM" className="text-slate-900">CRM & Tracking System</option>
+                      <option value="Sales" className="text-slate-900">E-Commerce System</option>
+                      <option value="Finance" className="text-slate-900">Finance App</option>
+                      <option value="HR" className="text-slate-900">HR & Management</option>
                     </Field>
                     <button disabled={demoStatus === 'sending'} className="w-full py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-slate-900 hover:bg-sky-600 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl">
                       {demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2">{t.demo_form_btn} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/></span>}
@@ -997,7 +1778,7 @@ export default function App() {
       )}
 
       {/* ═══ Footer ═════════════════════════════════════════════════════════ */}
-      <footer className="py-12 sm:py-16 px-6 sm:px-10 border-t border-slate-100 reveal">
+      <footer className="py-12 sm:py-16 px-6 sm:px-10 border-t border-slate-100 bg-white reveal z-10 relative">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
           <div><div className="mb-3">{lang === 'ar' ? <span className="font-normal text-xl tracking-[0.18em] uppercase text-slate-900">{t.logo}</span> : <LogoText className="font-normal text-xl tracking-[0.18em] uppercase" color="#0f172a"/>}</div><p className="text-xs text-slate-400 max-w-xs leading-relaxed">{t.footer_desc}</p></div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
@@ -1008,6 +1789,69 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* ═══ PREVIEW MODAL (Templates) ═══════════════════════════════ */}
+      {previewTemplate && (
+        <div className="fixed inset-0 z-[300] flex flex-col bg-slate-900 overflow-hidden animate-fadeIn" dir={ar ? 'rtl' : 'ltr'}>
+          {/* Modal Header */}
+          <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 shrink-0 shadow-sm z-10">
+            <div className="flex items-center gap-4 text-white">
+              <h3 className="font-bold text-lg hidden sm:block tracking-tight">{previewTemplate.title}</h3>
+              <span className="inline-block px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-[10px] uppercase tracking-widest font-bold border border-slate-700">
+                {previewTemplate.category === "E-Commerce" ? t.e_commerce : t.portfolio}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-4 sm:gap-6">
+              {/* Device Toggle */}
+              <div className="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
+                <button 
+                  onClick={() => setPreviewDevice('desktop')}
+                  className={`p-1.5 rounded-md transition-colors ${previewDevice === 'desktop' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                  title="Desktop View"
+                >
+                  <Monitor size={18} />
+                </button>
+                <button 
+                  onClick={() => setPreviewDevice('mobile')}
+                  className={`p-1.5 rounded-md transition-colors ${previewDevice === 'mobile' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
+                  title="Mobile View"
+                >
+                  <Smartphone size={18} />
+                </button>
+              </div>
+              
+              <div className="w-px h-6 bg-slate-700 hidden sm:block"></div>
+              
+              <button 
+                onClick={() => setPreviewTemplate(null)}
+                className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg"
+              >
+                <span className="hidden sm:inline text-xs uppercase tracking-widest font-bold">{t.close_preview}</span>
+                <X size={18} />
+              </button>
+            </div>
+          </div>
+          
+          {/* Modal Body / Iframe Area */}
+          <div className="flex-1 bg-slate-950 flex justify-center items-start overflow-auto p-4 sm:p-8" dir="ltr">
+            <div 
+              className={`bg-white transition-all duration-300 ease-in-out shadow-2xl ${
+                previewDevice === 'desktop' 
+                  ? 'w-full h-full rounded-2xl' 
+                  : 'w-[375px] h-[812px] rounded-[3rem] border-[14px] border-slate-800 overflow-hidden shrink-0 mt-4 sm:mt-0'
+              }`}
+            >
+              <iframe 
+                srcDoc={generateDummyTemplate(previewTemplate)}
+                className="w-full h-full border-0"
+                title={`${previewTemplate.title} Preview`}
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ═══ Consultation Modal ═══════════════════════════════ */}
       {consultModal && (
@@ -1064,7 +1908,6 @@ export default function App() {
                       <Field label={t.email_p} name="email" type="email" required/>
                     </div>
                     
-                    {/* UPDATED: Brief about Experience / Application rationale */}
                     <Field label={t.exp_brief_p} name="brief" required as="textarea" />
 
                     <div className="relative group">
