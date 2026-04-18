@@ -5,7 +5,7 @@ import {
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy,
   Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings, Calculator, FileText,
-  ShoppingBag, User, Search, Code, Building, Star, Download, Play
+  ShoppingBag, User, Search, Code, Building, Star, Download, Play, LayoutDashboard
 } from 'lucide-react';
 
 // ─── Data ──────────────────────────────────────────────────────────────────
@@ -73,7 +73,8 @@ const SERVICES = [
 const CATEGORIES = [
   { id: "All", icon: Layout },
   { id: "E-Commerce", icon: ShoppingBag },
-  { id: "Profiles", icon: Building }
+  { id: "Profiles", icon: Building },
+  { id: "SaaS", icon: LayoutDashboard }
 ];
 
 const TEMPLATES = [
@@ -91,6 +92,19 @@ const TEMPLATES = [
     complexity: "Advanced", time: "3–5 days"
   },
   {
+    id: 9,
+    title: "Nexus Analytics",
+    category: "SaaS",
+    description: "Comprehensive admin dashboard for SaaS platforms. Features data visualization, user management, and advanced metrics tracking.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+    tags: ["React", "Recharts", "Tailwind", "Zustand"],
+    badge: "hot",
+    rating: 5.0, reviews: 56, downloads: 842,
+    pages: ["Overview","Analytics","Users","Settings","Reports"],
+    features: ["Interactive Charts","Dark/Light mode switch","Data Grid with filters","Role-based access view"],
+    complexity: "Advanced", time: "5–8 days"
+  },
+  {
     id: 2,
     title: "Glow Cosmetics",
     category: "E-Commerce",
@@ -101,6 +115,19 @@ const TEMPLATES = [
     pages: ["Home","Shop","Product","About","Blog"],
     features: ["Shade selector widget","Ingredient transparency panel","Reviews integration","Bundle builder"],
     complexity: "Intermediate", time: "2–4 days"
+  },
+  {
+    id: 10,
+    title: "Maison Culinary",
+    category: "Profiles",
+    description: "Immersive, high-end restaurant template featuring rich typography, parallax scroll, and reservation system integration.",
+    image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=800&q=80",
+    tags: ["Vue.js", "Tailwind", "OpenTable API"],
+    badge: "new",
+    rating: 4.9, reviews: 12, downloads: 145,
+    pages: ["Home","Menu","Reservations","Our Story","Gallery"],
+    features: ["Parallax visual storytelling","Dynamic categorized menu","Direct reservation widget","Instagram feed sync"],
+    complexity: "Intermediate", time: "3–4 days"
   },
   {
     id: 3,
@@ -121,7 +148,6 @@ const TEMPLATES = [
     description: "Clean, blue-toned tech accessories store with a card-grid layout engineered for high product clarity.",
     image: "https://images.unsplash.com/photo-1611314643773-40eab71bd0eb?auto=format&fit=crop&w=800&q=80",
     tags: ["React", "Redux", "Payment", "TypeScript"],
-    badge: "new",
     rating: 4.6, reviews: 14, downloads: 145,
     pages: ["Home","Shop","Compare","Cart","Checkout"],
     features: ["Spec comparison table","Stock urgency tags","Sticky add-to-cart bar","Search with filters"],
@@ -171,7 +197,6 @@ const TEMPLATES = [
     description: "Luxury property listing site with oversized imagery, map integration, and elegant editorial typography.",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
     tags: ["React", "Mapbox API", "Sanity CMS", "i18n"],
-    badge: "new",
     rating: 4.9, reviews: 36, downloads: 461,
     pages: ["Home","Portfolio","Property","Map","Contact"],
     features: ["Interactive map pins","Currency & area converter","Virtual tour embed","Lead capture form"],
@@ -201,6 +226,14 @@ const generateDummyTemplate = (template) => {
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .page-view { display: none; }
         .page-view.active { display: block; animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        /* Iframe Scroll Animation Engine */
+        .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
+        .stagger-1 { transition-delay: 100ms; }
+        .stagger-2 { transition-delay: 200ms; }
+        .stagger-3 { transition-delay: 300ms; }
+
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
       </style>
       <script>
@@ -209,7 +242,40 @@ const generateDummyTemplate = (template) => {
           var target = document.getElementById('page-' + pageId);
           if(target) target.classList.add('active');
           window.scrollTo({ top: 0, behavior: 'smooth' });
+          
+          // Re-trigger animations on navigation
+          setTimeout(() => {
+             document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                el.classList.remove('is-visible');
+                // slight delay to re-trigger
+                setTimeout(() => {
+                   const rect = el.getBoundingClientRect();
+                   if(rect.top < window.innerHeight) el.classList.add('is-visible');
+                }, 50);
+             });
+          }, 100);
         }
+
+        // Initialize scroll animations
+        document.addEventListener("DOMContentLoaded", () => {
+          const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+               if(e.isIntersecting) {
+                  e.target.classList.add('is-visible');
+               }
+            });
+          }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+          
+          document.querySelectorAll('.animate-on-scroll').forEach(el => obs.observe(el));
+          
+          // Trigger initially for elements already in view
+          setTimeout(() => {
+             document.querySelectorAll('.animate-on-scroll').forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if(rect.top < window.innerHeight) el.classList.add('is-visible');
+             });
+          }, 100);
+        });
       <\/script>
     </head>
   `;
@@ -234,24 +300,24 @@ const generateDummyTemplate = (template) => {
           </div>
         </header>
         <div id="page-home" class="page-view active flex-1">
-          <section class="relative h-[80vh] flex items-center justify-center">
+          <section class="relative h-[80vh] flex items-center justify-center animate-on-scroll">
             <img src="https://images.unsplash.com/photo-1599643478524-4624419205b3?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60" />
             <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent"></div>
-            <div class="relative z-10 text-center text-white p-6">
+            <div class="relative z-10 text-center text-white p-6 animate-on-scroll stagger-1">
               <span class="text-xs uppercase tracking-[0.4em] font-bold text-[#D4AF37] mb-4 block">New Arrivals</span>
-              <h2 class="text-5xl md:text-7xl font-serif mb-8">Elegance in Details.</h2>
+              <h2 class="text-5xl md:text-7xl font-serif mb-8 drop-shadow-lg">Elegance in Details.</h2>
               <button onclick="navigateTo('shop')" class="border border-[#D4AF37] text-[#D4AF37] px-10 py-3 uppercase tracking-[0.2em] text-xs font-bold hover:bg-[#D4AF37] hover:text-black transition duration-300">Shop Now</button>
             </div>
           </section>
           <section class="py-24 px-6 max-w-7xl mx-auto w-full text-center">
-            <h3 class="text-3xl font-serif mb-16 text-white">Curated For You</h3>
+            <h3 class="text-3xl font-serif mb-16 text-white animate-on-scroll">Curated For You</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
               ${[
                 { img:"https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80", name:"Onyx Chronograph", price:"4,500" },
                 { img:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80", name:"Gold Halo Ring", price:"2,200" },
                 { img:"https://images.unsplash.com/photo-1573408301185-9519f94816a0?auto=format&fit=crop&w=600&q=80", name:"Pearl Drop Earrings", price:"1,850" }
-              ].map(p => `
-              <div class="group cursor-pointer border border-[#333] p-4 rounded-xl hover:border-[#D4AF37] transition">
+              ].map((p, i) => `
+              <div class="group cursor-pointer border border-[#333] p-4 rounded-xl hover:border-[#D4AF37] transition animate-on-scroll stagger-${i+1}">
                 <div class="relative aspect-square overflow-hidden mb-6 rounded-lg">
                   <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000" />
                 </div>
@@ -263,7 +329,7 @@ const generateDummyTemplate = (template) => {
           </section>
         </div>
         <div id="page-shop" class="page-view flex-1 py-16 px-6 max-w-7xl mx-auto w-full">
-          <h2 class="text-4xl font-serif mb-12 border-b border-[#333] pb-6">All Accessories</h2>
+          <h2 class="text-4xl font-serif mb-12 border-b border-[#333] pb-6 animate-on-scroll">All Accessories</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             ${[
               { img:"https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=400&q=80", n:"Onyx Chronograph", p:"4,500" },
@@ -274,8 +340,8 @@ const generateDummyTemplate = (template) => {
               { img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=400&q=80", n:"Diamond Bracelet", p:"12,000" },
               { img:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80", n:"Silver Band", p:"1,100" },
               { img:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80", n:"Classic Shades", p:"2,400" }
-            ].map(item => `
-              <div class="group cursor-pointer">
+            ].map((item, i) => `
+              <div class="group cursor-pointer animate-on-scroll" style="transition-delay: ${(i%4)*100}ms">
                 <div class="aspect-square overflow-hidden mb-4 rounded-lg bg-[#222]">
                   <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
                 </div>
@@ -305,23 +371,23 @@ const generateDummyTemplate = (template) => {
           </div>
         </header>
         <div id="page-home" class="page-view active flex-1">
-          <section class="relative h-[70vh] flex items-center justify-center bg-[#F2E8DF] mx-4 rounded-3xl overflow-hidden mt-4">
+          <section class="relative h-[70vh] flex items-center justify-center bg-[#F2E8DF] mx-4 rounded-3xl overflow-hidden mt-4 animate-on-scroll">
             <img src="https://images.unsplash.com/photo-1596462502278-27bf85033878?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-80" />
-            <div class="relative z-10 text-center bg-white/70 backdrop-blur-sm p-10 rounded-2xl max-w-lg">
+            <div class="relative z-10 text-center bg-white/70 backdrop-blur-sm p-10 rounded-2xl max-w-lg animate-on-scroll stagger-1">
               <h2 class="text-5xl font-playfair text-[#333] mb-4">Pure Radiance</h2>
               <p class="mb-8 text-[#666]">Vegan, cruelty-free skincare formulated for your natural glow.</p>
               <button onclick="navigateTo('shop')" class="bg-[#D98A82] text-white px-8 py-3 rounded-full font-bold tracking-wide hover:bg-[#C27A73] transition shadow-lg shadow-[#D98A82]/30">Shop Collection</button>
             </div>
           </section>
           <section class="py-20 px-6 max-w-6xl mx-auto text-center">
-            <h3 class="text-3xl font-playfair mb-12 text-[#333]">Best Sellers</h3>
+            <h3 class="text-3xl font-playfair mb-12 text-[#333] animate-on-scroll">Best Sellers</h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
               ${[
                 { img:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80", name:"Hydrating Face Cream", price:"650" },
                 { img:"https://images.unsplash.com/photo-1586495777744-4e6232bf2f9d?auto=format&fit=crop&w=600&q=80", name:"Velvet Matte Lipstick", price:"420" },
                 { img:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=80", name:"Vitamin C Serum", price:"890" }
-              ].map(p => `
-              <div class="group cursor-pointer">
+              ].map((p, i) => `
+              <div class="group cursor-pointer animate-on-scroll stagger-${i+1}">
                 <div class="relative aspect-square overflow-hidden rounded-2xl mb-4 bg-[#F2E8DF]">
                   <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
                 </div>
@@ -333,7 +399,7 @@ const generateDummyTemplate = (template) => {
           </section>
         </div>
         <div id="page-shop" class="page-view flex-1 py-12 px-6 max-w-6xl mx-auto w-full">
-          <h2 class="text-4xl font-playfair mb-10 text-[#333]">Skincare Essentials</h2>
+          <h2 class="text-4xl font-playfair mb-10 text-[#333] animate-on-scroll">Skincare Essentials</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
             ${[
               { img:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80", n:"Face Cream", p:"650" },
@@ -344,8 +410,8 @@ const generateDummyTemplate = (template) => {
               { img:"https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?auto=format&fit=crop&w=400&q=80", n:"Clay Mask", p:"450" },
               { img:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80", n:"Eye Cream", p:"720" },
               { img:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=400&q=80", n:"Night Repair", p:"950" }
-            ].map(item => `
-              <div class="group cursor-pointer text-center">
+            ].map((item, i) => `
+              <div class="group cursor-pointer text-center animate-on-scroll" style="transition-delay: ${(i%4)*100}ms">
                 <div class="aspect-square overflow-hidden mb-4 rounded-2xl bg-[#F2E8DF]">
                   <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                 </div>
@@ -358,6 +424,236 @@ const generateDummyTemplate = (template) => {
         <footer class="bg-[#F2E8DF] py-10 text-center text-sm font-medium text-[#888] mt-auto">
            <p>Glow Cosmetics Egypt &copy; 2026</p>
         </footer>
+      </div>
+    `;
+  } else if (template.id === 9) {
+    // SaaS Analytics Dashboard Template
+    body = `
+      <div class="flex h-screen bg-slate-50 font-sans text-slate-800 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+          <div class="p-6 border-b border-slate-800">
+            <h1 class="text-xl font-bold tracking-tight flex items-center gap-2">
+              <i class="fas fa-layer-group text-sky-500"></i> Nexus.
+            </h1>
+          </div>
+          <nav class="flex-1 p-4 space-y-2">
+            <a href="#" class="flex items-center gap-3 px-4 py-3 bg-sky-500/10 text-sky-400 rounded-lg font-medium transition">
+              <i class="fas fa-chart-pie"></i> Overview
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg font-medium transition">
+              <i class="fas fa-users"></i> Audience
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg font-medium transition">
+              <i class="fas fa-wallet"></i> Revenue
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg font-medium transition">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+          </nav>
+          <div class="p-4 border-t border-slate-800">
+            <div class="flex items-center gap-3">
+              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80" class="w-10 h-10 rounded-full object-cover border border-slate-700"/>
+              <div>
+                <p class="text-sm font-bold">Admin User</p>
+                <p class="text-xs text-slate-400">Pro Plan</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-screen overflow-y-auto page-view active" id="page-home">
+          <!-- Header -->
+          <header class="bg-white px-8 py-5 border-b border-slate-200 flex items-center justify-between sticky top-0 z-20">
+            <h2 class="text-xl font-bold text-slate-800">Dashboard Overview</h2>
+            <div class="flex items-center gap-5">
+              <div class="relative">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                <input type="text" placeholder="Search metrics..." class="pl-9 pr-4 py-2 bg-slate-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 w-64 transition-all"/>
+              </div>
+              <button class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition relative">
+                <i class="far fa-bell"></i>
+                <span class="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-slate-100"></span>
+              </button>
+            </div>
+          </header>
+
+          <!-- Dashboard Body -->
+          <div class="p-8 space-y-8">
+            <!-- Stat Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+              ${[
+                { l: "Total Revenue", v: "$124,500", c: "+14.5%", icon: "fa-dollar-sign", color: "sky" },
+                { l: "Active Users", v: "45,231", c: "+5.2%", icon: "fa-users", color: "emerald" },
+                { l: "Bounce Rate", v: "24.5%", c: "-2.1%", icon: "fa-level-down-alt", color: "rose" },
+                { l: "Avg Session", v: "4m 12s", c: "+1.5%", icon: "fa-stopwatch", color: "amber" }
+              ].map((s, i) => `
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm animate-on-scroll stagger-${i%4}">
+                  <div class="flex justify-between items-start mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-${s.color}-50 text-${s.color}-500 flex items-center justify-center text-xl">
+                      <i class="fas ${s.icon}"></i>
+                    </div>
+                    <span class="text-xs font-bold px-2.5 py-1 rounded-full ${s.c.startsWith('+') ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">${s.c}</span>
+                  </div>
+                  <h3 class="text-slate-500 text-sm font-medium mb-1">${s.l}</h3>
+                  <p class="text-3xl font-black text-slate-800">${s.v}</p>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- Charts Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Main Chart -->
+              <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm animate-on-scroll">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="font-bold text-slate-800">Revenue Analytics</h3>
+                  <select class="text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none">
+                    <option>Last 7 Days</option>
+                    <option>This Month</option>
+                    <option>This Year</option>
+                  </select>
+                </div>
+                <div class="h-64 flex items-end justify-between gap-2 border-b border-slate-100 pb-2 relative">
+                  <!-- Fake chart bars -->
+                  ${[40, 70, 45, 90, 65, 85, 50, 75, 100, 60, 80, 55].map(h => `
+                    <div class="w-full bg-sky-100 rounded-t-sm relative group hover:bg-sky-200 transition-colors" style="height: ${h}%">
+                      <div class="absolute bottom-0 w-full bg-sky-500 rounded-t-sm transition-all duration-500" style="height: ${h * 0.7}%"></div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+              
+              <!-- Recent Activity -->
+              <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm animate-on-scroll stagger-1">
+                <h3 class="font-bold text-slate-800 mb-6">Recent Users</h3>
+                <div class="space-y-5">
+                  ${[
+                    { n: "Sarah Jenkins", r: "Admin", t: "2 mins ago", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" },
+                    { n: "David Chen", r: "Editor", t: "1 hour ago", img: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80" },
+                    { n: "Emma Watson", r: "Viewer", t: "3 hours ago", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100&q=80" },
+                    { n: "Michael Scott", r: "Editor", t: "5 hours ago", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" }
+                  ].map(u => `
+                    <div class="flex items-center gap-4">
+                      <img src="${u.img}" class="w-10 h-10 rounded-full object-cover"/>
+                      <div class="flex-1">
+                        <p class="text-sm font-bold text-slate-800">${u.n}</p>
+                        <p class="text-xs text-slate-500">${u.r}</p>
+                      </div>
+                      <span class="text-xs text-slate-400">${u.t}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+            
+            <!-- Data Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden animate-on-scroll">
+              <div class="p-6 border-b border-slate-200 flex justify-between items-center">
+                <h3 class="font-bold text-slate-800">Latest Transactions</h3>
+                <button class="text-sm text-sky-600 font-medium hover:underline">View All</button>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                  <thead>
+                    <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider">
+                      <th class="p-4 font-medium">Transaction ID</th>
+                      <th class="p-4 font-medium">Date</th>
+                      <th class="p-4 font-medium">Amount</th>
+                      <th class="p-4 font-medium">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-sm text-slate-700 divide-y divide-slate-100">
+                    ${[
+                      { id: "#TRX-9012", d: "Oct 24, 2026", a: "$1,200.00", s: "Completed", sc: "emerald" },
+                      { id: "#TRX-9013", d: "Oct 24, 2026", a: "$450.50", s: "Pending", sc: "amber" },
+                      { id: "#TRX-9014", d: "Oct 23, 2026", a: "$3,400.00", s: "Completed", sc: "emerald" },
+                      { id: "#TRX-9015", d: "Oct 22, 2026", a: "$120.00", s: "Failed", sc: "rose" }
+                    ].map(tr => `
+                      <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="p-4 font-medium">${tr.id}</td>
+                        <td class="p-4 text-slate-500">${tr.d}</td>
+                        <td class="p-4 font-medium text-slate-900">${tr.a}</td>
+                        <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-${tr.sc}-50 text-${tr.sc}-600">${tr.s}</span></td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+          </div>
+        </main>
+      </div>
+    `;
+  } else if (template.id === 10) {
+    // Restaurant Template
+    body = `
+      <div class="bg-zinc-950 font-serif text-amber-50 min-h-screen selection:bg-amber-900 selection:text-white">
+        <header class="absolute top-0 inset-x-0 p-8 flex justify-between items-center z-30 mix-blend-difference">
+          <div class="text-2xl font-bold tracking-widest uppercase cursor-pointer" onclick="navigateTo('home')">Maison</div>
+          <nav class="hidden md:flex gap-8 text-xs tracking-[0.2em] uppercase font-medium">
+            <button class="hover:text-amber-500 transition">Menu</button>
+            <button class="hover:text-amber-500 transition">Story</button>
+            <button class="border border-white/30 px-6 py-2 hover:bg-white hover:text-black transition">Reserve</button>
+          </nav>
+        </header>
+        
+        <div id="page-home" class="page-view active">
+          <!-- Hero Section -->
+          <section class="relative h-screen flex flex-col justify-center px-8 md:px-20 animate-on-scroll">
+            <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=2000&q=80" class="absolute inset-0 w-full h-full object-cover opacity-40" />
+            <div class="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent"></div>
+            <div class="relative z-10 max-w-2xl animate-on-scroll stagger-1">
+              <span class="text-amber-500 text-sm tracking-[0.3em] uppercase font-sans mb-6 block">Culinary Excellence</span>
+              <h1 class="text-6xl md:text-8xl font-playfair leading-[1.1] mb-8">Taste the<br/><i class="font-light text-zinc-300">Extraordinary.</i></h1>
+              <p class="font-sans text-zinc-400 max-w-md leading-relaxed mb-10">A modern approach to classic gastronomy. Sourced locally, crafted with passion, served with elegance.</p>
+              <button class="bg-amber-600 text-white font-sans uppercase tracking-[0.2em] text-xs font-bold px-10 py-4 hover:bg-amber-500 transition">View Menu</button>
+            </div>
+          </section>
+
+          <!-- Featured Menu Section -->
+          <section class="py-32 px-8 md:px-20 bg-zinc-900 relative">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-20 items-center">
+              <div class="md:w-1/2 animate-on-scroll">
+                <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1000&q=80" class="w-full h-[600px] object-cover rounded-t-full shadow-2xl" />
+              </div>
+              <div class="md:w-1/2 animate-on-scroll stagger-1">
+                <span class="text-amber-500 text-xs tracking-[0.3em] uppercase font-sans mb-4 block">Our Specialties</span>
+                <h2 class="text-4xl md:text-5xl font-playfair mb-12">Signature Dishes</h2>
+                
+                <div class="space-y-8 font-sans">
+                  ${[
+                    { n: "Truffle Risotto", d: "Arborio rice, wild mushrooms, fresh black truffle shavings.", p: "$34" },
+                    { n: "Wagyu Ribeye", d: "Grade A5 Wagyu, charred asparagus, red wine reduction.", p: "$85" },
+                    { n: "Seared Scallops", d: "Diver scallops, cauliflower purée, crispy pancetta.", p: "$42" }
+                  ].map(item => `
+                    <div class="group border-b border-zinc-800 pb-6 hover:border-amber-500 transition-colors">
+                      <div class="flex justify-between items-baseline mb-2">
+                        <h3 class="text-xl font-playfair text-white group-hover:text-amber-400 transition-colors">${item.n}</h3>
+                        <span class="text-amber-500 font-bold tracking-widest">${item.p}</span>
+                      </div>
+                      <p class="text-zinc-500 text-sm max-w-md">${item.d}</p>
+                    </div>
+                  `).join('')}
+                </div>
+                
+                <button class="mt-12 text-sm font-sans tracking-[0.2em] uppercase font-bold text-white border-b border-white pb-1 hover:text-amber-500 hover:border-amber-500 transition-colors">Discover Full Menu</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Reservation Banner -->
+          <section class="py-32 text-center relative flex justify-center items-center overflow-hidden animate-on-scroll">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=2000&q=80" class="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-luminosity" />
+            <div class="relative z-10 max-w-lg mx-auto animate-on-scroll stagger-1">
+              <i class="fas fa-wine-glass-alt text-4xl text-amber-500 mb-6"></i>
+              <h2 class="text-4xl font-playfair mb-6">An Evening to Remember</h2>
+              <p class="font-sans text-zinc-400 mb-10">Reserve your table and embark on a culinary journey crafted for the senses.</p>
+              <button class="bg-white text-black font-sans uppercase tracking-[0.2em] text-xs font-bold px-10 py-4 hover:bg-amber-500 hover:text-white transition">Book a Table</button>
+            </div>
+          </section>
+        </div>
       </div>
     `;
   } else if (template.id === 3) {
@@ -380,15 +676,15 @@ const generateDummyTemplate = (template) => {
           </div>
         </header>
         <div id="page-home" class="page-view active w-full flex-1">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 p-1 bg-zinc-900">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 p-1 bg-zinc-900 animate-on-scroll">
              <div class="md:col-span-2 lg:col-span-2 relative bg-black aspect-[16/9] md:aspect-auto md:h-[70vh] flex items-center justify-center group overflow-hidden cursor-pointer" onclick="navigateTo('shop')">
                 <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=1200&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition duration-700 grayscale group-hover:grayscale-0" />
-                <div class="relative z-10 text-center pointer-events-none p-4">
+                <div class="relative z-10 text-center pointer-events-none p-4 animate-on-scroll stagger-1">
                    <h2 class="text-6xl md:text-9xl font-black italic tracking-tighter text-transparent leading-none" style="-webkit-text-stroke: 2px white;">DROP<br/>004</h2>
                    <button class="mt-8 bg-[#ff3366] text-black font-black uppercase tracking-widest px-8 py-3 text-sm pointer-events-auto hover:bg-white transition">Shop The Drop</button>
                 </div>
              </div>
-             <div class="relative bg-zinc-800 aspect-square md:aspect-auto md:h-[70vh] group overflow-hidden cursor-pointer">
+             <div class="relative bg-zinc-800 aspect-square md:aspect-auto md:h-[70vh] group overflow-hidden cursor-pointer animate-on-scroll stagger-2">
                 <img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:scale-105 transition duration-500" />
                 <div class="absolute inset-0 p-6 flex flex-col justify-between z-10">
                    <span class="bg-white text-black font-black px-2 py-1 text-[10px] self-start uppercase">Footwear</span>
@@ -398,7 +694,7 @@ const generateDummyTemplate = (template) => {
           </div>
         </div>
         <div id="page-shop" class="page-view w-full p-6 lg:p-12 flex-1">
-          <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-12 border-b border-zinc-800 pb-6">All Gear.</h2>
+          <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-12 border-b border-zinc-800 pb-6 animate-on-scroll">All Gear.</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
              ${[
                { img:"https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=500&q=80", name:"Retro Hi-Tops", p:"2,400" },
@@ -409,8 +705,8 @@ const generateDummyTemplate = (template) => {
                { img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80", name:"Cargo Pants", p:"1,900" },
                { img:"https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=500&q=80", name:"Beanie Red", p:"450" },
                { img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=500&q=80", name:"Crossbody Bag", p:"950" }
-             ].map(item => `
-              <div class="group cursor-pointer">
+             ].map((item, i) => `
+              <div class="group cursor-pointer animate-on-scroll" style="transition-delay: ${(i%4)*100}ms">
                 <div class="relative bg-zinc-900 aspect-[3/4] mb-4 overflow-hidden border border-zinc-800">
                   <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-90 group-hover:opacity-100" />
                   <button class="absolute bottom-0 w-full bg-white text-black py-4 font-black uppercase tracking-widest text-sm transform translate-y-full group-hover:translate-y-0 transition duration-300">Add to Cart</button>
@@ -436,19 +732,19 @@ const generateDummyTemplate = (template) => {
         </header>
         <div id="page-home" class="page-view active flex-1">
           <section class="max-w-7xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
-            <div class="md:w-1/2">
+            <div class="md:w-1/2 animate-on-scroll">
               <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6 inline-block">Premium Quality</span>
               <h2 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-slate-900">Power Up<br/>Your Tech.</h2>
               <p class="text-lg text-slate-500 mb-8 font-medium">Discover top-tier mobile cases, fast chargers, and durable cables engineered for your daily life.</p>
               <button onclick="navigateTo('shop')" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg shadow-blue-600/30">Shop Collection</button>
             </div>
-            <div class="md:w-1/2 relative">
+            <div class="md:w-1/2 relative animate-on-scroll stagger-1">
                <img src="https://images.unsplash.com/photo-1611314643773-40eab71bd0eb?auto=format&fit=crop&w=800&q=80" class="w-full h-[500px] object-cover rounded-[3rem] shadow-2xl shadow-blue-900/10" />
             </div>
           </section>
         </div>
         <div id="page-shop" class="page-view flex-1 py-16 px-6 max-w-7xl mx-auto w-full">
-          <h2 class="text-3xl font-black mb-10 text-slate-900">All Accessories</h2>
+          <h2 class="text-3xl font-black mb-10 text-slate-900 animate-on-scroll">All Accessories</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             ${[
               { img:"https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&w=400&q=80", n:"Silicone Phone Case", p:"350" },
@@ -459,8 +755,8 @@ const generateDummyTemplate = (template) => {
               { img:"https://images.unsplash.com/photo-1618366712010-f4ae9c647dcf?auto=format&fit=crop&w=400&q=80", n:"Wireless Charger", p:"850" },
               { img:"https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&w=400&q=80", n:"Screen Protector", p:"150" },
               { img:"https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=400&q=80", n:"Dual Car Charger", p:"380" }
-            ].map(item => `
-              <div class="group cursor-pointer bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+            ].map((item, i) => `
+              <div class="group cursor-pointer bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition animate-on-scroll" style="transition-delay: ${(i%4)*100}ms">
                 <div class="aspect-square overflow-hidden mb-4 rounded-xl bg-slate-50">
                   <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                 </div>
@@ -485,7 +781,7 @@ const generateDummyTemplate = (template) => {
           <button class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-md hover:bg-blue-700 transition">Hire Me</button>
         </header>
         <div id="page-home" class="page-view active flex-1 px-6 max-w-6xl mx-auto w-full py-20 flex flex-col md:flex-row items-center gap-16">
-          <div class="md:w-1/2">
+          <div class="md:w-1/2 animate-on-scroll">
             <span class="text-blue-600 font-bold uppercase tracking-widest text-xs mb-4 block">Senior Business Developer</span>
             <h2 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-slate-900">Driving<br/>Scalable<br/>Growth.</h2>
             <p class="text-lg text-slate-500 mb-8 leading-relaxed">I help B2B companies in Egypt and the MENA region build strategic partnerships, optimize sales pipelines, and achieve exponential revenue growth.</p>
@@ -493,25 +789,25 @@ const generateDummyTemplate = (template) => {
                <button onclick="navigateTo('services')" class="bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-600 transition">View My Services</button>
             </div>
           </div>
-          <div class="md:w-1/2">
+          <div class="md:w-1/2 animate-on-scroll stagger-1">
             <img src="https://images.unsplash.com/photo-1560250097001-a47b36f8636e?auto=format&fit=crop&w=800&q=80" class="w-full h-[600px] object-cover rounded-3xl shadow-2xl" />
           </div>
         </div>
         <div id="page-services" class="page-view flex-1 bg-slate-50 py-20 px-6">
            <div class="max-w-6xl mx-auto">
-              <h2 class="text-4xl font-black mb-12 text-center text-slate-900">Core Expertise</h2>
+              <h2 class="text-4xl font-black mb-12 text-center text-slate-900 animate-on-scroll">Core Expertise</h2>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition animate-on-scroll">
                     <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-chart-line"></i></div>
                     <h3 class="text-xl font-bold mb-3">Market Expansion</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">Identifying new territories and executing market entry strategies tailored for the Egyptian landscape.</p>
                  </div>
-                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition animate-on-scroll stagger-1">
                     <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-handshake"></i></div>
                     <h3 class="text-xl font-bold mb-3">B2B Partnerships</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">Building and nurturing high-value corporate relationships and closing enterprise-level deals.</p>
                  </div>
-                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
+                 <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition animate-on-scroll stagger-2">
                     <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-filter"></i></div>
                     <h3 class="text-xl font-bold mb-3">Sales Optimization</h3>
                     <p class="text-slate-500 text-sm leading-relaxed">Restructuring sales funnels and CRM workflows to maximize lead conversion rates.</p>
@@ -534,14 +830,14 @@ const generateDummyTemplate = (template) => {
           </nav>
         </header>
         <div id="page-home" class="page-view active flex-1">
-          <section class="px-6 md:px-12 py-20 flex flex-col justify-center min-h-[70vh]">
+          <section class="px-6 md:px-12 py-20 flex flex-col justify-center min-h-[70vh] animate-on-scroll">
             <h1 class="text-5xl md:text-8xl lg:text-[10vw] font-bold tracking-tighter leading-[0.9] mb-8">
               Visual <span class="text-[#ccff00] italic">identities</span><br/>that perform.
             </h1>
             <p class="text-xl md:text-3xl max-w-3xl font-light text-[#a0a0a0] mb-12">Studio Kroma is a Cairo-based branding agency crafting bold visual systems and digital experiences for modern brands.</p>
             <button onclick="navigateTo('work')" class="bg-[#ccff00] text-black px-8 py-4 rounded-full font-bold text-lg hover:bg-white transition self-start">See Our Work</button>
           </section>
-          <section class="px-6 md:px-12 pb-24">
+          <section class="px-6 md:px-12 pb-24 animate-on-scroll stagger-1">
              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
                 <div class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer" onclick="navigateTo('work')">
                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
@@ -549,11 +845,11 @@ const generateDummyTemplate = (template) => {
                       <h3 class="text-4xl font-bold mb-2">Neon Dynamics</h3><p class="text-[#ccff00] font-medium">Brand Identity / 3D</p>
                    </div>
                 </div>
-                <div class="relative rounded-3xl bg-[#1a1a1a] p-8 flex flex-col justify-between border border-[#333]">
+                <div class="relative rounded-3xl bg-[#1a1a1a] p-8 flex flex-col justify-between border border-[#333] hover:border-[#ccff00] transition-colors">
                    <div class="text-5xl text-[#ccff00]"><i class="fas fa-layer-group"></i></div>
                    <div><h3 class="text-2xl font-bold mb-2">Branding</h3><p class="opacity-70 text-sm">Logos, Guidelines, Strategy</p></div>
                 </div>
-                <div class="relative rounded-3xl bg-[#1a1a1a] p-8 flex flex-col justify-between border border-[#333]">
+                <div class="relative rounded-3xl bg-[#1a1a1a] p-8 flex flex-col justify-between border border-[#333] hover:border-[#ccff00] transition-colors">
                    <div class="text-5xl text-[#ccff00]"><i class="fas fa-desktop"></i></div>
                    <div><h3 class="text-2xl font-bold mb-2">Web Design</h3><p class="opacity-70 text-sm">UI/UX, Webflow, React</p></div>
                 </div>
@@ -561,13 +857,13 @@ const generateDummyTemplate = (template) => {
           </section>
         </div>
         <div id="page-work" class="page-view px-6 md:px-12 py-12 w-full flex-1">
-           <h2 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-16">Selected<br/><span class="text-[#ccff00]">Archive.</span></h2>
+           <h2 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-16 animate-on-scroll">Selected<br/><span class="text-[#ccff00]">Archive.</span></h2>
            <div class="space-y-24 pb-24">
              ${[
                { img:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80", title:"Neon Dynamics", cat:"Brand Identity", color:"ccff00" },
                { img:"https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1200&q=80", title:"Abstract Data", cat:"Data Visualization", color:"00ffff" }
-             ].map((p) => `
-             <div class="group cursor-pointer">
+             ].map((p, i) => `
+             <div class="group cursor-pointer animate-on-scroll stagger-${i%3}">
                <div class="relative overflow-hidden rounded-3xl aspect-[16/9] mb-8 bg-[#1a1a1a]">
                   <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
                </div>
@@ -596,16 +892,16 @@ const generateDummyTemplate = (template) => {
           <button class="bg-slate-900 text-white px-5 py-2 rounded font-medium text-sm hover:bg-blue-700 transition">Contact Us</button>
         </header>
         <div id="page-home" class="page-view active flex-1">
-          <section class="relative h-[60vh] flex items-center bg-slate-900">
+          <section class="relative h-[60vh] flex items-center bg-slate-900 animate-on-scroll">
             <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay" />
-            <div class="relative z-10 px-8 md:px-16 max-w-4xl text-white">
+            <div class="relative z-10 px-8 md:px-16 max-w-4xl text-white animate-on-scroll stagger-1">
                <h2 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">Excellence in Enterprise Solutions.</h2>
                <p class="text-lg text-blue-100 mb-8 max-w-2xl">Vertex provides world-class operational management and corporate consultancy for businesses across Egypt.</p>
                <button onclick="navigateTo('services')" class="bg-blue-600 px-8 py-3 rounded text-white font-bold hover:bg-blue-500 transition">Explore Capabilities</button>
             </div>
           </section>
           <section class="py-20 px-8 max-w-7xl mx-auto flex flex-col md:flex-row gap-16 items-center">
-             <div class="md:w-1/2">
+             <div class="md:w-1/2 animate-on-scroll">
                 <h3 class="text-blue-700 font-bold uppercase tracking-widest text-sm mb-2">Our Mission</h3>
                 <h2 class="text-4xl font-bold text-slate-900 mb-6">Empowering Corporate Growth</h2>
                 <p class="text-slate-600 leading-relaxed mb-6">Established in 2015, Vertex has grown to become a cornerstone of corporate strategy in the MENA region.</p>
@@ -615,25 +911,25 @@ const generateDummyTemplate = (template) => {
                    <li><i class="fas fa-check text-blue-600 mr-2"></i> Regional Expertise</li>
                 </ul>
              </div>
-             <div class="md:w-1/2">
+             <div class="md:w-1/2 animate-on-scroll stagger-1">
                 <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" class="rounded-xl shadow-xl w-full" />
              </div>
           </section>
         </div>
         <div id="page-services" class="page-view flex-1 py-20 px-8 max-w-7xl mx-auto w-full">
-           <h2 class="text-4xl font-bold text-slate-900 mb-12 text-center">Our Capabilities</h2>
+           <h2 class="text-4xl font-bold text-slate-900 mb-12 text-center animate-on-scroll">Our Capabilities</h2>
            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default">
+              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default animate-on-scroll">
                  <i class="fas fa-chart-pie text-4xl text-blue-600 mb-6"></i>
                  <h3 class="text-xl font-bold mb-3">Financial Advisory</h3>
                  <p class="text-slate-600 text-sm leading-relaxed">Comprehensive financial restructuring and audit services for large scale enterprises.</p>
               </div>
-              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default">
+              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default animate-on-scroll stagger-1">
                  <i class="fas fa-users-cog text-4xl text-blue-600 mb-6"></i>
                  <h3 class="text-xl font-bold mb-3">HR Management</h3>
                  <p class="text-slate-600 text-sm leading-relaxed">Talent acquisition, organizational structuring, and payroll management systems.</p>
               </div>
-              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default">
+              <div class="p-8 border border-slate-200 rounded-xl hover:shadow-lg hover:border-blue-300 transition cursor-default animate-on-scroll stagger-2">
                  <i class="fas fa-globe text-4xl text-blue-600 mb-6"></i>
                  <h3 class="text-xl font-bold mb-3">Global Logistics</h3>
                  <p class="text-slate-600 text-sm leading-relaxed">Supply chain optimization and international trade consultation.</p>
@@ -654,19 +950,19 @@ const generateDummyTemplate = (template) => {
           <button class="border border-[#C5A880] text-[#C5A880] px-6 py-2 font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#C5A880] hover:text-white transition">Contact</button>
         </header>
         <div id="page-home" class="page-view active flex-1">
-          <section class="relative h-[80vh] mx-4 mt-4 rounded-[2rem] overflow-hidden flex items-center justify-center">
+          <section class="relative h-[80vh] mx-4 mt-4 rounded-[2rem] overflow-hidden flex items-center justify-center animate-on-scroll">
             <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover" />
             <div class="absolute inset-0 bg-[#1A231C]/40"></div>
-            <div class="relative z-10 text-center text-white p-6 max-w-3xl">
+            <div class="relative z-10 text-center text-white p-6 max-w-3xl animate-on-scroll stagger-1">
               <span class="text-xs uppercase font-sans tracking-[0.3em] font-bold text-[#C5A880] mb-6 block">Luxury Real Estate Egypt</span>
-              <h2 class="text-5xl md:text-7xl font-serif mb-8 leading-tight">Extraordinary Homes for Extraordinary Lives.</h2>
+              <h2 class="text-5xl md:text-7xl font-serif mb-8 leading-tight drop-shadow-md">Extraordinary Homes for Extraordinary Lives.</h2>
               <button onclick="navigateTo('properties')" class="bg-[#C5A880] text-white px-10 py-4 font-sans uppercase tracking-[0.2em] text-xs font-bold hover:bg-white hover:text-[#2B3A30] transition duration-300">View Portfolio</button>
             </div>
           </section>
           <section class="py-24 px-6 max-w-7xl mx-auto w-full text-center">
-             <h3 class="text-4xl font-serif mb-4">Featured Property</h3>
-             <p class="font-sans text-[#556658] mb-12 max-w-2xl mx-auto">Discover unparalleled luxury in the heart of New Cairo.</p>
-             <div class="relative rounded-3xl overflow-hidden group cursor-pointer" onclick="navigateTo('properties')">
+             <h3 class="text-4xl font-serif mb-4 animate-on-scroll">Featured Property</h3>
+             <p class="font-sans text-[#556658] mb-12 max-w-2xl mx-auto animate-on-scroll stagger-1">Discover unparalleled luxury in the heart of New Cairo.</p>
+             <div class="relative rounded-3xl overflow-hidden group cursor-pointer animate-on-scroll stagger-2" onclick="navigateTo('properties')">
                 <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" class="w-full h-[500px] object-cover group-hover:scale-105 transition duration-1000" />
                 <div class="absolute bottom-0 w-full p-8 bg-gradient-to-t from-[#1A231C] to-transparent text-left text-white">
                    <h4 class="text-3xl font-serif mb-2">The Crown Villa</h4>
@@ -676,7 +972,7 @@ const generateDummyTemplate = (template) => {
           </section>
         </div>
         <div id="page-properties" class="page-view flex-1 py-20 px-6 max-w-7xl mx-auto w-full">
-          <div class="flex justify-between items-end mb-12 border-b border-[#E8E2D2] pb-6">
+          <div class="flex justify-between items-end mb-12 border-b border-[#E8E2D2] pb-6 animate-on-scroll">
              <h2 class="text-4xl font-serif">Exclusive Portfolio</h2>
              <span class="font-sans text-sm font-bold uppercase tracking-widest text-[#C5A880]">4 Properties</span>
           </div>
@@ -686,8 +982,8 @@ const generateDummyTemplate = (template) => {
               { img:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", n:"Modern Duplex", p:"12,500,000", loc:"Zayed City" },
               { img:"https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80", n:"Lakefront Mansion", p:"45,000,000", loc:"North Coast" },
               { img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80", n:"Oasis Townhouse", p:"8,900,000", loc:"October City" }
-            ].map(item => `
-              <div class="group cursor-pointer">
+            ].map((item, i) => `
+              <div class="group cursor-pointer animate-on-scroll stagger-${i%2}">
                 <div class="relative overflow-hidden mb-4 rounded-xl aspect-[4/3]">
                   <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000" />
                   <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 font-sans text-xs font-bold uppercase tracking-widest text-[#2B3A30] rounded">${item.loc}</div>
@@ -771,13 +1067,14 @@ const T = {
     all_templates: "All Templates",
     e_commerce: "E-Commerce",
     portfolio: "Company & Profiles",
+    saas: "SaaS & Dashboards",
     showing: "Showing",
     templates_found: "templates",
     in_cat: "in",
     no_templates: "No templates found",
     no_templates_desc: "Try adjusting your search or filters.",
     clear_filters: "Clear all filters",
-    view_demo: "View Demo",
+    view_demo: "Live Preview",
     close_preview: "Close Preview",
     new_badge: "NEW",
     hot_badge: "HOT",
@@ -849,17 +1146,18 @@ const T = {
     consult_btn: "تأكيد حجز الاستشارة",
     careers_section_title: "صمم المستقبل معنا.",
     careers_section_body: "نبحث دائمًا عن العقول المدفوعة بالمنطق في الاستراتيجية والهندسة والتصميم.",
-    search_placeholder: "ابحث عن النماذج (مثل: 'متجر'، 'شركات', 'عقارات')...",
+    search_placeholder: "ابحث عن النماذج (مثل: 'متجر'، 'شركات', 'أنظمة إدارية')...",
     all_templates: "جميع النماذج",
     e_commerce: "متاجر إلكترونية",
     portfolio: "ملفات الشركات والأفراد",
+    saas: "أنظمة SaaS / إدارية",
     showing: "عرض",
     templates_found: "نماذج",
     in_cat: "في فئة",
     no_templates: "لم يتم العثور على نماذج",
     no_templates_desc: "حاول تعديل الفلاتر أو البحث.",
     clear_filters: "مسح جميع الفلاتر",
-    view_demo: "عرض النموذج",
+    view_demo: "معاينة حية",
     close_preview: "إغلاق المعاينة",
     new_badge: "جديد",
     hot_badge: "رائج",
@@ -1319,8 +1617,11 @@ const TemplateCard = ({ template, t, lang, onPreview }) => {
     ));
   };
 
+  const catLabel = template.category === "SaaS" ? t.saas : template.category === "E-Commerce" ? t.e_commerce : t.portfolio;
+  const CatIcon = template.category === "SaaS" ? LayoutDashboard : template.category === "E-Commerce" ? ShoppingBag : Building;
+
   return (
-    <div className="group flex flex-col bg-white rounded-[1.5rem] overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-200 transition-all duration-300 hover:-translate-y-1">
+    <div className="group flex flex-col bg-white rounded-[1.5rem] overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-sky-500/10 hover:border-sky-200 transition-all duration-300 hover:-translate-y-1">
 
       {/* Image */}
       <div className="relative h-52 overflow-hidden bg-slate-100">
@@ -1329,13 +1630,13 @@ const TemplateCard = ({ template, t, lang, onPreview }) => {
           alt={template.title}
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
 
         {/* Badges */}
         <div className={`absolute top-3 ${ar ? 'right-3' : 'left-3'} flex flex-col gap-1.5`}>
           <span className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur text-slate-800 text-[9px] font-bold uppercase tracking-wider px-2.5 py-1.5 rounded-lg shadow-sm">
-            {template.category === 'E-Commerce' ? <ShoppingBag size={10} className="text-sky-500"/> : <Building size={10} className="text-sky-500"/>}
-            {template.category === 'E-Commerce' ? t.e_commerce : t.portfolio}
+            <CatIcon size={10} className="text-sky-500"/>
+            {catLabel}
           </span>
           {template.badge === 'new' && (
             <span className="bg-sky-500 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg shadow-sm">{t.new_badge}</span>
@@ -1349,16 +1650,19 @@ const TemplateCard = ({ template, t, lang, onPreview }) => {
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
           <button
             onClick={() => onPreview(template)}
-            className="flex items-center gap-2.5 bg-white text-slate-900 font-black text-xs uppercase tracking-wider py-3 px-6 rounded-xl shadow-xl transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 hover:bg-sky-500 hover:text-white"
+            className="flex items-center gap-2.5 bg-white text-slate-900 font-black text-xs uppercase tracking-wider py-3 px-6 rounded-xl shadow-2xl transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 hover:bg-sky-500 hover:text-white"
           >
-            <Play size={14} fill="currentColor"/>
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            </span>
             {t.view_demo}
           </button>
         </div>
       </div>
 
       {/* Body */}
-      <div className="p-6 flex flex-col flex-1 gap-4">
+      <div className="p-6 flex flex-col flex-1 gap-4 relative z-10 bg-white">
 
         {/* Header: title + rating */}
         <div className="flex items-start justify-between gap-3">
@@ -1373,7 +1677,7 @@ const TemplateCard = ({ template, t, lang, onPreview }) => {
         <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">{template.description}</p>
 
         {/* Stats row */}
-        <div className="grid grid-cols-4 divide-x divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+        <div className="grid grid-cols-4 divide-x divide-slate-100 border border-slate-100 rounded-xl overflow-hidden mt-1">
           {[
             { val: `${template.downloads}+`, lbl: t.requests_label },
             { val: template.reviews, lbl: t.reviews_label },
@@ -1388,7 +1692,7 @@ const TemplateCard = ({ template, t, lang, onPreview }) => {
         </div>
 
         {/* Pages chips */}
-        <div>
+        <div className="mt-2">
           <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">{t.pages_label}</p>
           <div className="flex flex-wrap gap-1.5">
             {template.pages.map((pg, i) => (
@@ -1413,7 +1717,7 @@ const TemplateCard = ({ template, t, lang, onPreview }) => {
         </div>
 
         {/* Tech tags */}
-        <div>
+        <div className="mt-auto pt-2">
           <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">{t.stack_label}</p>
           <div className="flex flex-wrap gap-1.5">
             {template.tags.map(tag => (
@@ -1426,12 +1730,15 @@ const TemplateCard = ({ template, t, lang, onPreview }) => {
       </div>
 
       {/* Footer — View Demo CTA only */}
-      <div className="px-6 pb-5 pt-3 border-t border-slate-100 bg-slate-50/60">
+      <div className="px-6 pb-5 pt-3 border-t border-slate-100 bg-slate-50/60 transition-colors group-hover:bg-sky-50">
         <button
           onClick={() => onPreview(template)}
-          className="w-full flex items-center justify-center gap-2.5 bg-slate-900 hover:bg-sky-500 text-white text-xs font-black uppercase tracking-widest py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-sm"
+          className="w-full flex items-center justify-center gap-2.5 bg-slate-900 hover:bg-sky-500 text-white text-[11px] font-black uppercase tracking-widest py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-sm"
         >
-          <Play size={13} fill="currentColor"/>
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
           {t.view_demo}
         </button>
       </div>
@@ -1724,8 +2031,12 @@ export default function App() {
         </>
       ) : (
         /* ═══ Demos Page ═══ */
-        <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen bg-slate-50">
-          <div className="max-w-7xl mx-auto">
+        <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen bg-slate-50 relative overflow-hidden">
+          {/* Subtle Background Glows */}
+          <div className="absolute top-0 left-1/4 w-[800px] h-[800px] bg-sky-200/40 rounded-full blur-[120px] mix-blend-multiply opacity-50 pointer-events-none"></div>
+          <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-amber-100/40 rounded-full blur-[100px] mix-blend-multiply opacity-50 pointer-events-none"></div>
+          
+          <div className="max-w-7xl mx-auto relative z-10">
             <SectionLabel text={t.demos_label}/>
 
             <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
@@ -1739,31 +2050,31 @@ export default function App() {
             </div>
 
             {/* Search */}
-            <div className="max-w-2xl mx-auto relative mb-10 shadow-sm rounded-2xl">
-              <div className={`absolute inset-y-0 ${ar ? 'right-0 pr-5' : 'left-0 pl-5'} flex items-center pointer-events-none`}>
-                <Search size={18} className="text-slate-400" />
+            <div className="max-w-2xl mx-auto relative mb-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-[1.25rem] group reveal" style={{ transitionDelay:'120ms' }}>
+              <div className={`absolute inset-y-0 ${ar ? 'right-0 pr-6' : 'left-0 pl-6'} flex items-center pointer-events-none`}>
+                <Search size={18} className="text-slate-400 group-focus-within:text-sky-500 transition-colors" />
               </div>
               <input
                 type="text"
                 placeholder={t.search_placeholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full ${ar ? 'pr-12 pl-5' : 'pl-12 pr-5'} py-4 rounded-2xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all text-sm font-medium`}
+                className={`w-full ${ar ? 'pr-14 pl-6' : 'pl-14 pr-6'} py-5 rounded-[1.25rem] bg-white border border-slate-100 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:border-sky-300 transition-all text-sm font-medium`}
               />
             </div>
 
             {/* Category filters */}
-            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-5 border-b border-slate-200 pb-6">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-5 border-b border-slate-200 pb-6 reveal" style={{ transitionDelay:'160ms' }}>
               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hidden lg:block">{t.feat_cat}</span>
-              <div className="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 w-full md:w-auto gap-2 sm:gap-3">
+              <div className="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 w-full md:w-auto gap-2 sm:gap-3 hide-scroll">
                 {CATEGORIES.map(category => {
                   const Icon = category.icon;
                   const isActive = activeCategory === category.id;
-                  const catLabel = category.id === "All" ? t.all_templates : category.id === "E-Commerce" ? t.e_commerce : t.portfolio;
+                  const catLabel = category.id === "All" ? t.all_templates : category.id === "E-Commerce" ? t.e_commerce : category.id === "SaaS" ? t.saas : t.portfolio;
                   return (
                     <button key={category.id} onClick={() => setActiveCategory(category.id)}
-                      className={`whitespace-nowrap flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${
-                        isActive ? 'bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/20' : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300 hover:bg-sky-50'
+                      className={`whitespace-nowrap flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all border ${
+                        isActive ? 'bg-sky-500 text-white border-sky-500 shadow-lg shadow-sky-500/30 scale-105' : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300 hover:bg-sky-50'
                       }`}>
                       <Icon size={14} className={isActive ? "text-white" : "text-slate-400"} />
                       {catLabel}
@@ -1774,14 +2085,14 @@ export default function App() {
             </div>
 
             {/* Results count */}
-            <div className="mb-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <div className="mb-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest reveal" style={{ transitionDelay:'200ms' }}>
               {t.showing} {filteredTemplates.length} {t.templates_found}
-              {activeCategory !== "All" && <span> {t.in_cat} <span className="text-sky-500">{activeCategory === "E-Commerce" ? t.e_commerce : t.portfolio}</span></span>}
+              {activeCategory !== "All" && <span> {t.in_cat} <span className="text-sky-500">{activeCategory === "E-Commerce" ? t.e_commerce : activeCategory === "SaaS" ? t.saas : t.portfolio}</span></span>}
             </div>
 
             {/* Grid */}
             {filteredTemplates.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-[2rem] border border-slate-200 border-dashed">
+              <div className="text-center py-20 bg-white rounded-[2rem] border border-slate-200 border-dashed reveal">
                 <Search size={32} className="mx-auto text-slate-300 mb-4"/>
                 <h3 className="text-xl font-black text-slate-900 mb-2">{t.no_templates}</h3>
                 <p className="text-slate-500 max-w-sm mx-auto font-medium text-sm">{t.no_templates_desc}</p>
@@ -1790,34 +2101,36 @@ export default function App() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-                {filteredTemplates.map(template => (
-                  <TemplateCard
-                    key={template.id}
-                    template={template}
-                    t={t}
-                    lang={lang}
-                    onPreview={setPreviewTemplate}
-                  />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredTemplates.map((template, i) => (
+                  <div className="reveal" style={{ transitionDelay: `${(i % 3) * 100}ms` }} key={template.id}>
+                    <TemplateCard
+                      template={template}
+                      t={t}
+                      lang={lang}
+                      onPreview={setPreviewTemplate}
+                    />
+                  </div>
                 ))}
               </div>
             )}
 
             {/* Customization form */}
-            <div className="max-w-3xl mx-auto mt-20 py-16 px-8 sm:px-12 rounded-[3rem] bg-white border border-slate-200 shadow-xl reveal">
+            <div className="max-w-3xl mx-auto mt-24 py-16 px-8 sm:px-12 rounded-[3rem] bg-white border border-slate-200 shadow-xl reveal relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-sky-100 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
               {demoStatus === 'success' ? (
-                <div className="flex flex-col items-center text-center gap-4 py-12">
+                <div className="flex flex-col items-center text-center gap-4 py-12 relative z-10">
                   <div className="w-16 h-16 rounded-3xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/20"><CheckCircle2 size={32} className="text-white"/></div>
                   <h4 className="text-2xl font-black text-slate-900 tracking-tight">{ar ? 'تم الاستلام!' : "Request Received!"}</h4>
                   <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{ar ? 'سيتواصل معك فريقنا التقني لترتيب عرض حي لنظامك المختار.' : 'Our technical team will reach out to arrange a live walkthrough for your chosen system or template.'}</p>
                 </div>
               ) : (
-                <>
+                <div className="relative z-10">
                   <div className="flex items-center gap-4 mb-10">
-                    <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center shadow-lg"><MonitorPlay size={22} className="text-white"/></div>
+                    <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/30"><MonitorPlay size={22} className="text-white"/></div>
                     <div>
-                      <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{t.demo_form_title}</h3>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{ar ? 'تطوير وتخصيص كامل' : 'Full Customization & Development'}</p>
+                      <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1.5">{t.demo_form_title}</h3>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-sky-500">{ar ? 'تطوير وتخصيص كامل' : 'Full Customization & Development'}</p>
                     </div>
                   </div>
                   <form className="space-y-8" onSubmit={e => handleActionForm(e, 'Demos', setDemoStatus)}>
@@ -1827,14 +2140,14 @@ export default function App() {
                       <option value="Template Inquiry" className="text-slate-900">Mantiq Template Customization</option>
                       <option value="CRM" className="text-slate-900">CRM & Tracking System</option>
                       <option value="Sales" className="text-slate-900">E-Commerce System</option>
-                      <option value="Finance" className="text-slate-900">Finance App</option>
+                      <option value="Finance" className="text-slate-900">Finance & Analytics Dashboard</option>
                       <option value="HR" className="text-slate-900">HR & Management</option>
                     </Field>
                     <button disabled={demoStatus === 'sending'} className="w-full py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white bg-slate-900 hover:bg-sky-600 active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-xl">
                       {demoStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <span className="flex items-center gap-2">{t.demo_form_btn} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/></span>}
                     </button>
                   </form>
-                </>
+                </div>
               )}
             </div>
           </div>
@@ -1866,8 +2179,9 @@ export default function App() {
           <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 shrink-0 z-10">
             <div className="flex items-center gap-3 text-white">
               <h3 className="font-bold text-base hidden sm:block tracking-tight">{previewTemplate.title}</h3>
-              <span className="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-[9px] uppercase tracking-widest font-bold border border-slate-700">
-                {previewTemplate.category === "E-Commerce" ? t.e_commerce : t.portfolio}
+              <span className="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-[9px] uppercase tracking-widest font-bold border border-slate-700 flex items-center gap-1.5">
+                {previewTemplate.category === "SaaS" ? <LayoutDashboard size={10} className="text-sky-400"/> : previewTemplate.category === "E-Commerce" ? <ShoppingBag size={10} className="text-sky-400"/> : <Building size={10} className="text-sky-400"/>}
+                {previewTemplate.category === "SaaS" ? t.saas : previewTemplate.category === "E-Commerce" ? t.e_commerce : t.portfolio}
               </span>
             </div>
             <div className="flex items-center gap-3 sm:gap-4">
@@ -2002,6 +2316,7 @@ export default function App() {
 
         * { box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
         *::-webkit-scrollbar { display: none; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
         html { scroll-behavior: smooth; }
         body { margin: 0; overflow-x: hidden; font-family: 'Now', sans-serif; }
         [dir="rtl"], [dir="rtl"] h1, [dir="rtl"] h2 { font-family: 'Noto Sans Arabic', sans-serif; }
