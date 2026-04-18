@@ -5,10 +5,10 @@ import {
   Linkedin, Facebook, CheckCircle2, ChevronRight,
   Target, Eye, Zap, Users, Trophy,
   Sparkles, Phone, Briefcase, Lightbulb, Rocket, ChevronDown, Globe, CalendarCheck, CreditCard, Clock, Shield, MonitorPlay, Upload, Gem, ShieldCheck, Timer, Cpu, ExternalLink, Monitor, Settings, Calculator, FileText,
-  ShoppingBag, User, Search, Code, Building
+  ShoppingBag, User, Search, Code, Building, Star, Download, Play
 } from 'lucide-react';
 
-// ─── البيانات ──────────────────────────────────────────────────────────────────
+// ─── Data ──────────────────────────────────────────────────────────────────
 
 const CUSTOMERS = [
   "EL ASEEL Development","Omar Gharib","ETMAM","ALSAIF ANALYSIS",
@@ -77,85 +77,116 @@ const CATEGORIES = [
 ];
 
 const TEMPLATES = [
-  // E-COMMERCE (4 Templates)
   {
     id: 1,
     title: "Luxe Accessories",
     category: "E-Commerce",
-    description: "Premium e-commerce template for high-end jewelry, watches, and accessories. Features a luxurious gold and dark aesthetic.",
+    description: "Premium dark-mode storefront for high-end jewelry, watches, and accessories with a gold-on-black aesthetic.",
     image: "https://images.unsplash.com/photo-1599643478524-4624419205b3?auto=format&fit=crop&w=800&q=80",
-    tags: ["React", "E-Commerce", "Stripe API"],
-    isNew: true
+    tags: ["React", "Stripe API", "Tailwind", "Framer"],
+    badge: "new",
+    rating: 4.9, reviews: 24, downloads: 312,
+    pages: ["Home","Shop","Product","Cart","Checkout"],
+    features: ["Animated product reveals","Wishlist & quick-buy","Gold accent system","Dark mode native"],
+    complexity: "Advanced", time: "3–5 days"
   },
   {
     id: 2,
     title: "Glow Cosmetics",
     category: "E-Commerce",
-    description: "Clean, soft, and minimalist storefront tailored for beauty, skincare, and cosmetics brands.",
+    description: "Soft, pastel-toned beauty store for skincare, makeup, and cosmetics brands. Built for high conversion.",
     image: "https://images.unsplash.com/photo-1596462502278-27bf85033878?auto=format&fit=crop&w=800&q=80",
-    tags: ["Next.js", "Tailwind", "Cart"]
+    tags: ["Next.js", "Tailwind", "Cart", "CMS"],
+    rating: 4.7, reviews: 18, downloads: 198,
+    pages: ["Home","Shop","Product","About","Blog"],
+    features: ["Shade selector widget","Ingredient transparency panel","Reviews integration","Bundle builder"],
+    complexity: "Intermediate", time: "2–4 days"
   },
   {
     id: 3,
     title: "URBN Clothing",
     category: "E-Commerce",
-    description: "High-contrast, edgy streetwear fashion storefront with dynamic grids and hype-focused marketing elements.",
+    description: "High-contrast streetwear fashion storefront with an editorial grid layout and hype-drop countdown mechanics.",
     image: "https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=800&q=80",
-    tags: ["Vue.js", "Shopify Headless"]
+    tags: ["Vue.js", "Shopify Headless", "GSAP"],
+    rating: 4.8, reviews: 31, downloads: 276,
+    pages: ["Feed","Shop","Drop","Lookbook","Cart"],
+    features: ["Drop countdown timer","Animated marquee ticker","Grayscale-to-color hover","Size guide modal"],
+    complexity: "Advanced", time: "4–6 days"
   },
   {
     id: 4,
     title: "TechGear Mobile",
     category: "E-Commerce",
-    description: "Modern, high-conversion tech store layout designed for mobile accessories, chargers, and gadgets.",
+    description: "Clean, blue-toned tech accessories store with a card-grid layout engineered for high product clarity.",
     image: "https://images.unsplash.com/photo-1611314643773-40eab71bd0eb?auto=format&fit=crop&w=800&q=80",
-    tags: ["React", "Redux", "Payment"],
-    isNew: true
+    tags: ["React", "Redux", "Payment", "TypeScript"],
+    badge: "new",
+    rating: 4.6, reviews: 14, downloads: 145,
+    pages: ["Home","Shop","Compare","Cart","Checkout"],
+    features: ["Spec comparison table","Stock urgency tags","Sticky add-to-cart bar","Search with filters"],
+    complexity: "Intermediate", time: "2–3 days"
   },
-  // PROFILES & COMPANIES (4 Templates)
   {
     id: 5,
     title: "Pro Business Developer",
     category: "Profiles",
-    description: "Sleek, results-oriented personal profile for business developers, consultants, and independent professionals.",
+    description: "Sleek personal profile for consultants and business developers. Results-led layout with a case study section.",
     image: "https://images.unsplash.com/photo-1560250097001-a47b36f8636e?auto=format&fit=crop&w=800&q=80",
-    tags: ["HTML5", "CSS3", "GSAP"]
+    tags: ["HTML5", "CSS3", "GSAP", "Calendly"],
+    rating: 4.8, reviews: 27, downloads: 389,
+    pages: ["Profile","Services","Clients","Contact"],
+    features: ["Client logo wall","Timeline achievements","Booking integration","PDF resume export"],
+    complexity: "Starter", time: "1–2 days"
   },
   {
     id: 6,
     title: "Studio Kroma Branding",
     category: "Profiles",
-    description: "Vibrant, bento-grid style creative agency portfolio with dark mode aesthetics and smooth scroll effects.",
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80",
-    tags: ["React", "Framer Motion"],
-    isNew: true
+    description: "Dark-mode creative agency portfolio with a bento-grid layout, smooth scroll effects, and bold typography.",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+    tags: ["React", "Framer Motion", "GSAP", "Lenis"],
+    badge: "hot",
+    rating: 5.0, reviews: 42, downloads: 534,
+    pages: ["Index","Work","Studio","Process","Contact"],
+    features: ["Bento grid layout","Custom cursor animation","Horizontal scroll gallery","Lenis smooth scroll"],
+    complexity: "Advanced", time: "5–7 days"
   },
   {
     id: 7,
     title: "Vertex Corporate",
     category: "Profiles",
-    description: "Professional, trustworthy, and clean corporate profile template suitable for B2B enterprises and services.",
+    description: "Professional B2B enterprise profile with a clean blue palette, capability sections, and trust-building layouts.",
     image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
-    tags: ["Next.js", "Tailwind CSS"]
+    tags: ["Next.js", "Tailwind CSS", "CMS", "i18n"],
+    rating: 4.5, reviews: 19, downloads: 228,
+    pages: ["Company","Capabilities","Leadership","Clients","Contact"],
+    features: ["ISO certification badges","Org chart component","Stats counter animation","Case study grid"],
+    complexity: "Intermediate", time: "3–4 days"
   },
   {
     id: 8,
     title: "Aseel Real Estate",
     category: "Profiles",
-    description: "Luxurious property listing and real estate company profile featuring large imagery and elegant typography.",
+    description: "Luxury property listing site with oversized imagery, map integration, and elegant editorial typography.",
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
-    tags: ["React", "Mapbox API"],
-    isNew: true
+    tags: ["React", "Mapbox API", "Sanity CMS", "i18n"],
+    badge: "new",
+    rating: 4.9, reviews: 36, downloads: 461,
+    pages: ["Home","Portfolio","Property","Map","Contact"],
+    features: ["Interactive map pins","Currency & area converter","Virtual tour embed","Lead capture form"],
+    complexity: "Advanced", time: "4–6 days"
   }
 ];
 
-// Helper to generate a scrollable mock HTML preview for the templates
+// ─── Template Preview HTML Generator ────────────────────────────────────────
+
 const generateDummyTemplate = (template) => {
   const head = `
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://cdn.tailwindcss.com"><\/script>
       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;700;900&family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap');
@@ -175,18 +206,17 @@ const generateDummyTemplate = (template) => {
       <script>
         function navigateTo(pageId) {
           document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active'));
-          const target = document.getElementById('page-' + pageId);
+          var target = document.getElementById('page-' + pageId);
           if(target) target.classList.add('active');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      </script>
+      <\/script>
     </head>
   `;
 
   let body = '';
 
   if (template.id === 1) {
-    // 1. Luxe Accessories Store
     body = `
       <div class="bg-[#111] font-sans text-white min-h-screen flex flex-col">
         <header class="px-8 py-6 flex justify-between items-center sticky top-0 z-30 bg-[#111]/90 backdrop-blur-md border-b border-[#333]">
@@ -217,13 +247,13 @@ const generateDummyTemplate = (template) => {
             <h3 class="text-3xl font-serif mb-16 text-white">Curated For You</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
               ${[
-                { img: "1515562141206-a4f0b2f56708", name: "Onyx Chronograph", price: "4,500" },
-                { img: "1611591437281-460bfbe1220a", name: "Gold Halo Ring", price: "2,200" },
-                { img: "1596944924616-7b38e7cfcac5", name: "Pearl Drop Earrings", price: "1,850" }
+                { img:"https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=600&q=80", name:"Onyx Chronograph", price:"4,500" },
+                { img:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=600&q=80", name:"Gold Halo Ring", price:"2,200" },
+                { img:"https://images.unsplash.com/photo-1573408301185-9519f94816a0?auto=format&fit=crop&w=600&q=80", name:"Pearl Drop Earrings", price:"1,850" }
               ].map(p => `
               <div class="group cursor-pointer border border-[#333] p-4 rounded-xl hover:border-[#D4AF37] transition">
                 <div class="relative aspect-square overflow-hidden mb-6 rounded-lg">
-                  <img src="https://images.unsplash.com/photo-${p.img}?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000" />
+                  <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-1000" />
                 </div>
                 <h4 class="text-sm font-bold tracking-wider uppercase text-gray-200">${p.name}</h4>
                 <p class="text-[#D4AF37] font-serif text-lg mt-2">EGP ${p.price}</p>
@@ -236,18 +266,18 @@ const generateDummyTemplate = (template) => {
           <h2 class="text-4xl font-serif mb-12 border-b border-[#333] pb-6">All Accessories</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             ${[
-              { img: "1515562141206-a4f0b2f56708", n: "Onyx Chronograph", p: "4,500" },
-              { img: "1611591437281-460bfbe1220a", n: "Gold Halo Ring", p: "2,200" },
-              { img: "1596944924616-7b38e7cfcac5", n: "Pearl Earrings", p: "1,850" },
-              { img: "1599643478524-4624419205b3", n: "Chain Necklace", p: "3,100" },
-              { img: "1573408301145-b98c4af0118e", n: "Leather Handbag", p: "6,500" },
-              { img: "1601121141461-9d6647bca1ed", n: "Diamond Bracelet", p: "12,000" },
-              { img: "1611591437281-460bfbe1220a", n: "Silver Band", p: "1,100" },
-              { img: "1542291026-7eec264c27ff", n: "Classic Shades", p: "2,400" }
+              { img:"https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=400&q=80", n:"Onyx Chronograph", p:"4,500" },
+              { img:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80", n:"Gold Halo Ring", p:"2,200" },
+              { img:"https://images.unsplash.com/photo-1573408301185-9519f94816a0?auto=format&fit=crop&w=400&q=80", n:"Pearl Earrings", p:"1,850" },
+              { img:"https://images.unsplash.com/photo-1599643478524-4624419205b3?auto=format&fit=crop&w=400&q=80", n:"Chain Necklace", p:"3,100" },
+              { img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80", n:"Leather Handbag", p:"6,500" },
+              { img:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=400&q=80", n:"Diamond Bracelet", p:"12,000" },
+              { img:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=400&q=80", n:"Silver Band", p:"1,100" },
+              { img:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=400&q=80", n:"Classic Shades", p:"2,400" }
             ].map(item => `
               <div class="group cursor-pointer">
                 <div class="aspect-square overflow-hidden mb-4 rounded-lg bg-[#222]">
-                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+                  <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
                 </div>
                 <h4 class="text-xs font-bold uppercase tracking-wide text-gray-300 group-hover:text-[#D4AF37] transition">${item.n}</h4>
                 <p class="font-serif text-[#D4AF37] mt-1">EGP ${item.p}</p>
@@ -261,7 +291,6 @@ const generateDummyTemplate = (template) => {
       </div>
     `;
   } else if (template.id === 2) {
-    // 2. Glow Cosmetics
     body = `
       <div class="bg-[#FAF7F2] font-sans text-[#4A4A4A] min-h-screen flex flex-col">
         <header class="px-8 py-5 flex justify-between items-center sticky top-0 z-30 bg-[#FAF7F2]/90 backdrop-blur-md">
@@ -288,13 +317,13 @@ const generateDummyTemplate = (template) => {
             <h3 class="text-3xl font-playfair mb-12 text-[#333]">Best Sellers</h3>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-10">
               ${[
-                { img: "1620916566398-39f1143ab7be", name: "Hydrating Face Cream", price: "650" },
-                { img: "1556228578-0d85b1a4d571", name: "Velvet Matte Lipstick", price: "420" },
-                { img: "1608248593890-dc56ba0567e4", name: "Vitamin C Serum", price: "890" }
+                { img:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=600&q=80", name:"Hydrating Face Cream", price:"650" },
+                { img:"https://images.unsplash.com/photo-1586495777744-4e6232bf2f9d?auto=format&fit=crop&w=600&q=80", name:"Velvet Matte Lipstick", price:"420" },
+                { img:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=80", name:"Vitamin C Serum", price:"890" }
               ].map(p => `
               <div class="group cursor-pointer">
                 <div class="relative aspect-square overflow-hidden rounded-2xl mb-4 bg-[#F2E8DF]">
-                  <img src="https://images.unsplash.com/photo-${p.img}?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                  <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
                 </div>
                 <h4 class="font-bold text-[#333]">${p.name}</h4>
                 <p class="text-[#D98A82] font-medium mt-1">EGP ${p.price}</p>
@@ -307,18 +336,18 @@ const generateDummyTemplate = (template) => {
           <h2 class="text-4xl font-playfair mb-10 text-[#333]">Skincare Essentials</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12">
             ${[
-              { img: "1620916566398-39f1143ab7be", n: "Face Cream", p: "650" },
-              { img: "1608248593890-dc56ba0567e4", n: "Vitamin Serum", p: "890" },
-              { img: "1556228578-0d85b1a4d571", n: "Lipstick Duo", p: "420" },
-              { img: "1596462502278-27bf85033878", n: "Cleansing Oil", p: "550" },
-              { img: "1615397323626-d6682701f464", n: "Rose Toner", p: "380" },
-              { img: "1571781256007-8822002f5a6b", n: "Clay Mask", p: "450" },
-              { img: "1620916566398-39f1143ab7be", n: "Eye Cream", p: "720" },
-              { img: "1608248593890-dc56ba0567e4", n: "Night Repair", p: "950" }
+              { img:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80", n:"Face Cream", p:"650" },
+              { img:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=400&q=80", n:"Vitamin Serum", p:"890" },
+              { img:"https://images.unsplash.com/photo-1586495777744-4e6232bf2f9d?auto=format&fit=crop&w=400&q=80", n:"Lipstick Duo", p:"420" },
+              { img:"https://images.unsplash.com/photo-1596462502278-27bf85033878?auto=format&fit=crop&w=400&q=80", n:"Cleansing Oil", p:"550" },
+              { img:"https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=400&q=80", n:"Rose Toner", p:"380" },
+              { img:"https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?auto=format&fit=crop&w=400&q=80", n:"Clay Mask", p:"450" },
+              { img:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=400&q=80", n:"Eye Cream", p:"720" },
+              { img:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=400&q=80", n:"Night Repair", p:"950" }
             ].map(item => `
               <div class="group cursor-pointer text-center">
                 <div class="aspect-square overflow-hidden mb-4 rounded-2xl bg-[#F2E8DF]">
-                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
                 </div>
                 <h4 class="font-bold text-[#333] text-sm">${item.n}</h4>
                 <p class="text-[#D98A82] text-sm mt-1">EGP ${item.p}</p>
@@ -332,12 +361,11 @@ const generateDummyTemplate = (template) => {
       </div>
     `;
   } else if (template.id === 3) {
-    // 3. URBN Clothes (Fashion)
     body = `
       <div class="bg-black font-tech text-white min-h-screen flex flex-col selection:bg-[#ff3366] selection:text-white">
         <div class="bg-[#ff3366] text-black overflow-hidden py-2 whitespace-nowrap border-b-2 border-black relative z-30">
            <div class="animate-[marquee_15s_linear_infinite] inline-block font-black uppercase text-sm tracking-widest">
-              NEW DROP OUT NOW // FREE SHIPPING IN EGYPT ON ORDERS OVER 2000 EGP // 
+              NEW DROP OUT NOW // FREE SHIPPING IN EGYPT ON ORDERS OVER 2000 EGP // NEW DROP OUT NOW // FREE SHIPPING IN EGYPT ON ORDERS OVER 2000 EGP //&nbsp;
            </div>
            <style>@keyframes marquee { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-50%, 0, 0); } }</style>
         </div>
@@ -356,8 +384,7 @@ const generateDummyTemplate = (template) => {
              <div class="md:col-span-2 lg:col-span-2 relative bg-black aspect-[16/9] md:aspect-auto md:h-[70vh] flex items-center justify-center group overflow-hidden cursor-pointer" onclick="navigateTo('shop')">
                 <img src="https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=1200&q=80" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition duration-700 grayscale group-hover:grayscale-0" />
                 <div class="relative z-10 text-center pointer-events-none p-4">
-                   <h2 class="text-6xl md:text-9xl font-black italic tracking-tighter text-transparent w-text-stroke leading-none">DROP<br/>004</h2>
-                   <style>.w-text-stroke { -webkit-text-stroke: 2px white; color: transparent; }</style>
+                   <h2 class="text-6xl md:text-9xl font-black italic tracking-tighter text-transparent leading-none" style="-webkit-text-stroke: 2px white;">DROP<br/>004</h2>
                    <button class="mt-8 bg-[#ff3366] text-black font-black uppercase tracking-widest px-8 py-3 text-sm pointer-events-auto hover:bg-white transition">Shop The Drop</button>
                 </div>
              </div>
@@ -374,18 +401,18 @@ const generateDummyTemplate = (template) => {
           <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-12 border-b border-zinc-800 pb-6">All Gear.</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
              ${[
-               { img: "1552374196-1ab2a1c593e8", name: "Retro Hi-Tops", p: "2,400" },
-               { img: "1556821840-3a63f95609a7", name: "Nylon Anorak", p: "3,200" },
-               { img: "1578681994506-b09e18b6a6c6", name: "Heavy Hoodie", p: "1,500" },
-               { img: "1617331721458-bd3fa364a5d8", name: "Utility Vest", p: "1,850" },
-               { img: "1523381294911-8d3cead13475", name: "Graphic Tee", p: "850" },
-               { img: "1503342217505-b0a15ec3261c", name: "Cargo Pants", p: "1,900" },
-               { img: "1608231387042-66d1773070a5", name: "Beanie Red", p: "450" },
-               { img: "1591047139829-19fc9b441221", name: "Crossbody Bag", p: "950" }
+               { img:"https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=500&q=80", name:"Retro Hi-Tops", p:"2,400" },
+               { img:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=500&q=80", name:"Nylon Anorak", p:"3,200" },
+               { img:"https://images.unsplash.com/photo-1578681994506-b09e18b6a6c6?auto=format&fit=crop&w=500&q=80", name:"Heavy Hoodie", p:"1,500" },
+               { img:"https://images.unsplash.com/photo-1617331721458-bd3fa364a5d8?auto=format&fit=crop&w=500&q=80", name:"Utility Vest", p:"1,850" },
+               { img:"https://images.unsplash.com/photo-1523381294911-8d3cead13475?auto=format&fit=crop&w=500&q=80", name:"Graphic Tee", p:"850" },
+               { img:"https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=500&q=80", name:"Cargo Pants", p:"1,900" },
+               { img:"https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=500&q=80", name:"Beanie Red", p:"450" },
+               { img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=500&q=80", name:"Crossbody Bag", p:"950" }
              ].map(item => `
               <div class="group cursor-pointer">
                 <div class="relative bg-zinc-900 aspect-[3/4] mb-4 overflow-hidden border border-zinc-800">
-                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=500&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-90 group-hover:opacity-100" />
+                  <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-90 group-hover:opacity-100" />
                   <button class="absolute bottom-0 w-full bg-white text-black py-4 font-black uppercase tracking-widest text-sm transform translate-y-full group-hover:translate-y-0 transition duration-300">Add to Cart</button>
                 </div>
                 <h4 class="font-black italic uppercase text-lg group-hover:text-[#ff3366] transition">${item.name}</h4>
@@ -397,7 +424,6 @@ const generateDummyTemplate = (template) => {
       </div>
     `;
   } else if (template.id === 4) {
-    // 4. TechGear Mobile Accessories
     body = `
       <div class="bg-[#F8FAFC] font-sans text-slate-900 min-h-screen flex flex-col">
         <header class="px-8 py-5 flex justify-between items-center sticky top-0 z-30 bg-white/80 backdrop-blur-md shadow-sm">
@@ -425,18 +451,18 @@ const generateDummyTemplate = (template) => {
           <h2 class="text-3xl font-black mb-10 text-slate-900">All Accessories</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             ${[
-              { img: "1611314643773-40eab71bd0eb", n: "Silicone Phone Case", p: "350" },
-              { img: "1585338107529-f47285a73e44", n: "Fast Power Bank", p: "1,200" },
-              { img: "1605236453806-6ff36851218e", n: "Pod Leather Case", p: "450" },
-              { img: "1583394838336-acd977736f90", n: "Type-C Cable 2M", p: "250" },
-              { img: "1611314643773-40eab71bd0eb", n: "Clear Armor Case", p: "400" },
-              { img: "1585338107529-f47285a73e44", n: "Wireless Desk Charger", p: "850" },
-              { img: "1605236453806-6ff36851218e", n: "Pod Silicon Skin", p: "150" },
-              { img: "1583394838336-acd977736f90", n: "Dual Car Charger", p: "380" }
+              { img:"https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&w=400&q=80", n:"Silicone Phone Case", p:"350" },
+              { img:"https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=400&q=80", n:"Fast Power Bank", p:"1,200" },
+              { img:"https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=400&q=80", n:"Wireless Earbuds", p:"450" },
+              { img:"https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80", n:"Type-C Cable 2M", p:"250" },
+              { img:"https://images.unsplash.com/photo-1611314643773-40eab71bd0eb?auto=format&fit=crop&w=400&q=80", n:"Clear Armor Case", p:"400" },
+              { img:"https://images.unsplash.com/photo-1618366712010-f4ae9c647dcf?auto=format&fit=crop&w=400&q=80", n:"Wireless Charger", p:"850" },
+              { img:"https://images.unsplash.com/photo-1601593346740-925612772716?auto=format&fit=crop&w=400&q=80", n:"Screen Protector", p:"150" },
+              { img:"https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?auto=format&fit=crop&w=400&q=80", n:"Dual Car Charger", p:"380" }
             ].map(item => `
               <div class="group cursor-pointer bg-white p-4 rounded-2xl shadow-sm border border-slate-100 hover:shadow-xl hover:border-blue-200 transition">
                 <div class="aspect-square overflow-hidden mb-4 rounded-xl bg-slate-50">
-                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=400&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 mix-blend-multiply" />
+                  <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
                 </div>
                 <h4 class="font-bold text-slate-900 text-sm">${item.n}</h4>
                 <p class="text-blue-600 font-black mt-1">EGP ${item.p}</p>
@@ -448,7 +474,6 @@ const generateDummyTemplate = (template) => {
       </div>
     `;
   } else if (template.id === 5) {
-    // 5. Business Developer Profile
     body = `
       <div class="bg-white font-sans text-slate-900 min-h-screen flex flex-col">
         <header class="px-8 py-6 flex justify-between items-center sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-100">
@@ -497,10 +522,9 @@ const generateDummyTemplate = (template) => {
       </div>
     `;
   } else if (template.id === 6) {
-    // 6. Studio Kroma Branding (Agency)
     body = `
       <div class="bg-[#0f0f0f] font-modern text-[#f0f0f0] min-h-screen flex flex-col selection:bg-[#ccff00] selection:text-black">
-        <header class="p-6 md:p-8 flex justify-between items-center sticky top-0 z-50 mix-blend-difference bg-[#0f0f0f]/80 backdrop-blur-md">
+        <header class="p-6 md:p-8 flex justify-between items-center sticky top-0 z-50 bg-[#0f0f0f]/80 backdrop-blur-md">
           <div class="text-2xl font-bold tracking-tight cursor-pointer flex items-center gap-2" onclick="navigateTo('home')">
              <div class="w-6 h-6 bg-[#ccff00] rounded-full"></div> KROMA.
           </div>
@@ -520,7 +544,7 @@ const generateDummyTemplate = (template) => {
           <section class="px-6 md:px-12 pb-24">
              <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
                 <div class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group cursor-pointer" onclick="navigateTo('work')">
-                   <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
+                   <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700" />
                    <div class="absolute bottom-0 left-0 p-8 w-full bg-gradient-to-t from-black to-transparent">
                       <h3 class="text-4xl font-bold mb-2">Neon Dynamics</h3><p class="text-[#ccff00] font-medium">Brand Identity / 3D</p>
                    </div>
@@ -540,12 +564,12 @@ const generateDummyTemplate = (template) => {
            <h2 class="text-6xl md:text-8xl font-bold tracking-tighter leading-none mb-16">Selected<br/><span class="text-[#ccff00]">Archive.</span></h2>
            <div class="space-y-24 pb-24">
              ${[
-               { img: "1550745165-9bc0b252726f", title: "Neon Dynamics", cat: "Brand Identity", color: "ccff00" },
-               { img: "1618005182384-a83a8bd57fbe", title: "Abstract Data", cat: "Data Visualization", color: "00ffff" }
+               { img:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80", title:"Neon Dynamics", cat:"Brand Identity", color:"ccff00" },
+               { img:"https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1200&q=80", title:"Abstract Data", cat:"Data Visualization", color:"00ffff" }
              ].map((p) => `
              <div class="group cursor-pointer">
                <div class="relative overflow-hidden rounded-3xl aspect-[16/9] mb-8 bg-[#1a1a1a]">
-                  <img src="https://images.unsplash.com/photo-${p.img}?auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
+                  <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700 opacity-80 group-hover:opacity-100" />
                </div>
                <div class="flex justify-between items-center border-b border-[#333] pb-6 group-hover:border-[#${p.color}] transition">
                  <h3 class="font-bold text-3xl md:text-5xl tracking-tight">${p.title}</h3>
@@ -558,12 +582,11 @@ const generateDummyTemplate = (template) => {
       </div>
     `;
   } else if (template.id === 7) {
-    // 7. Vertex Corporate Profile
     body = `
       <div class="bg-white font-sans text-slate-800 min-h-screen flex flex-col">
         <header class="px-8 py-5 flex justify-between items-center sticky top-0 z-30 bg-white shadow-sm">
           <div class="flex items-center gap-2 cursor-pointer" onclick="navigateTo('home')">
-             <div class="w-8 h-8 bg-blue-700 rounded flex items-center justify-center text-white font-bold text-xl"><i class="fas fa-v"></i></div>
+             <div class="w-8 h-8 bg-blue-700 rounded flex items-center justify-center text-white font-bold text-xl">V</div>
              <h1 class="text-2xl font-bold tracking-tight text-slate-900">Vertex</h1>
           </div>
           <nav class="hidden md:flex gap-8 font-semibold text-sm text-slate-600">
@@ -585,7 +608,7 @@ const generateDummyTemplate = (template) => {
              <div class="md:w-1/2">
                 <h3 class="text-blue-700 font-bold uppercase tracking-widest text-sm mb-2">Our Mission</h3>
                 <h2 class="text-4xl font-bold text-slate-900 mb-6">Empowering Corporate Growth</h2>
-                <p class="text-slate-600 leading-relaxed mb-6">Established in 2015, Vertex has grown to become a cornerstone of corporate strategy in the MENA region. We believe in sustainable scaling, ethical business practices, and data-driven decision making.</p>
+                <p class="text-slate-600 leading-relaxed mb-6">Established in 2015, Vertex has grown to become a cornerstone of corporate strategy in the MENA region.</p>
                 <ul class="space-y-3 text-slate-700 font-medium">
                    <li><i class="fas fa-check text-blue-600 mr-2"></i> 500+ Enterprise Clients</li>
                    <li><i class="fas fa-check text-blue-600 mr-2"></i> ISO 9001 Certified</li>
@@ -620,7 +643,6 @@ const generateDummyTemplate = (template) => {
       </div>
     `;
   } else if (template.id === 8) {
-    // 8. Aseel Real Estate
     body = `
       <div class="bg-[#FDFBF7] font-serif text-[#2B3A30] min-h-screen flex flex-col">
         <header class="px-8 py-6 flex justify-between items-center sticky top-0 z-30 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#E8E2D2]">
@@ -643,7 +665,7 @@ const generateDummyTemplate = (template) => {
           </section>
           <section class="py-24 px-6 max-w-7xl mx-auto w-full text-center">
              <h3 class="text-4xl font-serif mb-4">Featured Property</h3>
-             <p class="font-sans text-[#556658] mb-12 max-w-2xl mx-auto">Discover unparalleled luxury in the heart of New Cairo. Architecture that breathes elegance.</p>
+             <p class="font-sans text-[#556658] mb-12 max-w-2xl mx-auto">Discover unparalleled luxury in the heart of New Cairo.</p>
              <div class="relative rounded-3xl overflow-hidden group cursor-pointer" onclick="navigateTo('properties')">
                 <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" class="w-full h-[500px] object-cover group-hover:scale-105 transition duration-1000" />
                 <div class="absolute bottom-0 w-full p-8 bg-gradient-to-t from-[#1A231C] to-transparent text-left text-white">
@@ -660,14 +682,14 @@ const generateDummyTemplate = (template) => {
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
             ${[
-              { img: "1600596542815-ffad4c1539a9", n: "The Crown Villa", p: "25,000,000", loc: "New Cairo" },
-              { img: "1512917774080-9991f1c4c750", n: "Modern Duplex", p: "12,500,000", loc: "Zayed City" },
-              { img: "1600607686527-6fb886090705", n: "Lakefront Mansion", p: "45,000,000", loc: "North Coast" },
-              { img: "1583608205713-38cbed115b88", n: "Oasis Townhouse", p: "8,900,000", loc: "October City" }
+              { img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80", n:"The Crown Villa", p:"25,000,000", loc:"New Cairo" },
+              { img:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", n:"Modern Duplex", p:"12,500,000", loc:"Zayed City" },
+              { img:"https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80", n:"Lakefront Mansion", p:"45,000,000", loc:"North Coast" },
+              { img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80", n:"Oasis Townhouse", p:"8,900,000", loc:"October City" }
             ].map(item => `
               <div class="group cursor-pointer">
                 <div class="relative overflow-hidden mb-4 rounded-xl aspect-[4/3]">
-                  <img src="https://images.unsplash.com/photo-${item.img}?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000" />
+                  <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-1000" />
                   <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 font-sans text-xs font-bold uppercase tracking-widest text-[#2B3A30] rounded">${item.loc}</div>
                 </div>
                 <h4 class="text-2xl font-serif group-hover:text-[#C5A880] transition">${item.n}</h4>
@@ -683,7 +705,7 @@ const generateDummyTemplate = (template) => {
   return `<!DOCTYPE html><html>${head}<body class="antialiased">${body}</body></html>`;
 };
 
-// ─── Translations & Dictionary ───────────────────────────────────────────────
+// ─── Translations ─────────────────────────────────────────────────────────────
 
 const T = {
   en:{
@@ -745,25 +767,28 @@ const T = {
     consult_btn: "Confirm Consultation",
     careers_section_title: "Architect the future with us.",
     careers_section_body: "We are always looking for logic-driven minds in strategy, engineering, and design.",
-    
-    // Gallery specific
-    search_placeholder: "Search templates (e.g., 'E-Commerce', 'Profile')...",
+    search_placeholder: "Search templates (e.g. 'E-Commerce', 'Profile', 'Real Estate')...",
     all_templates: "All Templates",
     e_commerce: "E-Commerce",
-    portfolio: "Company & Personal Profiles",
-    mobile_apps: "Mobile Apps",
+    portfolio: "Company & Profiles",
     showing: "Showing",
     templates_found: "templates",
     in_cat: "in",
     no_templates: "No templates found",
-    no_templates_desc: "We couldn't find any templates matching your search criteria. Try adjusting your filters.",
+    no_templates_desc: "Try adjusting your search or filters.",
     clear_filters: "Clear all filters",
-    live_preview: "Live Preview",
-    view_details: "View Details",
-    get_template: "Request Template",
+    view_demo: "View Demo",
     close_preview: "Close Preview",
     new_badge: "NEW",
-    feat_cat: "Featured Categories"
+    hot_badge: "HOT",
+    feat_cat: "Featured Categories",
+    pages_label: "Included Pages",
+    features_label: "Key Features",
+    stack_label: "Tech Stack",
+    delivery_label: "Delivery",
+    complexity_label: "Level",
+    reviews_label: "Reviews",
+    requests_label: "Requests",
   },
   ar:{
     logo:"منطق",
@@ -824,29 +849,32 @@ const T = {
     consult_btn: "تأكيد حجز الاستشارة",
     careers_section_title: "صمم المستقبل معنا.",
     careers_section_body: "نبحث دائمًا عن العقول المدفوعة بالمنطق في الاستراتيجية والهندسة والتصميم.",
-    
-    // Gallery specific
-    search_placeholder: "ابحث عن النماذج (مثل: 'متجر'، 'شركات')...",
+    search_placeholder: "ابحث عن النماذج (مثل: 'متجر'، 'شركات', 'عقارات')...",
     all_templates: "جميع النماذج",
     e_commerce: "متاجر إلكترونية",
     portfolio: "ملفات الشركات والأفراد",
-    mobile_apps: "تطبيقات جوال",
     showing: "عرض",
     templates_found: "نماذج",
     in_cat: "في فئة",
     no_templates: "لم يتم العثور على نماذج",
-    no_templates_desc: "لم نتمكن من العثور على نماذج تطابق بحثك. حاول تعديل الفلاتر.",
+    no_templates_desc: "حاول تعديل الفلاتر أو البحث.",
     clear_filters: "مسح جميع الفلاتر",
-    live_preview: "معاينة حية",
-    view_details: "عرض التفاصيل",
-    get_template: "طلب النموذج",
+    view_demo: "عرض النموذج",
     close_preview: "إغلاق المعاينة",
     new_badge: "جديد",
-    feat_cat: "الفئات المميزة"
+    hot_badge: "رائج",
+    feat_cat: "الفئات المميزة",
+    pages_label: "الصفحات المضمنة",
+    features_label: "المميزات الرئيسية",
+    stack_label: "التقنيات",
+    delivery_label: "مدة التسليم",
+    complexity_label: "المستوى",
+    reviews_label: "تقييمات",
+    requests_label: "طلبات",
   }
 };
 
-// ─── الخطافات (Hooks) ─────────────────────────────────────────────────────────
+// ─── Hooks ─────────────────────────────────────────────────────────────────────
 
 const useReveal = () => {
   useEffect(() => {
@@ -913,7 +941,6 @@ const useScrollRevealValue = (threshold = 0.15) => {
       const start = window.innerHeight * (1 - threshold);
       const end   = window.innerHeight * 0.2;
       const divisor = start - end;
-      
       if (Math.abs(divisor) < 0.1) {
         setVal(rect.top <= start ? 1 : 0);
       } else {
@@ -930,7 +957,7 @@ const useScrollRevealValue = (threshold = 0.15) => {
   return [ref, val];
 };
 
-// ─── حقل الإدخال العائم ──────────────────────────────────────────────────────────
+// ─── Field Component ──────────────────────────────────────────────────────────
 
 const Field = ({ label, name, type = 'text', required, as: AsTag, children, dark }) => {
   const Tag = AsTag || 'input';
@@ -974,30 +1001,23 @@ const Field = ({ label, name, type = 'text', required, as: AsTag, children, dark
   );
 };
 
-// ─── الشعار (Logo) ──────────────────────────────────────────────────────────────────
+// ─── Logo ─────────────────────────────────────────────────────────────────────
 
 const LogoQ = ({ size = '1.3em' }) => (
-  <svg
-    viewBox="0 0 400 500"
-    fill="none"
-    stroke="#0ea5e9"
-    strokeWidth="55"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ display: 'inline-block', width: size, height: size, verticalAlign: 'middle', marginBottom: '0.08em' }}
-  >
+  <svg viewBox="0 0 400 500" fill="none" stroke="#0ea5e9" strokeWidth="55" strokeLinecap="round" strokeLinejoin="round"
+    style={{ display:'inline-block', width:size, height:size, verticalAlign:'middle', marginBottom:'0.08em' }}>
     <circle cx="200" cy="200" r="150"/>
     <path d="M320,430 C270,430 200,400 200,320 L200,140 M140,200 L200,140 L260,200"/>
   </svg>
 );
 
 const LogoText = ({ className = '', color }) => (
-  <span className={className} style={{ color: color || 'currentColor', letterSpacing: 'inherit', fontWeight: 400 }}>
+  <span className={className} style={{ color: color || 'currentColor', letterSpacing:'inherit', fontWeight:400 }}>
     MANTI<LogoQ size="1.3em"/>
   </span>
 );
 
-// ─── القائمة (Nav) ─────────────────────────────────────────────────────────────────────
+// ─── Nav ──────────────────────────────────────────────────────────────────────
 
 const Nav = ({ lang, setLang, go, active, currentPage, openCareers }) => {
   const [open, setOpen] = useState(false);
@@ -1025,14 +1045,12 @@ const Nav = ({ lang, setLang, go, active, currentPage, openCareers }) => {
         className={`fixed top-0 inset-x-0 z-[100] transition-all duration-500
         ${scrolled || currentPage !== 'home' ? 'bg-white/95 backdrop-blur-xl border-b border-slate-100 py-4' : 'bg-transparent py-6'}`}>
         <div className="max-w-7xl mx-auto px-6 sm:px-10 flex items-center justify-between">
-
           <button onClick={() => go('home')} className="flex items-center group">
             {lang === 'ar'
               ? <span className={`font-normal text-xl tracking-[0.18em] uppercase transition-colors ${scrolled || currentPage !== 'home' ? 'text-slate-900' : 'text-white'}`}>{t.logo}</span>
               : <LogoText className={`font-normal text-xl tracking-[0.18em] uppercase transition-colors ${scrolled || currentPage !== 'home' ? 'text-slate-900' : 'text-white'}`} color={scrolled || currentPage !== 'home' ? '#0f172a' : '#ffffff'}/>
             }
           </button>
-
           <div className="hidden lg:flex items-center gap-10">
             {links.map(l => (
               <button key={l.id} onClick={() => l.isCareers ? openCareers() : go(l.id)}
@@ -1044,7 +1062,6 @@ const Nav = ({ lang, setLang, go, active, currentPage, openCareers }) => {
               </button>
             ))}
           </div>
-
           <div className="hidden lg:flex items-center gap-5">
             <button onClick={() => setLang(ar ? 'en' : 'ar')}
               className={`text-[11px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1.5 ${(scrolled || currentPage !== 'home') ? 'text-sky-500 hover:text-sky-600' : 'text-white/50 hover:text-white'}`}>
@@ -1056,7 +1073,6 @@ const Nav = ({ lang, setLang, go, active, currentPage, openCareers }) => {
               {t.cta}
             </button>
           </div>
-
           <button className={`lg:hidden p-1 transition-colors ${scrolled || currentPage !== 'home' ? 'text-slate-900' : 'text-white'}`} onClick={() => setOpen(!open)}>
             {open ? <X size={22}/> : <Menu size={22}/>}
           </button>
@@ -1098,7 +1114,7 @@ const Nav = ({ lang, setLang, go, active, currentPage, openCareers }) => {
   );
 };
 
-// ─── سطر الخدمة (Service Row) ─────────────────────────────────────────────────────────────
+// ─── Service Row ──────────────────────────────────────────────────────────────
 
 const ServiceRow = ({ s, lang, i, onBookConsult, onViewDemos }) => {
   const [open, setOpen] = useState(false);
@@ -1185,7 +1201,7 @@ const ServiceRow = ({ s, lang, i, onBookConsult, onViewDemos }) => {
   );
 };
 
-// ─── بطاقة الإحصائيات (Stat Card) ───────────────────────────────────────────────────────────────
+// ─── Stat Card ────────────────────────────────────────────────────────────────
 
 const StatCard = ({ stat, delay }) => {
   const [visible, setVisible] = useState(false);
@@ -1208,7 +1224,7 @@ const StatCard = ({ stat, delay }) => {
   );
 };
 
-// ─── بطاقة الميلان (Tilt Card) ────────────────────────────────────────────────────────────────
+// ─── Tilt Card ────────────────────────────────────────────────────────────────
 
 const TiltCard = ({ children }) => {
   const ref = useRef(null);
@@ -1230,7 +1246,7 @@ const TiltCard = ({ children }) => {
   );
 };
 
-// ─── المكونات المساعدة ──────────────────────────────────────────────────────
+// ─── Helper Components ────────────────────────────────────────────────────────
 
 const SectionLabel = ({ text, dark = false }) => {
   const [ref, val] = useScrollRevealValue(0.3);
@@ -1245,7 +1261,7 @@ const SectionLabel = ({ text, dark = false }) => {
   );
 };
 
-const ScrollRevealText = ({ children, dark = false }) => {
+const ScrollRevealText = ({ children }) => {
   const [ref, val] = useScrollRevealValue(0.2);
   const safeVal = isNaN(val) ? 0 : val;
   return (
@@ -1285,11 +1301,149 @@ const Marquee = ({ lang }) => {
   );
 };
 
-// ─── التطبيق الرئيسي (App) ────────────────────────────────────────────────────────────────────
+// ─── Enhanced Template Card ───────────────────────────────────────────────────
+
+const complexityColor = {
+  Starter: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-200' },
+  Intermediate: { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-200' },
+  Advanced: { bg: 'bg-rose-50', text: 'text-rose-600', border: 'border-rose-200' }
+};
+
+const TemplateCard = ({ template, t, lang, onPreview }) => {
+  const ar = lang === 'ar';
+  const cc = complexityColor[template.complexity] || complexityColor.Starter;
+
+  const renderStars = (rating) => {
+    return [1,2,3,4,5].map(i => (
+      <span key={i} style={{ color: i <= Math.floor(rating) ? '#f59e0b' : '#e2e8f0', fontSize: '11px' }}>★</span>
+    ));
+  };
+
+  return (
+    <div className="group flex flex-col bg-white rounded-[1.5rem] overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-200 transition-all duration-300 hover:-translate-y-1">
+
+      {/* Image */}
+      <div className="relative h-52 overflow-hidden bg-slate-100">
+        <img
+          src={template.image}
+          alt={template.title}
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+
+        {/* Badges */}
+        <div className={`absolute top-3 ${ar ? 'right-3' : 'left-3'} flex flex-col gap-1.5`}>
+          <span className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur text-slate-800 text-[9px] font-bold uppercase tracking-wider px-2.5 py-1.5 rounded-lg shadow-sm">
+            {template.category === 'E-Commerce' ? <ShoppingBag size={10} className="text-sky-500"/> : <Building size={10} className="text-sky-500"/>}
+            {template.category === 'E-Commerce' ? t.e_commerce : t.portfolio}
+          </span>
+          {template.badge === 'new' && (
+            <span className="bg-sky-500 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg shadow-sm">{t.new_badge}</span>
+          )}
+          {template.badge === 'hot' && (
+            <span className="bg-orange-500 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-lg shadow-sm">{t.hot_badge} 🔥</span>
+          )}
+        </div>
+
+        {/* Hover: View Demo button */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+          <button
+            onClick={() => onPreview(template)}
+            className="flex items-center gap-2.5 bg-white text-slate-900 font-black text-xs uppercase tracking-wider py-3 px-6 rounded-xl shadow-xl transform translate-y-3 group-hover:translate-y-0 transition-all duration-300 hover:bg-sky-500 hover:text-white"
+          >
+            <Play size={14} fill="currentColor"/>
+            {t.view_demo}
+          </button>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="p-6 flex flex-col flex-1 gap-4">
+
+        {/* Header: title + rating */}
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-base font-black tracking-tight text-slate-900 leading-tight group-hover:text-sky-600 transition-colors">{template.title}</h3>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {renderStars(template.rating)}
+            <span className="text-[10px] font-bold text-slate-400 ml-1">{template.rating}</span>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p className="text-slate-500 text-xs leading-relaxed line-clamp-2">{template.description}</p>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-4 divide-x divide-slate-100 border border-slate-100 rounded-xl overflow-hidden">
+          {[
+            { val: `${template.downloads}+`, lbl: t.requests_label },
+            { val: template.reviews, lbl: t.reviews_label },
+            { val: template.pages.length, lbl: t.pages_label },
+            { val: template.time, lbl: t.delivery_label }
+          ].map((s, i) => (
+            <div key={i} className="flex flex-col items-center justify-center py-2.5 px-1 text-center bg-slate-50/50">
+              <span className={`font-black text-slate-900 leading-none ${i === 3 ? 'text-[9px]' : 'text-sm'}`}>{s.val}</span>
+              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-0.5 leading-tight">{s.lbl}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Pages chips */}
+        <div>
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">{t.pages_label}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {template.pages.map((pg, i) => (
+              <span key={i} className={`text-[9px] font-bold uppercase tracking-wide px-2 py-1 rounded-md border ${i < 3 ? 'bg-sky-50 border-sky-200 text-sky-600' : 'bg-slate-50 border-slate-200 text-slate-400'}`}>
+                {pg}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Features */}
+        <div>
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">{t.features_label}</p>
+          <div className="grid grid-cols-1 gap-1">
+            {template.features.map((f, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className="w-1 h-1 rounded-full bg-sky-400 flex-shrink-0"/>
+                <span className="text-xs text-slate-500 font-medium">{f}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tech tags */}
+        <div>
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2">{t.stack_label}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {template.tags.map(tag => (
+              <span key={tag} className="flex items-center gap-1 px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-wide bg-slate-100 text-slate-500 border border-slate-200">
+                <Code size={8}/> {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer — View Demo CTA only */}
+      <div className="px-6 pb-5 pt-3 border-t border-slate-100 bg-slate-50/60">
+        <button
+          onClick={() => onPreview(template)}
+          className="w-full flex items-center justify-center gap-2.5 bg-slate-900 hover:bg-sky-500 text-white text-xs font-black uppercase tracking-widest py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98] shadow-sm"
+        >
+          <Play size={13} fill="currentColor"/>
+          {t.view_demo}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ─── App ──────────────────────────────────────────────────────────────────────
 
 export default function App() {
   const [lang, setLang] = useState('en');
-  const [page, setPage] = useState('home'); 
+  const [page, setPage] = useState('home');
   const [active, setActive] = useState('home');
   const [careers, setCareers] = useState(false);
   const [formStatus, setFormStatus] = useState(null);
@@ -1297,8 +1451,8 @@ export default function App() {
   const [consultStatus, setConsultStatus] = useState(null);
   const [demoStatus, setDemoStatus] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState('');
-  
-  // Gallery specific state
+
+  // Gallery state
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [previewTemplate, setPreviewTemplate] = useState(null);
@@ -1337,7 +1491,6 @@ export default function App() {
       window.scrollTo(0, 0);
       return;
     }
-    
     if (page !== 'home') {
       setPage('home');
       setTimeout(() => {
@@ -1353,9 +1506,7 @@ export default function App() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setSelectedFileName(file.name);
-    }
+    if (file) setSelectedFileName(file.name);
   };
 
   const handleForm = async (e, sheet) => {
@@ -1363,7 +1514,6 @@ export default function App() {
     setFormStatus('sending');
     const fd = new FormData(e.target);
     const data = { sheetName: sheet };
-    
     for (let [key, value] of fd.entries()) {
       if (value instanceof File && value.name) {
         const base64 = await new Promise((resolve) => {
@@ -1371,30 +1521,20 @@ export default function App() {
           reader.onload = () => resolve(reader.result);
           reader.readAsDataURL(value);
         });
-        
-        data[key] = base64; 
+        data[key] = base64;
         data[`${key}_name`] = value.name;
         data[`${key}_data`] = base64;
       } else {
         data[key] = value;
       }
     }
-    
     try {
-      await fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
-      
+      await fetch(scriptURL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) });
       setFormStatus('success');
       e.target.reset();
       setSelectedFileName('');
       setTimeout(() => setFormStatus(null), 10000);
-    } catch(e) { 
-      setFormStatus(null); 
-    }
+    } catch(e) { setFormStatus(null); }
   };
 
   const handleActionForm = async (e, sheet, setter) => {
@@ -1404,7 +1544,7 @@ export default function App() {
     const data = { sheetName: sheet };
     fd.forEach((value, key) => { data[key] = value; });
     try {
-      await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
+      await fetch(scriptURL, { method:'POST', mode:'no-cors', body:JSON.stringify(data) });
       setter('success');
       e.target.reset();
       setTimeout(() => setter(null), 10000);
@@ -1418,43 +1558,40 @@ export default function App() {
     { n:'25+',  l: t.stats_d, icon:<Users size={16}/> },
   ];
 
-  // Filter templates
   const filteredTemplates = TEMPLATES.filter(template => {
     const matchesCategory = activeCategory === "All" || template.category === activeCategory;
-    const matchesSearch = template.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          template.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = !searchQuery || template.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          template.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          template.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
   return (
     <div dir={ar ? 'rtl' : 'ltr'} className="bg-white text-slate-900 min-h-screen font-sans selection:bg-sky-100 selection:text-sky-700 overflow-x-hidden">
 
-      <div className="fixed top-0 left-0 z-[200] h-[2px] bg-sky-500 transition-none pointer-events-none" style={{ width: `${scrollProgress * 100}%`, boxShadow: '0 0 8px rgba(14,165,233,0.6)' }}/>
+      {/* Scroll progress bar */}
+      <div className="fixed top-0 left-0 z-[200] h-[2px] bg-sky-500 transition-none pointer-events-none" style={{ width:`${scrollProgress * 100}%`, boxShadow:'0 0 8px rgba(14,165,233,0.6)' }}/>
 
       <Nav lang={lang} setLang={setLang} go={go} active={active} currentPage={page} openCareers={() => setCareers(true)} />
 
       {page === 'home' ? (
         <>
-          {/* ═══ Hero ═══════════════════════════════════════════════════════════ */}
+          {/* ═══ Hero ═══ */}
           <section id="home" className="relative min-h-screen flex flex-col overflow-hidden bg-slate-900">
             <div className="absolute inset-0 overflow-hidden" ref={heroImgRef}>
-              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover opacity-30" style={{ transform: `translateY(${isNaN(heroImgOffset) ? 0 : heroImgOffset}px)`, willChange: 'transform' }}/>
-              <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.6) 60%, rgba(2,6,23,0.8) 100%)' }}/>
+              <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=2000" alt="" className="w-full h-full object-cover opacity-30" style={{ transform:`translateY(${isNaN(heroImgOffset) ? 0 : heroImgOffset}px)`, willChange:'transform' }}/>
+              <div className="absolute inset-0" style={{ background:'linear-gradient(135deg, rgba(2,6,23,0.95) 0%, rgba(2,6,23,0.6) 60%, rgba(2,6,23,0.8) 100%)' }}/>
             </div>
-
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-sky-500 z-10 animate-accentPulse"/>
-
-            <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform: `translateY(${isNaN(heroTextOffset) ? 0 : heroTextOffset}px)`, willChange: 'transform' }}>
+            <div ref={heroTextRef} className="relative z-10 flex-1 flex flex-col justify-end pb-16 sm:pb-24 px-6 sm:px-10 pt-32 max-w-7xl mx-auto w-full" style={{ transform:`translateY(${isNaN(heroTextOffset) ? 0 : heroTextOffset}px)`, willChange:'transform' }}>
               <div className="flex items-center gap-3 mb-8 hero-label">
                 <div className="w-5 h-[2px] bg-sky-500"/>
                 <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-white/50">{t.hero_label}</span>
               </div>
-
               <h1>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-white leading-[0.88] hero-word-1">{t.hero_line1}</span>
                 <span className="block text-5xl sm:text-7xl md:text-9xl font-black tracking-tighter text-sky-400 leading-[0.88] italic hero-word-3">{t.hero_line3}</span>
               </h1>
-
               <div className="mt-10 flex flex-col sm:flex-row sm:items-end justify-between gap-8">
                 <p className="max-w-md text-base sm:text-lg text-white/50 leading-relaxed font-medium hero-desc">{t.hero_desc}</p>
                 <div className="flex gap-3 flex-shrink-0 hero-btns">
@@ -1469,7 +1606,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ About ══════════════════════════════════════════════════════════ */}
+          {/* ═══ About ═══ */}
           <section id="about" className="py-24 sm:py-36 px-6 sm:px-10">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.about_label}/>
@@ -1495,7 +1632,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ Services ═══════════════════════════════════════════════════════ */}
+          {/* ═══ Services ═══ */}
           <section id="services" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-50/50">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.services_label}/>
@@ -1505,11 +1642,11 @@ export default function App() {
               </div>
               <div className="border-t border-slate-100">
                 {SERVICES.map((s, i) => (
-                  <ServiceRow 
-                    key={s.id} 
-                    s={s} 
-                    lang={lang} 
-                    i={i} 
+                  <ServiceRow
+                    key={s.id}
+                    s={s}
+                    lang={lang}
+                    i={i}
                     onBookConsult={s.id === 'business' ? () => setConsultModal(true) : null}
                     onViewDemos={s.id === 'tracking' || s.id === 'web' || s.id === 'mobile' ? () => go('demos') : null}
                   />
@@ -1518,7 +1655,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ Careers Section ═════════════════════════════════════════════════ */}
+          {/* ═══ Careers CTA ═══ */}
           <section className="py-24 sm:py-36 px-6 sm:px-10 bg-sky-500">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
               <div className="reveal">
@@ -1531,7 +1668,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* ═══ Events ═════════════════════════════════════════════════════════ */}
+          {/* ═══ Events ═══ */}
           <section id="events" className="py-24 sm:py-36 px-6 sm:px-10">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.events_label}/>
@@ -1557,7 +1694,7 @@ export default function App() {
 
           <Marquee lang={lang}/>
 
-          {/* ═══ Contact ════════════════════════════════════════════════════════ */}
+          {/* ═══ Contact ═══ */}
           <section id="contact" className="py-24 sm:py-36 px-6 sm:px-10 bg-slate-900">
             <div className="max-w-7xl mx-auto">
               <SectionLabel text={t.contact_label} dark/>
@@ -1574,7 +1711,10 @@ export default function App() {
                       <div className="grid sm:grid-cols-2 gap-9"><Field label={t.name_p} name="name" required dark/><Field label={t.company_p} name="company" dark/></div>
                       <div className="grid sm:grid-cols-2 gap-9"><Field label={t.email_p} name="email" type="email" required dark/><Field label={t.phone_p} name="phone" type="tel" required dark/></div>
                       <Field label={t.service_p} name="service" required dark as="select">{SERVICES.map(s => <option key={s.id} value={s.id} className="text-slate-900 bg-white">{s.title[lang]}</option>)}</Field>
-                      <button disabled={formStatus === 'sending'} className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:bg-sky-600 transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2 overflow-hidden group/btn"><span className="absolute inset-0 bg-white/10 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>{formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <span className="relative flex items-center gap-3">{t.submit}<ChevronRight size={14} className={`transition-transform duration-300 group-hover/btn:translate-x-1 ${ar ? 'rotate-180' : ''}`}/></span>}</button>
+                      <button disabled={formStatus === 'sending'} className="relative w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-sky-500 hover:bg-sky-400 active:bg-sky-600 transition-all duration-200 active:scale-[0.97] flex items-center justify-center gap-3 disabled:opacity-40 shadow-xl shadow-sky-500/20 mt-2 overflow-hidden group/btn">
+                        <span className="absolute inset-0 bg-white/10 scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-500 origin-left rounded-2xl"/>
+                        {formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <span className="relative flex items-center gap-3">{t.submit}<ChevronRight size={14} className={`transition-transform duration-300 group-hover/btn:translate-x-1 ${ar ? 'rotate-180' : ''}`}/></span>}
+                      </button>
                     </form>
                   )}
                 </div>
@@ -1583,11 +1723,11 @@ export default function App() {
           </section>
         </>
       ) : (
-        /* ═══ Dedicated Demos & Gallery Page ═════════════════════════════════════════════ */
+        /* ═══ Demos Page ═══ */
         <section className="pt-32 pb-24 px-6 sm:px-10 min-h-screen bg-slate-50">
           <div className="max-w-7xl mx-auto">
             <SectionLabel text={t.demos_label}/>
-            
+
             <div className="grid lg:grid-cols-2 gap-12 sm:gap-20 items-end mb-16">
               <ScrollRevealText>
                 <h2 className="text-4xl sm:text-7xl font-black tracking-tighter leading-[0.9] text-slate-900">
@@ -1595,152 +1735,76 @@ export default function App() {
                   <span className="block italic text-sky-500">{t.demos_title2}</span>
                 </h2>
               </ScrollRevealText>
-              <div className="reveal flex flex-col gap-4" style={{ transitionDelay:'80ms' }}>
-                <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium">{t.demos_body}</p>
+              <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-medium reveal" style={{ transitionDelay:'80ms' }}>{t.demos_body}</p>
+            </div>
+
+            {/* Search */}
+            <div className="max-w-2xl mx-auto relative mb-10 shadow-sm rounded-2xl">
+              <div className={`absolute inset-y-0 ${ar ? 'right-0 pr-5' : 'left-0 pl-5'} flex items-center pointer-events-none`}>
+                <Search size={18} className="text-slate-400" />
+              </div>
+              <input
+                type="text"
+                placeholder={t.search_placeholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`w-full ${ar ? 'pr-12 pl-5' : 'pl-12 pr-5'} py-4 rounded-2xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all text-sm font-medium`}
+              />
+            </div>
+
+            {/* Category filters */}
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-5 border-b border-slate-200 pb-6">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 hidden lg:block">{t.feat_cat}</span>
+              <div className="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 w-full md:w-auto gap-2 sm:gap-3">
+                {CATEGORIES.map(category => {
+                  const Icon = category.icon;
+                  const isActive = activeCategory === category.id;
+                  const catLabel = category.id === "All" ? t.all_templates : category.id === "E-Commerce" ? t.e_commerce : t.portfolio;
+                  return (
+                    <button key={category.id} onClick={() => setActiveCategory(category.id)}
+                      className={`whitespace-nowrap flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${
+                        isActive ? 'bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/20' : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300 hover:bg-sky-50'
+                      }`}>
+                      <Icon size={14} className={isActive ? "text-white" : "text-slate-400"} />
+                      {catLabel}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* --- GALLERY SECTION --- */}
-            <div className="mb-24 reveal reveal-scale" style={{ transitionDelay:'150ms' }}>
-              
-              {/* Search Bar */}
-              <div className="max-w-2xl mx-auto relative mb-12 shadow-sm rounded-2xl">
-                <div className={`absolute inset-y-0 ${ar ? 'right-0 pr-5' : 'left-0 pl-5'} flex items-center pointer-events-none`}>
-                  <Search size={20} className="text-slate-400" />
-                </div>
-                <input 
-                  type="text" 
-                  placeholder={t.search_placeholder} 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className={`w-full ${ar ? 'pr-12 pl-5' : 'pl-12 pr-5'} py-5 rounded-2xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all text-sm font-medium`}
-                />
-              </div>
-
-              {/* Category Filters */}
-              <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6 border-b border-slate-200 pb-6">
-                <h2 className="text-2xl font-black text-slate-900 hidden lg:block tracking-tight">{t.feat_cat}</h2>
-                <div className="flex overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 w-full md:w-auto hide-scrollbar gap-2 sm:gap-3">
-                  {CATEGORIES.map(category => {
-                    const Icon = category.icon;
-                    const isActive = activeCategory === category.id;
-                    const catLabel = category.id === "All" ? t.all_templates : category.id === "E-Commerce" ? t.e_commerce : t.portfolio;
-                    return (
-                      <button
-                        key={category.id}
-                        onClick={() => setActiveCategory(category.id)}
-                        className={`whitespace-nowrap flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all border ${
-                          isActive 
-                            ? 'bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/20' 
-                            : 'bg-white text-slate-600 border-slate-200 hover:border-sky-300 hover:bg-sky-50'
-                        }`}
-                      >
-                        <Icon size={16} className={isActive ? "text-white" : "text-slate-400"} />
-                        {catLabel}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Results Count */}
-              <div className="mb-8 text-xs font-bold text-slate-500 uppercase tracking-widest">
-                {t.showing} {filteredTemplates.length} {t.templates_found}
-                {activeCategory !== "All" && <span> {t.in_cat} <span className="text-sky-500">{activeCategory === "E-Commerce" ? t.e_commerce : t.portfolio}</span></span>}
-              </div>
-
-              {/* Templates Grid */}
-              {filteredTemplates.length === 0 ? (
-                <div className="text-center py-20 bg-white rounded-[2rem] border border-slate-200 border-dashed">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-50 text-slate-400 mb-4 border border-slate-100">
-                    <Search size={32} />
-                  </div>
-                  <h3 className="text-xl font-black text-slate-900 mb-2">{t.no_templates}</h3>
-                  <p className="text-slate-500 max-w-sm mx-auto font-medium text-sm">
-                    {t.no_templates_desc}
-                  </p>
-                  <button 
-                    onClick={() => { setSearchQuery(""); setActiveCategory("All"); }}
-                    className="mt-6 text-sky-600 font-bold hover:underline text-sm uppercase tracking-wider"
-                  >
-                    {t.clear_filters}
-                  </button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {filteredTemplates.map(template => (
-                    <div key={template.id} className="group flex flex-col bg-white rounded-[2rem] overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:border-sky-200 transition-all duration-300">
-                      
-                      {/* Image Container */}
-                      <div className="relative h-64 overflow-hidden bg-slate-100 border-b border-slate-100">
-                        <img 
-                          src={template.image} 
-                          alt={template.title} 
-                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                        />
-                        <div className="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors"></div>
-                        
-                        {/* Badges */}
-                        <div className={`absolute top-4 ${ar ? 'right-4' : 'left-4'} flex flex-col gap-2 items-start`}>
-                          <span className="bg-white/95 backdrop-blur text-slate-800 text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1.5">
-                            {template.category === 'E-Commerce' && <ShoppingBag size={12} className="text-sky-500"/>}
-                            {template.category === 'Profiles' && <Building size={12} className="text-sky-500"/>}
-                            {template.category === "E-Commerce" ? t.e_commerce : t.portfolio}
-                          </span>
-                          {template.isNew && (
-                            <span className="bg-sky-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg shadow-sm self-start">
-                              {t.new_badge}
-                            </span>
-                          )}
-                        </div>
-                        
-                        {/* Overlay Action */}
-                        <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300 backdrop-blur-[2px]">
-                          <button 
-                            onClick={() => setPreviewTemplate(template)}
-                            className="bg-white text-slate-900 font-bold text-xs uppercase tracking-wider py-3 px-6 rounded-xl flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all hover:bg-sky-50 hover:text-sky-600"
-                          >
-                            {t.live_preview} <ExternalLink size={16} />
-                          </button>
-                        </div>
-                      </div>
-                      
-                      {/* Content */}
-                      <div className="p-8 flex flex-col flex-1">
-                        <h3 className="text-xl font-black tracking-tight text-slate-900 mb-2 group-hover:text-sky-600 transition-colors">
-                          {template.title}
-                        </h3>
-                        <p className="text-slate-500 text-sm mb-6 line-clamp-2 flex-1 leading-relaxed">
-                          {template.description}
-                        </p>
-                        
-                        {/* Tech Stack Tags */}
-                        <div className="flex flex-wrap gap-2 mb-8">
-                          {template.tags.map(tag => (
-                            <span key={tag} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500 border border-slate-200">
-                              <Code size={10} /> {tag}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* Footer Actions */}
-                        <div className="pt-5 border-t border-slate-100 flex items-center justify-between mt-auto">
-                          <button onClick={() => setPreviewTemplate(template)} className="text-sky-500 font-bold text-xs uppercase tracking-widest hover:text-sky-700 flex items-center gap-1 transition-colors">
-                            {t.view_details} <ChevronRight size={14} className={ar ? 'rotate-180' : ''}/>
-                          </button>
-                          <button onClick={() => setDemoStatus('show_form')} className="bg-slate-900 hover:bg-sky-500 text-white text-xs font-black uppercase tracking-widest py-3 px-5 rounded-xl transition-colors shadow-sm">
-                            {t.get_template}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+            {/* Results count */}
+            <div className="mb-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              {t.showing} {filteredTemplates.length} {t.templates_found}
+              {activeCategory !== "All" && <span> {t.in_cat} <span className="text-sky-500">{activeCategory === "E-Commerce" ? t.e_commerce : t.portfolio}</span></span>}
             </div>
 
-            {/* General Customization Request Form */}
-            <div className="max-w-3xl mx-auto py-16 px-8 sm:px-12 rounded-[3rem] bg-white border border-slate-200 shadow-xl reveal">
+            {/* Grid */}
+            {filteredTemplates.length === 0 ? (
+              <div className="text-center py-20 bg-white rounded-[2rem] border border-slate-200 border-dashed">
+                <Search size={32} className="mx-auto text-slate-300 mb-4"/>
+                <h3 className="text-xl font-black text-slate-900 mb-2">{t.no_templates}</h3>
+                <p className="text-slate-500 max-w-sm mx-auto font-medium text-sm">{t.no_templates_desc}</p>
+                <button onClick={() => { setSearchQuery(""); setActiveCategory("All"); }} className="mt-6 text-sky-600 font-bold hover:underline text-sm uppercase tracking-wider">
+                  {t.clear_filters}
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+                {filteredTemplates.map(template => (
+                  <TemplateCard
+                    key={template.id}
+                    template={template}
+                    t={t}
+                    lang={lang}
+                    onPreview={setPreviewTemplate}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Customization form */}
+            <div className="max-w-3xl mx-auto mt-20 py-16 px-8 sm:px-12 rounded-[3rem] bg-white border border-slate-200 shadow-xl reveal">
               {demoStatus === 'success' ? (
                 <div className="flex flex-col items-center text-center gap-4 py-12">
                   <div className="w-16 h-16 rounded-3xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/20"><CheckCircle2 size={32} className="text-white"/></div>
@@ -1777,72 +1841,61 @@ export default function App() {
         </section>
       )}
 
-      {/* ═══ Footer ═════════════════════════════════════════════════════════ */}
+      {/* ═══ Footer ═══ */}
       <footer className="py-12 sm:py-16 px-6 sm:px-10 border-t border-slate-100 bg-white reveal z-10 relative">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-8">
-          <div><div className="mb-3">{lang === 'ar' ? <span className="font-normal text-xl tracking-[0.18em] uppercase text-slate-900">{t.logo}</span> : <LogoText className="font-normal text-xl tracking-[0.18em] uppercase" color="#0f172a"/>}</div><p className="text-xs text-slate-400 max-w-xs leading-relaxed">{t.footer_desc}</p></div>
+          <div>
+            <div className="mb-3">{lang === 'ar' ? <span className="font-normal text-xl tracking-[0.18em] uppercase text-slate-900">{t.logo}</span> : <LogoText className="font-normal text-xl tracking-[0.18em] uppercase" color="#0f172a"/>}</div>
+            <p className="text-xs text-slate-400 max-w-xs leading-relaxed">{t.footer_desc}</p>
+          </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-8">
             <button onClick={() => setCareers(true)} className="text-sky-500 hover:text-sky-600 font-black text-[10px] uppercase tracking-widest transition-colors flex items-center gap-1.5"><Users size={11}/> {t.careers}</button>
-            <div className="flex items-center gap-3">{[ { Icon: Facebook, url: 'https://www.facebook.com/share/1Dss3Eqybc' }, { Icon: Linkedin, url: 'https://www.linkedin.com/company/mantiq.services' }, { Icon: Mail, url: 'mailto:hello@mantiq.services' } ].map(({ Icon, url }, i) => (
-              <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg border border-sky-100 bg-sky-50 flex items-center justify-center text-sky-500 hover:bg-sky-500 hover:text-white hover:border-sky-500 hover:-translate-y-1 transition-all duration-200" style={{ transitionDelay: `${i * 40}ms` }}><Icon size={14}/></a>
-            ))}</div>
+            <div className="flex items-center gap-3">
+              {[ { Icon: Facebook, url: 'https://www.facebook.com/share/1Dss3Eqybc' }, { Icon: Linkedin, url: 'https://www.linkedin.com/company/mantiq.services' }, { Icon: Mail, url: 'mailto:hello@mantiq.services' } ].map(({ Icon, url }, i) => (
+                <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg border border-sky-100 bg-sky-50 flex items-center justify-center text-sky-500 hover:bg-sky-500 hover:text-white hover:border-sky-500 hover:-translate-y-1 transition-all duration-200" style={{ transitionDelay:`${i * 40}ms` }}><Icon size={14}/></a>
+              ))}
+            </div>
           </div>
         </div>
       </footer>
 
-      {/* ═══ PREVIEW MODAL (Templates) ═══════════════════════════════ */}
+      {/* ═══ Full-screen Preview Modal ═══ */}
       {previewTemplate && (
         <div className="fixed inset-0 z-[300] flex flex-col bg-slate-900 overflow-hidden animate-fadeIn" dir={ar ? 'rtl' : 'ltr'}>
-          {/* Modal Header */}
-          <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 shrink-0 shadow-sm z-10">
-            <div className="flex items-center gap-4 text-white">
-              <h3 className="font-bold text-lg hidden sm:block tracking-tight">{previewTemplate.title}</h3>
-              <span className="inline-block px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-[10px] uppercase tracking-widest font-bold border border-slate-700">
+          {/* Header */}
+          <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 shrink-0 z-10">
+            <div className="flex items-center gap-3 text-white">
+              <h3 className="font-bold text-base hidden sm:block tracking-tight">{previewTemplate.title}</h3>
+              <span className="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-[9px] uppercase tracking-widest font-bold border border-slate-700">
                 {previewTemplate.category === "E-Commerce" ? t.e_commerce : t.portfolio}
               </span>
             </div>
-            
-            <div className="flex items-center gap-4 sm:gap-6">
-              {/* Device Toggle */}
+            <div className="flex items-center gap-3 sm:gap-4">
+              {/* Device toggle */}
               <div className="flex bg-slate-800 rounded-lg p-1 border border-slate-700">
-                <button 
-                  onClick={() => setPreviewDevice('desktop')}
-                  className={`p-1.5 rounded-md transition-colors ${previewDevice === 'desktop' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
-                  title="Desktop View"
-                >
-                  <Monitor size={18} />
+                <button onClick={() => setPreviewDevice('desktop')} className={`p-1.5 rounded-md transition-colors ${previewDevice === 'desktop' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`} title="Desktop">
+                  <Monitor size={17}/>
                 </button>
-                <button 
-                  onClick={() => setPreviewDevice('mobile')}
-                  className={`p-1.5 rounded-md transition-colors ${previewDevice === 'mobile' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400 hover:text-white'}`}
-                  title="Mobile View"
-                >
-                  <Smartphone size={18} />
+                <button onClick={() => setPreviewDevice('mobile')} className={`p-1.5 rounded-md transition-colors ${previewDevice === 'mobile' ? 'bg-slate-700 text-white' : 'text-slate-400 hover:text-white'}`} title="Mobile">
+                  <Smartphone size={17}/>
                 </button>
               </div>
-              
-              <div className="w-px h-6 bg-slate-700 hidden sm:block"></div>
-              
-              <button 
-                onClick={() => setPreviewTemplate(null)}
-                className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg"
-              >
+              <div className="w-px h-6 bg-slate-700 hidden sm:block"/>
+              <button onClick={() => setPreviewTemplate(null)} className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg">
                 <span className="hidden sm:inline text-xs uppercase tracking-widest font-bold">{t.close_preview}</span>
-                <X size={18} />
+                <X size={17}/>
               </button>
             </div>
           </div>
-          
-          {/* Modal Body / Iframe Area */}
+
+          {/* Iframe area */}
           <div className="flex-1 bg-slate-950 flex justify-center items-start overflow-auto p-4 sm:p-8" dir="ltr">
-            <div 
-              className={`bg-white transition-all duration-300 ease-in-out shadow-2xl ${
-                previewDevice === 'desktop' 
-                  ? 'w-full h-full rounded-2xl' 
-                  : 'w-[375px] h-[812px] rounded-[3rem] border-[14px] border-slate-800 overflow-hidden shrink-0 mt-4 sm:mt-0'
-              }`}
-            >
-              <iframe 
+            <div className={`bg-white transition-all duration-300 ease-in-out shadow-2xl ${
+              previewDevice === 'desktop'
+                ? 'w-full h-full rounded-2xl'
+                : 'w-[375px] h-[812px] rounded-[3rem] border-[14px] border-slate-800 overflow-hidden shrink-0 mt-4 sm:mt-0'
+            }`}>
+              <iframe
                 srcDoc={generateDummyTemplate(previewTemplate)}
                 className="w-full h-full border-0"
                 title={`${previewTemplate.title} Preview`}
@@ -1853,53 +1906,65 @@ export default function App() {
         </div>
       )}
 
-      {/* ═══ Consultation Modal ═══════════════════════════════ */}
+      {/* ═══ Consultation Modal ═══ */}
       {consultModal && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8 animate-fadeIn">
           <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setConsultModal(false)}/>
           <div className="relative w-full max-w-xl bg-white rounded-[2rem] p-8 sm:p-12 shadow-2xl animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
             <button onClick={() => setConsultModal(false)} className="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-all"><X size={16}/></button>
-            
             {consultStatus === 'success' ? (
-                <div className="flex flex-col items-center text-center gap-5 py-12">
-                  <div className="w-16 h-16 rounded-3xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/20 animate-bounce"><CheckCircle2 size={32} className="text-white"/></div>
-                  <h3 className="text-2xl font-black text-slate-900 tracking-tight">{ar ? 'تم تأكيد طلبك' : 'Strategy Request Sent'}</h3>
-                  <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{ar ? 'سيتواصل معك مستشارنا الاستراتيجي خلال يوم عمل واحد لترتيب الموعد.' : 'Our strategic consultant will contact you within one business day to arrange the session.'}</p>
-                </div>
+              <div className="flex flex-col items-center text-center gap-5 py-12">
+                <div className="w-16 h-16 rounded-3xl bg-sky-500 flex items-center justify-center shadow-xl shadow-sky-500/20 animate-bounce"><CheckCircle2 size={32} className="text-white"/></div>
+                <h3 className="text-2xl font-black text-slate-900 tracking-tight">{ar ? 'تم تأكيد طلبك' : 'Strategy Request Sent'}</h3>
+                <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{ar ? 'سيتواصل معك مستشارنا الاستراتيجي خلال يوم عمل واحد.' : 'Our strategic consultant will contact you within one business day.'}</p>
+              </div>
             ) : (
-                <>
-                  <div className="flex items-center gap-4 mb-10">
-                    <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-lg"><CalendarCheck size={24}/></div>
-                    <div>
-                      <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{t.consult_title}</h3>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-600">{ar ? 'جلسة استراتيجية — $20' : 'Strategic Business Session'}</p>
-                    </div>
+              <>
+                <div className="flex items-center gap-4 mb-10">
+                  <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-lg"><CalendarCheck size={24}/></div>
+                  <div>
+                    <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-none mb-1">{t.consult_title}</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-600">{ar ? 'جلسة استراتيجية — $20' : 'Strategic Business Session'}</p>
                   </div>
-                  <form className="space-y-8" onSubmit={e => handleActionForm(e, 'Consultations', setConsultStatus)}>
-                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Name" name="name" required/><Field label="Organization" name="company"/></div>
-                    <div className="grid sm:grid-cols-2 gap-8"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
-                    <button disabled={consultStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-slate-900 hover:bg-sky-500 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
-                      {consultStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <>{t.consult_btn} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/></>}
-                    </button>
-                  </form>
-                </>
+                </div>
+                <form className="space-y-8" onSubmit={e => handleActionForm(e, 'Consultations', setConsultStatus)}>
+                  <div className="grid sm:grid-cols-2 gap-8"><Field label="Name" name="name" required/><Field label="Organization" name="company"/></div>
+                  <div className="grid sm:grid-cols-2 gap-8"><Field label="Email" name="email" type="email" required/><Field label="Phone" name="phone" type="tel" required/></div>
+                  <button disabled={consultStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-slate-900 hover:bg-sky-500 active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+                    {consultStatus === 'sending' ? <Sparkles size={14} className="animate-spin"/> : <>{t.consult_btn} <ArrowRight size={14} className={ar ? 'rotate-180' : ''}/></>}
+                  </button>
+                </form>
+              </>
             )}
           </div>
         </div>
       )}
 
-      {/* ═══ Careers Modal ══════════════════════════════════════════════════ */}
+      {/* ═══ Careers Modal ═══ */}
       {careers && (
         <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-8">
           <div className="absolute inset-0 bg-slate-900/70 backdrop-blur-xl" onClick={() => setCareers(false)}/>
           <div className="relative w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-zoomIn" dir={ar ? 'rtl' : 'ltr'}>
             <div className="hidden md:flex md:w-5/12 flex-col justify-between p-12 bg-slate-900">
-              <div><div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8"><Briefcase size={18} className="text-white"/></div><h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2><p className="text-sm text-white/50 leading-relaxed">{t.career_body}</p></div>
-              <div className="space-y-4">{[ { icon:<Lightbulb size={14}/>, label: t.val_1 }, { icon:<Target size={14}/>, label: t.val_2 }, { icon:<Rocket size={14}/>, label: t.val_3 } ].map((v, i) => (<div key={i} className="flex items-center gap-3 text-white/60"><div className="text-sky-400">{v.icon}</div><span className="text-xs font-bold uppercase tracking-wide">{v.label}</span></div>))}</div>
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center mb-8"><Briefcase size={18} className="text-white"/></div>
+                <h2 className="text-4xl font-black tracking-tighter text-white leading-tight mb-4">{t.join_title}</h2>
+                <p className="text-sm text-white/50 leading-relaxed">{t.career_body}</p>
+              </div>
+              <div className="space-y-4">
+                {[ { icon:<Lightbulb size={14}/>, label: t.val_1 }, { icon:<Target size={14}/>, label: t.val_2 }, { icon:<Rocket size={14}/>, label: t.val_3 } ].map((v, i) => (
+                  <div key={i} className="flex items-center gap-3 text-white/60"><div className="text-sky-400">{v.icon}</div><span className="text-xs font-bold uppercase tracking-wide">{v.label}</span></div>
+                ))}
+              </div>
             </div>
             <div className="flex-1 p-8 sm:p-12 relative overflow-y-auto max-h-[90vh]">
               <button onClick={() => setCareers(false)} className="absolute top-5 right-5 w-9 h-9 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-700 transition-all z-20"><X size={16}/></button>
-              {formStatus === 'success' ? (<div className="flex flex-col gap-5 py-6"><div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center"><CheckCircle2 size={22} className="text-white"/></div><h3 className="text-2xl font-black text-slate-900 tracking-tight">{t.success_title}</h3></div>) : (
+              {formStatus === 'success' ? (
+                <div className="flex flex-col gap-5 py-6">
+                  <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center"><CheckCircle2 size={22} className="text-white"/></div>
+                  <h3 className="text-2xl font-black text-slate-900 tracking-tight">{t.success_title}</h3>
+                </div>
+              ) : (
                 <div className="space-y-2">
                   <h3 className="text-2xl font-black text-slate-900 tracking-tight mb-8">{t.join_title}</h3>
                   <form className="space-y-8" onSubmit={e => handleForm(e, 'Work')}>
@@ -1907,35 +1972,18 @@ export default function App() {
                       <Field label={t.name_p} name="name" required/>
                       <Field label={t.email_p} name="email" type="email" required/>
                     </div>
-                    
                     <Field label={t.exp_brief_p} name="brief" required as="textarea" />
-
                     <div className="relative group">
-                      <label className="absolute -top-5 text-[9px] tracking-[0.2em] font-bold uppercase text-sky-600">
-                        {t.cv_link}
-                      </label>
+                      <label className="absolute -top-5 text-[9px] tracking-[0.2em] font-bold uppercase text-sky-600">{t.cv_link}</label>
                       <div className="relative mt-2">
-                        <input 
-                          type="file" 
-                          name="cv_file" 
-                          id="cv_file"
-                          accept=".pdf,.doc,.docx" 
-                          required 
-                          onChange={handleFileChange}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        />
+                        <input type="file" name="cv_file" id="cv_file" accept=".pdf,.doc,.docx" required onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"/>
                         <div className="w-full bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl py-6 px-4 flex flex-col items-center justify-center gap-2 group-hover:border-sky-300 group-hover:bg-sky-50 transition-all">
-                          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-sky-500 shadow-sm transition-colors">
-                            <Upload size={18}/>
-                          </div>
-                          <span className="text-xs font-bold text-slate-500 text-center">
-                            {selectedFileName || (lang === 'ar' ? 'اسحب الملف هنا أو اضغط للرفع' : 'Drop your CV here or click to upload')}
-                          </span>
+                          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:text-sky-500 shadow-sm transition-colors"><Upload size={18}/></div>
+                          <span className="text-xs font-bold text-slate-500 text-center">{selectedFileName || (lang === 'ar' ? 'اسحب الملف هنا أو اضغط للرفع' : 'Drop your CV here or click to upload')}</span>
                           <span className="text-[10px] text-slate-400 uppercase tracking-widest">PDF, DOC (MAX 2MB)</span>
                         </div>
                       </div>
                     </div>
-
                     <button disabled={formStatus === 'sending'} className="w-full py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.25em] text-white bg-slate-900 flex items-center justify-center gap-3 mt-4">
                       {formStatus === 'sending' ? <><Sparkles size={14} className="animate-spin"/>{t.sending}</> : <>{t.apply}<ChevronRight size={14} className={ar ? 'rotate-180' : ''}/></>}
                     </button>
@@ -1947,14 +1995,13 @@ export default function App() {
         </div>
       )}
 
-      {/* ─── Styles ─────────────────────────────────────────────────── */}
+      {/* ─── Global Styles ─── */}
       <style>{`
         @import url('https://fonts.cdnfonts.com/css/now');
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700;900&display=swap');
 
         * { box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
         *::-webkit-scrollbar { display: none; }
-
         html { scroll-behavior: smooth; }
         body { margin: 0; overflow-x: hidden; font-family: 'Now', sans-serif; }
         [dir="rtl"], [dir="rtl"] h1, [dir="rtl"] h2 { font-family: 'Noto Sans Arabic', sans-serif; }
@@ -1963,10 +2010,6 @@ export default function App() {
         .animate-marquee { animation: marquee 50s linear infinite; }
 
         @keyframes fadeUp { from { opacity:0; transform:translateY(36px); } to { opacity:1; transform:translateY(0); } }
-        .animate-fadeUp { opacity: 0; animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) forwards; }
-
-        @keyframes scrollDot { 0% { transform: translateY(0); opacity: 1; } 60% { transform: translateY(12px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
-        .animate-scrollDot { animation: scrollDot 1.8s ease-in-out infinite; }
 
         .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
         .rv { opacity: 1 !important; transform: translateY(0) !important; pointer-events: auto; }
@@ -1979,7 +2022,6 @@ export default function App() {
         .service-line:hover::after { transform: scaleX(1); }
 
         .hero-word-1 { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0ms forwards; opacity:0; }
-        .hero-word-2 { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 120ms forwards; opacity:0; }
         .hero-word-3 { animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 240ms forwards; opacity:0; }
         .hero-label { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 0ms forwards; opacity:0; }
         .hero-desc { animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) 360ms forwards; opacity:0; }
@@ -1994,8 +2036,7 @@ export default function App() {
         @keyframes zoomIn { from { opacity:0; transform:scale(0.95) translateY(16px); } to { opacity:1; transform:scale(1) translateY(0); } }
         .animate-zoomIn { animation: zoomIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
 
-        .animate-spin-slow { animation: spin 8s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
       `}</style>
     </div>
   );
