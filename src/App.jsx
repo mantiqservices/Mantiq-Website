@@ -11,7 +11,7 @@ import {
 // ─── Data ──────────────────────────────────────────────────────────────────
 
 const CUSTOMERS = [
-  "EL ASEEL Development","Omar Gharib","ETMAM","ALSAIF ANALYSIS",
+  "EL ASEEL Development","Omar Gharib","ETMAM",
   "ELBEDAYA","PE","RESPRESSO","COVER SPORE","SIMCO","MIRROR",
   "ALMUHANDIS INDUSTRIES","NOURGEOUS ACCESSORIES","NAQLA",
   "START MART","CREATIVO","ALPHA ACADEMY","VARM","ART FURNITURE"
